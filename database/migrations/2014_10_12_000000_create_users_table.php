@@ -24,10 +24,10 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->integer('nik')->index();
             $table->string('nama');
-            $table->text('alamat');
-            $table->string('jk');
-            $table->string('ktp');
-            $table->string('no_hp');
+            $table->text('alamat')->nullable();
+            $table->string('jk')->nullable();
+            $table->string('ktp')->nullable();
+            $table->string('no_hp')->nullable();
             $table->string('reference')->nullable();
             $table->timestamps();
         });
@@ -38,7 +38,6 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('phone')->nullable();
             $table->string('pwd');
-            $table->string('nik')->nullable();
             $table->integer('kd_role')->nullable();
             $table->string('active')->nullable();
             $table->string('email')->unique();
@@ -47,8 +46,33 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('nik')->references('nik')->on('t_karyawan')->onDelete('cascade');
             $table->foreign('kd_role')->references('kd_role')->on('users_role')->onDelete('cascade');
+        });
+
+        Schema::create('users_menu', function (Blueprint $table) {
+            $table->id();
+            $table->integer('kd_menu')->index();
+            $table->integer('kd_parent');
+            $table->string('ur_menu_title');
+            $table->string('ur_menu_desc')->nullable();
+            $table->string('link_menu')->nullable();
+            $table->string('bg_color')->nullable();
+            $table->string('icon')->nullable();
+            $table->string('order')->nullable();
+            $table->string('is_active')->nullable();
+
+            $table->timestamps();
+        });
+
+        Schema::create('users_role_menu', function (Blueprint $table) {
+            $table->id();
+            $table->integer('kd_role');
+            $table->integer('kd_menu');
+
+            $table->timestamps();
+
+            $table->foreign('kd_role')->references('kd_role')->on('users_role')->onDelete('cascade');
+            $table->foreign('kd_menu')->references('kd_menu')->on('users_menu')->onDelete('cascade');
         });
     }
 
@@ -59,8 +83,10 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('users_role_menu');
         Schema::dropIfExists('users');
-        Schema::dropIfExists('users_role');
+        Schema::dropIfExists('users_menu');
         Schema::dropIfExists('t_karyawan');
+        Schema::dropIfExists('users_role');
     }
 }
