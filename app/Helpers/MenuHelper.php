@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class MenuHelper
 {
-    public static function getMenusByRole($role, $kd_parent)
+    public static function getMenusByRole($role, $kd_parent = 0)
     {
         if ($role) {
             $query = DB::table('users_role as a')
