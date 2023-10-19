@@ -1,13 +1,3 @@
-@php
-    use App\Helpers\MenuHelper;
-    $user = auth()->user();
-    $role = $user->getRole();
-    $menus = MenuHelper::getMenusByRole($role);
-    dd($menus);
-@endphp
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,21 +29,79 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('home') }}/assets/css/style.css" rel="stylesheet">
+
+    <!-- =======================================================
+  * Template Name: Gp
+  * Updated: Sep 18 2023 with Bootstrap v5.3.2
+  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
 
 <body>
-    @if (count($menus) > 0)
-        @foreach ($menus as $menu)
-            <ul>
-                <li>{{ $menu->nama_menu }}</li>
-                @php
-                    MenuHelper::printChildren($menu->id);
-                @endphp
-            </ul>
-        @endforeach
-    @endif
+    @php
+        use App\Helpers\MenuHelper;
+        $user = auth()->user();
+        $role = $user->getRole();
+        $menus_nav = MenuHelper::getMenusByRole($role)->where('type', 'nav');
+        $currentUrl = request()->url();
+    @endphp
 
-    {{-- @yield('content') --}}
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top ">
+        <div class="container d-flex align-items-center justify-content-lg-between">
+
+            {{-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> --}}
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="{{ asset('home') }}/assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+            <nav id="navbar" class="navbar order-last order-lg-0">
+                <ul>
+                    @if (count($menus_nav) > 0)
+                        @foreach ($menus_nav as $menu_nav)
+                            <li {{ $currentUrl === url($menu_nav->link_menu) ? " class='active'" : '' }}><a
+                                    class="nav-link scrollto"
+                                    href="{{ $menu_nav->link_menu }}">{{ $menu_nav->ur_menu_title }}</a></li>
+                        @endforeach
+                    @endif
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <button type="submit" class="get-started-btn scrollto" style="background: black">Logout</button>
+            </form>
+
+        </div>
+    </header><!-- End Header -->
+
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="d-flex align-items-center justify-content-center">
+        <div class="container" data-aos="fade-up">
+
+            @yield('content')
+
+        </div>
+    </section><!-- End Hero -->
+
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Gp</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/ -->
+                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </div>
+    </footer><!-- End Footer -->
 
     <div id="preloader"></div>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i

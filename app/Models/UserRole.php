@@ -9,6 +9,6 @@ class UserRole extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_role';
+    protected $table = 'users_role';
     protected $guarded = [];
 }

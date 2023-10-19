@@ -53,6 +53,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->integer('kd_menu')->index();
             $table->integer('kd_parent');
+            $table->string('type')->nullable();
             $table->string('ur_menu_title');
             $table->string('ur_menu_desc')->nullable();
             $table->string('link_menu')->nullable();

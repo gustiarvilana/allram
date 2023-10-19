@@ -9,6 +9,6 @@ class UserRoleMenu extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_role_menu';
+    protected $table = 'users_role_menu';
     protected $guarded = [];
 }
