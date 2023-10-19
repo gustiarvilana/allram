@@ -80,23 +80,35 @@ class MenuSeeder extends Seeder
                 'kd_menu'       => 6,
                 'kd_parent'     => 1,
                 'type'          => '',
-                'ur_menu_title' => 'Role',
+                'ur_menu_title' => 'User Menu',
                 'ur_menu_desc'  => '/roleole',
-                'link_menu'     => '/role',
+                'link_menu'     => '/user_menu',
                 'bg_color'      => '#',
-                'icon'          => 'ri6calendar-todo-line',
+                'icon'          => 'fab fa-mendeley',
                 'order'         => '6',
                 'is_active'     => '1',
             ],
             [
                 'kd_menu'       => 7,
-                'kd_parent'     => 6,
+                'kd_parent'     => 1,
                 'type'          => '',
-                'ur_menu_title' => 'Role child',
-                'ur_menu_desc'  => '/roleole',
-                'link_menu'     => '/role',
+                'ur_menu_title' => 'User Role',
+                'ur_menu_desc'  => 'User Role',
+                'link_menu'     => '/user_role',
                 'bg_color'      => '#',
-                'icon'          => 'ri6calendar-todo-line',
+                'icon'          => 'fas fa-user-tag',
+                'order'         => '7',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 8,
+                'kd_parent'     => 1,
+                'type'          => '',
+                'ur_menu_title' => 'User',
+                'ur_menu_desc'  => 'User',
+                'link_menu'     => '/user',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-users',
                 'order'         => '7',
                 'is_active'     => '1',
             ],
@@ -139,6 +151,11 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 1,
+                'kd_menu' => 8,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 99,
                 'kd_menu' => 1,
                 'tahun' => 2023
@@ -171,6 +188,11 @@ class MenuSeeder extends Seeder
             [
                 'kd_role' => 99,
                 'kd_menu' => 7,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 8,
                 'tahun' => 2023
             ],
             [
