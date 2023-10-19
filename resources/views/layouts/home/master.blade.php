@@ -46,7 +46,6 @@
         $role = $user->getRole();
         $menus_nav = MenuHelper::getMenusByRole($role)->where('type', 'nav');
         $currentUrl = request()->url();
-        dd($currentUrl);
     @endphp
 
     <!-- ======= Header ======= -->

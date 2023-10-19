@@ -26,5 +26,5 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['roles:99,1'])->group(function () {
-    Route::get('/home', [UserManagementController::class, 'index'])->name('home');
+    Route::get('/security', [UserManagementController::class, 'index'])->name('home');
 });
