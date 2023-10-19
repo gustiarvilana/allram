@@ -174,7 +174,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
         App\Providers\UserServiceProvider::class,
+        App\Providers\MenuServiceProvider::class,
 
     ],
 
@@ -231,7 +233,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
-        'UserHelper' => App\Helpers\User::class,
+        'UserHelper' => App\Helpers\UserHelper::class,
+        'MenuHelper' => App\Helpers\MenuHelper::class,
     ],
 
 ];

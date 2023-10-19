@@ -42,4 +42,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getRole()
+    {
+        return $this->kd_role;
+    }
+
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
 }

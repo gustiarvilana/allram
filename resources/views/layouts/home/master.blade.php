@@ -1,3 +1,13 @@
+@php
+    use App\Helpers\MenuHelper;
+    $user = auth()->user();
+    $role = $user->getRole();
+    $menus = MenuHelper::getMenusByRole($role);
+    dd($menus);
+@endphp
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,8 +42,18 @@
 </head>
 
 <body>
+    @if (count($menus) > 0)
+        @foreach ($menus as $menu)
+            <ul>
+                <li>{{ $menu->nama_menu }}</li>
+                @php
+                    MenuHelper::printChildren($menu->id);
+                @endphp
+            </ul>
+        @endforeach
+    @endif
 
-    @yield('content')
+    {{-- @yield('content') --}}
 
     <div id="preloader"></div>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
