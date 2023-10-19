@@ -30,17 +30,25 @@ class MenuHelper
         $children = UserMenu::where('kd_parent', $kd_parent)->get();
         if (count($children) > 0) {
             foreach ($children as $child) {
-                echo "<ul class='nav nav-treeview'>";
-                echo "<li class='nav-item'>";
+                echo "<ul class='nav nav-treeview ml-2'>";
+                echo "<li class='nav-item " . ($currentUrl === url($child->link_menu) ? 'active' : '') . "'>";
                 echo "<a href='" . url('/') . $child->link_menu . "' class='nav-link'>";
                 echo "<i class='far fa-circle nav-icon'></i>";
                 echo "<p>" . $child->ur_menu_title . "</p>";
+                if (count(self::countChildren($child->kd_menu)->where('kd_parent', '!=', null)) > 0) {
+                    echo '<i class="right fas fa-angle-left"></i>';
+                }
                 echo "</a>";
+
+                if (count(self::countChildren($child->kd_menu)->where('kd_parent', '!=', null)) > 0) {
+                    self::printChildren($child->kd_menu, $currentUrl);
+                }
                 echo "</li>";
                 echo "</ul>";
             }
         }
     }
+
 
     public static function countChildren($kd_parent)
     {
