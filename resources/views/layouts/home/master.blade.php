@@ -30,13 +30,10 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('home') }}/assets/css/style.css" rel="stylesheet">
 
-    <!-- =======================================================
-  * Template Name: Gp
-  * Updated: Sep 18 2023 with Bootstrap v5.3.2
-  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/dist/css/adminlte.min.css">
 </head>
 
 <body>
@@ -45,7 +42,7 @@
         $user = auth()->user();
         $role = $user->getRole();
         $menus_nav = MenuHelper::getMenusByRole($role)->where('type', 'nav');
-        $currentUrl = request()->url();
+        $currentUrl = request()->path();
     @endphp
 
     <!-- ======= Header ======= -->

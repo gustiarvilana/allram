@@ -21,7 +21,7 @@ class MenuSeeder extends Seeder
                 'type'          => '',
                 'ur_menu_title' => 'Security',
                 'ur_menu_desc'  => 'Menu1',
-                'link_menu'     => '#',
+                'link_menu'     => '/security',
                 'bg_color'      => '#',
                 'icon'          => 'ri-secure-payment-line',
                 'order'         => '1',
@@ -61,7 +61,7 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '#',
                 'bg_color'      => '#',
                 'icon'          => 'ri-calendar-todo-line',
-                'order'         => '4',
+                'order'         => '5',
                 'is_active'     => '1',
             ],
             [
@@ -73,7 +73,31 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '#',
                 'bg_color'      => '#',
                 'icon'          => 'ri-calendar-todo-line',
-                'order'         => '5',
+                'order'         => '4',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 6,
+                'kd_parent'     => 1,
+                'type'          => '',
+                'ur_menu_title' => 'Role',
+                'ur_menu_desc'  => '/roleole',
+                'link_menu'     => '/role',
+                'bg_color'      => '#',
+                'icon'          => 'ri6calendar-todo-line',
+                'order'         => '6',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 7,
+                'kd_parent'     => 6,
+                'type'          => '',
+                'ur_menu_title' => 'Role child',
+                'ur_menu_desc'  => '/roleole',
+                'link_menu'     => '/role',
+                'bg_color'      => '#',
+                'icon'          => 'ri6calendar-todo-line',
+                'order'         => '7',
                 'is_active'     => '1',
             ],
         ], ['kd_menu', 'kd_parent']);
@@ -82,50 +106,82 @@ class MenuSeeder extends Seeder
             [
                 'kd_role' => 1,
                 'kd_menu' => 1,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 1,
                 'kd_menu' => 2,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 1,
                 'kd_menu' => 3,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 1,
                 'kd_menu' => 4,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 1,
                 'kd_menu' => 5,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 6,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 7,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 99,
                 'kd_menu' => 1,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 99,
                 'kd_menu' => 2,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 99,
                 'kd_menu' => 3,
+                'tahun'   => 2023
             ],
             [
                 'kd_role' => 99,
                 'kd_menu' => 4,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 99,
                 'kd_menu' => 5,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 6,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 7,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 2,
                 'kd_menu' => 2,
+                'tahun' => 2023
             ],
             [
                 'kd_role' => 3,
                 'kd_menu' => 3,
+                'tahun' => 2023
             ],
         ], ['kd_role', 'kd_menu']);
     }

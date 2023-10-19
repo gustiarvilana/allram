@@ -1,1 +1,4 @@
-@extends('layouts.ram_water')
+@extends('layouts.master')
+
+@section('content')
+@endsection

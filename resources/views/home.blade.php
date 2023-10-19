@@ -25,7 +25,7 @@
                 <div class="col-xl-2 col-md-4" id="{{ 'menu-' . $menu->kd_menu }}" style="display: none">
                     <div class="icon-box">
                         <i class="{{ $menu->icon }}"></i>
-                        <h3><a href="{{ $menu->link_menu }}">{{ $menu->ur_menu_title }}</a></h3>
+                        <h3><a href="{{ url('/') . $menu->link_menu }}">{{ $menu->ur_menu_title }}</a></h3>
                     </div>
                 </div>
             @endforeach

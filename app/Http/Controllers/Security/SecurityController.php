@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Security;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UserManagementController extends Controller
+class SecurityController extends Controller
 {
     public function index()
     {

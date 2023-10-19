@@ -69,6 +69,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->integer('kd_role');
             $table->integer('kd_menu');
+            $table->integer('tahun');
 
             $table->timestamps();
 
