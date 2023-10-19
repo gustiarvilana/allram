@@ -61,7 +61,7 @@
                     @if (count($menus_nav) > 0)
                         @foreach ($menus_nav as $menu_nav)
                             <li {{ $currentUrl === url(url('/') . $menu_nav->link_menu) ? " class='active'" : '' }}><a
-                                    class="nav-link scrollto"
+                                    class="nav-link" id="{{ 'nav-' . $menu_nav->kd_menu }}"
                                     href="{{ $menu_nav->link_menu }}">{{ $menu_nav->ur_menu_title }}</a></li>
                         @endforeach
                     @endif
@@ -71,7 +71,7 @@
 
             <form action="{{ route('logout') }}" method="post">
                 @csrf
-                <button type="submit" class="get-started-btn scrollto" style="background: black">Logout</button>
+                <button type="submit" class="get-started-btn" style="background: black">Logout</button>
             </form>
 
         </div>
@@ -118,6 +118,26 @@
 
     <!-- Template Main JS File -->
     <script src="{{ asset('home') }}/assets/js/main.js"></script>
+
+    <!-- jQuery -->
+    <script src="{{ asset('assets') }}/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('assets') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('assets') }}/dist/js/adminlte.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#menu-1').show();
+            $('body').on('click', '#nav-5', function() {
+                $('#menu-2').fadeIn(1000);
+                $('#menu-3').hide();
+            }).on('click', '#nav-4', function() {
+                $('#menu-2').hide();
+                $('#menu-3').fadeIn(1000);
+            })
+        });
+    </script>
 
 </body>
 
