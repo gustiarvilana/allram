@@ -46,6 +46,7 @@
         $role = $user->getRole();
         $menus_nav = MenuHelper::getMenusByRole($role)->where('type', 'nav');
         $currentUrl = request()->url();
+        dd($currentUrl);
     @endphp
 
     <!-- ======= Header ======= -->
@@ -60,7 +61,7 @@
                 <ul>
                     @if (count($menus_nav) > 0)
                         @foreach ($menus_nav as $menu_nav)
-                            <li {{ $currentUrl === url($menu_nav->link_menu) ? " class='active'" : '' }}><a
+                            <li {{ $currentUrl === url(url('/') . $menu_nav->link_menu) ? " class='active'" : '' }}><a
                                     class="nav-link scrollto"
                                     href="{{ $menu_nav->link_menu }}">{{ $menu_nav->ur_menu_title }}</a></li>
                         @endforeach
