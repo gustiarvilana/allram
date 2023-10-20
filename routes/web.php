@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\SecurityController;
+use App\Http\Controllers\Security\UserController;
 use App\Http\Controllers\Security\UserMenuController;
 use App\Http\Controllers\Utility\UtilityController;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +29,7 @@ Route::middleware(['roles:99,1'])->group(function () {
 
         Route::get('/karyawan/data', [KaryawanController::class, 'data'])->name('karyawan.data');
         Route::resource('/karyawan', KaryawanController::class)->except('show');
+
+        Route::resource('/user', UserController::class)->except('show');
     });
 });

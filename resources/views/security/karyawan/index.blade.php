@@ -51,6 +51,7 @@
         var url_add = '{{ route('karyawan.store') }}';
         var url_delete = '{{ route('karyawan.destroy', ['karyawan' => ':id']) }}';
         var url_edit = '{{ route('karyawan.update', ['karyawan' => ':id']) }}';
+        var url_add_user = '{{ route('user.store') }}';
 
         $(document).ready(function() {
             table = $("#table").DataTable({
@@ -171,7 +172,7 @@
                 $('#modal-input-user .modal-title').text('Tambah Data');
 
                 $('#modal-input-user form')[0].reset();
-                $('#modal-input-user form').attr('action', url_add);
+                $('#modal-input-user form').attr('action', url_add_user);
                 $('#modal-input-user [name=_method]').val('post');
             });
         });

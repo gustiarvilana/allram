@@ -23,6 +23,14 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="nik">nik</label>
+                        <input type="text" class="form-control" name="nik" id="nik_user"
+                            value="{{ old('nik') }}">
+                        @error('nik')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="username">username</label>
                         <input type="text" class="form-control" name="username" id="username"
                             value="{{ old('username') }}">

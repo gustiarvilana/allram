@@ -16,7 +16,7 @@
                     <input type="hidden" name="id">
                     <div class="form-group">
                         <label for="nik">nik</label>
-                        <input type="text" class="form-control" name="nik" id="nik"
+                        <input type="text" class="form-control" name="nik" id="nik_karyawan"
                             value="{{ old('nik') }}">
                         @error('nik')
                             <div class="text-danger">{{ $message }}</div>

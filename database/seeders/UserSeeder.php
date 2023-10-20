@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
 
         DB::table('t_karyawan')->upsert([
             [
-                'nik'       => '2134',
+                'nik'       => 2134,
                 'nama'      => 'Superuser',
                 'alamat'    => 'alamat User',
                 'jk'        => 'L',
@@ -76,7 +76,7 @@ class UserSeeder extends Seeder
         DB::table('users')->upsert([
             [
                 'name'     => 'Superuser',
-                'nik'      => '2134',
+                'nik'      => 2134,
                 'username' => 'superuser',
                 'phone'    => '098765544323',
                 'pwd'      => '09120912',
@@ -87,7 +87,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name'     => 'Administrator',
-                'nik'      => '2135',
+                'nik'      => 2135,
                 'username' => 'administrator',
                 'phone'    => '098765544323',
                 'pwd'      => '09120912',
@@ -98,7 +98,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name'     => 'Admin',
-                'nik'      => '2136',
+                'nik'      => 2136,
                 'username' => 'Admin',
                 'phone'    => '098765544323',
                 'pwd'      => '09120912',
@@ -109,7 +109,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name'     => 'Sales',
-                'nik'      => '2137',
+                'nik'      => 2137,
                 'username' => 'sales',
                 'phone'    => '098765544323',
                 'pwd'      => '09120912',
