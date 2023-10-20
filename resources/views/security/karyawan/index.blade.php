@@ -127,7 +127,7 @@
             }).on('click', '#karyawan-edit', function() {
                 var id = $(this).data('id_karyawan');
                 url_edit = url_edit.replace(':id', id);
-
+                g
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Edit Data');
 
