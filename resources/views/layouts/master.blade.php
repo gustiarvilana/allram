@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RAM Armalia</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -18,7 +19,7 @@
 @php
     use App\Helpers\MenuHelper;
     $currentUrl = request()->path();
-    $kd_parent = MenuHelper::getKdByPath($currentUrl);
+    $kd_parent = Session::get('kd_home_parent');
     $user = auth()->user();
     $role = $user->getRole();
     $menus = MenuHelper::getMenusByRole($role, $kd_parent)->where('kd_parent', '!=', null);

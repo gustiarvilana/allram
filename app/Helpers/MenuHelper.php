@@ -31,7 +31,7 @@ class MenuHelper
         if (count($children) > 0) {
             foreach ($children as $child) {
                 echo "<ul class='nav nav-treeview ml-2'>";
-                echo "<li class='nav-item " . ($currentUrl === url($child->link_menu) ? 'active' : '') . "'>";
+                echo "<li class='nav-item'>";
                 echo "<a href='" . url('/') . $child->link_menu . "' class='nav-link'>";
                 echo "<i class='far fa-circle nav-icon'></i>";
                 echo "<p>" . $child->ur_menu_title . "</p>";

@@ -25,11 +25,44 @@
                 <div class="col-xl-2 col-md-4" id="{{ 'menu-' . $menu->kd_menu }}" style="display: none">
                     <div class="icon-box">
                         <i class="{{ $menu->icon }}"></i>
-                        <h3><a href="{{ url('/') . $menu->link_menu }}">{{ $menu->ur_menu_title }}</a></h3>
+                        <h3><a href="#" class="menu-link" data-redirect="{{ url('/') . $menu->link_menu }}"
+                                data-link="{{ url('/') . '/utility/setsession' }}"
+                                data-kd-menu="{{ $menu->kd_menu }}">{{ $menu->ur_menu_title }}</a></h3>
+
                     </div>
                 </div>
             @endforeach
         @endif
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.menu-link').click(function(e) {
+                    console.log('asd');
+                    e.preventDefault();
+                    var kdMenu = $(this).data('kd-menu');
+                    var linkMenu = $(this).data('link');
+                    var redirect = $(this).data('redirect');
+                    $.ajax({
+                        type: 'POST',
+                        url: linkMenu,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            name: 'kd_home_parent',
+                            val: kdMenu
+                        },
+                        success: function(data) {
+                            window.location.href = redirect;
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                });
+            });
+        </script>
 
     </div>
 @endsection
