@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    User Menu
+    Karyawan
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card card-warning">
                 <div class="card-header">
-                    <a class="btn btn-success btn-xs" id="add_menu">Tambah Menu</a>
+                    <a class="btn btn-success btn-xs" id="add_menu">Tambah Data</a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -18,16 +18,18 @@
                                 <thead class="thead-inverse">
                                     <tr>
                                         <th width="5%">No</th>
-                                        <th>kd_menu</th>
-                                        <th>kd_parent</th>
-                                        <th>type</th>
-                                        <th>ur_menu_title</th>
-                                        <th>ur_menu_desc</th>
-                                        <th>link_menu</th>
-                                        <th>bg_color</th>
-                                        <th>icon</th>
-                                        <th>order</th>
-                                        <th>is_active</th>
+                                        <th>nik</th>
+                                        <th>nama</th>
+                                        <th>alamat</th>
+                                        <th>jk</th>
+                                        <th>ktp</th>
+                                        <th>no_hp</th>
+                                        <th>Referensi</th>
+                                        <th>username</th>
+                                        <th>phone</th>
+                                        <th>kd_role</th>
+                                        <th>active</th>
+                                        <th>email</th>
                                         <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
@@ -39,15 +41,16 @@
             </div>
         </div>
     </div>
-    @include('security.user_menu.form')
+    @include('security.karyawan.form')
+    @include('security.karyawan.input-user')
 @endsection
 
 @push('js')
     <script>
         let table;
-        var url_add = '{{ route('user_menu.store') }}';
-        var url_delete = '{{ route('user_menu.destroy', ['user_menu' => ':id']) }}';
-        var url_edit = '{{ route('user_menu.update', ['user_menu' => ':id']) }}';
+        var url_add = '{{ route('karyawan.store') }}';
+        var url_delete = '{{ route('karyawan.destroy', ['karyawan' => ':id']) }}';
+        var url_edit = '{{ route('karyawan.update', ['karyawan' => ':id']) }}';
 
         $(document).ready(function() {
             table = $("#table").DataTable({
@@ -68,39 +71,44 @@
                     // "colvis"
                 ],
                 "ajax": {
-                    url: '{{ route('user_menu.data') }}',
+                    url: '{{ route('karyawan.data') }}',
                 },
                 "columns": [{
                     data: 'DT_RowIndex',
                     searchable: false,
                     shrotable: false
                 }, {
-                    data: 'kd_menu'
+                    data: 'nik_karyawan'
                 }, {
-                    data: 'kd_parent'
+                    data: 'nama'
                 }, {
-                    data: 'type'
+                    data: 'alamat'
                 }, {
-                    data: 'ur_menu_title'
+                    data: 'jk'
                 }, {
-                    data: 'ur_menu_desc'
+                    data: 'ktp'
                 }, {
-                    data: 'link_menu'
+                    data: 'no_hp'
                 }, {
-                    data: 'bg_color'
+                    data: 'reference'
                 }, {
-                    data: 'icon'
+                    data: 'username'
                 }, {
-                    data: 'order'
+                    data: 'phone'
                 }, {
-                    data: 'is_active'
+                    data: 'kd_role'
+                }, {
+                    data: 'active'
+                }, {
+                    data: 'email'
                 }, {
                     data: 'id',
                     render: function(data, type, row) {
                         return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" id="user_menu-edit" data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Edit</button>
-                                <button class="btn btn-sm btn-danger" id="user_menu-delete" data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Delete</button>
+                                <button class="btn btn-sm btn-warning" id="karyawan-add_user" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>User</button>
+                                <button class="btn btn-sm btn-primary" id="karyawan-edit" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Edit</button>
+                                <button class="btn btn-sm btn-danger" id="karyawan-delete" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Delete</button>
                             </div>
                         `;
                     }
@@ -110,38 +118,35 @@
 
             $('body').on('click', '#add_menu', function() {
                 $('#modal-form').modal('show');
-                $('#modal-form .modal-title').text('Tambah Menu');
+                $('#modal-form .modal-title').text('Tambah Data');
 
                 $('#modal-form form')[0].reset();
                 $('#modal-form form').attr('action', url_add);
                 $('#modal-form [name=_method]').val('post');
-            }).on('click', '#user_menu-edit', function() {
-                var id = $(this).data('id');
+            }).on('click', '#karyawan-edit', function() {
+                var id = $(this).data('id_karyawan');
                 url_edit = url_edit.replace(':id', id);
 
                 console.log();
 
                 $('#modal-form').modal('show');
-                $('#modal-form .modal-title').text('Edit Menu');
+                $('#modal-form .modal-title').text('Edit Data');
 
                 $('#modal-form form')[0].reset();
                 $('#modal-form form').attr('action', url_edit);
                 $('#modal-form [name=_method]').val('put');
 
-                $('#modal-form [name=id]').val($(this).data('id'));
-                $('#modal-form [name=kd_menu]').val($(this).data('kd_menu'));
-                $('#modal-form [name=kd_parent]').val($(this).data('kd_parent'));
-                $('#modal-form [name=type]').val($(this).data('type'));
-                $('#modal-form [name=ur_menu_title]').val($(this).data('ur_menu_title'));
-                $('#modal-form [name=ur_menu_desc]').val($(this).data('ur_menu_desc'));
-                $('#modal-form [name=link_menu]').val($(this).data('link_menu'));
-                $('#modal-form [name=bg_color]').val($(this).data('bg_color'));
-                $('#modal-form [name=icon]').val($(this).data('icon'));
-                $('#modal-form [name=order]').val($(this).data('order'));
-                $('#modal-form [name=is_active]').val($(this).data('is_active'));
+                $('#modal-form [name=id]').val($(this).data('id_karyawan'));
+                $('#modal-form [name=nik]').val($(this).data('nik_karyawan'));
+                $('#modal-form [name=nama]').val($(this).data('nama'));
+                $('#modal-form [name=alamat]').val($(this).data('alamat'));
+                $('#modal-form [name=jk]').val($(this).data('jk'));
+                $('#modal-form [name=ktp]').val($(this).data('ktp'));
+                $('#modal-form [name=no_hp]').val($(this).data('no_hp'));
+                $('#modal-form [name=reference]').val($(this).data('reference'));
 
-            }).on('click', '#user_menu-delete', function() {
-                var id = $(this).data('id');
+            }).on('click', '#karyawan-delete', function() {
+                var id = $(this).data('id_karyawan');
                 url_delete = url_delete.replace(':id', id);
 
                 if (confirm('Yakin akan menghapus data terpilih?')) {
@@ -161,6 +166,13 @@
                     });
                 }
 
+            }).on('click', '#karyawan-add_user', function() {
+                $('#modal-input-user').modal('show');
+                $('#modal-input-user .modal-title').text('Tambah Data');
+
+                $('#modal-input-user form')[0].reset();
+                $('#modal-input-user form').attr('action', url_add);
+                $('#modal-input-user [name=_method]').val('post');
             });
         });
 

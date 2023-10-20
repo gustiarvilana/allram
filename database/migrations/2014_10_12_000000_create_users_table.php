@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('nik');
             $table->string('username')->unique();
             $table->string('phone')->nullable();
             $table->string('pwd');
@@ -46,6 +47,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
 
+            $table->foreign('nik')->references('nik')->on('t_karyawan')->onDelete('cascade');
             $table->foreign('kd_role')->references('kd_role')->on('users_role')->onDelete('cascade');
         });
 
