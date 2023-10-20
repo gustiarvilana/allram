@@ -16,6 +16,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $user = User::where('id', $request->input('id') ?? '')->first();
         $data = [
             'name'              => $request->input('name'),
             'nik'               => $request->input('nik'),
@@ -27,9 +28,9 @@ class UserController extends Controller
             'email'             => $request->input('email'),
             'password'          => Hash::make($request->input('password')),
         ];
-        // dd($data);
         try {
             User::upsert($data, ['id']);
+            return;
         } catch (\Throwable $th) {
             throw $th;
         }

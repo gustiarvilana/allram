@@ -128,8 +128,6 @@
                 var id = $(this).data('id_karyawan');
                 url_edit = url_edit.replace(':id', id);
 
-                console.log();
-
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Edit Data');
 
@@ -174,6 +172,17 @@
                 $('#modal-input-user form')[0].reset();
                 $('#modal-input-user form').attr('action', url_add_user);
                 $('#modal-input-user [name=_method]').val('post');
+
+                $('#modal-input-user [name=id]').val($(this).data('id_user'));
+                $('#modal-input-user [name=name]').val($(this).data('name'));
+                $('#modal-input-user [name=nik]').val($(this).data('nik_karyawan'));
+                $('#modal-input-user [name=username]').val($(this).data('username'));
+                $('#modal-input-user [name=phone]').val($(this).data('phone'));
+                $('#modal-input-user [name=kd_role]').val($(this).data('kd_role'));
+                $('#modal-input-user [name=active]').val($(this).data('active'));
+                $('#modal-input-user [name=email]').val($(this).data('email'));
+                $('#modal-input-user [name=password]').val($(this).data('pwd'));
+
             });
         });
 

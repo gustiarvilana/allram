@@ -14,19 +14,12 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id">
+                    <input type="hidden" name="nik">
                     <div class="form-group">
                         <label for="name">name</label>
                         <input type="text" class="form-control" name="name" id="name"
                             value="{{ old('name') }}">
                         @error('name')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="nik">nik</label>
-                        <input type="text" class="form-control" name="nik" id="nik_user"
-                            value="{{ old('nik') }}">
-                        @error('nik')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
