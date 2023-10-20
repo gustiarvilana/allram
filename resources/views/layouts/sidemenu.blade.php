@@ -6,7 +6,6 @@
     @foreach ($menus as $menu)
         @php
             $count_child = MenuHelper::countChildren($menu->kd_menu)->where('kd_parent', '!=', null);
-            // dd('/' . $currentUrl == $menu->link_menu ? 'active' : '');
         @endphp
         <li class="nav-item">
             <a href="{{ url('/') . $menu->link_menu }}"
