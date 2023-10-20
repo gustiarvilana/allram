@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Security\KaryawanController;
+use App\Http\Controllers\Security\MenuByRoleController;
 use App\Http\Controllers\Security\SecurityController;
 use App\Http\Controllers\Security\UserController;
 use App\Http\Controllers\Security\UserMenuController;
+use App\Http\Controllers\Security\UserRoleController;
 use App\Http\Controllers\Utility\UtilityController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,5 +33,8 @@ Route::middleware(['roles:99,1'])->group(function () {
         Route::resource('/karyawan', KaryawanController::class)->except('show');
 
         Route::resource('/user', UserController::class)->except('show');
+
+        Route::get('/user_role/data', [UserRoleController::class, 'data'])->name('user_role.data');
+        Route::resource('/user_role', UserRoleController::class)->except('show');
     });
 });

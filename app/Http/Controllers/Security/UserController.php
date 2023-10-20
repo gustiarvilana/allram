@@ -16,7 +16,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $user = User::where('id', $request->input('id') ?? '')->first();
         $data = [
             'name'              => $request->input('name'),
             'nik'               => $request->input('nik'),
