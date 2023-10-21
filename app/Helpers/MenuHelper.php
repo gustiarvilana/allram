@@ -14,6 +14,7 @@ class MenuHelper
                 ->join('users_role_menu as b', 'a.kd_role', 'b.kd_role')
                 ->join('users as c', 'a.kd_role', 'c.kd_role')
                 ->join('users_menu as d', 'b.kd_menu', 'd.kd_menu')
+
                 ->where('d.kd_parent', $kd_parent)
                 ->where('d.is_active', '1')
                 ->where('b.tahun', 2023)
@@ -27,7 +28,12 @@ class MenuHelper
 
     public static function printChildren($kd_parent, $currentUrl)
     {
-        $children = UserMenu::where('kd_parent', $kd_parent)->get();
+        $children = DB::table('users_menu as a')
+            ->join('users_role_menu as b', 'a.kd_menu', 'b.kd_menu')
+            ->where('a.kd_parent', $kd_parent)
+            ->where('b.tahun', 2023)
+            ->get();
+
         if (count($children) > 0) {
             foreach ($children as $child) {
                 echo "<ul class='nav nav-treeview ml-2'>";
