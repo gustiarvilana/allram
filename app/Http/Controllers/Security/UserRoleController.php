@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Security;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserMenu;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,10 @@ class UserRoleController extends Controller
 
     public function index()
     {
-        return view('security.user_role.index');
+        $data = [
+            'UserMenu' => UserMenu::all(),
+        ];
+        return view('security.user_role.index', $data);
     }
 
     public function store(Request $request)

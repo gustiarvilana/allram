@@ -13,68 +13,53 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id">
-                    <input type="hidden" name="nik">
-                    <div class="form-group">
-                        <label for="name">name</label>
-                        <input type="text" class="form-control" name="name" id="name"
-                            value="{{ old('name') }}">
-                        @error('name')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+
+                    <div class="row">
+                        <div class="col">
+                            <input type="hidden" name="kd_role" id="kd_role">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Menu</th>
+                                        <th>:</th>
+                                        <th id="txt_menu"></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="username">username</label>
-                        <input type="text" class="form-control" name="username" id="username"
-                            value="{{ old('username') }}">
-                        @error('username')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+
+
+                    <div class="row">
+                        <div class="col table-responsive">
+                            <table class="table table-bordered table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th>Menu</th>
+                                        <th>Type</th>
+                                        <th><i class="fa fa-check" aria-hidden="true"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($UserMenu as $key => $menu)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $menu->ur_menu_title }}</td>
+                                            <td>{{ $menu->type }}</td>
+                                            <td><input type="checkbox" data-kd_menu="{{ $menu->kd_menu }}"
+                                                    data-kd_parent="{{ $menu->kd_parent }}" id="user_role-box"></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="phone">phone</label>
-                        <input type="text" class="form-control" name="phone" id="phone"
-                            value="{{ old('phone') }}">
-                        @error('phone')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="kd_role">kd_role</label>
-                        <input type="text" class="form-control" name="kd_role" id="kd_roled"
-                            value="{{ old('kd_role') }}">
-                        @error('kd_role')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="active">active</label>
-                        <input type="text" class="form-control" name="active" id="active"
-                            value="{{ old('active') }}">
-                        @error('active')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="email">email</label>
-                        <input type="text" class="form-control" name="email" id="email"
-                            value="{{ old('email') }}">
-                        @error('email')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="password">password</label>
-                        <input type="password" class="form-control" name="password" id="password"
-                            value="{{ old('password') }}">
-                        @error('password')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+
+
                 </div>
                 <div class="modal-footer">
-                    {{-- <button class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                    <button class="btn btn-primary">Simpan</button>
+                    <a class="btn btn-primary" id="user_role-box-simpan">simpan</a>
                 </div>
             </div>
         </form>

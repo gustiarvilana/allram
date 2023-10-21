@@ -41,7 +41,9 @@
         var url_add = '{{ route('user_role.store') }}';
         var url_delete = '{{ route('user_role.destroy', ['user_role' => ':id']) }}';
         var url_update = '{{ route('user_role.update', ['user_role' => ':id']) }}';
-        var url_add_user = '{{ route('user.store') }}';
+        var url_add_user = '{{ route('user_role_menu.store') }}';
+        var url_simpan_Role_menu = '{{ route('user_role_menu.store') }}';
+        var url_get_Role_menu = '{{ route('user_role_menu.getMenuByRole') }}';
 
         $(document).ready(function() {
             table = $("#table").DataTable({
@@ -77,7 +79,7 @@
                     render: function(data, type, row) {
                         return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-warning" id="user_role-add_user" data-id='${row.id}' data-kd_role='${row.kd_role}' data-ur_role='${row.ur_role}'>Menu</button>
+                                <button class="btn btn-sm btn-warning" id="user_role-add_menu" data-id='${row.id}' data-kd_role='${row.kd_role}' data-ur_role='${row.ur_role}'>Menu</button>
                                 <button class="btn btn-sm btn-primary" id="user_role-edit" data-id='${row.id}' data-kd_role='${row.kd_role}' data-ur_role='${row.ur_role}'>Edit</button>
                                 <button class="btn btn-sm btn-danger" id="user_role-delete" data-id='${row.id}' data-kd_role='${row.kd_role}' data-ur_role='${row.ur_role}'>Delete</button>
                             </div>
@@ -130,7 +132,7 @@
                     });
                 }
 
-            }).on('click', '#user_role-add_user', function() {
+            }).on('click', '#user_role-add_menu', function() {
                 $('#modal-input-user').modal('show');
                 $('#modal-input-user .modal-title').text('Tambah Data');
 
@@ -138,18 +140,88 @@
                 $('#modal-input-user form').attr('action', url_add_user);
                 $('#modal-input-user [name=_method]').val('post');
 
-                $('#modal-input-user [name=id]').val($(this).data('id_user'));
-                $('#modal-input-user [name=name]').val($(this).data('name'));
-                $('#modal-input-user [name=nik]').val($(this).data('nik_user_role'));
-                $('#modal-input-user [name=username]').val($(this).data('username'));
-                $('#modal-input-user [name=phone]').val($(this).data('phone'));
                 $('#modal-input-user [name=kd_role]').val($(this).data('kd_role'));
-                $('#modal-input-user [name=active]').val($(this).data('active'));
-                $('#modal-input-user [name=email]').val($(this).data('email'));
-                $('#modal-input-user [name=password]').val($(this).data('pwd'));
+                $('#modal-input-user #txt_menu').text($(this).data('ur_role'));
 
+                $.ajax({
+                    type: 'GET',
+                    url: url_get_Role_menu,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        kd_role: $(this).data('kd_role'),
+                    },
+                    success: function(response) {
+                        if (Array.isArray(response)) {
+                            response.forEach(function(menu) {
+                                console.log(menu.kd_menu);
+                                $('#modal-input-user [data-kd_menu="' + menu.kd_menu +
+                                    '"]').prop(
+                                    'checked',
+                                    true
+                                );
+                            });
+                        } else {
+                            console.error('Response bukan array.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Terjadi kesalahan: ', error);
+                    }
+                });
+
+
+
+            }).on('click', '#user_role-box', function() {
+                var kd_menu = $(this).data('kd_menu');
+
+                if ($(this).is(':checked')) {
+                    checkChildren(kd_menu, true);
+                } else {
+                    checkChildren(kd_menu, false);
+                }
+            }).on('click', '#user_role-box-simpan', function() {
+                var kd_role = $('#modal-input-user #kd_role').val();
+
+                var selectedData = [];
+                $('#modal-input-user #user_role-box:checked').each(function() {
+                    selectedData.push($(this).data('kd_menu'));
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: url_simpan_Role_menu,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        kd_role: kd_role,
+                        data: selectedData
+                    },
+                    success: function(response) {
+                        $('#modal-input-user form')[0].reset();
+                        $('#modal-input-user').modal('hide');
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Terjadi kesalahan: ', error);
+                    }
+                });
             });
         });
+
+        function checkChildren(kd_menu, checked) {
+            $('#modal-input-user #user_role-box').each(function() {
+                var kdParent = $(this).data('kd_parent');
+                var currentKdMenu = $(this).data('kd_menu');
+
+                if (kdParent == kd_menu) {
+                    $(this).prop('checked', checked);
+                    checkChildren(currentKdMenu, checked); // Pemanggilan rekursif
+                }
+            });
+        }
 
         function validate() {
             $('#modal-form').on('submit', function(e) {
