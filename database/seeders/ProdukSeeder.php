@@ -18,19 +18,26 @@ class ProdukSeeder extends Seeder
             [
                 'kd_produk' => '1',
                 'satker'    => 'ramwater',
-                'nama'      => 'Aqua Galon Air',
+                'nama'      => 'Aqua Galon SET',
                 'merek'     => 'Aqua',
                 'type'      => '19L',
             ],
             [
                 'kd_produk' => '2',
                 'satker'    => 'ramwater',
+                'nama'      => 'Aqua Galon Air',
+                'merek'     => 'Aqua',
+                'type'      => '19L',
+            ],
+            [
+                'kd_produk' => '3',
+                'satker'    => 'ramwater',
                 'nama'      => 'Aqua Galon Botol',
                 'merek'     => 'Aqua',
                 'type'      => 'Botol Galon',
             ],
             [
-                'kd_produk' => '3',
+                'kd_produk' => '4',
                 'satker'    => 'ramwater',
                 'nama'      => 'Lemineral Galon',
                 'merek'     => 'Lemineral',

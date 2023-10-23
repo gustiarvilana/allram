@@ -112,6 +112,18 @@ class MenuSeeder extends Seeder
                 'order'         => '7',
                 'is_active'     => '1',
             ],
+            [
+                'kd_menu'       => 9,
+                'kd_parent'     => 4,
+                'type'          => '',
+                'ur_menu_title' => 'Penjualan',
+                'ur_menu_desc'  => 'Penjualan',
+                'link_menu'     => '/ramwater/penjualan',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck-pickup',
+                'order'         => '3',
+                'is_active'     => '1',
+            ],
         ], ['kd_menu', 'kd_parent']);
 
         DB::table('users_role_menu')->upsert([
@@ -207,6 +219,10 @@ class MenuSeeder extends Seeder
             ], [
                 'kd_role' => 2,
                 'kd_menu' => 4,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 9,
                 'tahun' => 2023
             ],
         ], ['kd_role', 'kd_menu']);

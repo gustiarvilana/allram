@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Ramwater\DatangBarangControler;
+use App\Http\Controllers\Ramwater\PenjualanController;
 use App\Http\Controllers\Ramwater\RamwaterController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\MenuByRoleController;
@@ -50,5 +51,8 @@ Route::middleware(['roles:99,1,2'])->group(function () {
     Route::prefix('ramwater')->group(function () {
         Route::get('/datangbarang/data', [DatangBarangControler::class, 'data'])->name('datangbarang.data');
         Route::resource('/datangbarang', DatangBarangControler::class)->except('show');
+
+        Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
+        Route::resource('/penjualan', PenjualanController::class)->except('show');
     });
 });

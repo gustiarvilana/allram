@@ -25,11 +25,23 @@ class CreateTblProduk extends Migration
 
         Schema::create('d_datang_barang', function (Blueprint $table) {
             $table->id();
-            $table->string('tgl_datang');
+            $table->integer('tgl_datang');
             $table->string('nama');
             $table->string('kd_produk');
             $table->integer('jumlah');
             $table->integer('rb');
+            $table->timestamps();
+
+            $table->foreign('kd_produk')->references('kd_produk')->on('t_master_produk')->onDelete('cascade');
+        });
+
+        Schema::create('d_penjualan', function (Blueprint $table) {
+            $table->id();
+            $table->string('tgl_penjualan');
+            $table->string('nik');
+            $table->string('kd_produk');
+            $table->string('jumlah');
+            $table->string('galon_kembali')->nullable();
             $table->timestamps();
 
             $table->foreign('kd_produk')->references('kd_produk')->on('t_master_produk')->onDelete('cascade');

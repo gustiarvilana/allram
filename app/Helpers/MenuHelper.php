@@ -37,8 +37,16 @@ class MenuHelper
         if (count($children) > 0) {
             foreach ($children as $child) {
                 echo "<ul class='nav nav-treeview ml-2'>";
-                echo "<li class='nav-item'>";
-                echo "<a href='" . url('/') . $child->link_menu . "' class='nav-link'>";
+                echo "<li class='nav-item ";
+                if (url('/') . $child->link_menu === $currentUrl) {
+                    echo "menu-open";
+                }
+                echo "'>";
+                echo "<a href='" . url('/') . $child->link_menu . "' class='nav-link ";
+                if (url('/') . $child->link_menu === $currentUrl) {
+                    echo "active";
+                }
+                echo "'>";
                 echo "<i class='far fa-circle nav-icon'></i>";
                 echo "<p>" . $child->ur_menu_title . "</p>";
                 if (count(self::countChildren($child->kd_menu)->where('kd_parent', '!=', null)) > 0) {
@@ -54,6 +62,7 @@ class MenuHelper
             }
         }
     }
+
 
 
     public static function countChildren($kd_parent)
