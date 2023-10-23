@@ -22,7 +22,7 @@
 
         @if (count($menus))
             @foreach ($menus as $menu)
-                <div class="col-xl-2 col-md-4" id="{{ 'menu-' . $menu->kd_menu }}" style="display: none">
+                <div class="col-xl-2 col-md-4" id="{{ 'menu-' . $menu->kd_menu }}" style="display: block">
                     <div class="icon-box">
                         <i class="{{ $menu->icon }}"></i>
                         <h3><a href="#" class="menu-link" data-redirect="{{ url('/') . $menu->link_menu }}"

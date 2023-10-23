@@ -31,6 +31,7 @@ class KaryawanController extends Controller
         $data = [
             'nik'       => $request->input('nik'),
             'nama'      => $request->input('nama'),
+            'satker'      => $request->input('satker'),
             'alamat'    => $request->input('alamat'),
             'jk'        => $request->input('jk'),
             'ktp'       => $request->input('ktp'),
@@ -50,6 +51,7 @@ class KaryawanController extends Controller
             'id'        => $request->input('id'),
             'nik'       => $request->input('nik'),
             'nama'      => $request->input('nama'),
+            'satker'      => $request->input('satker'),
             'alamat'    => $request->input('alamat'),
             'jk'        => $request->input('jk'),
             'ktp'       => $request->input('ktp'),

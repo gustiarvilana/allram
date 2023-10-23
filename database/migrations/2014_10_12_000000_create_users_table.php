@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->integer('nik')->index();
             $table->string('nama');
+            $table->string('satker')->nullable();
             $table->text('alamat')->nullable();
             $table->string('jk')->nullable();
             $table->string('ktp')->nullable();

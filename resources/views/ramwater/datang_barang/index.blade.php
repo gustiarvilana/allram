@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Karyawan
+    Datang Barang
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card card-warning">
                 <div class="card-header">
-                    <a class="btn btn-success btn-xs" id="add_menu">Tambah Data</a>
+                    <a class="btn btn-success btn-xs" id="add_menu">Tambah Barang</a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -18,19 +18,11 @@
                                 <thead class="thead-inverse">
                                     <tr>
                                         <th width="5%">No</th>
-                                        <th>nik</th>
+                                        <th>tgl_datang</th>
                                         <th>nama</th>
-                                        <th>Satker</th>
-                                        <th>alamat</th>
-                                        <th>jk</th>
-                                        <th>ktp</th>
-                                        <th>no_hp</th>
-                                        <th>Referensi</th>
-                                        <th>username</th>
-                                        <th>phone</th>
-                                        <th>kd_role</th>
-                                        <th>active</th>
-                                        <th>email</th>
+                                        <th>kd_produk</th>
+                                        <th>jumlah</th>
+                                        <th>rb</th>
                                         <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
@@ -42,17 +34,15 @@
             </div>
         </div>
     </div>
-    @include('security.karyawan.form')
-    @include('security.karyawan.input-user')
+    @include('ramwater.datang_barang.form')
 @endsection
 
 @push('js')
     <script>
         let table;
-        var url_add = '{{ route('karyawan.store') }}';
-        var url_delete = '{{ route('karyawan.destroy', ['karyawan' => ':id']) }}';
-        var url_edit = '{{ route('karyawan.update', ['karyawan' => ':id']) }}';
-        var url_add_user = '{{ route('user.store') }}';
+        var url_add = '{{ route('datangbarang.store') }}';
+        var url_delete = '{{ route('datangbarang.destroy', ['datangbarang' => ':id']) }}';
+        var url_edit = '{{ route('datangbarang.update', ['datangbarang' => ':id']) }}';
 
         $(document).ready(function() {
             table = $("#table").DataTable({
@@ -73,46 +63,29 @@
                     // "colvis"
                 ],
                 "ajax": {
-                    url: '{{ route('karyawan.data') }}',
+                    url: '{{ route('datangbarang.data') }}',
                 },
                 "columns": [{
                     data: 'DT_RowIndex',
                     searchable: false,
                     shrotable: false
                 }, {
-                    data: 'nik_karyawan'
+                    data: 'tgl_datang'
                 }, {
                     data: 'nama'
                 }, {
-                    data: 'satker'
+                    data: 'nama_produk'
                 }, {
-                    data: 'alamat'
+                    data: 'jumlah'
                 }, {
-                    data: 'jk'
-                }, {
-                    data: 'ktp'
-                }, {
-                    data: 'no_hp'
-                }, {
-                    data: 'reference'
-                }, {
-                    data: 'username'
-                }, {
-                    data: 'phone'
-                }, {
-                    data: 'kd_role'
-                }, {
-                    data: 'active'
-                }, {
-                    data: 'email'
+                    data: 'rb'
                 }, {
                     data: 'id',
                     render: function(data, type, row) {
                         return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-warning" id="karyawan-add_user" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>User</button>
-                                <button class="btn btn-sm btn-primary" id="karyawan-edit" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Edit</button>
-                                <button class="btn btn-sm btn-danger" id="karyawan-delete" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Delete</button>
+                                <button class="btn btn-sm btn-primary" id="datangbarang-edit" data-id='${row.id}' data-tgl_datang='${row.tgl_datang}' data-nama='${row.nama}' data-kd_produk='${row.kd_produk}' data-jumlah='${row.jumlah} 'data-rb='${row.rb}'>Edit</button>
+                                <button class="btn btn-sm btn-danger" id="datangbarang-delete" data-id='${row.id}' data-tgl_datang='${row.tgl_datang}' data-nama='${row.nama}' data-kd_produk='${row.kd_produk}' data-jumlah='${row.jumlah} 'data-rb='${row.rb}'>Delete</button>
                             </div>
                         `;
                     }
@@ -122,33 +95,33 @@
 
             $('body').on('click', '#add_menu', function() {
                 $('#modal-form').modal('show');
-                $('#modal-form .modal-title').text('Tambah Data');
+                $('#modal-form .modal-title').text('Tambah Datang');
 
                 $('#modal-form form')[0].reset();
                 $('#modal-form form').attr('action', url_add);
                 $('#modal-form [name=_method]').val('post');
-            }).on('click', '#karyawan-edit', function() {
-                var id = $(this).data('id_karyawan');
+            }).on('click', '#datangbarang-edit', function() {
+                var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
 
+                console.log();
+
                 $('#modal-form').modal('show');
-                $('#modal-form .modal-title').text('Edit Data');
+                $('#modal-form .modal-title').text('Edit Datang');
 
                 $('#modal-form form')[0].reset();
                 $('#modal-form form').attr('action', url_edit);
                 $('#modal-form [name=_method]').val('put');
 
-                $('#modal-form [name=id]').val($(this).data('id_karyawan'));
-                $('#modal-form [name=nik]').val($(this).data('nik_karyawan'));
+                $('#modal-form [name=id]').val($(this).data('id'));
+                $('#modal-form [name=tgl_datang]').val($(this).data('tgl_datang'));
                 $('#modal-form [name=nama]').val($(this).data('nama'));
-                $('#modal-form [name=alamat]').val($(this).data('alamat'));
-                $('#modal-form [name=jk]').val($(this).data('jk'));
-                $('#modal-form [name=ktp]').val($(this).data('ktp'));
-                $('#modal-form [name=no_hp]').val($(this).data('no_hp'));
-                $('#modal-form [name=reference]').val($(this).data('reference'));
+                $('#modal-form [name=kd_produk]').val($(this).data('kd_produk'));
+                $('#modal-form [name=jumlah]').val($(this).data('jumlah'));
+                $('#modal-form [name=rb]').val($(this).data('rb'));
 
-            }).on('click', '#karyawan-delete', function() {
-                var id = $(this).data('id_karyawan');
+            }).on('click', '#datangbarang-delete', function() {
+                var id = $(this).data('id');
                 url_delete = url_delete.replace(':id', id);
 
                 if (confirm('Yakin akan menghapus data terpilih?')) {
@@ -167,24 +140,6 @@
                         }
                     });
                 }
-
-            }).on('click', '#karyawan-add_user', function() {
-                $('#modal-input-user').modal('show');
-                $('#modal-input-user .modal-title').text('Tambah Data');
-
-                $('#modal-input-user form')[0].reset();
-                $('#modal-input-user form').attr('action', url_add_user);
-                $('#modal-input-user [name=_method]').val('post');
-
-                $('#modal-input-user [name=id]').val($(this).data('id_user'));
-                $('#modal-input-user [name=name]').val($(this).data('nama'));
-                $('#modal-input-user [name=nik]').val($(this).data('nik_karyawan'));
-                $('#modal-input-user [name=username]').val($(this).data('username'));
-                $('#modal-input-user [name=phone]').val($(this).data('phone'));
-                $('#modal-input-user [name=kd_role]').val($(this).data('kd_role'));
-                $('#modal-input-user [name=active]').val($(this).data('active'));
-                $('#modal-input-user [name=email]').val($(this).data('email'));
-                $('#modal-input-user [name=password]').val($(this).data('pwd'));
 
             });
         });

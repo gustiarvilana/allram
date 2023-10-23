@@ -41,13 +41,13 @@ class MenuSeeder extends Seeder
             ],
             [
                 'kd_menu'       => 3,
-                'kd_parent'     => 0,
+                'kd_parent'     => 4,
                 'type'          => '',
-                'ur_menu_title' => 'Lorem Ipsum3',
-                'ur_menu_desc'  => 'Menu3',
-                'link_menu'     => '#',
+                'ur_menu_title' => 'Datang Barang',
+                'ur_menu_desc'  => 'Datang Barang',
+                'link_menu'     => '/ramwater/datangbarang',
                 'bg_color'      => '#',
-                'icon'          => 'ri-calendar-todo-line',
+                'icon'          => 'fas fa-truck-loading',
                 'order'         => '3',
                 'is_active'     => '1',
             ],
@@ -55,10 +55,10 @@ class MenuSeeder extends Seeder
             [
                 'kd_menu'       => 4,
                 'kd_parent'     => 0,
-                'type'          => 'nav',
+                'type'          => '',
                 'ur_menu_title' => 'RAM Water',
                 'ur_menu_desc'  => 'RAM Water',
-                'link_menu'     => '#',
+                'link_menu'     => '/ramwater',
                 'bg_color'      => '#',
                 'icon'          => 'ri-calendar-todo-line',
                 'order'         => '5',
@@ -197,12 +197,16 @@ class MenuSeeder extends Seeder
             ],
             [
                 'kd_role' => 2,
-                'kd_menu' => 2,
+                'kd_menu' => 3,
                 'tahun' => 2023
             ],
             [
                 'kd_role' => 3,
-                'kd_menu' => 3,
+                'kd_menu' => 2,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 4,
                 'tahun' => 2023
             ],
         ], ['kd_role', 'kd_menu']);

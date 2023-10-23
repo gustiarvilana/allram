@@ -38,6 +38,7 @@ class UserSeeder extends Seeder
             [
                 'nik'       => 2134,
                 'nama'      => 'Superuser',
+                'satker' => '',
                 'alamat'    => 'alamat User',
                 'jk'        => 'L',
                 'ktp'       => '00',
@@ -46,7 +47,8 @@ class UserSeeder extends Seeder
             ],
             [
                 'nik'       => '2135',
-                'nama'      => 'Administrator',
+                'nama'      => 'margana',
+                'satker' => 'ramwater',
                 'alamat'    => 'alamat Administrator',
                 'jk'        => 'L',
                 'ktp'       => '00',
@@ -55,7 +57,8 @@ class UserSeeder extends Seeder
             ],
             [
                 'nik'       => '2136',
-                'nama'      => 'Admin',
+                'nama'      => 'Rista',
+                'satker'    => 'ramwater',
                 'alamat'    => 'alamat Admin',
                 'jk'        => 'P',
                 'ktp'       => '00',
@@ -65,6 +68,7 @@ class UserSeeder extends Seeder
             [
                 'nik'       => '2137',
                 'nama'      => 'Sales',
+                'satker' => 'ramwater',
                 'alamat'    => 'alamat Sales',
                 'jk'        => 'P',
                 'ktp'       => '00',
