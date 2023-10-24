@@ -23,7 +23,6 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
                     <div class="form-group">
                         <label for="nik">nik</label>
                         <select name="nik" id="nik" class="form-control">
@@ -72,7 +71,30 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
+                    <div class="form-group">
+                        <label for="cash">cash</label>
+                        <input type="text" class="form-control" name="cash" id="cash"
+                            value="{{ old('cash') }}">
+                        @error('cash')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="galon_diluar">galon_diluar</label>
+                        <input type="text" class="form-control" name="galon_diluar" id="galon_diluar"
+                            value="{{ old('galon_diluar') }}">
+                        @error('galon_diluar')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="total_harga">total_harga</label>
+                        <input type="text" class="form-control" name="total_harga" id="total_harga"
+                            value="{{ old('total_harga') }}">
+                        @error('total_harga')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                 </div>
                 <div class="modal-footer">

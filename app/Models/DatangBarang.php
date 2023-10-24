@@ -9,6 +9,6 @@ class DatangBarang extends Model
 {
     use HasFactory;
 
-    protected $table = 'd_datang_barang';
+    protected $table = 'ramwater_d_datang_barang';
     protected $guarded = [];
 }

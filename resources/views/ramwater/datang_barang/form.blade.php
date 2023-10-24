@@ -36,7 +36,7 @@
                         <select name="kd_produk" id="kd_produk" class="form-control">
                             <option value="">Pilih Produk</option>
                             @foreach ($produks as $produk)
-                                <option value="{{ $produk->kd_produk }}">{{ $produk->merek . ' / ' . $produk->type }}
+                                <option value="{{ $produk->kd_produk }}">{{ $produk->nama . ' / ' . $produk->type }}
                                 </option>
                             @endforeach
                         </select>
