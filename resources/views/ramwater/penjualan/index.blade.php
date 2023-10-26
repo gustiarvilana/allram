@@ -174,7 +174,7 @@
                 $('#modal-galon .modal-title').text('Peminjam Galon');
 
                 $('#modal-galon [name=_method]').val('post');
-                $('#modal-galon [name=id]').val($(this).data('id'));
+                $('#modal-galon [name=id_penjualan]').val($(this).data('id'));
 
                 table_galon = $("#table_galon").DataTable({
                     "dom": 'Bfrtip',
@@ -212,8 +212,8 @@
                         render: function(data, type, row) {
                             return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" id="galon-edit" data-id='${row.id}'> Edit</button>
-                                <button class="btn btn-sm btn-danger" id="galon-delete" data-id='${row.id}'> Delete</button>
+                                <button class="btn btn-sm btn-primary" id="galon-edit" data-id='${row.id}' data-id_penjualan='${row.id_penjualan}' data-nama='${row.nama}' data-jumlah='${row.jumlah}'> Edit</button>
+                                <button class="btn btn-sm btn-danger" id="galon-delete" data-id='${row.id}' data-id_penjualan='${row.id_penjualan}' data-nama='${row.nama}' data-jumlah='${row.jumlah}'> Delete</button>
                             </div>
                         `;
                         }
@@ -269,32 +269,23 @@
                         }, 5000);
                     },
                 })
-            }).on('click', '#galon-edit', function() {
-                var id = $(this).data('id');
-                url_edit = url_edit.replace(':id', id);
+            }).on('click', '#galon-edit', function(e) {
+                if (!e.preventDefault()) {
+                    if (!e.preventDefault()) {
+                        var id = $(this).data('id');
+                        var id_penjualan = $(this).data('id_penjualan');
+                        var nama = $(this).data('nama');
+                        var jumlah = $(this).data('jumlah');
 
-                console.log();
+                        $('#modal-galon #id').val(id)
+                        $('#modal-galon #id_penjualan').val(id_penjualan)
+                        $('#modal-galon #nama').val(nama)
+                        $('#modal-galon #jumlah').val(jumlah)
 
-                $('#modal-form').modal('show');
-                $('#modal-form .modal-title').text('Edit Penjualan');
-
-                $('#modal-form form')[0].reset();
-                $('#modal-form form').attr('action', url_edit);
-                $('#modal-form [name=_method]').val('put');
-
-                $('#modal-form [name=id]').val($(this).data('id'));
-
-                $('#modal-form [name=tgl_penjualan]').val($(this).data('tgl_penjualan'));
-                $('#modal-form [name=nik]').val($(this).data('nik'));
-                $('#modal-form [name=kd_produk]').val($(this).data('kd_produk'));
-                $('#modal-form [name=jumlah]').val($(this).data('jumlah'));
-                $('#modal-form [name=galon_kembali]').val($(this).data('galon_kembali'));
-                $('#modal-form [name=galon_diluar]').val($(this).data('galon_diluar'));
-                $('#modal-form [name=total_harga]').val($(this).data('total_harga'));
-                $('#modal-form [name=cash]').val($(this).data('cash'));
+                    }
+                }
 
             }).on('click', '#galon-delete', function(e) {
-                console.log('sdfsf');
                 var id = $(this).data('id');
                 url_delete_galon = url_delete_galon.replace(':id', id);
 

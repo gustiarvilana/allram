@@ -103,8 +103,10 @@
             }).on('click', '#datangbarang-edit', function() {
                 var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
+                var tgl_datang = $(this).attr('data-tgl_datang').toString();
+                var tgl = tgl_datang.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+                console.log(tgl);
 
-                console.log();
 
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Edit Datang');
@@ -114,7 +116,7 @@
                 $('#modal-form [name=_method]').val('put');
 
                 $('#modal-form [name=id]').val($(this).data('id'));
-                $('#modal-form [name=tgl_datang]').val($(this).data('tgl_datang'));
+                $('#modal-form [name=tgl_datang]').val(tgl);
                 $('#modal-form [name=nama]').val($(this).data('nama'));
                 $('#modal-form [name=kd_produk]').val($(this).data('kd_produk'));
                 $('#modal-form [name=jumlah]').val($(this).data('jumlah'));

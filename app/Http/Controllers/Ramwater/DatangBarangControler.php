@@ -12,7 +12,7 @@ class DatangBarangControler extends Controller
 {
     public function data(Request $request)
     {
-        $datangBarang = DB::table('d_datang_barang as a')
+        $datangBarang = DB::table('ramwater_d_datang_barang as a')
             ->select('a.*', 'b.nama as nama_produk')
             ->join('t_master_produk as b', 'a.kd_produk', 'b.kd_produk');
 

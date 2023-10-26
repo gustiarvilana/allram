@@ -21,7 +21,8 @@ class DGalonController extends Controller
     public function store(Request $request)
     {
         $data = [
-            'id_penjualan' => $request->input('id'),
+            'id'           => $request->input('id'),
+            'id_penjualan' => $request->input('id_penjualan'),
             'nama'         => $request->input('nama'),
             'jumlah'       => $request->input('jumlah'),
             'tgl_kembali'  => $request->input('tgl_kembali'),

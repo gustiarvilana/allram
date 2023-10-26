@@ -13,12 +13,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id">
+                    <input type="hidden" name="id" id="id">
 
                     <div class="form-group" style="display: block">
-                        <label for="id">id </label>
-                        <input type="text" class="form-control" name="id" id="id">
-                        @error('id')
+                        <label for="id_penjualan">id_penjualan </label>
+                        <input type="text" class="form-control" name="id_penjualan" id="id_penjualan">
+                        @error('id_penjualan')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="modal-footer">
                     {{-- <button class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                    <button class="btn btn-primary">Simpan</button>
+                    {{-- <button class="btn btn-primary">Simpan</button> --}}
                 </div>
             </div>
         </form>

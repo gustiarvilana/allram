@@ -29,9 +29,9 @@ class PenjualanController extends Controller
                 'c.nama as nama_sales',
                 DB::raw('SUM(d.jumlah) as sum_galon')
             )
-            ->join('t_master_produk as b', 'a.kd_produk', 'b.kd_produk')
-            ->join('t_karyawan as c', 'a.nik', 'c.nik')
-            ->join('ramwater_d_galon as d', 'a.id', 'd.id_penjualan')
+            ->leftJoin('t_master_produk as b', 'a.kd_produk', 'b.kd_produk')
+            ->leftJoin('t_karyawan as c', 'a.nik', 'c.nik')
+            ->leftJoin('ramwater_d_galon as d', 'a.id', 'd.id_penjualan')
             ->groupBy(
                 'a.id',
                 'a.tgl_penjualan',
