@@ -50,6 +50,17 @@ class CreateTblProduk extends Migration
             $table->foreign('kd_produk')->references('kd_produk')->on('t_master_produk')->onDelete('cascade');
         });
 
+        Schema::create('ramwater_d_penjualan_detail', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('id_penjualan');
+            $table->string('nama');
+            $table->integer('jumlah');
+            $table->integer('harga')->nullable();
+            $table->integer('total')->nullable();
+            $table->text('ket')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('ramwater_d_galon', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_penjualan');

@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-galon" data-backdrop="static" data-keyboard="false" tabindex="-1"
+<div class="modal fade" id="modal-detail" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="alert alert-danger" style="display:none"></div>
@@ -32,27 +32,44 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="jumlah">jumlah Pinjam </label>
+                        <label for="jumlah">Jumlah </label>
                         <input type="text" class="form-control money" name="jumlah" id="jumlah"
                             value="{{ old('jumlah') }}">
                         @error('jumlah')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label for="harga">Harga </label>
+                        <input type="text" class="form-control money" name="harga" id="harga"
+                            value="{{ old('harga') }}">
+                        @error('harga')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="ket">Keterangan </label>
+                        <textarea name="ket" id="ket" rows="3" class="form-control" value="{{ old('ket') }}"></textarea>
+                        @error('ket')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="row">
                         <div class="col table-responsive">
                             <div class="card-header">
-                                <a class="btn btn-success float-right" id="save_galon">Simpan</a>
+                                <a class="btn btn-success float-right" id="save_detail">Simpan</a>
                             </div>
                             <div class="card-body">
-                                <table class="table table-bordered table-striped" id="table_galon">
+                                <table class="table table-bordered table-striped" id="table_detail">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
                                             <th>id</th>
                                             <th>nama</th>
                                             <th>jumlah</th>
-                                            <th width="25%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
+                                            <th>harga</th>
+                                            <th>Keterangan</th>
+                                            <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

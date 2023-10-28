@@ -27,11 +27,12 @@ class PenjualanController extends Controller
                 'a.cash',
                 'b.nama as nama_produk',
                 'c.nama as nama_sales',
-                DB::raw('SUM(d.jumlah) as sum_galon')
+                DB::raw('(SELECT SUM(jumlah) FROM ramwater_d_galon as d WHERE d.id_penjualan = a.id) as sum_galon'),
+                DB::raw('(SELECT SUM(total) FROM ramwater_d_penjualan_detail as e WHERE e.id_penjualan = a.id) as sum_detail'),
+                DB::raw('(SELECT SUM(jumlah) FROM ramwater_d_penjualan_detail as e WHERE e.id_penjualan = a.id) as sum_jumlah')
             )
-            ->leftJoin('t_master_produk as b', 'a.kd_produk', 'b.kd_produk')
-            ->leftJoin('t_karyawan as c', 'a.nik', 'c.nik')
-            ->leftJoin('ramwater_d_galon as d', 'a.id', 'd.id_penjualan')
+            ->leftJoin('t_master_produk as b', 'a.kd_produk', '=', 'b.kd_produk')
+            ->leftJoin('t_karyawan as c', 'a.nik', '=', 'c.nik')
             ->groupBy(
                 'a.id',
                 'a.tgl_penjualan',
@@ -48,10 +49,9 @@ class PenjualanController extends Controller
             ->get();
 
 
+
         return DataTables::of($datangBarang)->addIndexColumn()->make(true);
     }
-
-
 
     public function index()
     {
@@ -77,6 +77,13 @@ class PenjualanController extends Controller
             'total_harga'   => $request->input('total_harga'),
             'cash'          => $request->input('cash'),
         ];
+        $data['jumlah']        = str_replace('.', '', $data['jumlah']);
+        $data['galon_kembali'] = str_replace('.', '', $data['galon_kembali']);
+        $data['galon_diluar']  = str_replace('.', '', $data['galon_diluar']);
+        $data['total_harga']   = str_replace('.', '', $data['total_harga']);
+        $data['cash']          = str_replace('.', '', $data['cash']);
+
+
         $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
 
         try {

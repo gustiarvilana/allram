@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Ramwater\DatangBarangControler;
 use App\Http\Controllers\Ramwater\DGalonController;
 use App\Http\Controllers\Ramwater\PenjualanController;
+use App\Http\Controllers\Ramwater\PenjualandetailController;
 use App\Http\Controllers\Ramwater\RamwaterController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\MenuByRoleController;
@@ -58,5 +59,8 @@ Route::middleware(['roles:99,1,2'])->group(function () {
 
         Route::get('/galon/data/{id}', [DGalonController::class, 'data'])->name('galon.data');
         Route::resource('/galon', DGalonController::class)->except('show');
+
+        Route::get('/penjualandetail/data/{id}', [PenjualandetailController::class, 'data'])->name('penjualandetail.data');
+        Route::resource('/penjualandetail', PenjualandetailController::class)->except('show');
     });
 });

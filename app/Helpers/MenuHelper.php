@@ -76,4 +76,9 @@ class MenuHelper
         $menu = UserMenu::where('link_menu', '/' . $path)->first()->kd_menu;
         return $menu;
     }
+
+    function format_uang($angka)
+    {
+        return number_format($angka, 0, ',', '.');
+    }
 }
