@@ -7,7 +7,7 @@
         @php
             $count_child = MenuHelper::countChildren($menu->kd_menu)->where('kd_parent', '!=', null);
         @endphp
-        <li class="nav-item">
+        <li class="nav-item menu-is-opening menu-open">
             <a href="{{ url('/') . $menu->link_menu }}"
                 class="nav-link @if ('/' . $currentUrl == $menu->link_menu) active @endif>{{ $menu->ur_menu_title }}">
                 <i class="nav-icon {{ $menu->icon }}"></i>

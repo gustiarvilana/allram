@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Ramwater;
+namespace App\Http\Controllers\Ramwater\Penjualan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DGalonController extends Controller
+class PenjualandetailController extends Controller
 {
     public function data($id_penjualan)
     {
-        $datangBarang = DB::table('ramwater_d_galon as a')->where('id_penjualan', $id_penjualan);
+        $detail = DB::table('ramwater_d_penjualan_detail as a')->where('id_penjualan', $id_penjualan);
 
         return datatables()
-            ->of($datangBarang)
+            ->of($detail)
             ->addIndexColumn()
             ->make(true);
     }
@@ -25,12 +25,15 @@ class DGalonController extends Controller
             'id_penjualan' => $request->input('id_penjualan'),
             'nama'         => $request->input('nama'),
             'jumlah'       => $request->input('jumlah'),
-            'tgl_kembali'  => $request->input('tgl_kembali'),
+            'harga'        => $request->input('harga'),
+            'ket'        => $request->input('ket'),
         ];
         $data['jumlah'] = str_replace('.', '', $data['jumlah']);
+        $data['harga']  = str_replace('.', '', $data['harga']);
+        $data['total']  =  $data['jumlah'] * $data['harga'];
 
         try {
-            DB::table('ramwater_d_galon')->upsert($data, ['id']);
+            DB::table('ramwater_d_penjualan_detail')->upsert($data, ['id']);
             return 'berhasil disimpan';
         } catch (\Throwable $th) {
             throw $th;
@@ -40,7 +43,7 @@ class DGalonController extends Controller
     public function destroy($id)
     {
         try {
-            DB::table('ramwater_d_galon')->where('id', $id)->delete();
+            DB::table('ramwater_d_penjualan_detail')->where('id', $id)->delete();
         } catch (\Throwable $th) {
             throw $th;
         }

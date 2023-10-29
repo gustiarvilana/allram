@@ -20,7 +20,7 @@ class MenuSeeder extends Seeder
                 'kd_parent'     => 0,
                 'type'          => '',
                 'ur_menu_title' => 'Security',
-                'ur_menu_desc'  => 'Menu1',
+                'ur_menu_desc'  => 'User Management',
                 'link_menu'     => '/security',
                 'bg_color'      => '#',
                 'icon'          => 'ri-secure-payment-line',
@@ -31,27 +31,14 @@ class MenuSeeder extends Seeder
                 'kd_menu'       => 2,
                 'kd_parent'     => 0,
                 'type'          => '',
-                'ur_menu_title' => 'Lorem Ipsum2',
-                'ur_menu_desc'  => 'Menu2',
+                'ur_menu_title' => 'RAM Armalia',
+                'ur_menu_desc'  => 'Direct selling',
                 'link_menu'     => '#',
                 'bg_color'      => '#',
                 'icon'          => 'ri-bar-chart-box-line',
                 'order'         => '2',
                 'is_active'     => '1',
             ],
-            [
-                'kd_menu'       => 3,
-                'kd_parent'     => 4,
-                'type'          => '',
-                'ur_menu_title' => 'Datang Barang',
-                'ur_menu_desc'  => 'Datang Barang',
-                'link_menu'     => '/ramwater/datangbarang',
-                'bg_color'      => '#',
-                'icon'          => 'fas fa-truck-loading',
-                'order'         => '3',
-                'is_active'     => '1',
-            ],
-
             [
                 'kd_menu'       => 4,
                 'kd_parent'     => 0,
@@ -61,7 +48,7 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/ramwater',
                 'bg_color'      => '#',
                 'icon'          => 'ri-calendar-todo-line',
-                'order'         => '5',
+                'order'         => '3',
                 'is_active'     => '1',
             ],
             [
@@ -85,7 +72,7 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/security/user_menu',
                 'bg_color'      => '#',
                 'icon'          => 'fab fa-mendeley',
-                'order'         => '6',
+                'order'         => '5',
                 'is_active'     => '1',
             ],
             [
@@ -97,7 +84,7 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/security/user_role',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-user-tag',
-                'order'         => '7',
+                'order'         => '6',
                 'is_active'     => '1',
             ],
             [
@@ -121,7 +108,43 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/ramwater/penjualan',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-truck-pickup',
-                'order'         => '3',
+                'order'         => '8',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 10,
+                'kd_parent'     => 3,
+                'type'          => '',
+                'ur_menu_title' => 'Laporan',
+                'ur_menu_desc'  => 'Penjualan Datang Barang',
+                'link_menu'     => '/ramwater/laporan/datangbarang',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck-pickup',
+                'order'         => '11',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 3,
+                'kd_parent'     => 4,
+                'type'          => '',
+                'ur_menu_title' => 'Datang Barang',
+                'ur_menu_desc'  => 'Datang Barang',
+                'link_menu'     => '#',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck-loading',
+                'order'         => '10',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 11,
+                'kd_parent'     => 3,
+                'type'          => '',
+                'ur_menu_title' => 'Input Datang Barang',
+                'ur_menu_desc'  => 'Datang Barang',
+                'link_menu'     => '/ramwater/datangbarang',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck-loading',
+                'order'         => '9',
                 'is_active'     => '1',
             ],
         ], ['kd_menu', 'kd_parent']);
@@ -168,6 +191,21 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 1,
+                'kd_menu' => 9,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 10,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 11,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 99,
                 'kd_menu' => 1,
                 'tahun' => 2023
@@ -208,6 +246,21 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 99,
+                'kd_menu' => 9,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 10,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 11,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 3,
                 'tahun' => 2023
@@ -223,6 +276,14 @@ class MenuSeeder extends Seeder
             ], [
                 'kd_role' => 2,
                 'kd_menu' => 9,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 10,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 11,
                 'tahun' => 2023
             ],
         ], ['kd_role', 'kd_menu']);

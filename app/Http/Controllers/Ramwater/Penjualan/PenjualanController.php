@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ramwater;
+namespace App\Http\Controllers\Ramwater\Penjualan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Karyawan;

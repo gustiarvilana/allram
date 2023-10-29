@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ramwater;
+namespace App\Http\Controllers\Ramwater\DatangBarang;
 
 use App\Http\Controllers\Controller;
 use App\Models\DatangBarang;
@@ -38,8 +38,13 @@ class DatangBarangControler extends Controller
             'kd_produk' => $request->input('kd_produk'),
             'jumlah' => $request->input('jumlah'),
             'rb' => $request->input('rb'),
+            'harga' => $request->input('harga'),
         ];
         $data['tgl_datang'] = date('Ymd', strtotime($data['tgl_datang']));
+        if (isset($data['harga'])) {
+            $data['harga']        = str_replace('.', '', $data['harga']);
+        }
+
         try {
             DatangBarang::upsert($data, ['id']); // Memanggil metode upsert dari model User
             return;
@@ -57,7 +62,12 @@ class DatangBarangControler extends Controller
             'kd_produk'  => $request->input('kd_produk'),
             'jumlah'     => $request->input('jumlah'),
             'rb'         => $request->input('rb'),
+            'harga'      => $request->input('harga'),
         ];
+        if (isset($data['harga'])) {
+            $data['harga']        = str_replace('.', '', $data['harga']);
+        }
+
         $data['tgl_datang'] = date('Ymd', strtotime($data['tgl_datang']));
         try {
             DatangBarang::upsert($data, ['id']); // Memanggil metode upsert dari model User

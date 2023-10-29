@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\UserMenu;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MenuHelper
@@ -32,22 +33,24 @@ class MenuHelper
             ->join('users_role_menu as b', 'a.kd_menu', 'b.kd_menu')
             ->where('a.kd_parent', $kd_parent)
             ->where('b.tahun', 2023)
+            ->where('b.kd_role', Auth::user()->kd_role)
+            ->orderBy('a.order', 'desc')
             ->get();
 
         if (count($children) > 0) {
             foreach ($children as $child) {
                 echo "<ul class='nav nav-treeview ml-2'>";
                 echo "<li class='nav-item ";
-                if (url('/') . $child->link_menu === $currentUrl) {
+                if ($child->link_menu == '/' . $currentUrl) {
                     echo "menu-open";
                 }
                 echo "'>";
                 echo "<a href='" . url('/') . $child->link_menu . "' class='nav-link ";
-                if (url('/') . $child->link_menu === $currentUrl) {
+                if ($child->link_menu == '/' . $currentUrl) {
                     echo "active";
                 }
                 echo "'>";
-                echo "<i class='far fa-circle nav-icon'></i>";
+                echo "<i class='" . ($child->icon == '#' ? $child->icon : 'far fa-circle') . " nav-icon'></i>";
                 echo "<p>" . $child->ur_menu_title . "</p>";
                 if (count(self::countChildren($child->kd_menu)->where('kd_parent', '!=', null)) > 0) {
                     echo '<i class="right fas fa-angle-left"></i>';

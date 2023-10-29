@@ -121,6 +121,7 @@
                 $('#modal-form [name=kd_produk]').val($(this).data('kd_produk'));
                 $('#modal-form [name=jumlah]').val($(this).data('jumlah'));
                 $('#modal-form [name=rb]').val($(this).data('rb'));
+                $('#modal-form [name=harga]').val($(this).data('harga'));
 
             }).on('click', '#datangbarang-delete', function() {
                 var id = $(this).data('id');

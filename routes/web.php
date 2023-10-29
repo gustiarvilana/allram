@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Ramwater\DatangBarangControler;
-use App\Http\Controllers\Ramwater\DGalonController;
-use App\Http\Controllers\Ramwater\PenjualanController;
-use App\Http\Controllers\Ramwater\PenjualandetailController;
+use App\Http\Controllers\Ramwater\DatangBarang\DatangBarangControler;
+use App\Http\Controllers\Ramwater\Penjualan\DGalonController;
+use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
+use App\Http\Controllers\Ramwater\Penjualan\PenjualandetailController;
 use App\Http\Controllers\Ramwater\RamwaterController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\MenuByRoleController;
