@@ -117,7 +117,7 @@ class MenuSeeder extends Seeder
                 'type'          => '',
                 'ur_menu_title' => 'Laporan',
                 'ur_menu_desc'  => 'Penjualan Datang Barang',
-                'link_menu'     => '/ramwater/laporan/datangbarang',
+                'link_menu'     => '/ramwater/datangbarang/laporan',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-truck-pickup',
                 'order'         => '11',

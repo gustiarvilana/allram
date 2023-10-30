@@ -23,6 +23,8 @@
                                         <th>kd_produk</th>
                                         <th>jumlah</th>
                                         <th>rb</th>
+                                        <th>Harga</th>
+                                        <th>Total</th>
                                         <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
@@ -79,6 +81,10 @@
                     data: 'jumlah'
                 }, {
                     data: 'rb'
+                }, {
+                    data: 'harga'
+                }, {
+                    data: 'total'
                 }, {
                     data: 'id',
                     render: function(data, type, row) {

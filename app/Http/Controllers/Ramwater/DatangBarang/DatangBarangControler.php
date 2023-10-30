@@ -41,8 +41,10 @@ class DatangBarangControler extends Controller
             'harga' => $request->input('harga'),
         ];
         $data['tgl_datang'] = date('Ymd', strtotime($data['tgl_datang']));
+
         if (isset($data['harga'])) {
-            $data['harga']        = str_replace('.', '', $data['harga']);
+            $data['harga']      = str_replace('.', '', $data['harga']);
+            $data['total'] = $data['harga'] * $data['jumlah'];
         }
 
         try {
@@ -64,11 +66,13 @@ class DatangBarangControler extends Controller
             'rb'         => $request->input('rb'),
             'harga'      => $request->input('harga'),
         ];
+        $data['tgl_datang'] = date('Ymd', strtotime($data['tgl_datang']));
+
         if (isset($data['harga'])) {
-            $data['harga']        = str_replace('.', '', $data['harga']);
+            $data['harga'] = str_replace('.', '', $data['harga']);
+            $data['total'] = $data['harga'] * $data['jumlah'];
         }
 
-        $data['tgl_datang'] = date('Ymd', strtotime($data['tgl_datang']));
         try {
             DatangBarang::upsert($data, ['id']); // Memanggil metode upsert dari model User
             return;

@@ -31,6 +31,7 @@ class CreateTblProduk extends Migration
             $table->integer('jumlah');
             $table->integer('rb')->nullable();
             $table->integer('harga')->nullable();
+            $table->integer('total')->nullable();
             $table->timestamps();
 
             $table->foreign('kd_produk')->references('kd_produk')->on('t_master_produk')->onDelete('cascade');

@@ -17,7 +17,7 @@
                     <div class="form-group col-md-4">
                         <label for="tgl_datang">tgl_datang</label>
                         <input type="date" class="form-control" name="tgl_datang" id="tgl_datang"
-                            value="{{ old('tgl_datang') }}" required>
+                            value="{{ date('Y-m-d') }}" required>
                         @error('tgl_datang')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
