@@ -14,6 +14,7 @@ class PenjualanController extends Controller
 {
     public function data(Request $request)
     {
+        $tanggal = isset($request['tanggal']) ? date('Ymd', strtotime($request['tanggal'])) : date('Ymd');
         $datangBarang = DB::table('ramwater_d_penjualan as a')
             ->select(
                 'a.id as id_penjualan',
@@ -23,7 +24,6 @@ class PenjualanController extends Controller
                 'a.jumlah',
                 'a.galon_kembali',
                 'a.galon_diluar',
-                'a.total_harga',
                 'a.cash',
                 'b.nama as nama_produk',
                 'c.nama as nama_sales',
@@ -33,6 +33,7 @@ class PenjualanController extends Controller
             )
             ->leftJoin('t_master_produk as b', 'a.kd_produk', '=', 'b.kd_produk')
             ->leftJoin('t_karyawan as c', 'a.nik', '=', 'c.nik')
+            ->where('tgl_penjualan', $tanggal)
             ->groupBy(
                 'a.id',
                 'a.tgl_penjualan',
@@ -41,14 +42,11 @@ class PenjualanController extends Controller
                 'a.jumlah',
                 'a.galon_kembali',
                 'a.galon_diluar',
-                'a.total_harga',
                 'a.cash',
                 'b.nama',
                 'c.nama'
             )
             ->get();
-
-
 
         return DataTables::of($datangBarang)->addIndexColumn()->make(true);
     }

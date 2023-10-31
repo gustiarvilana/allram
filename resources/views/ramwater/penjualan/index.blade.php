@@ -12,6 +12,15 @@
                     <a class="btn btn-success btn-xs" id="add_menu">Tambah Penjualan</a>
                 </div>
                 <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-md-4 text-center">
+                            <div class="form-group">
+                                <label for="">Tanggal Penjualan</label>
+                            </div>
+                            <input type="date" name="tanggal" id="tanggal" class="form-control"
+                                value="{{ date('Y-m-d') }}">
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col table-responsive">
                             <table class="table table-striped table-bordered table-inverse text-center" id="table">
@@ -46,6 +55,7 @@
     <script>
         let table;
         let table_galon;
+        var tanggal = $('#tanggal').val();
         var url_add = '{{ route('penjualan.store') }}';
         var url_delete = '{{ route('penjualan.destroy', ['penjualan' => ':id']) }}';
         var url_edit = '{{ route('penjualan.update', ['penjualan' => ':id']) }}';
@@ -74,6 +84,9 @@
                 ],
                 "ajax": {
                     url: '{{ route('penjualan.data') }}',
+                    data: function(d) {
+                        d.tanggal = tanggal;
+                    }
                 },
                 "columns": [{
                     data: 'DT_RowIndex',
@@ -102,8 +115,7 @@
                 }, {
                     data: 'sum_detail',
                     render: function(data, type, row) {
-
-                        return row.sum_detail;
+                        return formatRupiah(row.sum_detail);
                     }
                 }, {
                     data: 'cash'
@@ -115,13 +127,13 @@
                             display = 'block';
                         }
                         return `
-                            <div class="btn-group">
-                                <button class="btn btn-m btn-info" style="display: block" id="penjualan-detail" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Detail</button>
-                                <button class="btn btn-m btn-warning" style="display:${display}" id="penjualan-galon" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Pinjam</button>
-                                <button class="btn btn-m btn-primary" id="penjualan-edit" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Edit</button>
-                                <button class="btn btn-m btn-danger" id="penjualan-delete" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Delete</button>
-                            </div>
-                        `;
+                        <div class="btn-group">
+                            <button class="btn btn-m btn-info" style="display: block" id="penjualan-detail" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Detail</button>
+                            <button class="btn btn-m btn-warning" style="display:${display}" id="penjualan-galon" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Pinjam</button>
+                            <button class="btn btn-m btn-primary" id="penjualan-edit" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Edit</button>
+                            <button class="btn btn-m btn-danger" id="penjualan-delete" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Delete</button>
+                        </div>
+                    `;
                     }
 
                 }],
@@ -155,14 +167,14 @@
                         className: 'dt-body-right',
                         render: $.fn.dataTable.render.number('.', '.', 0, '')
                     },
-                    {
-                        targets: 9,
-                        className: 'dt-body-right',
-                        render: $.fn.dataTable.render.number('.', '.', 0, '')
-                    },
                 ],
             });
             validate()
+
+            $('#tanggal').on('change', function() {
+                tanggal = $('#tanggal').val();
+                table.ajax.reload();
+            })
 
             $('body').on('click', '#add_menu', function() {
                 $('#modal-form').modal('show');
@@ -185,6 +197,7 @@
                 $('#modal-form [name=_method]').val('put');
 
                 $('#modal-form [name=id]').val($(this).data('id'));
+                $('#modal-form #cash').show()
 
                 $('#modal-form [name=tgl_penjualan]').val($(this).data('tgl_penjualan'));
                 $('#modal-form [name=nik]').val($(this).data('nik'));

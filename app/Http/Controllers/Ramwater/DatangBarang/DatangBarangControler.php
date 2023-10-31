@@ -12,9 +12,11 @@ class DatangBarangControler extends Controller
 {
     public function data(Request $request)
     {
+        $tanggal = date('Ymd', strtotime($request['tanggal']));
         $datangBarang = DB::table('ramwater_d_datang_barang as a')
             ->select('a.*', 'b.nama as nama_produk')
-            ->join('t_master_produk as b', 'a.kd_produk', 'b.kd_produk');
+            ->join('t_master_produk as b', 'a.kd_produk', 'b.kd_produk')
+            ->where('tgl_datang', $tanggal);
 
         return datatables()
             ->of($datangBarang)

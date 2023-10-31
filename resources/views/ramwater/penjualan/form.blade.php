@@ -71,26 +71,24 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="cash" style="display: none">
                         <label for="cash">cash</label>
-                        <input type="text" class="form-control" name="cash" id="cash"
-                            value="{{ old('cash') }}">
+                        <input type="text" class="form-control" name="cash" value="{{ old('cash') }}">
                         @error('cash')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="galon_diluar" style="display: none">
                         <label for="galon_diluar">galon_diluar</label>
-                        <input type="text" class="form-control" name="galon_diluar" id="galon_diluar"
+                        <input type="text" class="form-control" name="galon_diluar"
                             value="{{ old('galon_diluar') }}">
                         @error('galon_diluar')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="total_harga" style="display: none">
                         <label for="total_harga">total_harga</label>
-                        <input type="text" class="form-control" name="total_harga" id="total_harga"
-                            value="{{ old('total_harga') }}">
+                        <input type="text" class="form-control" name="total_harga" value="{{ old('total_harga') }}">
                         @error('total_harga')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

@@ -101,10 +101,10 @@ class MenuSeeder extends Seeder
             ],
             [
                 'kd_menu'       => 9,
-                'kd_parent'     => 4,
+                'kd_parent'     => 12,
                 'type'          => '',
-                'ur_menu_title' => 'Penjualan',
-                'ur_menu_desc'  => 'Penjualan',
+                'ur_menu_title' => 'Input Penjualan',
+                'ur_menu_desc'  => 'Input Penjualan',
                 'link_menu'     => '/ramwater/penjualan',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-truck-pickup',
@@ -145,6 +145,30 @@ class MenuSeeder extends Seeder
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-truck-loading',
                 'order'         => '9',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 12,
+                'kd_parent'     => 4,
+                'type'          => '',
+                'ur_menu_title' => 'Penjualan',
+                'ur_menu_desc'  => 'Penjualan',
+                'link_menu'     => '#',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck',
+                'order'         => '10',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 13,
+                'kd_parent'     => 12,
+                'type'          => '',
+                'ur_menu_title' => 'Laporan',
+                'ur_menu_desc'  => 'Penjualan Penjualan',
+                'link_menu'     => '/ramwater/penjualan/laporan',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck',
+                'order'         => '10',
                 'is_active'     => '1',
             ],
         ], ['kd_menu', 'kd_parent']);
@@ -206,6 +230,16 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 1,
+                'kd_menu' => 12,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 13,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 99,
                 'kd_menu' => 1,
                 'tahun' => 2023
@@ -261,6 +295,16 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 99,
+                'kd_menu' => 12,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 13,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 3,
                 'tahun' => 2023
@@ -284,6 +328,14 @@ class MenuSeeder extends Seeder
             ], [
                 'kd_role' => 2,
                 'kd_menu' => 11,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 12,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 13,
                 'tahun' => 2023
             ],
         ], ['kd_role', 'kd_menu']);

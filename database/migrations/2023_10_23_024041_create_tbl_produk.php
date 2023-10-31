@@ -45,7 +45,6 @@ class CreateTblProduk extends Migration
             $table->string('jumlah');
             $table->string('galon_kembali')->nullable();
             $table->string('galon_diluar')->nullable();
-            $table->string('total_harga')->nullable();
             $table->string('cash')->nullable();
             $table->timestamps();
 

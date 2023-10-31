@@ -12,29 +12,39 @@
                     <a class="btn btn-success btn-xs" id="add_menu">Tambah Barang</a>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col table-responsive">
-                            <table class="table table-striped table-inverse text-center" id="table">
-                                <thead class="thead-inverse">
-                                    <tr>
-                                        <th width="5%">No</th>
-                                        <th>tgl_datang</th>
-                                        <th>nama</th>
-                                        <th>kd_produk</th>
-                                        <th>jumlah</th>
-                                        <th>rb</th>
-                                        <th>Harga</th>
-                                        <th>Total</th>
-                                        <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                    <div class="row justify-content-center">
+                        <div class="col-md-4 text-center">
+                            <div class="form-group">
+                                <label for="">Tanggal Datang</label>
+                            </div>
+                            <input type="date" name="tanggal" id="tanggal" class="form-control"
+                                value="{{ date('Y-m-d') }}">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col table-responsive">
+                        <table class="table table-striped table-inverse text-center" id="table">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th>tgl_datang</th>
+                                    <th>nama</th>
+                                    <th>kd_produk</th>
+                                    <th>jumlah</th>
+                                    <th>rb</th>
+                                    <th>Harga</th>
+                                    <th>Total</th>
+                                    <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     @include('ramwater.datang_barang.form')
 @endsection
@@ -45,6 +55,7 @@
         var url_add = '{{ route('datangbarang.store') }}';
         var url_delete = '{{ route('datangbarang.destroy', ['datangbarang' => ':id']) }}';
         var url_edit = '{{ route('datangbarang.update', ['datangbarang' => ':id']) }}';
+        var tanggal = $('#tanggal').val();
 
         $(document).ready(function() {
             table = $("#table").DataTable({
@@ -66,6 +77,9 @@
                 ],
                 "ajax": {
                     url: '{{ route('datangbarang.data') }}',
+                    data: function(d) {
+                        d.tanggal = tanggal;
+                    }
                 },
                 "columns": [{
                     data: 'DT_RowIndex',
@@ -95,9 +109,34 @@
                             </div>
                         `;
                     }
-                }]
+                }],
+                columnDefs: [{
+                        targets: 4,
+                        className: 'dt-body-right',
+                    },
+                    {
+                        targets: 5,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    },
+                    {
+                        targets: 6,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    },
+                    {
+                        targets: 7,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    },
+                ],
             });
             validate()
+
+            $('#tanggal').on('change', function() {
+                tanggal = $('#tanggal').val();
+                table.ajax.reload();
+            })
 
             $('body').on('click', '#add_menu', function() {
                 $('#modal-form').modal('show');

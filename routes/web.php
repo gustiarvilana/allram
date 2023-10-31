@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Ramwater\DatangBarang\DatangBarangControler;
-use App\Http\Controllers\Ramwater\DatangBarang\LaporanControler;
+use App\Http\Controllers\Ramwater\DatangBarang\LaporanDatangBarangControler;
 use App\Http\Controllers\Ramwater\Penjualan\DGalonController;
+use App\Http\Controllers\Ramwater\penjualan\LaporanPenjualanControler;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualandetailController;
 use App\Http\Controllers\Ramwater\RamwaterController;
 use App\Http\Controllers\Security\KaryawanController;
-use App\Http\Controllers\Security\MenuByRoleController;
 use App\Http\Controllers\Security\SecurityController;
 use App\Http\Controllers\Security\UserController;
 use App\Http\Controllers\Security\UserMenuController;
@@ -54,11 +54,13 @@ Route::middleware(['roles:99,1,2'])->group(function () {
     Route::prefix('ramwater')->group(function () {
         Route::get('/datangbarang/data', [DatangBarangControler::class, 'data'])->name('datangbarang.data');
         Route::resource('/datangbarang', DatangBarangControler::class)->except('show');
-        Route::get('/datangbarang/laporan', [LaporanControler::class, 'laporan'])->name('datangbarang.laporan');
-        Route::get('/datangbarang/laporan/data', [LaporanControler::class, 'data'])->name('datangbarang.laporan.data');
+        Route::get('/datangbarang/laporan', [LaporanDatangBarangControler::class, 'laporan'])->name('datangbarang.laporan');
+        Route::get('/datangbarang/laporan/data', [LaporanDatangBarangControler::class, 'data'])->name('datangbarang.laporan.data');
 
         Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
         Route::resource('/penjualan', PenjualanController::class)->except('show');
+        Route::get('/penjualan/laporan', [LaporanPenjualanControler::class, 'laporan'])->name('penjualan.laporan');
+        Route::get('/penjualan/laporan/data', [LaporanPenjualanControler::class, 'data'])->name('penjualan.laporan.data');
 
         Route::get('/galon/data/{id}', [DGalonController::class, 'data'])->name('galon.data');
         Route::resource('/galon', DGalonController::class)->except('show');

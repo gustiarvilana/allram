@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Datang Barang
+    Laporan Penjualan
 @endsection
 
 @section('content')
@@ -12,8 +12,8 @@
                     {{-- <a class="btn btn-success btn-xs" id="add_menu">Tambah Barang</a> --}}
                 </div>
                 <div class="card-body">
-                    <div class="row mb-2 justify-content-center">
-                        <div class="col-md-4 text-center">
+                    <div class="row mb-2">
+                        <div class="col-md-4">
                             <!-- Date range -->
                             <div class="form-group">
                                 <label>Date range:</label>
@@ -36,12 +36,10 @@
                                 <thead class="thead-inverse">
                                     <tr>
                                         <th>No</th>
-                                        <th>Tanggal</th>
-                                        <th>Nama Depo</th>
+                                        <th>Nama Sales</th>
                                         <th>Nama Produk</th>
-                                        <th>jumlah</th>
+                                        <th>jumlah Terjual</th>
                                         <th>Total Harga</th>
-                                        <th>Rata Harga</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -57,7 +55,6 @@
     @push('js')
         <script>
             let table;
-            let tanggal = $('#daterange').val();
             var url_add = '{{ route('datangbarang.store') }}';
             var url_delete = '{{ route('datangbarang.destroy', ['datangbarang' => ':id']) }}';
             var url_edit = '{{ route('datangbarang.update', ['datangbarang' => ':id']) }}';
@@ -81,64 +78,28 @@
                         // "colvis"
                     ],
                     "ajax": {
-                        url: '{{ route('datangbarang.laporan.data') }}',
-                        data: function(d) {
-                            d.tanggal = tanggal;
-                        }
+                        url: '{{ route('penjualan.laporan.data') }}',
                     },
                     "columns": [{
                         data: 'DT_RowIndex',
                         searchable: false,
                         shrotable: false
                     }, {
-                        data: 'tgl_datang',
-                        render: function(data, type, row) {
-                            const dateString = row.tgl_datang;
-
-                            return moment(dateString, 'YYYYMMDD').format(
-                                'DD-MM-YYYY');
-                        }
-                    }, {
-                        data: 'nama'
+                        data: 'nama_sales'
                     }, {
                         data: 'nama_produk'
                     }, {
                         data: 'sum_jumlah'
                     }, {
                         data: 'sum_total'
-                    }, {
-                        data: 'sum_total',
-                        render: function(data, type, row) {
-                            return (row.sum_total / row.sum_jumlah).toFixed(0);
-                        }
                     }],
                     columnDefs: [{
-                            targets: 3,
-                            className: 'dt-body-right',
-                        },
-                        {
-                            targets: 4,
-                            className: 'dt-body-right',
-                            render: $.fn.dataTable.render.number('.', '.', 0, '')
-                        },
-                        {
-                            targets: 5,
-                            className: 'dt-body-right',
-                            render: $.fn.dataTable.render.number('.', '.', 0, '')
-                        },
-                        {
-                            targets: 6,
-                            className: 'dt-body-right',
-                            render: $.fn.dataTable.render.number('.', '.', 0, '')
-                        },
-                    ],
+                        targets: 4,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    }, ],
                 });
                 validate()
-
-                $('#daterange').on('change', function() {
-                    tanggal = $('#daterange').val();
-                    table.ajax.reload();
-                })
 
                 $('body').on('click', '#add_menu', function() {
                     $('#modal-form').modal('show');

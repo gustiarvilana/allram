@@ -231,6 +231,10 @@
             }
 
         }
+
+        function formatRupiah(number) {
+            return Math.trunc(number).toLocaleString('id-ID');
+        }
     </script>
 
     @stack('js')
