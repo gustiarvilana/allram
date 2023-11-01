@@ -204,7 +204,43 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/ramwater/operasional/laporan',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-truck',
-                'order'         => '10',
+                'order'         => '14',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 17,
+                'kd_parent'     => 4,
+                'type'          => '',
+                'ur_menu_title' => 'Kasbon',
+                'ur_menu_desc'  => 'Kasbon',
+                'link_menu'     => '#',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-list',
+                'order'         => '15',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 18,
+                'kd_parent'     => 17,
+                'type'          => '',
+                'ur_menu_title' => 'Input Kasbon',
+                'ur_menu_desc'  => 'kasbon',
+                'link_menu'     => '/ramwater/kasbon',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-random',
+                'order'         => '16',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 19,
+                'kd_parent'     => 17,
+                'type'          => '',
+                'ur_menu_title' => 'Laporan',
+                'ur_menu_desc'  => 'kasbon',
+                'link_menu'     => '/ramwater/kasbon/laporan',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck',
+                'order'         => '17',
                 'is_active'     => '1',
             ],
         ], ['kd_menu', 'kd_parent']);
@@ -291,6 +327,21 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 1,
+                'kd_menu' => 17,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 18,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 19,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 99,
                 'kd_menu' => 1,
                 'tahun' => 2023
@@ -371,6 +422,21 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 99,
+                'kd_menu' => 17,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 18,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 19,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 3,
                 'tahun' => 2023
@@ -379,41 +445,65 @@ class MenuSeeder extends Seeder
                 'kd_role' => 3,
                 'kd_menu' => 2,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 4,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 9,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 10,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 11,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 12,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 13,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 14,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 15,
                 'tahun' => 2023
-            ], [
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 16,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 2,
+                'kd_menu' => 17,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 2,
+                'kd_menu' => 18,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 2,
+                'kd_menu' => 19,
                 'tahun' => 2023
             ],
         ], ['kd_role', 'kd_menu']);
