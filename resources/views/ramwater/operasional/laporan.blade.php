@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Penjualan
+    Laporan Datang Barang
 @endsection
 
 @section('content')
@@ -35,11 +35,10 @@
                             <table class="table table-striped table-inverse text-center" id="table">
                                 <thead class="thead-inverse">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Sales</th>
-                                        <th>Nama Produk</th>
-                                        <th>jumlah Terjual</th>
-                                        <th>Total Harga</th>
+                                        <th width="5%">No</th>
+                                        <th>Tanggal</th>
+                                        <th>Nama OPS</th>
+                                        <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -49,12 +48,12 @@
                 </div>
             </div>
         </div>
-        @include('ramwater.datang_barang.form')
     @endsection
 
     @push('js')
         <script>
             let table;
+            let tanggal = $('#daterange').val();
             var url_add = '{{ route('datangbarang.store') }}';
             var url_delete = '{{ route('datangbarang.destroy', ['datangbarang' => ':id']) }}';
             var url_edit = '{{ route('datangbarang.update', ['datangbarang' => ':id']) }}';
@@ -78,28 +77,43 @@
                         // "colvis"
                     ],
                     "ajax": {
-                        url: '{{ route('penjualan.laporan.data') }}',
+                        url: '{{ route('operasional.laporan.data') }}',
+                        data: function(d) {
+                            d.tanggal = tanggal;
+                        }
                     },
                     "columns": [{
                         data: 'DT_RowIndex',
                         searchable: false,
                         shrotable: false
                     }, {
-                        data: 'nama_sales'
+                        data: 'tanggal',
+                        render: function(data, type, row) {
+                            const dateString = row.tanggal;
+
+                            return moment(dateString, 'YYYYMMDD').format(
+                                'DD-MM-YYYY');
+                        }
                     }, {
-                        data: 'nama_produk'
+                        data: 'nama'
                     }, {
-                        data: 'sum_jumlah'
-                    }, {
-                        data: 'sum_total'
+                        data: 'total',
+                        render: function(data, type, row) {
+                            return formatRupiah(row.total)
+                            // return (row.sum_total / row.sum_jumlah).toFixed(0);
+                        }
                     }],
                     columnDefs: [{
-                        targets: 4,
+                        targets: 3,
                         className: 'dt-body-right',
-                        render: $.fn.dataTable.render.number('.', '.', 0, '')
-                    }, ],
+                    }],
                 });
                 validate()
+
+                $('#daterange').on('change', function() {
+                    tanggal = $('#daterange').val();
+                    table.ajax.reload();
+                })
 
                 $('body').on('click', '#add_menu', function() {
                     $('#modal-form').modal('show');

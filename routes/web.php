@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Ramwater\DatangBarang\DatangBarangControler;
 use App\Http\Controllers\Ramwater\DatangBarang\LaporanDatangBarangControler;
+use App\Http\Controllers\Ramwater\Operasional\LaporanOperasionalController;
+use App\Http\Controllers\Ramwater\Operasional\OperasionalController;
 use App\Http\Controllers\Ramwater\Penjualan\DGalonController;
 use App\Http\Controllers\Ramwater\penjualan\LaporanPenjualanControler;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
@@ -67,5 +69,12 @@ Route::middleware(['roles:99,1,2'])->group(function () {
 
         Route::get('/penjualandetail/data/{id}', [PenjualandetailController::class, 'data'])->name('penjualandetail.data');
         Route::resource('/penjualandetail', PenjualandetailController::class)->except('show');
+
+        Route::resource('/operasional', OperasionalController::class)->except('show');
+        Route::prefix('operasional')->group(function () {
+            Route::get('/data', [OperasionalController::class, 'data'])->name('operasional.data');
+            Route::get('/laporan', [LaporanOperasionalController::class, 'laporan'])->name('operasional.laporan');
+            Route::get('laporan/data', [LaporanOperasionalController::class, 'data'])->name('operasional.laporan.data');
+        });
     });
 });

@@ -45,6 +45,8 @@
 
 @php
     use App\Helpers\MenuHelper;
+    use App\Helpers\UserHelper;
+
     $currentUrl = request()->path();
     $kd_parent = Session::get('kd_home_parent');
     $user = auth()->user();

@@ -51,7 +51,6 @@
                 </div>
             </div>
         </div>
-        @include('ramwater.datang_barang.form')
     @endsection
 
     @push('js')

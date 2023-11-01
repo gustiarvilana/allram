@@ -45,7 +45,7 @@ class MenuSeeder extends Seeder
                 'type'          => '',
                 'ur_menu_title' => 'RAM Water',
                 'ur_menu_desc'  => 'RAM Water',
-                'link_menu'     => '/ramwater',
+                'link_menu'     => '/ramwater/penjualan',
                 'bg_color'      => '#',
                 'icon'          => 'ri-calendar-todo-line',
                 'order'         => '3',
@@ -168,6 +168,42 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/ramwater/penjualan/laporan',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-truck',
+                'order'         => '11',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 14,
+                'kd_parent'     => 4,
+                'type'          => '',
+                'ur_menu_title' => 'Operasional',
+                'ur_menu_desc'  => 'OPS',
+                'link_menu'     => '#',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck',
+                'order'         => '12',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 15,
+                'kd_parent'     => 14,
+                'type'          => '',
+                'ur_menu_title' => 'Input Operasional',
+                'ur_menu_desc'  => 'OPS',
+                'link_menu'     => '/ramwater/operasional',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-random',
+                'order'         => '13',
+                'is_active'     => '1',
+            ],
+            [
+                'kd_menu'       => 16,
+                'kd_parent'     => 14,
+                'type'          => '',
+                'ur_menu_title' => 'Laporan',
+                'ur_menu_desc'  => 'OPS',
+                'link_menu'     => '/ramwater/operasional/laporan',
+                'bg_color'      => '#',
+                'icon'          => 'fas fa-truck',
                 'order'         => '10',
                 'is_active'     => '1',
             ],
@@ -240,6 +276,21 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 1,
+                'kd_menu' => 14,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 15,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 1,
+                'kd_menu' => 16,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 99,
                 'kd_menu' => 1,
                 'tahun' => 2023
@@ -305,6 +356,21 @@ class MenuSeeder extends Seeder
                 'tahun' => 2023
             ],
             [
+                'kd_role' => 99,
+                'kd_menu' => 14,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 15,
+                'tahun' => 2023
+            ],
+            [
+                'kd_role' => 99,
+                'kd_menu' => 16,
+                'tahun' => 2023
+            ],
+            [
                 'kd_role' => 2,
                 'kd_menu' => 3,
                 'tahun' => 2023
@@ -336,6 +402,18 @@ class MenuSeeder extends Seeder
             ], [
                 'kd_role' => 2,
                 'kd_menu' => 13,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 14,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 15,
+                'tahun' => 2023
+            ], [
+                'kd_role' => 2,
+                'kd_menu' => 16,
                 'tahun' => 2023
             ],
         ], ['kd_role', 'kd_menu']);

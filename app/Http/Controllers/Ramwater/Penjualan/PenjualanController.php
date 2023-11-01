@@ -72,17 +72,13 @@ class PenjualanController extends Controller
             'jumlah'        => $request->input('jumlah'),
             'galon_kembali' => $request->input('galon_kembali'),
             'galon_diluar'  => $request->input('galon_diluar'),
-            'total_harga'   => $request->input('total_harga'),
             'cash'          => $request->input('cash'),
         ];
+        $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
         $data['jumlah']        = str_replace('.', '', $data['jumlah']);
         $data['galon_kembali'] = str_replace('.', '', $data['galon_kembali']);
         $data['galon_diluar']  = str_replace('.', '', $data['galon_diluar']);
-        $data['total_harga']   = str_replace('.', '', $data['total_harga']);
         $data['cash']          = str_replace('.', '', $data['cash']);
-
-
-        $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
 
         try {
             Penjualan::upsert($data, ['id']);
@@ -102,11 +98,14 @@ class PenjualanController extends Controller
             'jumlah'        => $request->input('jumlah'),
             'galon_kembali' => $request->input('galon_kembali'),
             'galon_diluar'  => $request->input('galon_diluar'),
-            'total_harga'   => $request->input('total_harga'),
             'cash'          => $request->input('cash'),
         ];
         $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
         $data['jumlah'] = $data['jumlah'] - $request->input('sisa');
+        $data['jumlah']        = str_replace('.', '', $data['jumlah']);
+        $data['galon_kembali'] = str_replace('.', '', $data['galon_kembali']);
+        $data['galon_diluar']  = str_replace('.', '', $data['galon_diluar']);
+        $data['cash']          = str_replace('.', '', $data['cash']);
 
         try {
             Penjualan::upsert($data, ['id']); // Memanggil metode upsert dari model User

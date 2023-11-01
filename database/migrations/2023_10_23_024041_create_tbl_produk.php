@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTblProduk extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('t_master_produk', function (Blueprint $table) {
@@ -70,18 +65,36 @@ class CreateTblProduk extends Migration
             $table->integer('tgl_kembali')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('t_operasional', function (Blueprint $table) {
+            $table->id();
+            $table->integer('kd_operasional')->index();
+            $table->string('nama_operasional');
+            $table->timestamps();
+        });
+        Schema::create('d_operasional', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('tanggal');
+            $table->string('satker');
+            $table->string('nik');
+            $table->integer('kd_operasional');
+            $table->integer('jumlah');
+            $table->integer('harga');
+            $table->integer('total');
+            $table->text('keterangan')->nullable();
+            $table->timestamps();
+
+            $table->foreign('kd_operasional')->references('kd_operasional')->on('t_operasional')->onDelete('cascade');
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('ramwater_d_galon');
         Schema::dropIfExists('t_produk');
         Schema::dropIfExists('ramwater_d_datang_barang');
         Schema::dropIfExists('ramwater_d_penjualan');
+        Schema::dropIfExists('t_operasional');
+        Schema::dropIfExists('d_operasional');
     }
 }
