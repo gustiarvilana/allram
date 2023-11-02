@@ -46,6 +46,28 @@
                             </table>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <h3><span>Perorangan</span></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col table-responsive">
+                            <table class="table table-striped table-inverse text-center" id="perorangan">
+                                <thead class="thead-inverse">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Nama Produk</th>
+                                        <th>jumlah</th>
+                                        <th>Total Harga</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,13 +76,12 @@
 
     @push('js')
         <script>
-            let table;
             var url_add = '{{ route('datangbarang.store') }}';
             var url_delete = '{{ route('datangbarang.destroy', ['datangbarang' => ':id']) }}';
             var url_edit = '{{ route('datangbarang.update', ['datangbarang' => ':id']) }}';
 
             $(document).ready(function() {
-                table = $("#table").DataTable({
+                var table = $("#table").DataTable({
                     "dom": 'Bfrtip',
                     "info": true,
                     "processing": true,
@@ -99,6 +120,47 @@
                         render: $.fn.dataTable.render.number('.', '.', 0, '')
                     }, ],
                 });
+
+                var perorangan = $("#perorangan").DataTable({
+                    "dom": 'Bfrtip',
+                    "info": true,
+                    "processing": true,
+                    "responsive": false,
+                    "lengthChange": true,
+                    "autoWidth": true,
+                    "searching": true,
+                    "ordering": true,
+                    "buttons": [
+                        // "copy",
+                        // "csv",
+                        "excel",
+                        // "pdf",
+                        // "print",
+                        // "colvis"
+                    ],
+                    "ajax": {
+                        url: '{{ route('penjualan.laporan.perorangan') }}',
+                    },
+                    "columns": [{
+                        data: 'DT_RowIndex',
+                        searchable: false,
+                        shrotable: false
+                    }, {
+                        data: 'nama_sales'
+                    }, {
+                        data: 'nama_produk'
+                    }, {
+                        data: 'sum_jumlah'
+                    }, {
+                        data: 'sum_total'
+                    }],
+                    columnDefs: [{
+                        targets: 4,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    }, ],
+                });
+
                 validate()
 
                 $('body').on('click', '#add_menu', function() {

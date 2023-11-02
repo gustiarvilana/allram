@@ -63,6 +63,7 @@ Route::middleware(['roles:99,1,2'])->group(function () {
         Route::resource('/penjualan', PenjualanController::class)->except('show');
         Route::get('/penjualan/laporan', [LaporanPenjualanControler::class, 'laporan'])->name('penjualan.laporan');
         Route::get('/penjualan/laporan/data', [LaporanPenjualanControler::class, 'data'])->name('penjualan.laporan.data');
+        Route::get('/penjualan/laporan/perorangan', [LaporanPenjualanControler::class, 'perorangan'])->name('penjualan.laporan.perorangan');
 
         Route::get('/galon/data/{id}', [DGalonController::class, 'data'])->name('galon.data');
         Route::resource('/galon', DGalonController::class)->except('show');
