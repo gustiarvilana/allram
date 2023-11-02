@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class LaporanPenjualanControler extends Controller
 {
+
     public function data(Request $request)
     {
         $laporan = DB::table('ramwater_d_penjualan as a')
