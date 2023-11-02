@@ -30,6 +30,7 @@
                                         <th>nik</th>
                                         <th>kd_produk</th>
                                         <th>jumlah</th>
+                                        <th>sisa</th>
                                         <th>galon_kembali</th>
                                         <th>galon_diluar</th>
                                         <th>total_terjual</th>
@@ -98,6 +99,11 @@
                     data: 'nama_produk'
                 }, {
                     data: 'jumlah'
+                }, {
+                    data: 'sisa',
+                    render: function(data, type, row) {
+                        return row.jumlah - row.sum_jumlah;
+                    }
                 }, {
                     data: 'galon_kembali'
                 }, {
