@@ -36,6 +36,7 @@
                                         <th>total_terjual</th>
                                         <th>total_harga</th>
                                         <th>cash</th>
+                                        <th>Transfer</th>
                                         <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
@@ -126,6 +127,8 @@
                 }, {
                     data: 'cash'
                 }, {
+                    data: 'transfer'
+                }, {
                     data: 'id',
                     render: function(data, type, row) {
                         var display = 'none';
@@ -173,6 +176,11 @@
                         className: 'dt-body-right',
                         render: $.fn.dataTable.render.number('.', '.', 0, '')
                     },
+                    {
+                        targets: 9,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    },
                 ],
             });
             validate()
@@ -191,6 +199,8 @@
             });
 
             $('body').on('click', '#add_menu', function() {
+                $('#modal-form #cash').hide()
+                $('#modal-form #transfer').hide()
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Tambah Penjualan');
 
@@ -212,6 +222,7 @@
 
                 $('#modal-form [name=id]').val($(this).data('id'));
                 $('#modal-form #cash').show()
+                $('#modal-form #transfer').show()
 
                 $('#modal-form [name=tgl_penjualan]').val($(this).data('tgl_penjualan'));
                 $('#modal-form [name=nik]').val($(this).data('nik'));

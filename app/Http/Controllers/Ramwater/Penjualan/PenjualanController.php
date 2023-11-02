@@ -25,6 +25,7 @@ class PenjualanController extends Controller
                 'a.galon_kembali',
                 'a.galon_diluar',
                 'a.cash',
+                'a.transfer',
                 'b.nama as nama_produk',
                 'c.nama as nama_sales',
                 DB::raw('(SELECT SUM(jumlah) FROM ramwater_d_galon as d WHERE d.id_penjualan = a.id) as sum_galon'),
@@ -44,7 +45,8 @@ class PenjualanController extends Controller
                 'a.galon_diluar',
                 'a.cash',
                 'b.nama',
-                'c.nama'
+                'c.nama',
+                'a.transfer'
             )
             ->orderBy('a.created_at', 'desc')
             ->get();
@@ -74,12 +76,14 @@ class PenjualanController extends Controller
             'galon_kembali' => $request->input('galon_kembali'),
             'galon_diluar'  => $request->input('galon_diluar'),
             'cash'          => $request->input('cash'),
+            'transfer'          => $request->input('transfer'),
         ];
         $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
         $data['jumlah']        = str_replace('.', '', $data['jumlah']);
         $data['galon_kembali'] = str_replace('.', '', $data['galon_kembali']);
         $data['galon_diluar']  = str_replace('.', '', $data['galon_diluar']);
         $data['cash']          = str_replace('.', '', $data['cash']);
+        $data['transfer']      = str_replace('.', '', $data['transfer']);
 
         try {
             Penjualan::upsert($data, ['id']);
@@ -100,13 +104,15 @@ class PenjualanController extends Controller
             'galon_kembali' => $request->input('galon_kembali'),
             'galon_diluar'  => $request->input('galon_diluar'),
             'cash'          => $request->input('cash'),
+            'transfer'      => $request->input('transfer'),
         ];
         $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
-        $data['jumlah'] = $data['jumlah'] - $request->input('sisa');
+        $data['jumlah']        = $data['jumlah'] - $request->input('sisa');
         $data['jumlah']        = str_replace('.', '', $data['jumlah']);
         $data['galon_kembali'] = str_replace('.', '', $data['galon_kembali']);
         $data['galon_diluar']  = str_replace('.', '', $data['galon_diluar']);
         $data['cash']          = str_replace('.', '', $data['cash']);
+        $data['transfer']      = str_replace('.', '', $data['transfer']);
 
         try {
             Penjualan::upsert($data, ['id']); // Memanggil metode upsert dari model User

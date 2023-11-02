@@ -66,8 +66,15 @@
                     </div>
                     <div class="form-group" id="cash" style="display: none">
                         <label for="cash">cash</label>
-                        <input type="text" class="form-control" name="cash" value="{{ old('cash') }}">
+                        <input type="text" class="form-control money" name="cash" value="{{ old('cash') }}">
                         @error('cash')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group" id="transfer" style="display: none">
+                        <label for="transfer">transfer</label>
+                        <input type="text" class="form-control money" name="transfer" value="{{ old('transfer') }}">
+                        @error('transfer')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -81,7 +88,8 @@
                     </div>
                     <div class="form-group" id="total_harga" style="display: none">
                         <label for="total_harga">total_harga</label>
-                        <input type="text" class="form-control" name="total_harga" value="{{ old('total_harga') }}">
+                        <input type="text" class="form-control" name="total_harga"
+                            value="{{ old('total_harga') }}">
                         @error('total_harga')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

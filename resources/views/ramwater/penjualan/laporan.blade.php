@@ -37,31 +37,12 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Sales</th>
-                                        <th>Nama Produk</th>
-                                        <th>jumlah Terjual</th>
-                                        <th>Total Harga</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <h3><span>Perorangan</span></h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col table-responsive">
-                            <table class="table table-striped table-inverse text-center" id="perorangan">
-                                <thead class="thead-inverse">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Nama Produk</th>
-                                        <th>jumlah</th>
-                                        <th>Total Harga</th>
+                                        <th>jumlah Global</th>
+                                        <th>Total Global</th>
+                                        <th>Cash</th>
+                                        <th>Transfer</th>
+                                        <th>Selisih</th>
+                                        <th width="30%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -79,6 +60,7 @@
             var url_add = '{{ route('datangbarang.store') }}';
             var url_delete = '{{ route('datangbarang.destroy', ['datangbarang' => ':id']) }}';
             var url_edit = '{{ route('datangbarang.update', ['datangbarang' => ':id']) }}';
+            let tanggal = $('#daterange').val();
 
             $(document).ready(function() {
                 var table = $("#table").DataTable({
@@ -100,6 +82,9 @@
                     ],
                     "ajax": {
                         url: '{{ route('penjualan.laporan.data') }}',
+                        data: function(d) {
+                            d.tanggal = tanggal;
+                        }
                     },
                     "columns": [{
                         data: 'DT_RowIndex',
@@ -108,60 +93,57 @@
                     }, {
                         data: 'nama_sales'
                     }, {
-                        data: 'nama_produk'
-                    }, {
                         data: 'sum_jumlah'
                     }, {
                         data: 'sum_total'
+                    }, {
+                        data: 't_cash'
+                    }, {
+                        data: 't_transfer'
+                    }, {
+                        data: 't_selisih',
+                        render: function(data, type, row) {
+                            return formatRupiah(row.sum_total - row.t_cash);
+                        }
+                    }, {
+                        data: 'id',
+                        render: function(data, type, row) {
+                            return `
+                            <form action="" method="post">
+                                <div class="form-group">
+                                <input type="text"
+                                    class="form-control money" name="cash" id="cash" placeholder="Cash Sales">
+                                </div>
+                            </form>
+                            `;
+                        }
+
                     }],
                     columnDefs: [{
+                        targets: 3,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    }, {
                         targets: 4,
                         className: 'dt-body-right',
                         render: $.fn.dataTable.render.number('.', '.', 0, '')
-                    }, ],
-                });
-
-                var perorangan = $("#perorangan").DataTable({
-                    "dom": 'Bfrtip',
-                    "info": true,
-                    "processing": true,
-                    "responsive": false,
-                    "lengthChange": true,
-                    "autoWidth": true,
-                    "searching": true,
-                    "ordering": true,
-                    "buttons": [
-                        // "copy",
-                        // "csv",
-                        "excel",
-                        // "pdf",
-                        // "print",
-                        // "colvis"
-                    ],
-                    "ajax": {
-                        url: '{{ route('penjualan.laporan.perorangan') }}',
-                    },
-                    "columns": [{
-                        data: 'DT_RowIndex',
-                        searchable: false,
-                        shrotable: false
                     }, {
-                        data: 'nama_sales'
+                        targets: 5,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
                     }, {
-                        data: 'nama_produk'
-                    }, {
-                        data: 'sum_jumlah'
-                    }, {
-                        data: 'sum_total'
-                    }],
-                    columnDefs: [{
-                        targets: 4,
+                        targets: 6,
                         className: 'dt-body-right',
                         render: $.fn.dataTable.render.number('.', '.', 0, '')
                     }, ],
                 });
 
                 validate()
+
+                $('#daterange').on('change', function() {
+                    tanggal = $('#daterange').val();
+                    table.ajax.reload();
+                })
 
                 $('body').on('click', '#add_menu', function() {
                     $('#modal-form').modal('show');
