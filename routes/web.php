@@ -6,7 +6,7 @@ use App\Http\Controllers\Ramwater\DatangBarang\LaporanDatangBarangControler;
 use App\Http\Controllers\Ramwater\Operasional\LaporanOperasionalController;
 use App\Http\Controllers\Ramwater\Operasional\OperasionalController;
 use App\Http\Controllers\Ramwater\Penjualan\DGalonController;
-use App\Http\Controllers\Ramwater\penjualan\LaporanPenjualanControler;
+use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanControler;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualandetailController;
 use App\Http\Controllers\Ramwater\RamwaterController;
