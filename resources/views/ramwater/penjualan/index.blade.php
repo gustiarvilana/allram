@@ -134,10 +134,10 @@
                         }
                         return `
                         <div class="btn-group">
-                            <button class="btn btn-m btn-info" style="display: block" id="penjualan-detail" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Detail</button>
-                            <button class="btn btn-m btn-warning" style="display:${display}" id="penjualan-galon" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Pinjam</button>
-                            <button class="btn btn-m btn-primary" id="penjualan-edit" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Edit</button>
-                            <button class="btn btn-m btn-danger" id="penjualan-delete" data-id='${row.id_penjualan}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Delete</button>
+                            <button class="btn btn-m btn-info" style="display: block" id="penjualan-detail" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Detail</button>
+                            <button class="btn btn-m btn-warning" style="display:${display}" id="penjualan-galon" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Pinjam</button>
+                            <button class="btn btn-m btn-primary" id="penjualan-edit" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Edit</button>
+                            <button class="btn btn-m btn-danger" id="penjualan-delete" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Delete</button>
                         </div>
                     `;
                     }
@@ -182,6 +182,14 @@
                 table.ajax.reload();
             })
 
+            $('#modal-detail [name=sisa]').on('change', function() {
+                // val($(this).data('jumlah'))
+                var jumlah = $('#modal-detail [name=jumlah]').val();
+                var sisa = $('#modal-detail [name=sisa]').val();
+
+                $('#modal-detail [name=jumlah]').val(jumlah - sisa);
+            });
+
             $('body').on('click', '#add_menu', function() {
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Tambah Penjualan');
@@ -193,7 +201,7 @@
                 var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
 
-                console.log();
+                console.log(id);
 
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Edit Penjualan');
@@ -389,6 +397,9 @@
                 $('#modal-detail form')[0].reset();
                 $('#modal-detail .modal-title').text('Penjualan detail => ' + nama_sales + ' => ' +
                     nama_produk);
+                $('#modal-detail [name=nama]').val('KONS ' + $(this).data('nama_sales'));
+                $('#modal-detail [name=jumlah]').val($(this).data('jumlah') - $(this).data('terjual'));
+
                 $('#modal-detail [name=_method]').val('post');
                 $('#modal-detail [name=id_penjualan]').val(id);
 

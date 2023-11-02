@@ -55,14 +55,7 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="sisa">sisa </label>
-                        <input type="text" class="form-control" name="sisa" id="sisa"
-                            value="{{ old('sisa') }}">
-                        @error('sisa')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+
                     <div class="form-group">
                         <label for="galon_kembali">galon_kembali</label>
                         <input type="text" class="form-control" name="galon_kembali" id="galon_kembali"

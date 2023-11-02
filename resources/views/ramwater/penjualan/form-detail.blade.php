@@ -40,6 +40,14 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="sisa">sisa </label>
+                        <input type="text" class="form-control" name="sisa" id="sisa"
+                            value="{{ old('sisa') }}">
+                        @error('sisa')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="harga">Harga </label>
                         <input type="text" class="form-control money" name="harga" id="harga"
                             value="{{ old('harga') }}">
