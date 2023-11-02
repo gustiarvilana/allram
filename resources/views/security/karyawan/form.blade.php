@@ -31,6 +31,14 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="satker">satker</label>
+                        <input type="text" class="form-control" name="satker" id="satker"
+                            value="{{ old('satker') }}">
+                        @error('satker')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="alamat">alamat</label>
                         <input type="text" class="form-control" name="alamat" id="alamat"
                             value="{{ old('alamat') }}">

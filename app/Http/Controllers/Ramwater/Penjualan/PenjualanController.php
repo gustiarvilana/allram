@@ -46,6 +46,7 @@ class PenjualanController extends Controller
                 'b.nama',
                 'c.nama'
             )
+            ->orderBy('a.created_at', 'desc')
             ->get();
 
         return DataTables::of($datangBarang)->addIndexColumn()->make(true);
