@@ -131,9 +131,9 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('09120912'),
             ],
             [
-                'name'     => 'Admin',
+                'name'     => 'Rista',
                 'nik'      => 2136,
-                'username' => 'Admin',
+                'username' => 'rista',
                 'phone'    => '098765544323',
                 'pwd'      => '09120912',
                 'kd_role'  => 2,

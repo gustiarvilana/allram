@@ -192,7 +192,7 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/ramwater/operasional',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-random',
-                'order'         => '13',
+                'order'         => '14',
                 'is_active'     => '1',
             ],
             [
@@ -204,7 +204,7 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/ramwater/operasional/laporan',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-truck',
-                'order'         => '14',
+                'order'         => '13',
                 'is_active'     => '1',
             ],
             [
@@ -228,7 +228,7 @@ class MenuSeeder extends Seeder
                 'link_menu'     => '/ramwater/kasbon',
                 'bg_color'      => '#',
                 'icon'          => 'fas fa-random',
-                'order'         => '16',
+                'order'         => '18',
                 'is_active'     => '1',
             ],
             [
