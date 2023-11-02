@@ -426,6 +426,8 @@
                     }, {
                         data: 'harga'
                     }, {
+                        data: 'total'
+                    }, {
                         data: 'ket'
                     }, {
                         data: 'id',
@@ -446,6 +448,11 @@
                         },
                         {
                             targets: 4,
+                            className: 'dt-body-right',
+                            render: $.fn.dataTable.render.number('.', '.', 0, '')
+                        },
+                        {
+                            targets: 5,
                             className: 'dt-body-right',
                             render: $.fn.dataTable.render.number('.', '.', 0, '')
                         },
@@ -473,6 +480,7 @@
                             $('#modal-detail [name=ket]').val('');
                             $("#table_detail").DataTable().ajax.reload()
                             $('#table').DataTable().ajax.reload();
+                            alert('Input Berhasil');
                         }
                     },
                     error: function(jqXHR, exception, request, status, error) {

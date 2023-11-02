@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-group">
                         <label for="ket">Keterangan </label>
-                        <textarea name="ket" id="ket" rows="3" class="form-control" value="{{ old('ket') }}"></textarea>
+                        <textarea name="ket" id="ket" rows="1" class="form-control" value="{{ old('ket') }}"></textarea>
                         @error('ket')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -68,6 +68,7 @@
                                             <th>nama</th>
                                             <th>jumlah</th>
                                             <th>harga</th>
+                                            <th>Total</th>
                                             <th>Keterangan</th>
                                             <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                         </tr>
