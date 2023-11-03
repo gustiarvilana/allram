@@ -35,8 +35,8 @@ class LaporanPenjualanControler extends Controller
                 // 'b.jumlah',
                 // 'a.cash',
                 // 'a.transfer',
-            )
-            ->havingRaw('SUM(b.jumlah) > 5');
+            );
+        // ->havingRaw('SUM(b.jumlah) > 5');
 
 
         return datatables()
@@ -71,8 +71,8 @@ class LaporanPenjualanControler extends Controller
                 'd.nama',
                 // 'a.cash',
                 // 'a.transfer',
-            )
-            ->havingRaw('SUM(b.jumlah) > 5');
+            );
+        // ->havingRaw('SUM(b.jumlah) > 5');
 
 
         return datatables()
