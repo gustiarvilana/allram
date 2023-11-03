@@ -29,8 +29,23 @@ class Update extends Seeder
         DB::statement("ALTER TABLE `ramwater_d_penjualan` ADD IF NOT EXISTS `sisa` int(11) DEFAULT NULL AFTER `jumlah`;");
 
         DB::statement("ALTER TABLE `ramwater_d_galon` DROP COLUMN IF EXISTS `id_penjualan`;");
-        DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `nik` varchar(255) DEFAULT NULL AFTER `id`;");
+        DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `tanggal` int(11) DEFAULT NULL AFTER `id`;");
+        DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `nik` varchar(255) DEFAULT NULL AFTER `tanggal`;");
         DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `alamat` varchar(255) DEFAULT NULL AFTER `jumlah`;");
         DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `hp` varchar(255) DEFAULT NULL AFTER `alamat`;");
+
+        DB::statement("CREATE TABLE IF NOT EXISTS `ramwater_d_hutang` (
+                    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                    `tanggal` int(11) DEFAULT NULL,
+                    `nik` varchar(255) DEFAULT NULL,
+                    `nama` varchar(255) NOT NULL,
+                    `jumlah` int(11) NOT NULL,
+                    `alamat` TEXT DEFAULT NULL,
+                    `hp` varchar(255) DEFAULT NULL,
+                    `tgl_kembali` int(11) DEFAULT NULL,
+                    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
     }
 }

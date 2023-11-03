@@ -33,7 +33,6 @@ class PenjualandetailController extends Controller
         $data['total']  =  $data['jumlah'] * $data['harga'];
 
         try {
-            DB::table('ramwater_d_penjualan')->where('id', $data['id_penjualan'])->update(['sisa' => $request->input('sisa')]);
             DB::table('ramwater_d_penjualan_detail')->upsert($data, ['id']);
             return 'berhasil disimpan';
         } catch (\Throwable $th) {

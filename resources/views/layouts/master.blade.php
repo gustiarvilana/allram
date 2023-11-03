@@ -41,6 +41,18 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
+    <style>
+        #ajax-wait {
+            display: none;
+            position: fixed;
+            z-index: 1999
+        }
+
+        .main-sidebar {
+            background-color: #333 !important
+        }
+    </style>
+
 </head>
 
 @php
@@ -57,6 +69,13 @@
 <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
     <div class="wrapper">
+
+        <div id='ajax-wait'>
+            <img alt='loading...'
+                src='//4.bp.blogspot.com/-M1GL94ukmSw/We41R8CWTfI/AAAAAAAAGnw/cIVHpqsywN85zcfFpNMGexHHmFGHJbKzQCLcBGAs/s0000/loading-x.gif'
+                width='32' height='32' />
+        </div>
+
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
@@ -215,6 +234,16 @@
             });
 
             $('#daterange').daterangepicker()
+        });
+
+        $(document).ajaxStart(function() {
+            $("#ajax-wait").css({
+                left: ($(window).width() - 32) / 2 + "px", // 32 = lebar gambar
+                top: ($(window).height() - 32) / 2 + "px", // 32 = tinggi gambar
+                display: "block"
+            })
+        }).ajaxComplete(function() {
+            $("#ajax-wait").fadeOut();
         });
 
         function addCommas(nStr) {

@@ -13,7 +13,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id" id="id">
+                    <div class="form-group col-md-3" style="display: block">
+                        <label for="id">id </label>
+                        <input type="text" class="form-control" name="id" id="id" readonly>
+                        <small class="text-red">* Jika Kolom id kosong berarti INPUT</small><br>
+                        <small class="text-red">* Jika Kolom id Tidak kosong berarti EDIT</small>
+                        @error('id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <div class="form-group" style="display: none">
                         <label for="id_penjualan">id_penjualan </label>
@@ -26,6 +34,7 @@
                     <div class="form-group" style="display: block">
                         <label for="nama">Nama </label>
                         <input type="text" class="form-control" name="nama" id="nama">
+                        <small class="text-red">* Isi dengan Nama Konsumen</small>
                         @error('nama')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -34,16 +43,8 @@
                     <div class="form-group">
                         <label for="jumlah">Jumlah </label>
                         <input type="text" class="form-control money" name="jumlah" id="jumlah"
-                            value="{{ old('jumlah') }}">
+                            value="{{ old('jumlah') }}" readonly>
                         @error('jumlah')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="sisa">sisa </label>
-                        <input type="text" class="form-control" name="sisa" id="sisa"
-                            value="{{ old('sisa') }}">
-                        @error('sisa')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

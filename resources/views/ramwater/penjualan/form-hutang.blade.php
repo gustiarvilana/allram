@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-galon" data-backdrop="static" data-keyboard="false" tabindex="-1"
+<div class="modal fade" id="modal-hutang" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="alert alert-danger" style="display:none"></div>
@@ -65,14 +65,14 @@
                     <div class="row">
                         <div class="col table-responsive">
                             <div class="card-header">
-                                <a class="btn btn-success float-right" id="save_galon">Simpan</a>
+                                <a class="btn btn-success float-right" id="save_hutang">Simpan</a>
                             </div>
                             <div class="card-body">
-                                <table class="table table-bordered table-striped" id="table_galon">
+                                <table class="table table-bordered table-striped" id="table_hutang">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th>Tanggal</th>
+                                            <th>Sales</th>
                                             <th>nama</th>
                                             <th>jumlah</th>
                                             <th width="25%"><i class="fa fa-cogs" aria-hidden="true"></i></th>

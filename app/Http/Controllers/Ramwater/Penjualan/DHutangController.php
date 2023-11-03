@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DGalonController extends Controller
+class DHutangController extends Controller
 {
     public function data()
     {
-        $datangBarang = DB::table('ramwater_d_galon as a');
+        $datangBarang = DB::table('ramwater_d_hutang as a');
 
         return datatables()
             ->of($datangBarang)
@@ -44,8 +44,9 @@ class DGalonController extends Controller
 
         $data['jumlah'] = str_replace('.', '', $data['jumlah']);
 
+        // dd($data);
         try {
-            DB::table('ramwater_d_galon')->upsert($data, ['id']);
+            DB::table('ramwater_d_hutang')->upsert($data, ['id']);
             return 'berhasil disimpan';
         } catch (\Throwable $th) {
             throw $th;
@@ -55,7 +56,7 @@ class DGalonController extends Controller
     public function destroy($id)
     {
         try {
-            DB::table('ramwater_d_galon')->where('id', $id)->delete();
+            DB::table('ramwater_d_hutang')->where('id', $id)->delete();
         } catch (\Throwable $th) {
             throw $th;
         }

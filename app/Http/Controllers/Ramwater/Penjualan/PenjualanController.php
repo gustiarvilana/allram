@@ -75,9 +75,10 @@ class PenjualanController extends Controller
             'kd_produk'     => $request->input('kd_produk'),
             'jumlah'        => $request->input('jumlah'),
             'galon_kembali' => $request->input('galon_kembali'),
+            'sisa'          => $request->input('sisa'),
             'galon_diluar'  => $request->input('galon_diluar'),
             'cash'          => $request->input('cash'),
-            'transfer'          => $request->input('transfer'),
+            'transfer'      => $request->input('transfer'),
         ];
         $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
         $data['jumlah']        = isset($data['jumlah']) ? str_replace('.', '', $data['jumlah']) : '';
@@ -102,6 +103,7 @@ class PenjualanController extends Controller
             'nik'           => $request->input('nik'),
             'kd_produk'     => $request->input('kd_produk'),
             'jumlah'        => $request->input('jumlah'),
+            'sisa'          => $request->input('sisa'),
             'galon_kembali' => $request->input('galon_kembali'),
             'galon_diluar'  => $request->input('galon_diluar'),
             'cash'          => $request->input('cash'),
