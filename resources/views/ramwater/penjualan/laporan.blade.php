@@ -32,6 +32,27 @@
                     </div>
                     <div class="row">
                         <div class="col table-responsive">
+                            <table class="table table-striped table-inverse text-center" id="perProduk">
+                                <thead class="thead-inverse">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Sales</th>
+                                        <th>Nama Produk</th>
+                                        <th>jumlah </th>
+                                        <th>Total </th>
+                                        <th>Cash</th>
+                                        <th>Transfer</th>
+                                        <th>Selisih</th>
+                                        <th>Stor</th>
+                                        <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col table-responsive">
                             <table class="table table-striped table-inverse text-center" id="table">
                                 <thead class="thead-inverse">
                                     <tr>
@@ -64,6 +85,97 @@
             let tanggal = $('#daterange').val();
 
             $(document).ready(function() {
+                var perProduk = $("#perProduk").DataTable({
+                    "dom": 'Bfrtip',
+                    "info": true,
+                    "processing": true,
+                    "responsive": false,
+                    "lengthChange": true,
+                    "autoWidth": true,
+                    "searching": true,
+                    "ordering": true,
+                    "buttons": [
+                        // "copy",
+                        // "csv",
+                        "excel",
+                        // "pdf",
+                        // "print",
+                        // "colvis"
+                    ],
+                    "ajax": {
+                        url: '{{ route('penjualan.laporan.perProduk') }}',
+                        data: function(d) {
+                            d.tanggal = tanggal;
+                        }
+                    },
+                    "columns": [{
+                        data: 'DT_RowIndex',
+                        searchable: false,
+                        shrotable: false
+                    }, {
+                        data: 'nama_sales'
+                    }, {
+                        data: 'nama_produk'
+                    }, {
+                        data: 'sum_jumlah'
+                    }, {
+                        data: 'sum_total'
+                    }, {
+                        data: 't_cash'
+                    }, {
+                        data: 't_transfer'
+                    }, {
+                        data: 't_selisih',
+                        render: function(data, type, row) {
+                            return formatRupiah(row.sum_total - row.t_cash);
+                        }
+                    }, {
+                        data: 'id',
+                        render: function(data, type, row) {
+                            return `
+                            <form action="" method="post">
+                                <div class="form-group">
+                                <input type="text"
+                                    class="form-control money" name="cash" id="cash" placeholder="Cash Sales">
+                                </div>
+                            </form>
+                            `;
+                        }
+
+                    }, {
+                        data: 'id',
+                        render: function(data, type, row) {
+                            var display = 'none';
+                            if (row.jumlah != row.galon_kembali) {
+                                display = 'block';
+                            }
+                            return `
+                        <div class="btn-group">
+                            <button class="btn btn-m btn-info" style="display: block" id="penjualan-detail" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Simpan</button>
+                        </div>
+                    `;
+                        }
+
+                    }],
+                    columnDefs: [{
+                        targets: 3,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    }, {
+                        targets: 4,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    }, {
+                        targets: 5,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    }, {
+                        targets: 6,
+                        className: 'dt-body-right',
+                        render: $.fn.dataTable.render.number('.', '.', 0, '')
+                    }, ],
+                });
+
                 var table = $("#table").DataTable({
                     "dom": 'Bfrtip',
                     "info": true,
@@ -158,6 +270,7 @@
                 $('#daterange').on('change', function() {
                     tanggal = $('#daterange').val();
                     table.ajax.reload();
+                    perProduk.ajax.reload();
                 })
 
                 $('body').on('click', '#add_menu', function() {

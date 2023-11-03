@@ -20,7 +20,7 @@ class LaporanPenjualanControler extends Controller
         $laporan = DB::table('ramwater_d_penjualan as a')
             ->select(
                 'c.nama as nama_sales',
-                DB::raw('SUM(a.jumlah) as sum_jumlah'),
+                DB::raw('SUM(b.jumlah) as sum_jumlah'),
                 DB::raw('SUM(b.total) as sum_total'),
                 DB::raw('SUM(a.cash) as t_cash'),
                 DB::raw('SUM(a.transfer) as t_transfer'),
@@ -33,6 +33,42 @@ class LaporanPenjualanControler extends Controller
                 'c.nik',
                 'a.tgl_penjualan',
                 // 'b.jumlah',
+                // 'a.cash',
+                // 'a.transfer',
+            )
+            ->havingRaw('SUM(b.jumlah) > 5');
+
+
+        return datatables()
+            ->of($laporan)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function perProduk(Request $request)
+    {
+        $tgl_ = $request['tanggal'];
+        $tgl_awal =  $tgl_ ? date('Ymd', strtotime(substr($tgl_, 0, 10))) : date('Ymd');
+        $tgl_akhir = $tgl_ ? date('Ymd', strtotime(substr($tgl_, 13, 10))) : date('Ymd');
+
+        $laporan = DB::table('ramwater_d_penjualan as a')
+            ->select(
+                'c.nama as nama_sales',
+                'd.nama as nama_produk',
+                DB::raw('SUM(b.jumlah) as sum_jumlah'),
+                DB::raw('SUM(b.total) as sum_total'),
+                DB::raw('SUM(a.cash) as t_cash'),
+                DB::raw('SUM(a.transfer) as t_transfer'),
+            )
+            ->join('ramwater_d_penjualan_detail as b', 'a.id', 'b.id_penjualan')
+            ->join('t_karyawan as c', 'a.nik', 'c.nik')
+            ->join('t_master_produk as d', 'a.kd_produk', 'd.kd_produk')
+            ->whereBetween('a.tgl_penjualan', [$tgl_awal, $tgl_akhir])
+            ->groupBy(
+                'c.nama',
+                'c.nik',
+                'a.tgl_penjualan',
+                'd.nama',
                 // 'a.cash',
                 // 'a.transfer',
             )
