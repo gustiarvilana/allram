@@ -253,6 +253,8 @@
 
                 $('#modal-galon [name=_method]').val('post');
                 $('#modal-galon [name=nik]').val($(this).data('nik'));
+                $('#modal-galon #alamat').show()
+                $('#modal-galon #hp').show()
 
                 table_galon = $("#table_galon").DataTable({
                     "dom": 'Bfrtip',
