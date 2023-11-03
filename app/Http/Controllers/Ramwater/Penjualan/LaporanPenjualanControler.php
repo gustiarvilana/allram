@@ -32,7 +32,7 @@ class LaporanPenjualanControler extends Controller
                 'c.nama',
                 'c.nik',
                 'a.tgl_penjualan',
-                'b.jumlah',
+                // 'b.jumlah',
                 // 'a.cash',
                 // 'a.transfer',
             )
