@@ -79,11 +79,11 @@ class PenjualanController extends Controller
             'transfer'          => $request->input('transfer'),
         ];
         $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
-        $data['jumlah']        = str_replace('.', '', $data['jumlah']);
-        $data['galon_kembali'] = str_replace('.', '', $data['galon_kembali']);
-        $data['galon_diluar']  = str_replace('.', '', $data['galon_diluar']);
-        $data['cash']          = str_replace('.', '', $data['cash']);
-        $data['transfer']      = str_replace('.', '', $data['transfer']);
+        $data['jumlah']        = isset($data['jumlah']) ? str_replace('.', '', $data['jumlah']) : '';
+        $data['galon_kembali'] = isset($data['galon_kembali']) ? str_replace('.', '', $data['galon_kembali']) : '';
+        $data['galon_diluar']  = isset($data['galon_diluar']) ? str_replace('.', '', $data['galon_diluar']) : '';
+        $data['cash']          = isset($data['cash']) ? str_replace('.', '', $data['cash']) : 0;
+        $data['transfer']      = isset($data['transfer']) ? str_replace('.', '', $data['transfer']) : 0;
 
         try {
             Penjualan::upsert($data, ['id']);
@@ -106,13 +106,11 @@ class PenjualanController extends Controller
             'cash'          => $request->input('cash'),
             'transfer'      => $request->input('transfer'),
         ];
-        $data['tgl_penjualan'] = date('Ymd', strtotime($data['tgl_penjualan']));
-        $data['jumlah']        = $data['jumlah'] - $request->input('sisa');
-        $data['jumlah']        = str_replace('.', '', $data['jumlah']);
-        $data['galon_kembali'] = str_replace('.', '', $data['galon_kembali']);
-        $data['galon_diluar']  = str_replace('.', '', $data['galon_diluar']);
-        $data['cash']          = str_replace('.', '', $data['cash']);
-        $data['transfer']      = str_replace('.', '', $data['transfer']);
+        $data['jumlah']        = isset($data['jumlah']) ? str_replace('.', '', $data['jumlah']) : '';
+        $data['galon_kembali'] = isset($data['galon_kembali']) ? str_replace('.', '', $data['galon_kembali']) : '';
+        $data['galon_diluar']  = isset($data['galon_diluar']) ? str_replace('.', '', $data['galon_diluar']) : '';
+        $data['cash']          = isset($data['cash']) ? str_replace('.', '', $data['cash']) : 0;
+        $data['transfer']      = $data['transfer'] ? str_replace('.', '', $data['transfer']) : 0;
 
         try {
             Penjualan::upsert($data, ['id']); // Memanggil metode upsert dari model User

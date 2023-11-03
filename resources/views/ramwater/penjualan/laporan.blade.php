@@ -42,7 +42,8 @@
                                         <th>Cash</th>
                                         <th>Transfer</th>
                                         <th>Selisih</th>
-                                        <th width="30%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
+                                        <th>Stor</th>
+                                        <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -116,6 +117,20 @@
                                 </div>
                             </form>
                             `;
+                        }
+
+                    }, {
+                        data: 'id',
+                        render: function(data, type, row) {
+                            var display = 'none';
+                            if (row.jumlah != row.galon_kembali) {
+                                display = 'block';
+                            }
+                            return `
+                        <div class="btn-group">
+                            <button class="btn btn-m btn-info" style="display: block" id="penjualan-detail" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Simpan</button>
+                        </div>
+                    `;
                         }
 
                     }],
