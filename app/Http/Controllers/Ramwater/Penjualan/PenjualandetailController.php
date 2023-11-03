@@ -25,6 +25,7 @@ class PenjualandetailController extends Controller
             'id_penjualan' => $request->input('id_penjualan'),
             'nama'         => $request->input('nama'),
             'jumlah'       => $request->input('jumlah'),
+            'sisa'       => $request->input('sisa'),
             'harga'        => $request->input('harga'),
             'ket'        => $request->input('ket'),
         ];
@@ -33,6 +34,7 @@ class PenjualandetailController extends Controller
         $data['total']  =  $data['jumlah'] * $data['harga'];
 
         try {
+            DB::table('ramwater_d_penjualan')->where('id', $data['id_penjualan'])->update(['sisa' => $data['sisa']]);
             DB::table('ramwater_d_penjualan_detail')->upsert($data, ['id']);
             return 'berhasil disimpan';
         } catch (\Throwable $th) {

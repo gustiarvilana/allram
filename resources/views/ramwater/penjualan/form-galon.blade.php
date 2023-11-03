@@ -16,9 +16,9 @@
                     <input type="hidden" name="id" id="id">
 
                     <div class="form-group" style="display: none">
-                        <label for="id_penjualan">id_penjualan </label>
-                        <input type="text" class="form-control" name="id_penjualan" id="id_penjualan">
-                        @error('id_penjualan')
+                        <label for="nik">nik </label>
+                        <input type="text" class="form-control" name="nik" id="nik">
+                        @error('nik')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -27,6 +27,22 @@
                         <label for="nama">Nama </label>
                         <input type="text" class="form-control" name="nama" id="nama">
                         @error('nama')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group" style="display: block" id="alamat">
+                        <label for="alamat">Alamat </label>
+                        <input type="text" class="form-control" name="alamat">
+                        @error('alamat')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group" style="display: block" id="hp">
+                        <label for="hp">Hp</label>
+                        <input type="text" class="form-control" name="hp">
+                        @error('hp')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -49,7 +65,7 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th>id</th>
+                                            <th>Sales</th>
                                             <th>nama</th>
                                             <th>jumlah</th>
                                             <th width="25%"><i class="fa fa-cogs" aria-hidden="true"></i></th>

@@ -103,16 +103,12 @@
                 }, {
                     data: 'sisa',
                     render: function(data, type, row) {
-                        return row.jumlah - row.sum_jumlah;
+                        return row.sisa;
                     }
                 }, {
                     data: 'galon_kembali'
                 }, {
-                    data: 'sum_galon',
-                    render: function(data, type, row) {
-
-                        return row.sum_galon;
-                    }
+                    data: 'galon_diluar',
                 }, {
                     data: 'sum_jumlah',
                     render: function(data, type, row) {
@@ -131,14 +127,10 @@
                 }, {
                     data: 'id',
                     render: function(data, type, row) {
-                        var display = 'none';
-                        if (row.jumlah != row.galon_kembali) {
-                            display = 'block';
-                        }
                         return `
                         <div class="btn-group">
                             <button class="btn btn-m btn-info" style="display: block" id="penjualan-detail" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Detail</button>
-                            <button class="btn btn-m btn-warning" style="display:${display}" id="penjualan-galon" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Pinjam</button>
+                            <button class="btn btn-m btn-warning" id="penjualan-galon" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}' > Galon</button>
                             <button class="btn btn-m btn-primary" id="penjualan-edit" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Edit</button>
                             <button class="btn btn-m btn-danger" id="penjualan-delete" data-id='${row.id_penjualan}'  data-terjual='${row.sum_jumlah}' data-tgl_penjualan='${row.tgl_penjualan}' data-nik='${row.nik}' data-kd_produk='${row.kd_produk}'  data-nama_produk='${row.nama_produk}' data-nama_sales='${row.nama_sales}' data-jumlah='${row.jumlah}' data-galon_kembali='${row.galon_kembali}' data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}'data-galon_kembali='${row.galon_kembali}' data-galon_diluar='${row.galon_diluar}'data-total_harga='${row.total_harga}'data-cash='${row.cash}'> Delete</button>
                         </div>
@@ -255,15 +247,12 @@
                 }
 
             }).on('click', '#penjualan-galon', function() {
-                var id = $(this).data('id');
-                url_edit = url_edit.replace(':id', id);
-
                 $('#modal-galon').modal('show');
                 $('#modal-galon form')[0].reset();
                 $('#modal-galon .modal-title').text('Peminjam Galon');
 
                 $('#modal-galon [name=_method]').val('post');
-                $('#modal-galon [name=id_penjualan]').val($(this).data('id'));
+                $('#modal-galon [name=nik]').val($(this).data('nik'));
 
                 table_galon = $("#table_galon").DataTable({
                     "dom": 'Bfrtip',
@@ -284,14 +273,14 @@
                         // "colvis"
                     ],
                     "ajax": {
-                        url: '{{ route('galon.data', ':id') }}'.replace(':id', id),
+                        url: '{{ route('galon.data') }}',
                     },
                     "columns": [{
                         data: 'DT_RowIndex',
                         searchable: false,
                         shrotable: false
                     }, {
-                        data: 'id'
+                        data: 'nik'
                     }, {
                         data: 'nama'
                     }, {
@@ -370,6 +359,8 @@
                         $('#modal-galon #id_penjualan').val(id_penjualan)
                         $('#modal-galon #nama').val(nama)
                         $('#modal-galon #jumlah').val(jumlah)
+                        $('#modal-galon #alamat').hide(alamat)
+                        $('#modal-galon #hp').hide(hp)
                     }
                 }
 
@@ -498,6 +489,7 @@
                         } else {
                             $('#modal-detail [name=nama]').val('');
                             $('#modal-detail [name=jumlah]').val('');
+                            $('#modal-detail [name=sisa]').val('');
                             $('#modal-detail [name=harga]').val('');
                             $('#modal-detail [name=ket]').val('');
                             $("#table_detail").DataTable().ajax.reload()

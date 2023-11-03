@@ -22,13 +22,13 @@ class PenjualanController extends Controller
                 'a.nik',
                 'a.kd_produk',
                 'a.jumlah',
+                'a.sisa',
                 'a.galon_kembali',
                 'a.galon_diluar',
                 'a.cash',
                 'a.transfer',
                 'b.nama as nama_produk',
                 'c.nama as nama_sales',
-                DB::raw('(SELECT SUM(jumlah) FROM ramwater_d_galon as d WHERE d.id_penjualan = a.id) as sum_galon'),
                 DB::raw('(SELECT SUM(total) FROM ramwater_d_penjualan_detail as e WHERE e.id_penjualan = a.id) as sum_detail'),
                 DB::raw('(SELECT SUM(jumlah) FROM ramwater_d_penjualan_detail as e WHERE e.id_penjualan = a.id) as sum_jumlah')
             )
@@ -41,6 +41,7 @@ class PenjualanController extends Controller
                 'a.nik',
                 'a.kd_produk',
                 'a.jumlah',
+                'a.sisa',
                 'a.galon_kembali',
                 'a.galon_diluar',
                 'a.cash',

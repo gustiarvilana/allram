@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class DGalonController extends Controller
 {
-    public function data($id_penjualan)
+    public function data()
     {
-        $datangBarang = DB::table('ramwater_d_galon as a')->where('id_penjualan', $id_penjualan);
+        $datangBarang = DB::table('ramwater_d_galon as a');
 
         return datatables()
             ->of($datangBarang)
@@ -21,12 +21,26 @@ class DGalonController extends Controller
     public function store(Request $request)
     {
         $data = [
-            'id'           => $request->input('id'),
-            'id_penjualan' => $request->input('id_penjualan'),
-            'nama'         => $request->input('nama'),
-            'jumlah'       => $request->input('jumlah'),
-            'tgl_kembali'  => $request->input('tgl_kembali'),
+            'id'          => $request->input('id'),
+            // 'nik'         => $request->input('nik'),
+            'nama'        => $request->input('nama'),
+            'jumlah'      => $request->input('jumlah'),
+            'alamat'      => $request->input('alamat'),
+            'hp'          => $request->input('hp'),
+            'tgl_kembali' => $request->input('tgl_kembali'),
         ];
+        if ($data['alamat']) {
+            $data = [
+                'id'          => $request->input('id'),
+                'nik'         => $request->input('nik'),
+                'nama'        => $request->input('nama'),
+                'jumlah'      => $request->input('jumlah'),
+                'alamat'      => $request->input('alamat'),
+                'hp'          => $request->input('hp'),
+                'tgl_kembali' => $request->input('tgl_kembali'),
+            ];
+        }
+
         $data['jumlah'] = str_replace('.', '', $data['jumlah']);
 
         try {
