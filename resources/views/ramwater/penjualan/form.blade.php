@@ -15,8 +15,8 @@
                 <div class="modal-body">
                     <input type="hidden" name="id">
 
-                    <div class="form-group" style="display: none">
-                        <label for="tgl_penjualan">tgl_penjualan </label>
+                    <div class="form-group" style="display: block">
+                        <label for="tgl_penjualan">tgl_penjualan <small class="text-red">*YYYYmmdd</small></label>
                         <input type="text" class="form-control" name="tgl_penjualan" id="tgl_penjualan"
                             value="{{ date('Ymd') }}">
                         @error('tgl_penjualan')

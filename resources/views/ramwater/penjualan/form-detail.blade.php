@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <label for="jumlah">Jumlah </label>
                         <input type="text" class="form-control money" name="jumlah" id="jumlah"
-                            value="{{ old('jumlah') }}" readonly>
+                            value="{{ old('jumlah') }}">
                         @error('jumlah')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

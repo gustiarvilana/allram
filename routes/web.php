@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
-Route::middleware(['roles:99,1'])->group(function () {
+Route::middleware(['auth', 'roles:99,1'])->group(function () {
     Route::get('/security', [SecurityController::class, 'index'])->name('security.home');
 
     Route::prefix('security')->group(function () {
@@ -52,7 +52,7 @@ Route::middleware(['roles:99,1'])->group(function () {
     });
 });
 
-Route::middleware(['roles:99,1,2'])->group(function () {
+Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
     Route::get('/ramwater', [RamwaterController::class, 'index'])->name('ramwater.home');
     Route::prefix('ramwater')->group(function () {
         Route::get('/datangbarang/data', [DatangBarangControler::class, 'data'])->name('datangbarang.data');
