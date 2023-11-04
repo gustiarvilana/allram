@@ -186,8 +186,6 @@
                 var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
 
-                console.log(id);
-
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Edit Penjualan');
 
@@ -601,27 +599,53 @@
                         url: '{{ route('hutang.data') }}',
                     },
                     "columns": [{
-                        data: 'DT_RowIndex',
-                        searchable: false,
-                        shrotable: false
-                    }, {
-                        data: 'tanggal'
-                    }, {
-                        data: 'nama'
-                    }, {
-                        data: 'jumlah'
-                    }, {
-                        data: 'id',
-                        render: function(data, type, row) {
-                            return `
+                            data: 'DT_RowIndex',
+                            searchable: false,
+                            shrotable: false
+                        },
+                        {
+                            data: 'tanggal'
+                        },
+                        {
+                            data: 'nama'
+                        },
+                        {
+                            data: 'alamat'
+                        },
+                        {
+                            data: 'hp'
+                        },
+                        {
+                            data: 'jumlah'
+                        },
+                        {
+                            data: 'bayar'
+                        },
+                        {
+                            data: 'id',
+                            render: function(data, type, row) {
+                                return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" id="hutang-edit" data-id='${row.id}' data-id_penjualan='${row.id_penjualan}' data-nama='${row.nama}' data-jumlah='${row.jumlah}'> Edit</button>
-                                <button class="btn btn-sm btn-danger" id="hutang-delete" data-id='${row.id}' data-id_penjualan='${row.id_penjualan}' data-nama='${row.nama}' data-jumlah='${row.jumlah}'> Delete</button>
+                                <a class="btn btn-sm btn-primary" id="hutang-edit" data-id='${row.id}' data-id_parent='${row.id_parent}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-jumlah='${row.jumlah}' data-bayar='${row.bayar}' data-tanggal='${row.tanggal}'> Edit</a>
+                                <a class="btn btn-sm btn-success" id="hutang-bayar" data-id='${row.id}' data-id_parent='${row.id_parent}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-jumlah='${row.jumlah}' data-bayar='${row.bayar}' data-tanggal='${row.tanggal}'> Bayar</a>
+                                <a class="btn btn-sm btn-danger" id="hutang-delete" data-id='${row.id}' data-id_parent='${row.id_parent}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-jumlah='${row.jumlah}' data-bayar='${row.bayar}' data-tanggal='${row.tanggal}'> Delete</a>
                             </div>
                         `;
-                        }
+                            }
 
-                    }]
+                        }
+                    ],
+                    "columnDefs": [{
+                            targets: 5,
+                            className: 'dt-body-right',
+                            render: $.fn.dataTable.render.number('.', '.', 0, '')
+                        },
+                        {
+                            targets: 6,
+                            className: 'dt-body-right',
+                            render: $.fn.dataTable.render.number('.', '.', 0, '')
+                        },
+                    ],
                 });
 
             }).on('click', '#save_hutang', function() {
@@ -639,8 +663,7 @@
                                     '</li>');
                             });
                         } else {
-                            $('#modal-hutang [name=nama]').val('');
-                            $('#modal-hutang [name=jumlah]').val('');
+                            $('#modal-hutang form')[0].reset();
                             $("#table_hutang").DataTable().ajax.reload()
                             $('#table').DataTable().ajax.reload();
                         }
@@ -681,6 +704,9 @@
                         $.ajax({
                             url: url_delete_hutang,
                             type: 'DELETE',
+                            responsive: true,
+                            processing: true,
+                            serverSide: true,
                             data: {
                                 _token: $('[name=csrf-token]').attr('content')
                             },
@@ -696,6 +722,31 @@
                     }
                 }
 
+            }).on('click', '#hutang-bayar', function() {
+                $('#modal-hutang form')[0].reset();
+                $('#modal-hutang [name=nik]').val($(this).data('nik'));
+                $('#modal-hutang [name=tanggal]').val($(this).data('tanggal'))
+                $('#modal-hutang [name=id_parent]').val($(this).data('id_parent'))
+                $('#modal-hutang [name=nama]').val($(this).data('nama'))
+                $('#modal-hutang [name=alamat]').val($(this).data('alamat'))
+                $('#modal-hutang [name=hp]').val($(this).data('hp'))
+                $('#modal-hutang #jumlah').val($(this).data('jumlah'))
+                $('#modal-hutang [name=bayar]').val('')
+
+                $('#modal-hutang #bayar').show()
+            }).on('click', '#hutang-edit', function() {
+                $('#modal-hutang form')[0].reset();
+                $('#modal-hutang [name=nik]').val($(this).data('nik'));
+                $('#modal-hutang [name=tanggal]').val($(this).data('tanggal'))
+                $('#modal-hutang [name=id]').val($(this).data('id'))
+                $('#modal-hutang [name=id_parent]').val($(this).data('id_parent'))
+                $('#modal-hutang [name=nama]').val($(this).data('nama'))
+                $('#modal-hutang [name=alamat]').val($(this).data('alamat'))
+                $('#modal-hutang [name=hp]').val($(this).data('hp'))
+                $('#modal-hutang #jumlah').val($(this).data('jumlah'))
+                $('#modal-hutang [name=bayar]').val($(this).data('bayar'))
+
+                $('#modal-hutang #jumlah').show()
             });
         });
 

@@ -231,6 +231,9 @@
                 var nilai1 = this.value.replace(/[^a-z0-9\s]/gi, '');
                 var nilai = addCommas(nilai1);
                 $(this).val(nilai).trigger("change");
+            }).on('click', function() {
+                var newCsrfToken = '{{ csrf_token() }}';
+                $('meta[name="csrf-token"]').attr('content', newCsrfToken);
             });
 
             $('#daterange').daterangepicker()

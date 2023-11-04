@@ -47,5 +47,8 @@ class Update extends Seeder
                     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+        DB::statement("ALTER TABLE `ramwater_d_hutang` ADD IF NOT EXISTS `id_parent` int(11) DEFAULT NULL AFTER `id`;");
+        DB::statement("ALTER TABLE `ramwater_d_hutang` ADD IF NOT EXISTS `bayar` int(11) DEFAULT NULL AFTER `hp`;");
+        DB::statement("ALTER TABLE `ramwater_d_hutang` ADD IF NOT EXISTS `sts` varchar(1) DEFAULT NULL AFTER `tgl_kembali`;");
     }
 }

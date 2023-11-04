@@ -22,7 +22,7 @@ class DGalonController extends Controller
     {
         $data = [
             'id'          => $request->input('id'),
-            // 'nik'         => $request->input('nik'),
+            'nik'         => $request->input('nik'),
             'nama'        => $request->input('nama'),
             'jumlah'      => $request->input('jumlah'),
             'alamat'      => $request->input('alamat'),
@@ -31,14 +31,14 @@ class DGalonController extends Controller
         ];
         if ($data['alamat']) {
             $data = [
-                'id'          => $request->input('id'),
-                'tanggal'     => $request->input('tanggal'),
-                'nik'         => $request->input('nik'),
-                'nama'        => $request->input('nama'),
-                'jumlah'      => $request->input('jumlah'),
-                'alamat'      => $request->input('alamat'),
-                'hp'          => $request->input('hp'),
-                'tgl_kembali' => $request->input('tgl_kembali'),
+                'id'          => $request->input('id') ?? '',
+                'tanggal'     => $request->input('tanggal') ?? '',
+                'nik'         => $request->input('nik') ?? '',
+                'nama'        => $request->input('nama') ?? '',
+                'jumlah'      => $request->input('jumlah') ?? 0,
+                'alamat'      => $request->input('alamat') ?? '',
+                'hp'          => $request->input('hp') ?? '',
+                'tgl_kembali' => $request->input('tgl_kembali') ?? '',
             ];
         }
 

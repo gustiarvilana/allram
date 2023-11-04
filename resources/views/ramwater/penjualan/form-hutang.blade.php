@@ -14,6 +14,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="id_parent" id="id_parent">
 
                     <div class="form-group" style="display: block">
                         <label for="tanggal">tanggal </label>
@@ -22,7 +23,7 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group" style="display: none">
+                    <div class="form-group" style="display: block">
                         <label for="nik">nik </label>
                         <input type="text" class="form-control" name="nik" id="nik">
                         @error('nik')
@@ -54,11 +55,19 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="jumlah">
                         <label for="jumlah">jumlah Pinjam </label>
                         <input type="text" class="form-control money" name="jumlah" id="jumlah"
                             value="{{ old('jumlah') }}">
                         @error('jumlah')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group" style="display: none" id="bayar">
+                        <label for="bayar">Bayar</label>
+                        <input type="text" class="form-control money" name="bayar" id="bayar"
+                            value="{{ old('bayar') }}">
+                        @error('bayar')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -74,7 +83,10 @@
                                             <th width="5%">No</th>
                                             <th>Sales</th>
                                             <th>nama</th>
+                                            <th>alamat</th>
+                                            <th>Telepon</th>
                                             <th>jumlah</th>
+                                            <th>bayar</th>
                                             <th width="25%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                         </tr>
                                     </thead>
