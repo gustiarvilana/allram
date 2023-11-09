@@ -13,8 +13,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" name="id" id="id">
-                    <input type="text" name="id_parent" id="id_parent">
+                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="id_parent" id="id_parent">
 
                     <div class="form-group" style="display: block">
                         <label for="tanggal">tanggal </label>
