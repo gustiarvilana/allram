@@ -81,11 +81,12 @@
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
+                                            <th>Tanggal</th>
                                             <th>Sales</th>
                                             <th>nama</th>
                                             <th>alamat</th>
                                             <th>Telepon</th>
-                                            <th>jumlah</th>
+                                            <th>Sisa Pinjam</th>
                                             <th>bayar</th>
                                             <th width="25%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                         </tr>

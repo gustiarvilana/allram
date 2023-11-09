@@ -33,6 +33,9 @@ class Update extends Seeder
         DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `nik` varchar(255) DEFAULT NULL AFTER `tanggal`;");
         DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `alamat` varchar(255) DEFAULT NULL AFTER `jumlah`;");
         DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `hp` varchar(255) DEFAULT NULL AFTER `alamat`;");
+        DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `id_parent` int(11) DEFAULT NULL AFTER `id`;");
+        DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `bayar` int(11) DEFAULT NULL AFTER `hp`;");
+        DB::statement("ALTER TABLE `ramwater_d_galon` ADD IF NOT EXISTS `sts` varchar(1) DEFAULT NULL AFTER `tgl_kembali`;");
 
         DB::statement("CREATE TABLE IF NOT EXISTS `ramwater_d_hutang` (
                     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,

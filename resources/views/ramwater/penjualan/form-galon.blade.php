@@ -13,7 +13,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id" id="id">
+                    <input type="text" name="id" id="id">
+                    <input type="text" name="id_parent" id="id_parent">
 
                     <div class="form-group" style="display: block">
                         <label for="tanggal">tanggal </label>
@@ -22,7 +23,7 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group" style="display: none">
+                    <div class="form-group" style="display: block">
                         <label for="nik">nik </label>
                         <input type="text" class="form-control" name="nik" id="nik">
                         @error('nik')
@@ -62,6 +63,15 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <div class="form-group">
+                        <label for="bayar">Jumlah Kembali </label>
+                        <input type="text" class="form-control money" name="bayar" id="bayar"
+                            value="{{ old('bayar') }}">
+                        @error('bayar')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="row">
                         <div class="col table-responsive">
                             <div class="card-header">
@@ -73,9 +83,13 @@
                                         <tr>
                                             <th width="5%">No</th>
                                             <th>Tanggal</th>
+                                            <th>Sales</th>
                                             <th>nama</th>
+                                            <th>alamat</th>
+                                            <th>Telepon</th>
                                             <th>jumlah</th>
-                                            <th width="25%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
+                                            <th>bayar</th>
+                                            <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

@@ -54,8 +54,6 @@
 
 @push('js')
     <script>
-        let table;
-        let table_galon;
         var tanggal = $('#tanggal').val();
         var url_add = '{{ route('penjualan.store') }}';
         var url_delete = '{{ route('penjualan.destroy', ['penjualan' => ':id']) }}';
@@ -68,7 +66,7 @@
         var url_delete_hutang = '{{ route('hutang.destroy', ['hutang' => ':id']) }}';
 
         $(document).ready(function() {
-            table = $("#table").DataTable({
+            var table = $("#table").DataTable({
                 "dom": 'Bfrtip',
                 "info": true,
                 "processing": true,
@@ -238,7 +236,7 @@
                 $('#modal-galon #alamat').show()
                 $('#modal-galon #hp').show()
 
-                table_galon = $("#table_galon").DataTable({
+                var table_galon = $("#table_galon").DataTable({
                     "dom": 'Bfrtip',
                     "info": true,
                     "processing": true,
@@ -247,7 +245,7 @@
                     "autoWidth": true,
                     "searching": true,
                     "ordering": true,
-                    "bDestroy": true,
+                    // "bDestroy": true,
                     "buttons": [
                         // "copy",
                         // "csv",
@@ -260,40 +258,57 @@
                         url: '{{ route('galon.data') }}',
                     },
                     "columns": [{
-                        data: 'DT_RowIndex',
-                        searchable: false,
-                        shrotable: false
-                    }, {
-                        data: 'tanggal',
-                        "render": function(data, type, full, meta) {
-                            // Mengonversi format tanggal
-                            if (data != null) {
-                                if (type === 'display' || type === 'filter') {
-                                    var dateString = data.toString();
-                                    var year = dateString.slice(0, 4);
-                                    var month = dateString.slice(4, 6);
-                                    var day = dateString.slice(6, 8);
-                                    return year + '-' + month + '-' + day;
+                            data: 'DT_RowIndex',
+                            searchable: false,
+                            shrotable: false
+                        }, {
+                            data: 'tanggal',
+                            "render": function(data, type, full, meta) {
+                                // Mengonversi format tanggal
+                                if (data != null) {
+                                    if (type === 'display' || type === 'filter') {
+                                        var dateString = data.toString();
+                                        var year = dateString.slice(0, 4);
+                                        var month = dateString.slice(4, 6);
+                                        var day = dateString.slice(6, 8);
+                                        return year + '-' + month + '-' + day;
+                                    }
                                 }
+                                return data;
                             }
-                            return data;
-                        }
-                    }, {
-                        data: 'nama'
-                    }, {
-                        data: 'jumlah'
-                    }, {
-                        data: 'id',
-                        render: function(data, type, row) {
-                            return `
+                        },
+                        {
+                            data: 'nik'
+                        },
+                        {
+                            data: 'nama'
+                        },
+                        {
+                            data: 'alamat'
+                        },
+                        {
+                            data: 'hp'
+                        },
+                        {
+                            data: 'jumlah'
+                        },
+                        {
+                            data: 'bayar'
+                        },
+                        {
+                            data: 'id',
+                            render: function(data, type, row) {
+                                return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" id="galon-edit" data-id='${row.id}' data-id_penjualan='${row.id_penjualan}' data-nama='${row.nama}' data-jumlah='${row.jumlah}'> Edit</button>
-                                <button class="btn btn-sm btn-danger" id="galon-delete" data-id='${row.id}' data-id_penjualan='${row.id_penjualan}' data-nama='${row.nama}' data-jumlah='${row.jumlah}'> Delete</button>
+                                <a class="btn btn-sm btn-primary" id="galon-edit" data-id='${row.id}' data-id_parent='${row.id_parent}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-jumlah='${row.jumlah}' data-bayar='${row.bayar}' data-tanggal='${row.tanggal}'> Edit</a>
+                                <a class="btn btn-sm btn-success" id="galon-bayar" data-id='${row.id}' data-id_parent='${row.id_parent}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-jumlah='${row.jumlah}' data-bayar='${row.bayar}' data-tanggal='${row.tanggal}'> Bayar</a>
+                                <a class="btn btn-sm btn-danger" id="galon-delete" data-id='${row.id}' data-id_parent='${row.id_parent}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-jumlah='${row.jumlah}' data-bayar='${row.bayar}' data-tanggal='${row.tanggal}'> Delete</a>
                             </div>
                         `;
-                        }
+                            }
 
-                    }]
+                        }
+                    ]
                 });
 
             }).on('click', '#save_galon', function() {
@@ -344,23 +359,34 @@
                         }, 5000);
                     },
                 })
-            }).on('click', '#galon-edit', function(e) {
-                if (!e.preventDefault()) {
-                    if (!e.preventDefault()) {
-                        var id = $(this).data('id');
-                        var id_penjualan = $(this).data('id_penjualan');
-                        var nama = $(this).data('nama');
-                        var jumlah = $(this).data('jumlah');
+            }).on('click', '#galon-edit', function() {
+                var nik = $('#modal-galon [name=nik]').val();
+                $('#modal-galon form')[0].reset();
+                $('#modal-galon [name=nik]').val(nik);
+                $('#modal-galon [name=tanggal]').val($(this).data('tanggal'))
+                $('#modal-galon [name=id]').val($(this).data('id'))
+                $('#modal-galon [name=id_parent]').val($(this).data('id_parent'))
+                $('#modal-galon [name=nama]').val($(this).data('nama'))
+                $('#modal-galon [name=alamat]').val($(this).data('alamat'))
+                $('#modal-galon [name=hp]').val($(this).data('hp'))
+                $('#modal-galon #jumlah').val($(this).data('jumlah'))
+                $('#modal-galon [name=bayar]').val($(this).data('bayar'))
 
-                        $('#modal-galon #id').val(id)
-                        $('#modal-galon #id_penjualan').val(id_penjualan)
-                        $('#modal-galon #nama').val(nama)
-                        $('#modal-galon #jumlah').val(jumlah)
-                        $('#modal-galon #alamat').hide(alamat)
-                        $('#modal-galon #hp').hide(hp)
-                    }
-                }
+                $('#modal-galon #jumlah').show()
 
+            }).on('click', '#galon-bayar', function() {
+                var nik = $('#modal-galon [name=nik]').val();
+                $('#modal-galon form')[0].reset();
+                $('#modal-galon [name=nik]').val(nik);
+                $('#modal-galon [name=tanggal]').val($(this).data('tanggal'))
+                $('#modal-galon [name=id_parent]').val($(this).data('id_parent'))
+                $('#modal-galon [name=nama]').val($(this).data('nama'))
+                $('#modal-galon [name=alamat]').val($(this).data('alamat'))
+                $('#modal-galon [name=hp]').val($(this).data('hp'))
+                $('#modal-galon #jumlah').val($(this).data('jumlah'))
+                $('#modal-galon [name=bayar]').val('')
+
+                $('#modal-galon #bayar').show()
             }).on('click', '#galon-delete', function(e) {
                 var id = $(this).data('id');
                 url_delete_galon = url_delete_galon.replace(':id', id);
@@ -607,6 +633,9 @@
                             data: 'tanggal'
                         },
                         {
+                            data: 'nik'
+                        },
+                        {
                             data: 'nama'
                         },
                         {
@@ -642,6 +671,11 @@
                         },
                         {
                             targets: 6,
+                            className: 'dt-body-right',
+                            render: $.fn.dataTable.render.number('.', '.', 0, '')
+                        },
+                        {
+                            targets: 7,
                             className: 'dt-body-right',
                             render: $.fn.dataTable.render.number('.', '.', 0, '')
                         },
@@ -723,8 +757,9 @@
                 }
 
             }).on('click', '#hutang-bayar', function() {
+                var nik = $('#modal-galon [name=nik]').val();
                 $('#modal-hutang form')[0].reset();
-                $('#modal-hutang [name=nik]').val($(this).data('nik'));
+                $('#modal-hutang [name=nik]').val(nik);
                 $('#modal-hutang [name=tanggal]').val($(this).data('tanggal'))
                 $('#modal-hutang [name=id_parent]').val($(this).data('id_parent'))
                 $('#modal-hutang [name=nama]').val($(this).data('nama'))
@@ -735,8 +770,9 @@
 
                 $('#modal-hutang #bayar').show()
             }).on('click', '#hutang-edit', function() {
+                var nik = $('#modal-galon [name=nik]').val();
                 $('#modal-hutang form')[0].reset();
-                $('#modal-hutang [name=nik]').val($(this).data('nik'));
+                $('#modal-hutang [name=nik]').val(nik);
                 $('#modal-hutang [name=tanggal]').val($(this).data('tanggal'))
                 $('#modal-hutang [name=id]').val($(this).data('id'))
                 $('#modal-hutang [name=id_parent]').val($(this).data('id_parent'))
