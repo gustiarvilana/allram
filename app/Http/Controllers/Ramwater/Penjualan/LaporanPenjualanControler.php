@@ -20,10 +20,16 @@ class LaporanPenjualanControler extends Controller
         $laporan = DB::table('ramwater_d_penjualan as a')
             ->select(
                 'c.nama as nama_sales',
+                'a.nik',
+                'a.tgl_penjualan',
                 DB::raw('SUM(b.jumlah) as sum_jumlah'),
                 DB::raw('SUM(b.total) as sum_total'),
                 DB::raw('SUM(a.cash) as t_cash'),
                 DB::raw('SUM(a.transfer) as t_transfer'),
+                DB::raw('(SELECT SUM(bayar) FROM ramwater_d_hutang as d WHERE d.nik = a.nik and d.tanggal = a.tgl_penjualan) as bayar_total'),
+                DB::raw('(SELECT SUM(jumlah) FROM ramwater_d_hutang as e WHERE e.nik = a.nik and e.tanggal = a.tgl_penjualan) as hutang_total'),
+                DB::raw('SUM(b.total) + (SELECT SUM(bayar) FROM ramwater_d_hutang as c WHERE c.nik = a.nik and c.tanggal = a.tgl_penjualan) - (SELECT SUM(jumlah) FROM ramwater_d_hutang as d WHERE d.nik = a.nik and d.tanggal = a.tgl_penjualan) as cash'),
+                DB::raw("(SELECT SUM(jumlah) FROM d_kasbon as e WHERE e.satker='ramwater' and e.nik = a.nik and e.tanggal = a.tgl_penjualan) as kasbon_sales"),
             )
             ->join('ramwater_d_penjualan_detail as b', 'a.id', 'b.id_penjualan')
             ->join('t_karyawan as c', 'a.nik', 'c.nik')
@@ -32,9 +38,7 @@ class LaporanPenjualanControler extends Controller
                 'c.nama',
                 'c.nik',
                 'a.tgl_penjualan',
-                // 'b.jumlah',
-                // 'a.cash',
-                // 'a.transfer',
+                'a.nik',
             );
         // ->havingRaw('SUM(b.jumlah) > 5');
 

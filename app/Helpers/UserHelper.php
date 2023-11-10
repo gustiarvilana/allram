@@ -23,6 +23,7 @@ class UserHelper
             ->leftJoin('users_role as c', 'b.kd_role', 'c.kd_role')
             // ->whereNotIn('b.kd_role', ['1', '2', '99'])
             ->where('a.satker', 'ramwater')
+            ->where('b.active', '1')
             ->get();
         return $ramwater;
     }

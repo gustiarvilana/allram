@@ -66,7 +66,7 @@
         var url_delete_hutang = '{{ route('hutang.destroy', ['hutang' => ':id']) }}';
 
         $(document).ready(function() {
-            var table = $("#table").DataTable({
+            $("#table").DataTable({
                 "dom": 'Bfrtip',
                 "info": true,
                 "processing": true,
@@ -160,7 +160,7 @@
 
             $('#tanggal').on('change', function() {
                 tanggal = $('#tanggal').val();
-                table.ajax.reload();
+                $('#table').DataTable().ajax.reload();
             })
 
             $('#modal-detail [name=sisa]').on('change', function() {
@@ -220,6 +220,7 @@
                         },
                         error: function(errors) {
                             alert('Gagal Hapus data!');
+                            $('#table').DataTable().ajax.reload();
                             return;
                         }
                     });
@@ -236,7 +237,7 @@
                 $('#modal-galon #alamat').show()
                 $('#modal-galon #hp').show()
 
-                var table_galon = $("#table_galon").DataTable({
+                $("#table_galon").DataTable({
                     "dom": 'Bfrtip',
                     "info": true,
                     "processing": true,
@@ -245,7 +246,7 @@
                     "autoWidth": true,
                     "searching": true,
                     "ordering": true,
-                    // "bDestroy": true,
+                    "bDestroy": true,
                     "buttons": [
                         // "copy",
                         // "csv",
@@ -603,7 +604,7 @@
                 $('#modal-hutang #alamat').show()
                 $('#modal-hutang #hp').show()
 
-                var table_hutang = $("#table_hutang").DataTable({
+                $("#table_hutang").DataTable({
                     "dom": 'Bfrtip',
                     "info": true,
                     "processing": true,

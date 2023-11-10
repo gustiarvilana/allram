@@ -13,69 +13,71 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id" id="id">
-                    <input type="hidden" name="id_parent" id="id_parent">
+                    <div id="form_hutang">
+                        <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="id_parent" id="id_parent">
 
-                    <div class="form-group" style="display: block">
-                        <label for="tanggal">tanggal </label>
-                        <input type="text" class="form-control" name="tanggal" id="tanggal" readonly>
-                        @error('tanggal')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group" style="display: block">
-                        <label for="nik">nik </label>
-                        <input type="text" class="form-control" name="nik" id="nik">
-                        @error('nik')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="form-group" style="display: block" id="tanggal">
+                            <label for="tanggal">tanggal </label>
+                            <input type="text" class="form-control" name="tanggal" id="tanggal" readonly>
+                            @error('tanggal')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group" style="display: block" id="nik">
+                            <label for="nik">nik </label>
+                            <input type="text" class="form-control" name="nik" id="nik">
+                            @error('nik')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group" style="display: block">
-                        <label for="nama">Nama </label>
-                        <input type="text" class="form-control" name="nama" id="nama">
-                        @error('nama')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="form-group" style="display: block" id="nama">
+                            <label for="nama">Nama </label>
+                            <input type="text" class="form-control" name="nama" id="nama">
+                            @error('nama')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group" style="display: block" id="alamat">
-                        <label for="alamat">Alamat </label>
-                        <input type="text" class="form-control" name="alamat">
-                        @error('alamat')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="form-group" style="display: block" id="alamat">
+                            <label for="alamat">Alamat </label>
+                            <input type="text" class="form-control" name="alamat">
+                            @error('alamat')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group" style="display: block" id="hp">
-                        <label for="hp">Hp</label>
-                        <input type="text" class="form-control" name="hp">
-                        @error('hp')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="form-group" style="display: block" id="hp">
+                            <label for="hp">Hp</label>
+                            <input type="text" class="form-control" name="hp">
+                            @error('hp')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group" id="jumlah">
-                        <label for="jumlah">jumlah Pinjam </label>
-                        <input type="text" class="form-control money" name="jumlah" id="jumlah"
-                            value="{{ old('jumlah') }}">
-                        @error('jumlah')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group" style="display: none" id="bayar">
-                        <label for="bayar">Bayar</label>
-                        <input type="text" class="form-control money" name="bayar" id="bayar"
-                            value="{{ old('bayar') }}">
-                        @error('bayar')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <div class="form-group" id="jumlah">
+                            <label for="jumlah">jumlah Pinjam </label>
+                            <input type="text" class="form-control money" name="jumlah" id="jumlah"
+                                value="{{ old('jumlah') }}">
+                            @error('jumlah')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group" style="display: none" id="bayar">
+                            <label for="bayar">Bayar</label>
+                            <input type="text" class="form-control money" name="bayar" id="bayar"
+                                value="{{ old('bayar') }}">
+                            @error('bayar')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="card-header">
+                            <a class="btn btn-success float-right" id="save_hutang">Simpan</a>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col table-responsive">
-                            <div class="card-header">
-                                <a class="btn btn-success float-right" id="save_hutang">Simpan</a>
-                            </div>
                             <div class="card-body">
                                 <table class="table table-bordered table-striped" id="table_hutang">
                                     <thead>

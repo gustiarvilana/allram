@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Ramwater\DatangBarang\DatangBarangControler;
 use App\Http\Controllers\Ramwater\DatangBarang\LaporanDatangBarangControler;
+use App\Http\Controllers\Ramwater\Kasbon\KasbonController;
+use App\Http\Controllers\Ramwater\Kasbon\LaporanKasbonController;
 use App\Http\Controllers\Ramwater\Operasional\LaporanOperasionalController;
 use App\Http\Controllers\Ramwater\Operasional\OperasionalController;
 use App\Http\Controllers\Ramwater\Penjualan\DGalonController;
@@ -80,6 +82,13 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('/data', [OperasionalController::class, 'data'])->name('operasional.data');
             Route::get('/laporan', [LaporanOperasionalController::class, 'laporan'])->name('operasional.laporan');
             Route::get('laporan/data', [LaporanOperasionalController::class, 'data'])->name('operasional.laporan.data');
+        });
+
+        Route::resource('/kasbon', KasbonController::class)->except('show');
+        Route::prefix('kasbon')->group(function () {
+            Route::get('/data', [KasbonController::class, 'data'])->name('kasbon.data');
+            Route::get('/laporan', [LaporanKasbonController::class, 'laporan'])->name('kasbon.laporan');
+            Route::get('laporan/data', [LaporanKasbonController::class, 'data'])->name('kasbon.laporan.data');
         });
     });
 });
