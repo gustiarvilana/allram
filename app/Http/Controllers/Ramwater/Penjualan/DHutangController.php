@@ -12,9 +12,8 @@ class DHutangController extends Controller
     {
         $datangBarang = DB::table('ramwater_d_hutang as a')
             ->where('sts', '!=', '4');
-        if ($request['nik'] && $request['tanggal']) {
+        if ($request['nik']) {
             $datangBarang->where('nik', $request['nik']);
-            $datangBarang->where('tanggal', $request['tanggal']);
         }
         $datangBarang->latest();
 
