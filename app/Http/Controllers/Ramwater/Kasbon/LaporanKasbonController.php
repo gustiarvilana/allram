@@ -15,20 +15,20 @@ class LaporanKasbonController extends Controller
         $tgl_awal =  $tgl_ ? date('Ymd', strtotime(substr($tgl_, 0, 10))) : date('Ymd');
         $tgl_akhir = $tgl_ ? date('Ymd', strtotime(substr($tgl_, 13, 10))) : date('Ymd');
 
-        $laporan = DB::table('d_operasional as a')
+        $laporan = DB::table('d_kasbon as a')
             ->select(
                 'a.tanggal',
-                'c.nama_operasional as nama',
-                DB::raw('(SELECT SUM(total) FROM d_operasional where kd_operasional = a.kd_operasional) as total'),
+                'b.nama',
+                DB::raw('(SELECT SUM(jumlah) FROM d_kasbon where nik = a.nik) as total'),
             )
             ->join('t_karyawan as b', 'a.nik', 'b.nik')
-            ->join('t_operasional as c', 'a.kd_operasional', 'c.kd_operasional')
             ->whereBetween('tanggal', [$tgl_awal, $tgl_akhir])
             ->where('a.satker', 'ramwater')
+            ->where('a.sts', '1')
             ->groupBy(
-                'a.kd_operasional',
+                'b.nama',
                 'a.tanggal',
-                'c.nama_operasional',
+                'a.nik',
             );
 
         return datatables()
@@ -42,6 +42,6 @@ class LaporanKasbonController extends Controller
         $data = [
             'produks' => Produk::where('satker', 'ramwater')->get(),
         ];
-        return view('ramwater.operasional.laporan', $data);
+        return view('ramwater.kasbon.laporan', $data);
     }
 }

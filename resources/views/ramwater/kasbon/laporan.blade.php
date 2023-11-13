@@ -37,7 +37,7 @@
                                     <tr>
                                         <th width="5%">No</th>
                                         <th>Tanggal</th>
-                                        <th>Nama OPS</th>
+                                        <th>Nama Sales</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
