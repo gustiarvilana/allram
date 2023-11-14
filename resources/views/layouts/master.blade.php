@@ -224,6 +224,7 @@
     <script src="{{ asset('assets') }}/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <!-- Select2 -->
     <script src="{{ asset('assets') }}/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{ asset('assets') }}/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -237,6 +238,11 @@
             });
 
             $('#daterange').daterangepicker()
+
+            $("input[data-bootstrap-switch]").each(function() {
+                $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            })
+
         });
 
         $(document).ajaxStart(function() {

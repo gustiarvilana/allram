@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Ramwater\Kasbon;
+namespace App\Http\Controllers\Ramwater\Pinjaman;
 
 use App\Http\Controllers\Controller;
-use App\Models\DKasbon;
+use App\Models\DPinjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class KasbonController extends Controller
+class PinjamanController extends Controller
 {
     public function data(Request $request)
     {
         $tanggal = $request['tanggal'] ? date('Ymd', strtotime($request['tanggal'])) : date('Ymd');
 
         if ($request['riwayat'] != 1) {
-            $kasbon = DB::table('d_kasbon as a')
+            $pinjaman = DB::table('d_pinjaman as a')
                 ->select(
                     'a.*',
                     'b.nama',
-                    DB::raw('(SELECT jumlah FROM d_kasbon as c WHERE c.id_parent = a.id ORDER BY created_at DESC LIMIT 1) as sisa'),
-                    DB::raw('(SELECT SUM(bayar) FROM d_kasbon as c WHERE c.id_parent = a.id) as byr_akhir'),
-                    DB::raw('(SELECT catatan FROM d_kasbon as c WHERE c.id_parent = a.id ORDER BY created_at DESC LIMIT 1) as catatan_akhir'),
-                    DB::raw('(SELECT tanggal FROM d_kasbon as c WHERE c.id_parent = a.id ORDER BY created_at DESC LIMIT 1) as tgl_byr')
+                    DB::raw('(SELECT jumlah FROM d_pinjaman as c WHERE c.id_parent = a.id ORDER BY created_at DESC LIMIT 1) as sisa'),
+                    DB::raw('(SELECT SUM(bayar) FROM d_pinjaman as c WHERE c.id_parent = a.id) as byr_akhir'),
+                    DB::raw('(SELECT catatan FROM d_pinjaman as c WHERE c.id_parent = a.id ORDER BY created_at DESC LIMIT 1) as catatan_akhir'),
+                    DB::raw('(SELECT tanggal FROM d_pinjaman as c WHERE c.id_parent = a.id ORDER BY created_at DESC LIMIT 1) as tgl_byr')
                 )
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
                 ->where('a.satker', 'ramwater')
@@ -29,7 +29,7 @@ class KasbonController extends Controller
                 ->whereRaw('a.id_parent = a.id')
                 ->where('tanggal', $tanggal);
         } else {
-            $kasbon = DB::table('d_kasbon as a')
+            $pinjaman = DB::table('d_pinjaman as a')
                 ->select(
                     'a.*',
                     'b.nama',
@@ -39,20 +39,20 @@ class KasbonController extends Controller
                     'a.tanggal as tgl_byr'
                 )
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
-                ->where('a.satker', 'ramwater')
+                // ->where('a.satker', 'ramwater')
                 ->where('a.sts', '!=', 4)
                 ->where('tanggal', $tanggal);
         }
 
         return datatables()
-            ->of($kasbon)
+            ->of($pinjaman)
             ->addIndexColumn()
             ->make(true);
     }
 
     public function index()
     {
-        return view('ramwater.kasbon.index');
+        return view('ramwater.pinjaman.index');
     }
 
     public function store(Request $request)
@@ -64,21 +64,20 @@ class KasbonController extends Controller
             'tanggal'   => $request->input('tanggal'),
             'nik'       => $request->input('nik'),
             'jumlah'    => $request->input('jumlah'),
+            'jml_angs'    => $request->input('jml_angs'),
             'bayar'     => $request->input('bayar'),
             'catatan'   => $request->input('catatan'),
         ];
         $data['tanggal'] = date('Ymd', strtotime($data['tanggal']));
-        $data['jumlah']  = $data['jumlah'] ? str_replace('.', '', $data['jumlah']) : 0;
-        $data['bayar']   = $data['bayar'] ? str_replace('.', '', $data['bayar']) : 0;
-
-        $data['jumlah'] = $data['jumlah'] - $data['bayar'];
-        $data['sts']     = '1';
+        $data['jumlah'] = str_replace('.', '', $data['jumlah']);
+        $data['jml_angs'] = str_replace('.', '', $data['jml_angs']);
+        $data['sts'] = '1';
 
         try {
-            DKasbon::upsert($data, ['id']); // Memanggil metode upsert dari model User
-            $save = DKasbon::latest()->first();
+            DPinjaman::upsert($data, ['id']); // Memanggil metode upsert dari model User
+            $save = DPinjaman::latest()->first();
             if (!$data['id_parent']) {
-                DKasbon::where('id', $save->id)->update(['id_parent' => $save->id]);
+                DPinjaman::where('id', $save->id)->update(['id_parent' => $save->id]);
             }
             return;
         } catch (\Throwable $th) {
@@ -89,18 +88,21 @@ class KasbonController extends Controller
     public function update(Request $request, $id)
     {
         $data = [
-            'id'        => $request->input('id'),
+            'id'       => $request->input('id'),
             'id_parent' => $request->input('id_parent'),
-            'satker'    => $request->input('satker'),
-            'tanggal'   => $request->input('tanggal'),
-            'nik'       => $request->input('nik'),
-            'jumlah'    => $request->input('jumlah'),
-            'bayar'     => $request->input('bayar'),
-            'catatan'   => $request->input('catatan'),
+            'satker'   => $request->input('satker'),
+            'tanggal'  => $request->input('tanggal'),
+            'nik'      => $request->input('nik'),
+            'jumlah'   => $request->input('jumlah'),
+            'jml_angs' => $request->input('jml_angs'),
+            'bayar'    => $request->input('bayar'),
+            'catatan'  => $request->input('catatan'),
+            'sts'      => $request->input('sts'),
         ];
         $data['tanggal'] = date('Ymd', strtotime($data['tanggal']));
+        $data['jml_angs'] = str_replace('.', '', $data['jml_angs']);
         $data['jumlah'] = str_replace('.', '', $data['jumlah']);
-        $data['bayar']   = $data['bayar'] ? str_replace('.', '', $data['bayar']) : 0;
+        $data['bayar'] = str_replace('.', '', $data['bayar']);
 
         $data['jumlah'] = $data['jumlah'] - $data['bayar'];
         $data['sts']     = '1';
@@ -117,7 +119,7 @@ class KasbonController extends Controller
         }
 
         try {
-            DKasbon::upsert($data, ['id']); // Memanggil metode upsert dari model User
+            DPinjaman::upsert($data, ['id']); // Memanggil metode upsert dari model User
             return;
         } catch (\Throwable $th) {
             throw $th;
@@ -127,7 +129,7 @@ class KasbonController extends Controller
     public function destroy($id)
     {
         try {
-            DKasbon::where('id', $id)->delete();
+            DPinjaman::where('id', $id)->delete();
         } catch (\Throwable $th) {
             throw $th;
         }

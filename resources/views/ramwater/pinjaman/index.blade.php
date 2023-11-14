@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Kasbon
+    Pinjaman
 @endsection
 
 @section('content')
@@ -9,13 +9,13 @@
         <div class="col-md-12">
             <div class="card card-warning">
                 <div class="card-header">
-                    <a class="btn btn-success btn-xs text-white" id="add_menu">Tambah Kasbon</a>
+                    <a class="btn btn-success btn-xs text-white" id="add_menu">Tambah Pinjaman</a>
                 </div>
                 <div class="card-body">
                     <div class="row justify-content-center">
                         <div class="col-md-4 text-center">
                             <div class="form-group">
-                                <label for="">Tanggal Kasbon</label>
+                                <label for="">Tanggal Pinjaman</label>
                             </div>
                             <input type="date" name="tanggal" id="tanggal" class="form-control"
                                 value="{{ date('Y-m-d') }}">
@@ -26,8 +26,8 @@
                     <div class="col-md-4 mx-5">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="kasbon-history">
-                                <label class="custom-control-label" for="kasbon-history">Riwayat Pembayaran</label>
+                                <input type="checkbox" class="custom-control-input" id="pinjaman-history">
+                                <label class="custom-control-label" for="pinjaman-history">Riwayat Pembayaran</label>
                             </div>
                         </div>
                     </div>
@@ -41,6 +41,7 @@
                                     <th>tanggal</th>
                                     <th>nik</th>
                                     <th>jumlah</th>
+                                    <th>jml_angs</th>
                                     <th>Bayar Akhir</th>
                                     <th>Tgl Bayar</th>
                                     <th>catatan</th>
@@ -55,15 +56,15 @@
         </div>
     </div>
     </div>
-    @include('ramwater.kasbon.form')
+    @include('ramwater.pinjaman.form')
 @endsection
 
 @push('js')
     <script>
         let table;
-        var url_add = '{{ route('kasbon.store') }}';
-        var url_delete = '{{ route('kasbon.destroy', ['kasbon' => ':id']) }}';
-        var url_edit = '{{ route('kasbon.update', ['kasbon' => ':id']) }}';
+        var url_add = '{{ route('pinjaman.store') }}';
+        var url_delete = '{{ route('pinjaman.destroy', ['pinjaman' => ':id']) }}';
+        var url_edit = '{{ route('pinjaman.update', ['pinjaman' => ':id']) }}';
         var tanggal = $('#tanggal').val();
         var riwayat = 0;
 
@@ -86,7 +87,7 @@
                     // "colvis"
                 ],
                 "ajax": {
-                    url: '{{ route('kasbon.data') }}',
+                    url: '{{ route('pinjaman.data') }}',
                     data: function(d) {
                         d.tanggal = tanggal;
                         d.riwayat = riwayat;
@@ -111,6 +112,9 @@
                         data: 'jumlah',
                     },
                     {
+                        data: 'jml_angs',
+                    },
+                    {
                         data: 'bayar',
                         render: function(data, type, row) {
 
@@ -118,19 +122,22 @@
                         }
                     },
                     {
-                        data: 'tgl_byr',
+                        data: 'tgl_byr'
                     },
                     {
-                        data: 'catatan_akhir',
+                        data: 'catatan',
+                        render: function(data, type, row) {
+                            return row.catatan_akhir;
+                        }
                     },
                     {
                         data: 'id',
                         render: function(data, type, row) {
                             return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" id="kasbon-edit" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-bayar='${row.bayar}' data-catatan='${row.catatan}' data-catatan_akhir='${row.catatan_akhir}' >Edit</button>
-                                <button class="btn btn-sm btn-warning" id="kasbon-bayar" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-bayar='${row.bayar}' data-catatan='${row.catatan}' data-catatan_akhir='${row.catatan_akhir}' >Bayar</button>
-                                <button class="btn btn-sm btn-danger" id="kasbon-delete" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-bayar='${row.bayar}' data-catatan='${row.catatan}' data-catatan_akhir='${row.catatan_akhir}' >Delete</button>
+                                <button class="btn btn-sm btn-primary" id="pinjaman-edit" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-jml_angs='${row.jml_angs}' data-bayar='${row.bayar}' data-catatan='${row.catatan} data-catatan_akhir='${row.catatan_akhir}' >Edit</button>
+                                <button class="btn btn-sm btn-warning" id="pinjaman-bayar" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-jml_angs='${row.jml_angs}' data-bayar='${row.bayar}' data-catatan='${row.catatan} data-catatan_akhir='${row.catatan_akhir}' >Bayar</button>
+                                <button class="btn btn-sm btn-danger" id="pinjaman-delete" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-jml_angs='${row.jml_angs}' data-bayar='${row.bayar}' data-catatan='${row.catatan} data-catatan_akhir='${row.catatan_akhir}' >Delete</button>
                             </div>
                         `;
                         }
@@ -155,8 +162,8 @@
                 table.ajax.reload();
             })
 
-            $('body').on('click', '#kasbon-history', function() {
-                if ($('#kasbon-history').prop('checked')) {
+            $('body').on('click', '#pinjaman-history', function() {
+                if ($('#pinjaman-history').prop('checked')) {
                     riwayat = 1;
                     table.ajax.reload();
                 } else {
@@ -165,37 +172,38 @@
                 }
             });
 
-
             $('body').on('click', '#add_menu', function() {
-                $('#modal-kasbon').modal('show');
-                $('#modal-kasbon .modal-title').text('Tambah Kasbon');
+                $('#modal-pinjaman').modal('show');
+                $('#modal-pinjaman .modal-title').text('Tambah Datang');
 
-                $('#modal-kasbon form')[0].reset();
-                $('#modal-kasbon form').attr('action', url_add);
-                $('#modal-kasbon [name=_method]').val('post');
-            }).on('click', '#kasbon-edit', function() {
+                $('#modal-pinjaman form')[0].reset();
+                $('#modal-pinjaman form').attr('action', url_add);
+                $('#modal-pinjaman [name=_method]').val('post');
+                $('#modal-pinjaman #bayar').hide();
+            }).on('click', '#pinjaman-edit', function() {
                 var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
                 var tanggal = $(this).attr('data-tanggal').toString();
                 var tgl = tanggal.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
 
-                $('#modal-kasbon').modal('show');
-                $('#modal-kasbon .modal-title').text('Edit Datang');
+                $('#modal-pinjaman').modal('show');
+                $('#modal-pinjaman .modal-title').text('Edit Pinjaman');
 
-                $('#modal-kasbon form')[0].reset();
-                $('#modal-kasbon form').attr('action', url_edit);
-                $('#modal-kasbon [name=_method]').val('put');
+                $('#modal-pinjaman form')[0].reset();
+                $('#modal-pinjaman form').attr('action', url_edit);
+                $('#modal-pinjaman [name=_method]').val('put');
 
-                $('#modal-kasbon [name=id]').val($(this).data('id'));
-                $('#modal-kasbon [name=id_parent]').val($(this).data('id_parent'));
-                $('#modal-kasbon [name=tanggal]').val(tgl);
-                $('#modal-kasbon [name=satker]').val($(this).data('satker'));
-                $('#modal-kasbon [name=nik]').val($(this).data('nik'));
-                $('#modal-kasbon [name=jumlah]').val($(this).data('jumlah'));
-                $('#modal-kasbon [name=bayar]').val($(this).data('bayar'));
-                $('#modal-kasbon [name=catatan]').val($(this).data('catatan'));
+                $('#modal-pinjaman [name=id]').val($(this).data('id'));
+                $('#modal-pinjaman [name=id_parent]').val($(this).data('id_parent'));
+                $('#modal-pinjaman [name=tanggal]').val(tgl);
+                $('#modal-pinjaman [name=satker]').val($(this).data('satker'));
+                $('#modal-pinjaman [name=nik]').val($(this).data('nik'));
+                $('#modal-pinjaman [name=jml_angs]').val($(this).data('jml_angs'));
+                $('#modal-pinjaman [name=jumlah]').val($(this).data('jumlah'));
+                $('#modal-pinjaman [name=bayar]').val($(this).data('bayar'));
+                $('#modal-pinjaman [name=catatan]').val($(this).data('catatan'));
 
-            }).on('click', '#kasbon-bayar', function() {
+            }).on('click', '#pinjaman-bayar', function() {
                 var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
                 var tanggal = $(this).attr('data-tanggal').toString();
@@ -205,23 +213,23 @@
                     alert('Matikan History terlebih dahulu');
                     return;
                 }
+                $('#modal-pinjaman').modal('show');
+                $('#modal-pinjaman .modal-title').text('Pinjaman Bayar');
 
-                $('#modal-kasbon').modal('show');
-                $('#modal-kasbon .modal-title').text('Edit Datang');
+                $('#modal-pinjaman form')[0].reset();
+                $('#modal-pinjaman form').attr('action', url_edit);
+                $('#modal-pinjaman [name=_method]').val('put');
 
-                $('#modal-kasbon form')[0].reset();
-                $('#modal-kasbon form').attr('action', url_edit);
-                $('#modal-kasbon [name=_method]').val('put');
+                $('#modal-pinjaman [name=id_parent]').val($(this).data('id'));
+                $('#modal-pinjaman [name=tanggal]').val(tgl);
+                $('#modal-pinjaman [name=satker]').val($(this).data('satker'));
+                $('#modal-pinjaman [name=nik]').val($(this).data('nik'));
+                $('#modal-pinjaman [name=jml_angs]').val($(this).data('jml_angs'));
+                $('#modal-pinjaman [name=jumlah]').val($(this).data('sisa'));
+                $('#modal-pinjaman [name=bayar]').val($(this).data('bayar'));
+                $('#modal-pinjaman [name=catatan]').val($(this).data('catatan_akhir'));
 
-                $('#modal-kasbon [name=id_parent]').val($(this).data('id'));
-                $('#modal-kasbon [name=tanggal]').val(tgl);
-                $('#modal-kasbon [name=satker]').val($(this).data('satker'));
-                $('#modal-kasbon [name=nik]').val($(this).data('nik'));
-                $('#modal-kasbon [name=jumlah]').val($(this).data('sisa'));
-                $('#modal-kasbon [name=bayar]').val($(this).data('bayar'));
-                $('#modal-kasbon [name=catatan]').val($(this).data('catatan_akhir'));
-
-            }).on('click', '#kasbon-delete', function() {
+            }).on('click', '#pinjaman-delete', function() {
                 var id = $(this).data('id');
                 url_delete = url_delete.replace(':id', id);
                 if (confirm('Yakin akan menghapus data terpilih?')) {
@@ -245,12 +253,12 @@
         });
 
         function validate() {
-            $('#modal-kasbon').on('submit', function(e) {
+            $('#modal-pinjaman').on('submit', function(e) {
                 if (!e.preventDefault()) {
                     $.ajax({
                         type: "POST",
-                        url: $('#modal-kasbon form').attr('action'),
-                        data: $('#modal-kasbon form').serialize(),
+                        url: $('#modal-pinjaman form').attr('action'),
+                        data: $('#modal-pinjaman form').serialize(),
                         success: function(result) {
                             if (result.errors) {
                                 $('.alert-danger').html('');
@@ -261,7 +269,7 @@
                                         '</li>');
                                 });
                             } else {
-                                $('#modal-kasbon').modal('hide');
+                                $('#modal-pinjaman').modal('hide');
                                 $('#table').DataTable().ajax.reload()
                             }
                         },

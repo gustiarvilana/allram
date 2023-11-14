@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-kasbon" data-backdrop="static" data-keyboard="false" tabindex="-1"
+<div class="modal fade" id="modal-pinjaman" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="alert alert-danger" style="display:none"></div>
@@ -47,12 +47,20 @@
                     <div class="form-group">
                         <label for="jumlah">Sisa</label>
                         <input type="text" class="form-control money" name="jumlah" id="jumlah"
-                            value="{{ old('jumlah') }}">
+                            value="{{ old('jumlah') }}" required>
                         @error('jumlah')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="jml_angs">jml_angs</label>
+                        <input type="text" class="form-control money" name="jml_angs" id="jml_angs"
+                            value="{{ old('jml_angs') }}" required>
+                        @error('jml_angs')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group" id="bayar">
                         <label for="bayar">bayar</label>
                         <input type="text" class="form-control money" name="bayar" id="bayar"
                             value="{{ old('bayar') }}">

@@ -12,6 +12,8 @@ use App\Http\Controllers\Ramwater\Penjualan\DHutangController;
 use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanControler;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualandetailController;
+use App\Http\Controllers\Ramwater\Pinjaman\LaporanPinjamanController;
+use App\Http\Controllers\Ramwater\Pinjaman\PinjamanController;
 use App\Http\Controllers\Ramwater\RamwaterController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\SecurityController;
@@ -89,6 +91,13 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('/data', [KasbonController::class, 'data'])->name('kasbon.data');
             Route::get('/laporan', [LaporanKasbonController::class, 'laporan'])->name('kasbon.laporan');
             Route::get('laporan/data', [LaporanKasbonController::class, 'data'])->name('kasbon.laporan.data');
+        });
+
+        Route::resource('/pinjaman', PinjamanController::class)->except('show');
+        Route::prefix('pinjaman')->group(function () {
+            Route::get('/data', [PinjamanController::class, 'data'])->name('pinjaman.data');
+            Route::get('/laporan', [LaporanPinjamanController::class, 'laporan'])->name('pinjaman.laporan');
+            Route::get('laporan/data', [LaporanPinjamanController::class, 'data'])->name('pinjaman.laporan.data');
         });
     });
 });

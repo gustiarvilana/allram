@@ -68,5 +68,45 @@ class Update extends Seeder
                     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+
+        DB::statement("
+            INSERT IGNORE INTO `users_menu`
+            (`id`, `kd_menu`, `kd_parent`, `type`, `ur_menu_title`, `ur_menu_desc`, `link_menu`, `bg_color`, `icon`, `order`, `is_active`)
+            VALUES
+            (20, 20, 4, null, 'Pinjaman', 'Pinjaman', '#', 'bg_color', 'fas fa-random', 19, 1),
+            (21, 21, 20, null, 'Laporan', 'Pinjaman', '/ramwater/pinjaman/laporan', 'bg_color', 'fas fa-random', 20, 1),
+            (22, 22, 20, null, 'Input Pinjaman', 'Pinjaman', '/ramwater/pinjaman', 'bg_color', 'fas fa-random', 21, 1)
+        ");
+
+        DB::statement("
+            INSERT IGNORE INTO `users_role_menu`
+            (`id`, `kd_role`, `kd_menu`, `tahun`)
+            VALUES
+            (53, '99', '20', '2023'),
+            (54, '99', '21', '2023'),
+            (55, '99', '22', '2023'),
+            (56, '1', '20', '2023'),
+            (57, '1', '21', '2023'),
+            (58, '1', '22', '2023'),
+            (59, '2', '20', '2023'),
+            (60, '2', '21', '2023'),
+            (61, '2', '22', '2023')
+        ");
+
+        DB::statement("CREATE TABLE IF NOT EXISTS `d_pinjaman` (
+                    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                    `id_parent` int(11) DEFAULT NULL,
+                    `satker` varchar(255) DEFAULT NULL,
+                    `tanggal` int(11) DEFAULT NULL,
+                    `nik` varchar(255) DEFAULT NULL,
+                    `jumlah` int(11) NOT NULL,
+                    `jml_angs` int(11) NOT NULL,
+                    `bayar` int(11) DEFAULT NULL,
+                    `catatan` text DEFAULT NULL,
+                    `sts` varchar(1) DEFAULT NULL,
+                    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
     }
 }
