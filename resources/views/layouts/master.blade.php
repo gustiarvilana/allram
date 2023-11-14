@@ -60,6 +60,9 @@
     use App\Helpers\UserHelper;
 
     $currentUrl = request()->path();
+    $urlSegments = explode('/', $currentUrl);
+    $parentUrl = implode('/', array_slice($urlSegments, 0, 2));
+
     $kd_parent = Session::get('kd_home_parent');
     $user = auth()->user();
     $role = $user->getRole();

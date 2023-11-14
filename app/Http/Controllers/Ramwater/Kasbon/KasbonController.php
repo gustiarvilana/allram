@@ -40,8 +40,8 @@ class KasbonController extends Controller
                 )
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
                 ->where('a.satker', 'ramwater')
-                ->where('a.sts', '!=', 4)
-                ->where('tanggal', $tanggal);
+                ->where('a.sts', '!=', 4);
+            // ->where('tanggal', $tanggal);
         }
 
         return datatables()

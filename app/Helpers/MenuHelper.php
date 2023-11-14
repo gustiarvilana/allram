@@ -27,7 +27,7 @@ class MenuHelper
         }
     }
 
-    public static function printChildren($kd_parent, $currentUrl)
+    public static function printChildren($kd_parent, $currentUrl, $parentUrl)
     {
         $children = DB::table('users_menu as a')
             ->join('users_role_menu as b', 'a.kd_menu', 'b.kd_menu')
@@ -58,10 +58,19 @@ class MenuHelper
                 echo "</a>";
 
                 if (count(self::countChildren($child->kd_menu)->where('kd_parent', '!=', null)) > 0) {
-                    self::printChildren($child->kd_menu, $currentUrl);
+                    self::printChildren($child->kd_menu, $currentUrl, $parentUrl);
                 }
                 echo "</li>";
                 echo "</ul>";
+            }
+            // open
+            if (dirname($child->link_menu) == '/' . $parentUrl) {
+                echo "<script src='https://code.jquery.com/jquery-3.6.4.min.js'></script>";
+                echo "<script>";
+                echo "$(document).ready(function() {";
+                echo "$('#item_menu-" . $child->kd_parent . "').toggleClass('menu-is-opening menu-open');";
+                echo "});";
+                echo "</script>";
             }
         }
     }
