@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Pinjam Uang
+    Pending Uang
 @endsection
 
 @section('content')
