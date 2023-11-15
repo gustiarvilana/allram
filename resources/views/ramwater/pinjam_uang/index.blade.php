@@ -97,7 +97,7 @@
                         data: 'nik',
                         render: function(data, type, row) {
 
-                            return row.nama;
+                            return row.nama_karyawan;
                         }
                     },
                     {
