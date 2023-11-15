@@ -93,7 +93,8 @@ class Update extends Seeder
             (61, '2', '22', '2023')
         ");
 
-        DB::statement("CREATE TABLE IF NOT EXISTS `d_pinjaman` (
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_pinjaman` (
                     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                     `id_parent` int(11) DEFAULT NULL,
                     `satker` varchar(255) DEFAULT NULL,
@@ -107,6 +108,27 @@ class Update extends Seeder
                     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        DB::statement("
+            INSERT IGNORE INTO `users_menu`
+            (`id`, `kd_menu`, `kd_parent`, `type`, `ur_menu_title`, `ur_menu_desc`, `link_menu`, `bg_color`, `icon`, `order`, `is_active`)
+            VALUES
+            (23, 23, 12, null, 'Pinjam Galon', 'Pinjaman Galon', '/ramwater/penjualan/galon', 'bg_color', 'fas fa-random', 23, 1),
+            (24, 24, 12, null, 'Pending Bayar', 'Pending Uang', '/ramwater/penjualan/hutang', 'bg_color', 'fas fa-random', 24, 1);
+        ");
+
+        DB::statement("
+            INSERT IGNORE INTO `users_role_menu`
+            (`id`, `kd_role`, `kd_menu`, `tahun`)
+            VALUES
+            (61, '99', '23', '2023'),
+            (62, '99', '24', '2023'),
+            (63, '1', '23', '2023'),
+            (64, '1', '24', '2023'),
+            (65, '2', '23', '2023'),
+            (66, '2', '24', '2023')
+        ");
     }
 }

@@ -12,7 +12,7 @@
                     <a class="btn btn-success btn-xs text-white" id="add_menu">Tambah Kasbon</a>
                 </div>
                 <div class="card-body">
-                    <div class="row justify-content-center">
+                    {{-- <div class="row justify-content-center">
                         <div class="col-md-4 text-center">
                             <div class="form-group">
                                 <label for="">Tanggal Kasbon</label>
@@ -20,7 +20,7 @@
                             <input type="date" name="tanggal" id="tanggal" class="form-control"
                                 value="{{ date('Y-m-d') }}">
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="row">
                     <div class="col-md-4 mx-5">

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Pinjaman
+    Pinjam Galon
 @endsection
 
 @section('content')
@@ -9,13 +9,13 @@
         <div class="col-md-12">
             <div class="card card-warning">
                 <div class="card-header">
-                    <a class="btn btn-success btn-xs text-white" id="add_menu">Tambah Pinjaman</a>
+                    <a class="btn btn-success btn-xs text-white" id="add_menu">Tambah Pinjam Galon</a>
                 </div>
                 <div class="card-body">
                     {{-- <div class="row justify-content-center">
                         <div class="col-md-4 text-center">
                             <div class="form-group">
-                                <label for="">Tanggal Pinjaman</label>
+                                <label for="">Tanggal Pinjam</label>
                             </div>
                             <input type="date" name="tanggal" id="tanggal" class="form-control"
                                 value="{{ date('Y-m-d') }}">
@@ -26,8 +26,8 @@
                     <div class="col-md-4 mx-5">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="pinjaman-history">
-                                <label class="custom-control-label" for="pinjaman-history">Riwayat Pembayaran</label>
+                                <input type="checkbox" class="custom-control-input" id="galon-history">
+                                <label class="custom-control-label" for="galon-history">Riwayat Pinjam</label>
                             </div>
                         </div>
                     </div>
@@ -39,12 +39,13 @@
                                 <tr>
                                     <th width="5%">No</th>
                                     <th>tanggal</th>
-                                    <th>nik</th>
+                                    <th>nik Sales</th>
+                                    <th>nama Konsumen</th>
+                                    <th>alamat</th>
+                                    <th>hp</th>
                                     <th>jumlah</th>
-                                    <th>jml_angs</th>
                                     <th>Bayar Akhir</th>
                                     <th>Tgl Bayar</th>
-                                    <th>catatan</th>
                                     <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                 </tr>
                             </thead>
@@ -56,15 +57,15 @@
         </div>
     </div>
     </div>
-    @include('ramwater.pinjaman.form')
+    @include('ramwater.pinjam_galon.form')
 @endsection
 
 @push('js')
     <script>
         let table;
-        var url_add = '{{ route('pinjaman.store') }}';
-        var url_delete = '{{ route('pinjaman.destroy', ['pinjaman' => ':id']) }}';
-        var url_edit = '{{ route('pinjaman.update', ['pinjaman' => ':id']) }}';
+        var url_add = '{{ route('galon.store') }}';
+        var url_delete = '{{ route('galon.destroy', ['galon' => ':id']) }}';
+        var url_edit = '{{ route('galon.update', ['galon' => ':id']) }}';
         var tanggal = $('#tanggal').val();
         var riwayat = 0;
 
@@ -87,7 +88,7 @@
                     // "colvis"
                 ],
                 "ajax": {
-                    url: '{{ route('pinjaman.data') }}',
+                    url: '{{ route('galon.data') }}',
                     data: function(d) {
                         d.tanggal = tanggal;
                         d.riwayat = riwayat;
@@ -109,10 +110,16 @@
                         }
                     },
                     {
-                        data: 'jumlah',
+                        data: 'nama',
                     },
                     {
-                        data: 'jml_angs',
+                        data: 'alamat',
+                    },
+                    {
+                        data: 'hp',
+                    },
+                    {
+                        data: 'jumlah',
                     },
                     {
                         data: 'bayar',
@@ -122,22 +129,16 @@
                         }
                     },
                     {
-                        data: 'tgl_byr'
-                    },
-                    {
-                        data: 'catatan',
-                        render: function(data, type, row) {
-                            return row.catatan_akhir;
-                        }
+                        data: 'tgl_byr',
                     },
                     {
                         data: 'id',
                         render: function(data, type, row) {
                             return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" id="pinjaman-edit" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-jml_angs='${row.jml_angs}' data-bayar='${row.bayar}' data-catatan='${row.catatan} data-catatan_akhir='${row.catatan_akhir}' >Edit</button>
-                                <button class="btn btn-sm btn-warning" id="pinjaman-bayar" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-jml_angs='${row.jml_angs}' data-bayar='${row.bayar}' data-catatan='${row.catatan} data-catatan_akhir='${row.catatan_akhir}' >Bayar</button>
-                                <button class="btn btn-sm btn-danger" id="pinjaman-delete" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-satker='${row.satker}' data-nik='${row.nik}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-jml_angs='${row.jml_angs}' data-bayar='${row.bayar}' data-catatan='${row.catatan} data-catatan_akhir='${row.catatan_akhir}' >Delete</button>
+                                <button class="btn btn-sm btn-primary" id="galon-edit" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-nik='${row.nik}' data-nama='${row.nama}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-bayar='${row.bayar}' data-tgl_kembali='${row.tgl_kembali}' data-sts='${row.sts}'>Edit</button>
+                                <button class="btn btn-sm btn-warning" id="galon-bayar" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-nik='${row.nik}' data-nama='${row.nama}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-bayar='${row.bayar}' data-tgl_kembali='${row.tgl_kembali}' data-sts='${row.sts}'>Bayar</button>
+                                <button class="btn btn-sm btn-danger" id="galon-delete" data-id='${row.id}' data-id_parent='${row.id_parent}' data-tanggal='${row.tanggal}' data-nik='${row.nik}' data-nama='${row.nama}' data-jumlah='${row.jumlah}' data-sisa='${row.sisa}' data-alamat='${row.alamat}' data-hp='${row.hp}' data-bayar='${row.bayar}' data-tgl_kembali='${row.tgl_kembali}' data-sts='${row.sts}'>Delete</button>
                             </div>
                         `;
                         }
@@ -162,8 +163,8 @@
                 table.ajax.reload();
             })
 
-            $('body').on('click', '#pinjaman-history', function() {
-                if ($('#pinjaman-history').prop('checked')) {
+            $('body').on('click', '#galon-history', function() {
+                if ($('#galon-history').prop('checked')) {
                     riwayat = 1;
                     table.ajax.reload();
                 } else {
@@ -172,64 +173,69 @@
                 }
             });
 
+
             $('body').on('click', '#add_menu', function() {
-                $('#modal-pinjaman').modal('show');
-                $('#modal-pinjaman .modal-title').text('Tambah Datang');
+                $('#modal-galon').modal('show');
+                $('#modal-galon .modal-title').text('Tambah Galon');
 
-                $('#modal-pinjaman form')[0].reset();
-                $('#modal-pinjaman form').attr('action', url_add);
-                $('#modal-pinjaman [name=_method]').val('post');
-                $('#modal-pinjaman #bayar').hide();
-            }).on('click', '#pinjaman-edit', function() {
+                $('#modal-galon form')[0].reset();
+                $('#modal-galon form').attr('action', url_add);
+                $('#modal-galon [name=_method]').val('post');
+            }).on('click', '#galon-edit', function() {
                 var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
                 var tanggal = $(this).attr('data-tanggal').toString();
                 var tgl = tanggal.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
 
-                $('#modal-pinjaman').modal('show');
-                $('#modal-pinjaman .modal-title').text('Edit Pinjaman');
+                $('#modal-galon').modal('show');
+                $('#modal-galon .modal-title').text('Edit Datang');
 
-                $('#modal-pinjaman form')[0].reset();
-                $('#modal-pinjaman form').attr('action', url_edit);
-                $('#modal-pinjaman [name=_method]').val('put');
+                $('#modal-galon form')[0].reset();
+                $('#modal-galon form').attr('action', url_edit);
+                $('#modal-galon [name=_method]').val('put');
 
-                $('#modal-pinjaman [name=id]').val($(this).data('id'));
-                $('#modal-pinjaman [name=id_parent]').val($(this).data('id_parent'));
-                $('#modal-pinjaman [name=tanggal]').val(tgl);
-                $('#modal-pinjaman [name=satker]').val($(this).data('satker'));
-                $('#modal-pinjaman [name=nik]').val($(this).data('nik'));
-                $('#modal-pinjaman [name=jml_angs]').val($(this).data('jml_angs'));
-                $('#modal-pinjaman [name=jumlah]').val($(this).data('jumlah'));
-                $('#modal-pinjaman [name=bayar]').val($(this).data('bayar'));
-                $('#modal-pinjaman [name=catatan]').val($(this).data('catatan'));
+                $('#modal-galon [name=id]').val($(this).data('id'));
+                $('#modal-galon [name=id_parent]').val($(this).data('id_parent'));
+                $('#modal-galon [name=tanggal]').val(tgl);
+                $('#modal-galon [name=nik]').val($(this).data('nik'));
+                $('#modal-galon [name=nama]').val($(this).data('nama'));
+                $('#modal-galon [name=jumlah]').val($(this).data('jumlah'));
+                $('#modal-galon [name=alamat]').val($(this).data('alamat'));
+                $('#modal-galon [name=hp]').val($(this).data('hp'));
+                $('#modal-galon [name=bayar]').val($(this).data('bayar'));
+                $('#modal-galon [name=tgl_kembali]').val($(this).data('tgl_kembali'));
+                $('#modal-galon [name=sts]').val($(this).data('sts'));
 
-            }).on('click', '#pinjaman-bayar', function() {
+            }).on('click', '#galon-bayar', function() {
                 var id = $(this).data('id');
                 url_edit = url_edit.replace(':id', id);
                 var tanggal = $(this).attr('data-tanggal').toString();
                 var tgl = tanggal.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
-
+                console.log(tgl);
                 if (id != $(this).data('id_parent')) {
                     alert('Matikan History terlebih dahulu');
                     return;
                 }
-                $('#modal-pinjaman').modal('show');
-                $('#modal-pinjaman .modal-title').text('Pinjaman Bayar');
 
-                $('#modal-pinjaman form')[0].reset();
-                $('#modal-pinjaman form').attr('action', url_edit);
-                $('#modal-pinjaman [name=_method]').val('put');
+                $('#modal-galon').modal('show');
+                $('#modal-galon .modal-title').text('Edit Datang');
 
-                $('#modal-pinjaman [name=id_parent]').val($(this).data('id'));
-                $('#modal-pinjaman [name=tanggal]').val(tgl);
-                $('#modal-pinjaman [name=satker]').val($(this).data('satker'));
-                $('#modal-pinjaman [name=nik]').val($(this).data('nik'));
-                $('#modal-pinjaman [name=jml_angs]').val($(this).data('jml_angs'));
-                $('#modal-pinjaman [name=jumlah]').val($(this).data('sisa'));
-                $('#modal-pinjaman [name=bayar]').val($(this).data('bayar'));
-                $('#modal-pinjaman [name=catatan]').val($(this).data('catatan_akhir'));
+                $('#modal-galon form')[0].reset();
+                $('#modal-galon form').attr('action', url_edit);
+                $('#modal-galon [name=_method]').val('put');
 
-            }).on('click', '#pinjaman-delete', function() {
+                $('#modal-galon [name=id_parent]').val($(this).data('id'));
+                $('#modal-galon [name=tanggal]').val(tgl);
+                $('#modal-galon [name=nik]').val($(this).data('nik'));
+                $('#modal-galon [name=nama]').val($(this).data('nama'));
+                $('#modal-galon [name=jumlah]').val($(this).data('sisa'));
+                $('#modal-galon [name=alamat]').val($(this).data('alamat'));
+                $('#modal-galon [name=hp]').val($(this).data('hp'));
+                $('#modal-galon [name=bayar]').val($(this).data('bayar'));
+                $('#modal-galon [name=tgl_kembali]').val($(this).data('tgl_kembali'));
+                $('#modal-galon [name=sts]').val($(this).data('sts'));
+
+            }).on('click', '#galon-delete', function() {
                 var id = $(this).data('id');
                 url_delete = url_delete.replace(':id', id);
                 if (confirm('Yakin akan menghapus data terpilih?')) {
@@ -253,12 +259,12 @@
         });
 
         function validate() {
-            $('#modal-pinjaman').on('submit', function(e) {
+            $('#modal-galon').on('submit', function(e) {
                 if (!e.preventDefault()) {
                     $.ajax({
                         type: "POST",
-                        url: $('#modal-pinjaman form').attr('action'),
-                        data: $('#modal-pinjaman form').serialize(),
+                        url: $('#modal-galon form').attr('action'),
+                        data: $('#modal-galon form').serialize(),
                         success: function(result) {
                             if (result.errors) {
                                 $('.alert-danger').html('');
@@ -269,7 +275,7 @@
                                         '</li>');
                                 });
                             } else {
-                                $('#modal-pinjaman').modal('hide');
+                                $('#modal-galon').modal('hide');
                                 $('#table').DataTable().ajax.reload()
                             }
                         },

@@ -70,11 +70,11 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::get('/penjualan/laporan/data', [LaporanPenjualanControler::class, 'data'])->name('penjualan.laporan.data');
         Route::get('/penjualan/laporan/perProduk', [LaporanPenjualanControler::class, 'perProduk'])->name('penjualan.laporan.perProduk');
 
-        Route::get('/galon/data', [DGalonController::class, 'data'])->name('galon.data');
-        Route::resource('/galon', DGalonController::class)->except('show');
+        Route::get('/penjualan/galon/data', [DGalonController::class, 'data'])->name('galon.data');
+        Route::resource('/penjualan/galon', DGalonController::class)->except('show');
 
-        Route::get('/hutang/data', [DHutangController::class, 'data'])->name('hutang.data');
-        Route::resource('/hutang', DHutangController::class)->except('show');
+        Route::get('/penjualan/hutang/data', [DHutangController::class, 'data'])->name('hutang.data');
+        Route::resource('/penjualan/hutang', DHutangController::class)->except('show');
 
         Route::get('/penjualandetail/data/{id}', [PenjualandetailController::class, 'data'])->name('penjualandetail.data');
         Route::resource('/penjualandetail', PenjualandetailController::class)->except('show');

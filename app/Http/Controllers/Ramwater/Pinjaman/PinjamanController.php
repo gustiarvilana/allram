@@ -26,8 +26,8 @@ class PinjamanController extends Controller
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
                 ->where('a.satker', 'ramwater')
                 ->where('a.sts', '!=', 4)
-                ->whereRaw('a.id_parent = a.id')
-                ->where('tanggal', $tanggal);
+                ->whereRaw('a.id_parent = a.id');
+            // ->where('tanggal', $tanggal);
         } else {
             $pinjaman = DB::table('d_pinjaman as a')
                 ->select(
