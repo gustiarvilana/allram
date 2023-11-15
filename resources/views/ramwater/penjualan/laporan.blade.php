@@ -72,9 +72,6 @@
                                         <th rowspan="2"
                                             style="vertical-align: middle !important; text-align:center; font-size:12pt;">
                                             Cash</th>
-                                        <th rowspan="2"
-                                            style="vertical-align: middle !important; text-align:center; font-size:12pt;">
-                                            Kasbon Kurang</th>
                                         <th width="15%" rowspan="2"
                                             style="vertical-align: middle !important; text-align:center; font-size:12pt;">
                                             <i class="fa fa-cogs" aria-hidden="true"></i>
@@ -221,20 +218,6 @@
                             render: function(data, type, row) {
                                 return formatRupiah(row.cash - row.kasbon_sales);
                             }
-                        },
-                        {
-                            data: 'kasbon_kurang',
-                            render: function(data, type, row) {
-                                return `
-                                    <form action="" method="post">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control money" name="cash" id="cash" placeholder="Cash"">
-                                        </div>
-                                    </form>
-                                `;
-                            }
-
-
                         },
                         {
                             data: 'id',
