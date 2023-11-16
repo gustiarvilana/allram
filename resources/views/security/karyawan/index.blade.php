@@ -21,6 +21,7 @@
                                         <th>nik</th>
                                         <th>nama</th>
                                         <th>Satker</th>
+                                        <th>Jabatan</th>
                                         <th>alamat</th>
                                         <th>jk</th>
                                         <th>ktp</th>
@@ -86,6 +87,8 @@
                 }, {
                     data: 'satker'
                 }, {
+                    data: 'jabatan'
+                }, {
                     data: 'alamat'
                 }, {
                     data: 'jk'
@@ -110,9 +113,9 @@
                     render: function(data, type, row) {
                         return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-warning" id="karyawan-add_user" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>User</button>
-                                <button class="btn btn-sm btn-primary" id="karyawan-edit" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Edit</button>
-                                <button class="btn btn-sm btn-danger" id="karyawan-delete" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Delete</button>
+                                <button class="btn btn-sm btn-warning" id="karyawan-add_user" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-satker='${row.satker}' data-jabatan='${row.jabatan}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>User</button>
+                                <button class="btn btn-sm btn-primary" id="karyawan-edit" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-satker='${row.satker}' data-jabatan='${row.jabatan}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Edit</button>
+                                <button class="btn btn-sm btn-danger" id="karyawan-delete" data-id='${row.id}' data-nik='${row.nik}' data-nama='${row.nama}' data-satker='${row.satker}' data-jabatan='${row.jabatan}' data-alamat='${row.alamat}' data-jk='${row.jk}' data-ktp='${row.ktp}' data-no_hp='${row.no_hp}' data-reference='${row.reference}' data-created_at='${row.created_at}' data-updated_at='${row.updated_at}' data-name='${row.name}' data-username='${row.username}' data-phone='${row.phone}' data-pwd='${row.pwd}' data-kd_role='${row.kd_role}' data-active='${row.active}' data-email='${row.email}' data-nik_karyawan='${row.nik_karyawan}' data-id_karyawan='${row.id_karyawan}' data-id_user='${row.id_user}'>Delete</button>
                             </div>
                         `;
                     }
@@ -141,6 +144,8 @@
                 $('#modal-form [name=id]').val($(this).data('id_karyawan'));
                 $('#modal-form [name=nik]').val($(this).data('nik_karyawan'));
                 $('#modal-form [name=nama]').val($(this).data('nama'));
+                $('#modal-form [name=satker]').val($(this).data('satker'));
+                $('#modal-form [name=jabatan]').val($(this).data('jabatan'));
                 $('#modal-form [name=alamat]').val($(this).data('alamat'));
                 $('#modal-form [name=jk]').val($(this).data('jk'));
                 $('#modal-form [name=ktp]').val($(this).data('ktp'));

@@ -14,7 +14,7 @@ use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualandetailController;
 use App\Http\Controllers\Ramwater\Pinjaman\LaporanPinjamanController;
 use App\Http\Controllers\Ramwater\Pinjaman\PinjamanController;
-use App\Http\Controllers\Ramwater\RamwaterController;
+use App\Http\Controllers\Ramwater\Report\RamwaterController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\SecurityController;
 use App\Http\Controllers\Security\UserController;
@@ -57,8 +57,11 @@ Route::middleware(['auth', 'roles:99,1'])->group(function () {
 });
 
 Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
-    Route::get('/ramwater', [RamwaterController::class, 'index'])->name('ramwater.home');
     Route::prefix('ramwater')->group(function () {
+        Route::get('/', [RamwaterController::class, 'dashboard'])->name('ramwater.dashboard.dashboard');
+        Route::get('/monitoring/data', [RamwaterController::class, 'monitoring_data'])->name('ramwater.dashboard.monitoring.monitoring_data');
+        Route::get('/monitoring', [RamwaterController::class, 'monitoring'])->name('ramwater.dashboard.monitoring');
+
         Route::get('/datangbarang/data', [DatangBarangControler::class, 'data'])->name('datangbarang.data');
         Route::resource('/datangbarang', DatangBarangControler::class)->except('show');
         Route::get('/datangbarang/laporan', [LaporanDatangBarangControler::class, 'laporan'])->name('datangbarang.laporan');

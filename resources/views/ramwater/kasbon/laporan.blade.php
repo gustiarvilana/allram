@@ -26,7 +26,6 @@
                                     </div>
                                     <input type="text" class="form-control float-right" id="daterange">
                                 </div>
-                                <!-- /.input group -->
                             </div>
                         </div>
                     </div>
