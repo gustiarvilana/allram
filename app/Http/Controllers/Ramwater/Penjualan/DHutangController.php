@@ -66,19 +66,8 @@ class DHutangController extends Controller
         $data['tanggal'] = date('Ymd', strtotime($data['tanggal']));
         $data['jumlah'] = str_replace('.', '', $data['jumlah']);
         $data['bayar'] = str_replace('.', '', $data['bayar']);
-        $data['jumlah'] = $data['jumlah'] - $data['bayar'];
+        // $data['jumlah'] = $data['jumlah'] - $data['bayar'];
         $data['sts'] = 1;
-
-        if ($data['jumlah'] < 1) {
-            $data['sts'] = 4;
-            try {
-                DB::table('ramwater_d_hutang')
-                    ->where('id_parent', $data['id_parent'])
-                    ->update(['sts' => $data['sts']]);
-            } catch (\Throwable $th) {
-                throw $th;
-            }
-        }
 
         // dd($data);
         try {
@@ -86,6 +75,13 @@ class DHutangController extends Controller
             $save = DB::table('ramwater_d_hutang')->latest()->first();
             if (!$data['id_parent']) {
                 DB::table('ramwater_d_hutang')->where('id', $save->id)->update(['id_parent' => $save->id]);
+            }
+            $all_bayar = DB::table('ramwater_d_hutang')->where('id_parent', $save->id_parent)->sum('bayar');
+            $jml_awal = DB::table('ramwater_d_hutang')->where('id', $save->id_parent)->first()->jumlah;
+            if ($jml_awal == $all_bayar || $jml_awal < $all_bayar) {
+                DB::table('ramwater_d_hutang')
+                ->where('id_parent', $data['id_parent'])
+                    ->update(['sts' => '4']);
             }
             return 'berhasil disimpan';
         } catch (\Throwable $th) {
@@ -111,26 +107,21 @@ class DHutangController extends Controller
         $data['tanggal'] = date('Ymd', strtotime($data['tanggal']));
         $data['jumlah'] = str_replace('.', '', $data['jumlah']);
         $data['bayar'] = str_replace('.', '', $data['bayar']);
-        $data['jumlah'] = $data['jumlah'] - $data['bayar'];
+        // $data['jumlah'] = $data['jumlah'] - $data['bayar'];
         $data['sts'] = 1;
 
-        if ($data['jumlah'] < 1) {
-            $data['sts'] = 4;
-            try {
-                DB::table('ramwater_d_hutang')
-                    ->where('id_parent', $data['id_parent'])
-                    ->update(['sts' => $data['sts']]);
-            } catch (\Throwable $th) {
-                throw $th;
-            }
-        }
-
-        // dd($data);
         try {
             DB::table('ramwater_d_hutang')->upsert($data, ['id']);
             $save = DB::table('ramwater_d_hutang')->latest()->first();
             if (!$data['id_parent']) {
                 DB::table('ramwater_d_hutang')->where('id', $save->id)->update(['id_parent' => $save->id]);
+            }
+            $all_bayar = DB::table('ramwater_d_hutang')->where('id_parent', $save->id_parent)->sum('bayar');
+            $jml_awal = DB::table('ramwater_d_hutang')->where('id', $save->id_parent)->first()->jumlah;
+            if ($jml_awal == $all_bayar || $jml_awal < $all_bayar) {
+                DB::table('ramwater_d_hutang')
+                ->where('id_parent', $data['id_parent'])
+                    ->update(['sts' => '4']);
             }
             return 'berhasil disimpan';
         } catch (\Throwable $th) {

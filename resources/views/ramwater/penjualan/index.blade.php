@@ -767,12 +767,12 @@
                 $('#modal-hutang [name=nama]').val($(this).data('nama'))
                 $('#modal-hutang [name=alamat]').val($(this).data('alamat'))
                 $('#modal-hutang [name=hp]').val($(this).data('hp'))
-                $('#modal-hutang #jumlah').val($(this).data('jumlah'))
+                $('#modal-hutang #jumlah').hide()
                 $('#modal-hutang [name=bayar]').val('')
 
                 $('#modal-hutang #bayar').show()
             }).on('click', '#hutang-edit', function() {
-                var nik = $('#modal-galon [name=nik]').val();
+                var nik = $('#modal-hutang [name=nik]').val();
                 $('#modal-hutang form')[0].reset();
                 $('#modal-hutang [name=nik]').val(nik);
                 $('#modal-hutang [name=tanggal]').val($(this).data('tanggal'))
@@ -781,7 +781,7 @@
                 $('#modal-hutang [name=nama]').val($(this).data('nama'))
                 $('#modal-hutang [name=alamat]').val($(this).data('alamat'))
                 $('#modal-hutang [name=hp]').val($(this).data('hp'))
-                $('#modal-hutang #jumlah').val($(this).data('jumlah'))
+                $('#modal-hutang #jumlah').show()
                 $('#modal-hutang [name=bayar]').val($(this).data('bayar'))
 
                 $('#modal-hutang #jumlah').show()
