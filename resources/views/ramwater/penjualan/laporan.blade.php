@@ -12,22 +12,13 @@
                     {{-- <a class="btn btn-success btn-xs" id="add_menu">Tambah Barang</a> --}}
                 </div>
                 <div class="card-body">
-                    <div class="row mb-2 justify-content-center">
+                    <div class="row justify-content-center">
                         <div class="col-md-4 text-center">
-                            <!-- Date range -->
                             <div class="form-group">
-                                <label>Date range:</label>
-
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control float-right" id="daterange">
-                                </div>
-                                <!-- /.input group -->
+                                <label for="">Tanggal Penjualan</label>
                             </div>
+                            <input type="date" name="tanggal" id="tanggal" class="form-control"
+                                value="{{ date('Y-m-d') }}">
                         </div>
                     </div>
                     <div class="row">
@@ -99,7 +90,7 @@
             var url_add = '{{ route('datangbarang.store') }}';
             var url_delete = '{{ route('datangbarang.destroy', ['datangbarang' => ':id']) }}';
             var url_edit = '{{ route('datangbarang.update', ['datangbarang' => ':id']) }}';
-            let tanggal = $('#daterange').val();
+            let tanggal = $('#tanggal').val();
             var url_save_hutang = '{{ route('hutang.store') }}';
             var url_delete_hutang = '{{ route('hutang.destroy', ['hutang' => ':id']) }}';
             var url_add_kasbon = '{{ route('kasbon.store') }}';
@@ -196,7 +187,7 @@
                             render: function(data, type, row) {
                                 return '<a id="uang-masuk" data-sales=' + row.nama_sales +
                                     ' data-tgl_penjualan=' + row.tgl_penjualan + ' data-nik=' + row
-                                    .nik + '>' + row.bayar_total + '</a>';
+                                    .nik + '>' + formatRupiah(row.bayar_total) + '</a>';
                             }
                         },
                         {
@@ -204,7 +195,7 @@
                             render: function(data, type, row) {
                                 return '<a id="pending" data-sales=' + row.nama_sales +
                                     ' data-tgl_penjualan=' + row.tgl_penjualan + ' data-nik=' + row
-                                    .nik + '>' + row.hutang_total + '</a>';
+                                    .nik + '>' + formatRupiah(row.hutang_total) + '</a>';
                             }
                         },
                         {
@@ -262,8 +253,8 @@
 
                 validate()
 
-                $('#daterange').on('change', function() {
-                    tanggal = $('#daterange').val();
+                $('#tanggal').on('change', function() {
+                    tanggal = $('#tanggal').val();
                     table.ajax.reload();
                     perProduk.ajax.reload();
                 })

@@ -758,7 +758,8 @@
                 }
 
             }).on('click', '#hutang-bayar', function() {
-                var nik = $('#modal-galon [name=nik]').val();
+                var nik = $('#modal-hutang [name=nik]').val();
+
                 $('#modal-hutang form')[0].reset();
                 $('#modal-hutang [name=nik]').val(nik);
                 $('#modal-hutang [name=tanggal]').val($(this).data('tanggal'))
