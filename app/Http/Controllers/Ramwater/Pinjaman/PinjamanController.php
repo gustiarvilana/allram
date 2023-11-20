@@ -110,7 +110,7 @@ class PinjamanController extends Controller
         if ($data['jumlah'] < 1) {
             $data['sts'] = 4;
             try {
-                DB::table('d_kasbon')
+                DB::table('d_pinjaman')
                     ->where('id_parent', $data['id_parent'])
                     ->update(['sts' => $data['sts']]);
             } catch (\Throwable $th) {
