@@ -23,7 +23,7 @@ class LaporanOperasionalController extends Controller
             )
             ->join('t_karyawan as b', 'a.nik', 'b.nik')
             ->join('t_operasional as c', 'a.kd_operasional', 'c.kd_operasional')
-            ->whereBetween('tanggal', [$tgl_awal, $tgl_akhir])
+            ->where('tanggal', date('Ymd',strtotime($tgl_)))
             ->where('a.satker', 'ramwater')
             ->groupBy(
                 'a.kd_operasional',
