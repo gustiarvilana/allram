@@ -73,10 +73,12 @@ class DHutangController extends Controller
         try {
             DB::table('ramwater_d_hutang')->upsert($data, ['id']);
             $save = DB::table('ramwater_d_hutang')->latest()->first();
-            if (!$data['id_parent']) {
+            if ($data['id_parent'] == null) {
                 DB::table('ramwater_d_hutang')->where('id', $save->id)->update(['id_parent' => $save->id]);
             }
+            $save = DB::table('ramwater_d_hutang')->latest()->first();
             $all_bayar = DB::table('ramwater_d_hutang')->where('id_parent', $save->id_parent)->sum('bayar');
+            $jml_awal = DB::table('ramwater_d_hutang')->where('id', $save->id_parent)->first();
             $jml_awal = DB::table('ramwater_d_hutang')->where('id', $save->id_parent)->first()->jumlah;
             if ($jml_awal == $all_bayar || $jml_awal < $all_bayar) {
                 DB::table('ramwater_d_hutang')
