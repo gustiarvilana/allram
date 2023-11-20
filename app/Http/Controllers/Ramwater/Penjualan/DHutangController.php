@@ -51,7 +51,7 @@ class DHutangController extends Controller
     public function store(Request $request)
     {
         $data = [
-            'id'          => $request->input('id'),
+            // 'id'          => $request->input('id'),
             'id_parent'   => $request->input('id_parent'),
             'tanggal'     => $request->input('tanggal'),
             'nik'         => $request->input('nik'),
