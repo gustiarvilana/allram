@@ -81,7 +81,7 @@
                 "ajax": {
                     url: '{{ route('hutang.data') }}',
                     data: function(d) {
-                        d.tanggal = tanggal;
+                        // d.tanggal = tanggal;
                         d.riwayat = riwayat;
                     }
                 },
