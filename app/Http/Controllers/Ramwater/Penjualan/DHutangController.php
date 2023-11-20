@@ -23,17 +23,19 @@ class DHutangController extends Controller
                 )
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
                 ->where('a.sts', '!=', 4)
-                ->whereRaw('a.id_parent = a.id');
-        } else {
-            $kasbon = DB::table('ramwater_d_hutang as a')
+                ->whereRaw('a.id_parent = a.id')
+                ->where('a.nik', $request['riwayat']);
+            } else {
+                $kasbon = DB::table('ramwater_d_hutang as a')
                 ->select(
                     'a.*',
                     'b.nama as nama_karyawan',
                     'a.bayar as sisa',
                     'a.bayar as byr_akhir',
                     'a.tanggal as tgl_byr'
-                )
+                    )
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
+                ->where('a.nik', $request['riwayat'])
                 ->where('a.sts', '!=', 4);
         }
 

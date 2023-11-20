@@ -25,7 +25,7 @@ class LaporanPenjualanControler extends Controller
                     DB::raw('SUM(b.total) as sum_total'),
                     DB::raw('SUM(a.cash) as t_cash'),
                     DB::raw('SUM(a.transfer) as t_transfer'),
-                    DB::raw('(SELECT COALESCE(SUM(bayar), 0) FROM ramwater_d_hutang as d WHERE d.nik = a.nik and d.tanggal = a.tgl_penjualan) as bayar_total'),
+                    DB::raw('(SELECT COALESCE(SUM(bayar), 0) FROM ramwater_d_hutang as d WHERE d.nik = a.nik and d.tanggal = a.tgl_penjualan and d.created_at = (SELECT MAX(created_at) FROM ramwater_d_hutang WHERE nik = a.nik and tanggal = a.tgl_penjualan)) as bayar_total'),
                     DB::raw('(SELECT COALESCE(SUM(jumlah), 0) FROM ramwater_d_hutang as e WHERE e.nik = a.nik and e.tanggal = a.tgl_penjualan) as hutang_total'),
                     DB::raw('SUM(b.total) + COALESCE((SELECT SUM(bayar) FROM ramwater_d_hutang as c WHERE c.nik = a.nik and c.tanggal = a.tgl_penjualan), 0) - COALESCE((SELECT SUM(jumlah) FROM ramwater_d_hutang as d WHERE d.nik = a.nik and d.tanggal = a.tgl_penjualan), 0) as cash'),
                     DB::raw("(SELECT COALESCE(SUM(jumlah), 0) FROM d_kasbon as e WHERE e.satker='ramwater' and e.nik = a.nik and e.tanggal = a.tgl_penjualan) as kasbon_sales"),
