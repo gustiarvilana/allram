@@ -24,7 +24,7 @@ class DHutangController extends Controller
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
                 ->where('a.sts', '!=', 4)
                 ->whereRaw('a.id_parent = a.id')
-                ->where('a.nik', $request['riwayat']);
+                ->where('a.nik', $request['nik']);
             } else {
                 $kasbon = DB::table('ramwater_d_hutang as a')
                 ->select(
@@ -35,7 +35,7 @@ class DHutangController extends Controller
                     'a.tanggal as tgl_byr'
                     )
                 ->join('t_karyawan as b', 'a.nik', 'b.nik')
-                ->where('a.nik', $request['riwayat'])
+                ->where('a.nik', $request['nik'])
                 ->where('a.sts', '!=', 4);
         }
 
