@@ -7,5 +7,13 @@ use Illuminate\Http\Request;
 
 class LaporanPembelianController extends Controller
 {
-    //
+    public function data()
+    {
+        dd('data');
+    }
+
+    public function laporan()
+    {
+        dd('laporan');
+    }
 }

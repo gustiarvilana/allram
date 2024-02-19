@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class PembelianController extends Controller
 {
+    public function data()
+    {
+        dd('data');
+    }
+
     public function index()
     {
         return view('ramwater.pembelian.index');

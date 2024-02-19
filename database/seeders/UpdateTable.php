@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UpdateTable extends Seeder
 {
@@ -125,7 +126,7 @@ class UpdateTable extends Seeder
             ADD IF NOT EXISTS `tgl_keluar` int(11) DEFAULT NULL AFTER `tgl_masuk`,
             ADD IF NOT EXISTS `sts_karyawan` varchar(11) DEFAULT NULL AFTER `tgl_keluar`,
             ADD IF NOT EXISTS `opr_input` varchar(11) DEFAULT NULL AFTER `sts_karyawan`,
-            ADD IF NOT EXISTS `tgl_input` int(11) DEFAULT NULL AFTER `opr_input`;
+            ADD IF NOT EXISTS `tgl_input` int(11) DEFAULT NULL AFTER `opr_input`,
             ADD IF NOT EXISTS `jabatan` varchar(11) DEFAULT NULL AFTER `satker`;"
 
         );
