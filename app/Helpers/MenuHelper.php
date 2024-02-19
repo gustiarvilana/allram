@@ -18,7 +18,7 @@ class MenuHelper
 
                 ->where('d.kd_parent', $kd_parent)
                 ->where('d.is_active', '1')
-                ->where('b.tahun', 2023)
+                ->where('b.tahun', date('Y'))
                 ->where('c.kd_role', $role)
                 ->orderBy('d.order')
                 ->get();
@@ -32,7 +32,7 @@ class MenuHelper
         $children = DB::table('users_menu as a')
             ->join('users_role_menu as b', 'a.kd_menu', 'b.kd_menu')
             ->where('a.kd_parent', $kd_parent)
-            ->where('b.tahun', 2023)
+            ->where('b.tahun', date('Y'))
             ->where('b.kd_role', Auth::user()->kd_role)
             ->orderBy('a.order', 'desc')
             ->get();
