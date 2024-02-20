@@ -62,9 +62,9 @@ class CreateTable extends Seeder
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
 
-        // t_stok_produk
+        // d_stok_produk
         DB::statement(
-            "CREATE TABLE IF NOT EXISTS `t_stok_produk` (
+            "CREATE TABLE IF NOT EXISTS `d_stok_produk` (
                     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                     `kd_produk` varchar(255) NOT NULL,
                     `nama` varchar(50) DEFAULT NULL,
@@ -140,9 +140,9 @@ class CreateTable extends Seeder
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
 
-        // d_detail_pembelian
+        // d_pembelian_detail
         DB::statement(
-            "CREATE TABLE IF NOT EXISTS `d_detail_pembelian` (
+            "CREATE TABLE IF NOT EXISTS `d_pembelian_detail` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                 `nota_pembelian` VARCHAR(50) NOT NULL,
                 `kd_produk` VARCHAR(50) DEFAULT NULL,
@@ -154,8 +154,63 @@ class CreateTable extends Seeder
                 `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
-                CONSTRAINT `fk_nota_pembelian` FOREIGN KEY (`nota_pembelian`) REFERENCES `d_pembelian` (`nota_pembelian`) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+                INDEX `idx_nota_pembelian_detail` (`nota_pembelian`),
+                CONSTRAINT `fk_nota_pembelian_detail` FOREIGN KEY (`nota_pembelian`) REFERENCES `d_pembelian` (`nota_pembelian`) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // d_pembayaran
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_pembayaran` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nota_pembelian` VARCHAR(50) NOT NULL,
+                `tgl_pembayaran` INT DEFAULT NULL,
+                `angs_ke` INT DEFAULT NULL,
+                `nominal_bayar` INT DEFAULT NULL,
+                `channel_bayar` VARCHAR(50) DEFAULT NULL,
+                `ket_bayar` INT DEFAULT NULL,
+                `path_file` VARCHAR(50) DEFAULT NULL,
+                `opr_input` VARCHAR(50) DEFAULT NULL,
+                `tgl_input` INT DEFAULT NULL,
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_nota_pembayaran` (`nota_pembelian`),
+                CONSTRAINT `fk_nota_pembayaran` FOREIGN KEY (`nota_pembelian`) REFERENCES `d_pembelian` (`nota_pembelian`) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // d_transaksi_ops
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_transaksi_ops` (
+                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nota_pembelian` varchar(50) DEFAULT NULL,
+                `tgl_transaksi` INT DEFAULT NULL,
+                `kd_ops` varchar(50) DEFAULT NULL,
+                `jns_trs` INT DEFAULT NULL,
+                `nominal` INT DEFAULT NULL,
+                `ket_transaksi` TEXT DEFAULT NULL,
+
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_d_transaksi_nota_pembelian` (`nota_pembelian`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // t_transaksi_ops
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `t_transaksi_ops` (
+                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+                `kd_transaksi_ops` varchar(50) DEFAULT NULL,
+                `ur_transaksi_ops` varchar(50) DEFAULT NULL,
+
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_t_transaksi_ops_kd` (`kd_transaksi_ops`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
     }
 }
