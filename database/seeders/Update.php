@@ -14,5 +14,7 @@ class Update extends Seeder
         $this->call(UpdateMenu::class);
         $this->call(CreateTable::class);
         $this->call(AlterTable::class);
+
+        $this->call(TSeeder::class);
     }
 }

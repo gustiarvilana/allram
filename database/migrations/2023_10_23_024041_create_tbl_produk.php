@@ -20,7 +20,7 @@ class CreateTblProduk extends Migration
 
         Schema::create('t_operasional', function (Blueprint $table) {
             $table->id();
-            $table->integer('kd_operasional')->index();
+            $table->string('kd_operasional')->index();
             $table->string('nama_operasional');
             $table->timestamps();
         });
@@ -29,7 +29,7 @@ class CreateTblProduk extends Migration
             $table->bigInteger('tanggal');
             $table->string('satker');
             $table->string('nik');
-            $table->integer('kd_operasional');
+            $table->string('kd_operasional');
             $table->integer('jumlah');
             $table->integer('harga');
             $table->integer('total');
