@@ -24,7 +24,7 @@ class AlterTable extends Seeder
 
         // t_karyawan
         DB::statement(
-            "ALTER TABLE `t_karyawan`
+            "ALTER TABLE `d_karyawan`
             ADD IF NOT EXISTS `kd_kec` int(11) DEFAULT NULL AFTER `alamat`,
             ADD IF NOT EXISTS `kd_kel` int(11) DEFAULT NULL NULL AFTER `kd_kec`,
             ADD IF NOT EXISTS `kd_kota` int(11) DEFAULT NULL NULL AFTER `kd_kel`,

@@ -11,7 +11,7 @@ class KaryawanController extends Controller
 {
     public function data(Request $request)
     {
-        $menu = DB::table('t_karyawan as a')
+        $menu = DB::table('d_karyawan as a')
             ->select('a.*', 'b.*', 'a.nik as nik_karyawan', 'a.id as id_karyawan', 'b.id as id_user')
             ->leftJoin('users as b', 'a.nik', 'b.nik');
 

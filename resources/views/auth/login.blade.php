@@ -6,12 +6,29 @@
             <div class="alert alert-danger">
                 <li>{!! \Session::get('error') !!}</li>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var errorAlerts = document.querySelectorAll('.alert');
+
+                    if (errorAlerts.length > 0) {
+                        setTimeout(function() {
+                            errorAlerts.forEach(function(alert) {
+                                alert.style.transition = 'opacity 1s';
+                                alert.style.opacity = '0';
+
+                                setTimeout(function() {
+                                    alert.style.display = 'none';
+                                }, 1000);
+                            });
+                        }, 5000);
+                    }
+                });
+            </script>
         @endif
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Login') }}</div>
-
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf

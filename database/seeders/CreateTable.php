@@ -14,9 +14,9 @@ class CreateTable extends Seeder
      */
     public function run()
     {
-        // t_supplier
+        // d_supplier
         DB::statement(
-            "CREATE TABLE IF NOT EXISTS `t_supplier` (
+            "CREATE TABLE IF NOT EXISTS `d_supplier` (
                     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                     `kd_supplier` varchar(50) DEFAULT NULL,
                     `nama` varchar(50) DEFAULT NULL,
@@ -79,9 +79,9 @@ class CreateTable extends Seeder
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
 
-        // t_pelanggan
+        // d_pelanggan
         DB::statement(
-            "CREATE TABLE IF NOT EXISTS `t_pelanggan` (
+            "CREATE TABLE IF NOT EXISTS `d_pelanggan` (
                     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                     `kd_pelanggan` varchar(50) DEFAULT NULL,
                     `nama` varchar(50) DEFAULT NULL,
@@ -103,6 +103,25 @@ class CreateTable extends Seeder
         // t_harga_jual
         DB::statement(
             "CREATE TABLE IF NOT EXISTS `t_harga_jual` (
+                    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                    `kd_harga` varchar(50) DEFAULT NULL,
+                    `kd_produk` varchar(50) DEFAULT NULL,
+                    `ket_harga` varchar(50) DEFAULT NULL,
+                    `harga` int(11) DEFAULT NULL,
+                    `satuan` varchar(50) DEFAULT NULL,
+                    `opr_input` varchar(50) DEFAULT NULL,
+                    `tgl_input` int(11) DEFAULT NULL,
+
+                    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`id`),
+                    INDEX `idx_kd_produk` (`kd_produk`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // d_pembelian
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_pembelian` (
                     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                     `kd_harga` varchar(50) DEFAULT NULL,
                     `kd_produk` varchar(50) DEFAULT NULL,

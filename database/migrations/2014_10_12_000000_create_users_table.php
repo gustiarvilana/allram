@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('t_karyawan', function (Blueprint $table) {
+        Schema::create('d_karyawan', function (Blueprint $table) {
             $table->id();
             $table->integer('nik')->index();
             $table->string('nama');

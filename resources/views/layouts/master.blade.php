@@ -230,6 +230,25 @@
     <script src="{{ asset('assets') }}/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var errorAlerts = document.querySelectorAll('.alert');
+
+            if (errorAlerts.length > 0) {
+                setTimeout(function() {
+                    errorAlerts.forEach(function(alert) {
+                        alert.style.transition = 'opacity 1s';
+                        alert.style.opacity = '0';
+
+                        setTimeout(function() {
+                            alert.style.display = 'none';
+                        }, 1000);
+                    });
+                }, 5000);
+            }
+        });
+    </script>
+
+    <script>
         $(document).ready(function() {
             $('body').on('keyup', '.money', function() {
                 var nilai1 = this.value.replace(/[^a-z0-9\s]/gi, '');

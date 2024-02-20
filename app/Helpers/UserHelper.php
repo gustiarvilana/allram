@@ -10,7 +10,7 @@ class UserHelper
     public static function getUser()
     {
         $user = DB::table('users as a')
-            ->leftJoin('t_karyawan as b', 'a.nik', 'b.nik')
+            ->leftJoin('d_karyawan as b', 'a.nik', 'b.nik')
             ->where('a.id', Auth::user()->id)
             ->first();
         return $user;
@@ -18,7 +18,7 @@ class UserHelper
 
     public static function getKaryawanWater()
     {
-        $ramwater = DB::table('t_karyawan as a')
+        $ramwater = DB::table('d_karyawan as a')
             ->leftJoin('users as b', 'a.nik', 'b.nik')
             ->leftJoin('users_role as c', 'b.kd_role', 'c.kd_role')
             // ->whereNotIn('b.kd_role', ['1', '2', '99'])
