@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    User Role
+    Pembelian
 @endsection
 
 @section('content')

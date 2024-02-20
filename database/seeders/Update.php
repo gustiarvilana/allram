@@ -12,6 +12,7 @@ class Update extends Seeder
     public function run()
     {
         $this->call(UpdateMenu::class);
-        $this->call(UpdateTable::class);
+        $this->call(CreateTable::class);
+        $this->call(AlterTable::class);
     }
 }
