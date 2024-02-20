@@ -48,7 +48,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('nik')->references('nik')->on('t_karyawan')->onDelete('cascade');
+            $table->foreign('nik')->references('nik')->on('d_karyawan')->onDelete('cascade');
             $table->foreign('kd_role')->references('kd_role')->on('users_role')->onDelete('cascade');
         });
 

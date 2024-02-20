@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             ],
         ], ['kd_role']);
 
-        DB::table('t_karyawan')->upsert([
+        DB::table('d_karyawan')->upsert([
             [
                 'nik'       => 2134,
                 'nama'      => 'Superuser',
