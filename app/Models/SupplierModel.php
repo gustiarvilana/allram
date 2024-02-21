@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class SupplierModel extends Model
 {
@@ -11,11 +12,11 @@ class SupplierModel extends Model
 
     protected $table = 'd_supplier';
     protected $guarded = [];
-}
 
+    public function getSupplier()
+    {
+        $supplier = DB::table('d_supplier');
 
-function getSupplier() {
-    $supplier = $this->model;
-    dd($supplier);
-    return $supplier;
+        return $supplier;
+    }
 }

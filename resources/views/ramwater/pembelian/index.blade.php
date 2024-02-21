@@ -22,7 +22,7 @@
                                     <table class="table table-striped table-inverse" id="table-supplier">
                                         <thead>
                                             <tr>
-                                                <th width="5%">No</th>
+                                                {{-- <th width="5%">No</th> --}}
                                                 <th>Supplier</th>
                                                 <th>merek</th>
                                                 <th>alamat</th>
@@ -54,8 +54,30 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="row col-md-12 table-responsive mb-3">
+                        <div class="card card-primary">
+                            <div class="card-header card-success">
+                                <span>Produk</span>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Uraian</th>
+                                            <th>merek</th>
+                                            <th>type</th>
+                                            <th>stok_all</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pembelian-uraian"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row col-md-12 table-responsive">
-                        <div class="card card-primary card-outline">
+                        <div class="card card-primary">
                             <div class="card-header card-success">
                                 <span>Produk</span>
                             </div>
@@ -108,12 +130,13 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
+                ordering: false,
                 ajax: '{{ route('pembelian.data') }}',
                 order: [],
-                dom: 'Bfrtip',
+                dom: 'Brtip',
                 buttons: [{
                     extend: "excel",
-                    text: "Export Excel",
+                    text: "Export Data",
                     className: "btn-excel",
                     action: function(e, dt, node, config) {
                         $.getJSON('#', function(
@@ -135,46 +158,68 @@
                         });
                     }
                 }],
-                columns: [{
-                        data: 'no',
-                        orderable: false
-                    },
+                columns: [
+                    // {
+                    //     data: 'DT_RowIndex',
+                    //     searchable: false,
+                    //     shrotable: false
+                    // },
                     {
-                        data: 'active',
+                        data: 'nama',
                         render: function(data, type, row) {
-                            var p_active = (row.active == '0') ? '<p>Not Active</p>' : (row
-                                .active == '1') ? '<p>Active</p>' : '<p>Unknown</p>';
-                            return p_active;
+                            return data;
                         }
                     },
                     {
-                        data: 'user_id',
+                        data: 'merek',
                         render: function(data, type, row) {
-                            var data = JSON.stringify(row);
-                            var btn_edit = '<a id="users_btn_edit" data-id="' + row.user_id +
-                                '" data-row=\'' + data + '\' class="btn btn-primary edit">Edit</a>';
-                            var btn_delete = '<a id="users_btn_delete" data-id="' + row.user_id +
-                                '" data-row=\'' + data +
-                                '\' class="btn btn-danger delete">Delete</a>'
-                            return btn_edit + ' ' + btn_delete;
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'alamat',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'no_tlp',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id',
+                        render: function(data, type, row) {
+                            var row_data = JSON.stringify(row);
+
+                            var btn_input = '<a id="btn-penjualan-input" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-primary edit">Input</a>';
+
+                            return btn_input;
                         },
                     },
                 ],
                 columnDefs: [{
-                    // searchable: false,
-                    // targets: [0, 8]
+                    targets: [4],
+                    searchable: false
                 }],
+                initComplete: function() {
+                    initializeColumnSearch(this);
+                }
+
             });
 
-            table = $("#table").DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
+            // table = $("#table").DataTable({
+            //     "paging": true,
+            //     "lengthChange": false,
+            //     "searching": false,
+            //     "ordering": true,
+            //     "info": true,
+            //     "autoWidth": false,
+            //     "responsive": true,
+            // });
 
             table = $("#table-produk").DataTable({
                 info: false,
@@ -182,11 +227,37 @@
                 bLengthChange: false,
             });
 
-            $("body").on("click", "#btn-add-pembelian", function() {
+            $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#modal-pembelian").modal("show");
-            }).on("click", ".btn-add-pembelian-close", function() {
+            }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
                 $("#modal-pembelian").modal("hide");
+                // $('#pembelian-uraian').empty();
+            }).on("click", "#btn-penjualan-input", function() { //btn_input_click
+                var rowData = $(this).data('row');
+                var row = '<tr>' +
+                    '<td> <a href="#" class="id_ur">' + rowData.nama + '</a> </td>' +
+                    '<td>' + rowData.kd_supplier + '</td>' +
+                    '<td>' +
+                    '<input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="" value="' +
+                    rowData.notlp + '">' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="" value="' +
+                    rowData.notlp + '">' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="" value="' +
+                    rowData.notlp + '">' +
+                    '</td>' +
+                    '</tr>';
+
+                $('#pembelian-uraian').append(row);
+
+                $("#modal-pembelian-title").text("Tambah Data");
+                $("#modal-pembelian").modal("show");
+            }).on("click", ".id_ur", function() { //hapus next row
+                $(this).closest('tr').nextAll().remove();
             });
         });
     </script>

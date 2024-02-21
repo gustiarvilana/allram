@@ -264,7 +264,6 @@
             $("input[data-bootstrap-switch]").each(function() {
                 $(this).bootstrapSwitch('state', $(this).prop('checked'));
             })
-
         });
 
         $(document).ajaxStart(function() {
@@ -296,6 +295,47 @@
 
         function formatRupiah(number) {
             return Math.trunc(number).toLocaleString('id-ID');
+        }
+
+        function initializeColumnSearch(table) {
+            table.api().columns().every(function() {
+                var column = this;
+                var title = column.header().textContent;
+                var wrapper = document.createElement('div');
+                $(wrapper).addClass('input-group');
+
+                var input = document.createElement('input');
+                $(input).addClass('form-control');
+                input.placeholder = 'Search ' + title;
+
+                var clearBtn = document.createElement('button');
+                $(clearBtn).addClass('btn btn-outline-secondary input-group-text');
+                clearBtn.type = 'button';
+                clearBtn.innerHTML = '&times;';
+
+                $(wrapper).append(input);
+                // $(wrapper).append(clearBtn);
+
+                $(column.header()).append(wrapper);
+
+                if (!column.settings()[0].aoColumns[column.index()].bSearchable) {
+                    // Sembunyikan input pencarian jika kolom tidak dapat dicari
+                    $(wrapper).hide();
+                }
+
+                $(clearBtn).on('click', function() {
+                    $(input).val('');
+                    column.search('').draw();
+                });
+
+                $(input).on('keyup change', function(e) {
+                    if (e.keyCode == 13) {
+                        if (column.search() !== this.value) {
+                            column.search(this.value).draw();
+                        }
+                    }
+                });
+            });
         }
     </script>
 
