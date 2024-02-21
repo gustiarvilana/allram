@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class MenuSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         DB::table('users_menu')->upsert([
@@ -37,7 +32,7 @@ class MenuSeeder extends Seeder
                 'bg_color'      => '#',
                 'icon'          => 'ri-bar-chart-box-line',
                 'order'         => '2',
-                'is_active'     => '1',
+                'is_active'     => '0',
             ],
             [
                 'kd_menu'       => 4,

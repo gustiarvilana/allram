@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 
 class PembelianController extends Controller
 {
+    private $supplier;
+    public function __construct() {
+    $this->supplierModel=new SupplierModel();    
+    }
+
     public function data()
     {
-        dd('data');
+        $supplier=Suppl
     }
 
     public function index()

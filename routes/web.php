@@ -66,9 +66,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
 
         Route::resource('/pembelian', PembelianController::class)->except('show');
         Route::prefix('pembelian')->group(function () {
-            Route::get('/data', [PembelianController::class, 'data'])->name('pinjaman.data');
-            Route::get('/laporan', [LaporanPembelianController::class, 'laporan'])->name('pinjaman.laporan');
-            Route::get('laporan/data', [LaporanPembelianController::class, 'data'])->name('pinjaman.laporan.data');
+            Route::get('/data', [PembelianController::class, 'data'])->name('pembelian.data');
+            Route::get('/laporan', [LaporanPembelianController::class, 'laporan'])->name('pembelian.laporan');
+            Route::get('laporan/data', [LaporanPembelianController::class, 'data'])->name('pembelian.laporan.data');
         });
     });
 });
