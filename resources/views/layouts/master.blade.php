@@ -360,6 +360,42 @@
                 return "";
             }
         }
+
+        // Fungsi untuk memperbarui nilai field berdasarkan field-field lainnya
+        function updateField(row, fieldId, sourceIds, calculateFunction) {
+            // Mengumpulkan nilai dari field-field sumber
+            var values = sourceIds.map(function(id) {
+                return getFloatValue(row.find(id));
+            });
+
+            // Menghitung nilai baru menggunakan fungsi kalkulasi
+            var total = calculateFunction.apply(null, values);
+
+            // Menyimpan nilai baru ke dalam field target
+            row.find('#' + fieldId).val(addCommas(total));
+        }
+
+        // Fungsi untuk menghitung dan memperbarui total dari field-field tertentu
+        function updateTotal(totalFieldId, itemClass) {
+            // Menghitung total dari field-field dengan kelas tertentu
+            var total = 0;
+            $(itemClass).each(function() {
+                total += getFloatValue($(this));
+            });
+
+            // Menyimpan nilai total ke dalam field total
+            $(totalFieldId).val(addCommas(total));
+        }
+
+        // Fungsi untuk mendapatkan nilai float dari elemen input dengan memperhatikan pemisah ribuan
+        function getFloatValue(element) {
+            return parseFloat(element.val().replace(/\./g, '')) || 0;
+        }
+
+        // Fungsi untuk menambahkan pemisah ribuan pada angka
+        function addCommas(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
 
     @stack('js')
