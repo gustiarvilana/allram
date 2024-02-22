@@ -8,16 +8,15 @@ use Illuminate\Http\Request;
 
 class PembelianController extends Controller
 {
-    private $supplierModel;
-
+    private $model;
     public function __construct(SupplierModel $supplierModel)
     {
-        $this->supplierModel = $supplierModel;
+        $this->model = $supplierModel;
     }
 
     public function data()
     {
-        $supplier = $this->supplierModel->getSupplier();
+        $supplier = $this->model->getSupplier();
 
         return datatables()
             ->of($supplier)
