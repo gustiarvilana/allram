@@ -66,17 +66,15 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="2">Supplier</th>
-                                                    </tr>
-                                                    <tr>
                                                         <th>Supplier</th>
                                                         <th>nota_pembelian</th>
-                                                        <th>kd_produk</th>
-                                                        <th>qty_pesan</th>
-                                                        <th>qty_retur</th>
-                                                        <th>qty_bersih</th>
-                                                        <th>harga_satuan</th>
+                                                        <th>tgl_pembelian</th>
+                                                        <th>kd_supplier</th>
+                                                        <th>jns_pembelian</th>
                                                         <th>harga_total</th>
+                                                        <th>nominal_bayar</th>
+                                                        <th>sisa_bayar</th>
+                                                        <th>sts_angsuran</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="pembelian-uraian"></tbody>
@@ -101,18 +99,17 @@
                                                 <thead>
                                                     <tr>
                                                         <th>nama</th>
+                                                        <th>nota_pembelian</th>
+                                                        <th>kd_produk</th>
                                                         <th>type</th>
-                                                        <th>Jumlah</th>
+                                                        <th>qty_pesan</th>
+                                                        <th>qty_retur</th>
+                                                        <th>qty_bersih</th>
+                                                        <th>harga_satuan</th>
+                                                        <th>harga_total</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                    </tr>
-                                                </tbody>
+                                                <tbody> </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -264,26 +261,68 @@
                         }
                     },
                     {
+                        data: 'nota_pembelian',
+                        render: function(data, type, row) {
+                            return '<input type="text" class="form-control money detail_nota_pembelian" name="nota_pembelian" id="detail_nota_pembelian" value="' +
+                                row.nota_pembelian + '">';
+                        }
+                    },
+                    {
+                        data: 'kd_produk',
+                        render: function(data, type, row) {
+                            return '<input type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                row.kd_produk + '">';
+                        }
+                    },
+                    {
                         data: 'type',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
-                        data: 'id',
+                        data: 'qty_pesan',
                         render: function(data, type, row) {
-                            return '<input type="text" class="form-control money qty_pesan" name="qty_pesan">';
+                            return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan">';
+                        }
+                    },
+                    {
+                        data: 'qty_retur',
+                        render: function(data, type, row) {
+                            return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur">';
+                        }
+                    },
+                    {
+                        data: 'qty_bersih',
+                        render: function(data, type, row) {
+                            return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih">';
+                        }
+                    },
+                    {
+                        data: 'harga_satuan',
+                        render: function(data, type, row) {
+                            return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan">';
+                        }
+                    },
+                    {
+                        data: 'harga_total',
+                        render: function(data, type, row) {
+                            return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total">';
                         }
                     }
                 ],
                 columnDefs: [{
-                        targets: [2],
+                        targets: [4, 5, 6, 7, 8],
                         searchable: false,
-                        orderable: true
+                        orderable: false
                     },
                     {
                         targets: [0, 1],
                         orderable: false
+                    },
+                    {
+                        // targets: [1, 2], // Indeks kolom yang ingin disembunyikan (dimulai dari 0)
+                        visible: false
                     }
                 ],
                 initComplete: function() {
@@ -293,49 +332,78 @@
             });
 
             $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
-                $("#modal-pembelian-title").text("Tambah Data");
-                $("#modal-pembelian").modal("show");
-            }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
-                $("#modal-pembelian").modal("hide");
-                $('#pembelian-uraian').empty();
-            }).on("click", "#btn-penjualan-input", function() { //btn_input_click
-                var rowData = $(this).data('row');
-                var row =
-                    '<tr>' +
-                    '<td> <input type="text" name="" id="" value="' + rowData.nama +
-                    '" disabled> </td>' +
-                    '<td> <input type="text" name="nota_pembelian" id="ur_nota_pembelian"></td>' +
-                    '<td> <input type="text" name="kd_produk" id="ur_kd_produk"></td>' +
-                    '<td> <input type="text" name="qty_pesan" id="ur_qty_pesan" class="money"></td>' +
-                    '<td> <input type="text" name="qty_retur" id="ur_qty_retur" class="money"></td>' +
-                    '<td> <input type="text" name="qty_bersih" id="ur_qty_bersih" class="money"></td>' +
-                    '<td> <input type="text" name="harga_satuan" id="ur_harga_satuan" class="money"></td>' +
-                    '<td> <input type="text" name="harga_total" id="ur_harga_total" class="money"></td>' +
-                    '</tr>';
-                '<tr>';
+                    $("#modal-pembelian-title").text("Tambah Data");
+                    $("#modal-pembelian").modal("show");
+                }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
+                    $("#modal-pembelian").modal("hide");
+                    $('#pembelian-uraian').empty();
+                }).on("click", "#btn-penjualan-input", function() { //btn_input_click
+                    var rowData = $(this).data('row');
+                    var row =
+                        '<tr>' +
+                        '<td> <input type="text" name="" id="" value="' + rowData.nama +
+                        '" disabled> </td>' +
+                        '<td> <input type="text" name="nota_pembelian" id="ur_nota_pembelian"></td>' +
+                        '<td> <input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' +
+                        {{ date('Ymd') }} + '"></td>' +
+                        '<td> <input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
+                        .kd_supplier + '"></td>' +
+                        '<td> <input type="text" name="jns_pembelian" id="ur_jns_pembelian" ></td>' +
+                        '<td> <input type="text" name="harga_total" id="ur_harga_total" class="money"></td>' +
+                        '<td> <input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="money"></td>' +
+                        '<td> <input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="money"></td>' +
+                        '<td> <input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="money"></td>' +
+                        '</tr>';
+                    '<tr>';
 
-                $('#pembelian-uraian').append(row);
+                    $('#pembelian-uraian').append(row);
 
-                $("#modal-pembelian-title").text("Tambah Data");
-                $("#modal-pembelian").modal("show");
-            }).on("click", ".ur_supplier", function() { //hapus next row
-                $(this).closest('tr').nextAll().remove();
-            }).on("click", "._produk", function() { //pilih produk
-                var rowData = $(this).data('row');
-                console.log(rowData);
-            }).on("blur", ".qty_pesan", function() { //pilih produk
-                total = 0;
-                $('.qty_pesan').each(function() {
-                    var value = parseFloat($(this).val().replace(/\./g, ''));
+                    $("#modal-pembelian-title").text("Tambah Data");
+                    $("#modal-pembelian").modal("show");
+                }).on("click", ".ur_supplier", function() { //hapus next row
+                    $(this).closest('tr').nextAll().remove();
+                }).on("click", "._produk", function() { //pilih produk
+                    var rowData = $(this).data('row');
+                    console.log(rowData);
+                }).on("blur", ".detail_harga_satuan", function() { //pilih produk
+                    total = 0;
+                    $('.detail_harga_satuan').each(function() {
+                        var value = parseFloat($(this).val().replace(/\./g, ''));
 
-                    if (!isNaN(value)) {
-                        total += value;
-                    }
+                        if (!isNaN(value)) {
+                            total += value;
+                        }
+                    });
+
+                    total = addCommas(total)
+                    $('#ur_harga_total').val(total);
+                }).on("keyup", "#ur_nota_pembelian", function() { //pilih produk
+                    var text = $('#ur_nota_pembelian').val()
+
+                    $('.detail_nota_pembelian').val(text)
+                }).on("blur", "#detail_qty_pesan, #detail_qty_retur", function() {
+                    var currentRow = $(this).closest('tr');
+
+                    var qtyPesan = parseFloat(currentRow.find('#detail_qty_pesan').val().replace(/\./g, ''));
+                    var qtyRetur = parseFloat(currentRow.find('#detail_qty_retur').val().replace(/\./g, ''));
+
+                    var total = qtyPesan - qtyRetur;
+
+                    total = addCommas(total)
+                    currentRow.find('#detail_qty_bersih').val(total);
+                })
+                .on("blur", "#detail_harga_satuan", function() {
+                    var currentRow = $(this).closest('tr');
+
+                    var hargaSatuan = parseFloat(currentRow.find('#detail_harga_satuan').val().replace(/\./g,
+                        ''));
+                    var qty_bersih = parseFloat(currentRow.find('#detail_qty_bersih').val().replace(/\./g, ''));
+
+                    var total = qty_bersih * hargaSatuan;
+
+                    total = addCommas(total)
+                    currentRow.find('#detail_harga_total').val(total);
                 });
-
-                total = addCommas(total)
-                $('#ur_qty_pesan').val(total);
-            });;
         });
     </script>
 @endpush
