@@ -295,7 +295,7 @@
                     {
                         data: 'qty_bersih',
                         render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih">';
+                            return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" readonly>';
                         }
                     },
                     {
@@ -307,7 +307,7 @@
                     {
                         data: 'harga_total',
                         render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total">';
+                            return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" readonly>';
                         }
                     }
                 ],
@@ -332,78 +332,116 @@
             });
 
             $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
-                    $("#modal-pembelian-title").text("Tambah Data");
-                    $("#modal-pembelian").modal("show");
-                }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
-                    $("#modal-pembelian").modal("hide");
-                    $('#pembelian-uraian').empty();
-                }).on("click", "#btn-penjualan-input", function() { //btn_input_click
-                    var rowData = $(this).data('row');
-                    var row =
-                        '<tr>' +
-                        '<td> <input type="text" name="" id="" value="' + rowData.nama +
-                        '" disabled> </td>' +
-                        '<td> <input type="text" name="nota_pembelian" id="ur_nota_pembelian"></td>' +
-                        '<td> <input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' +
-                        {{ date('Ymd') }} + '"></td>' +
-                        '<td> <input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
-                        .kd_supplier + '"></td>' +
-                        '<td> <input type="text" name="jns_pembelian" id="ur_jns_pembelian" ></td>' +
-                        '<td> <input type="text" name="harga_total" id="ur_harga_total" class="money"></td>' +
-                        '<td> <input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="money"></td>' +
-                        '<td> <input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="money"></td>' +
-                        '<td> <input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="money"></td>' +
-                        '</tr>';
-                    '<tr>';
+                $("#modal-pembelian-title").text("Tambah Data");
+                $("#modal-pembelian").modal("show");
+            }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
+                $("#modal-pembelian").modal("hide");
+                $('#pembelian-uraian').empty();
+            }).on("click", "#btn-penjualan-input", function() { //btn_input_click
+                var rowData = $(this).data('row');
+                var row =
+                    '<tr>' +
+                    '<td> <input type="text" name="" id="" value="' + rowData.nama +
+                    '" disabled> </td>' +
+                    '<td> <input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
+                    '<td> <input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' +
+                    {{ date('Ymd') }} + '" class="form-control"></td>' +
+                    '<td> <input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
+                    .kd_supplier + '" class="form-control"></td>' +
+                    '<td> <input type="text" name="jns_pembelian" id="ur_jns_pembelian" class="form-control"></td>' +
+                    '<td> <input type="text" name="harga_total" id="ur_harga_total" class="form-control money" readonly></td>' +
+                    '<td> <input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
+                    '<td> <input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +
+                    '<td> <input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" readonly></td>' +
+                    '</tr>';
 
-                    $('#pembelian-uraian').append(row);
 
-                    $("#modal-pembelian-title").text("Tambah Data");
-                    $("#modal-pembelian").modal("show");
-                }).on("click", ".ur_supplier", function() { //hapus next row
-                    $(this).closest('tr').nextAll().remove();
-                }).on("click", "._produk", function() { //pilih produk
-                    var rowData = $(this).data('row');
-                    console.log(rowData);
-                }).on("blur", ".detail_harga_satuan", function() { //pilih produk
-                    total = 0;
-                    $('.detail_harga_satuan').each(function() {
-                        var value = parseFloat($(this).val().replace(/\./g, ''));
+                $('#pembelian-uraian').append(row);
 
-                        if (!isNaN(value)) {
-                            total += value;
-                        }
-                    });
+                $("#modal-pembelian-title").text("Tambah Data");
+                // $("#ur_harga_total").prop("readonly", true);
+                $("#modal-pembelian").modal("show");
+            }).on("click", ".ur_supplier", function() { //hapus next row
+                $(this).closest('tr').nextAll().remove();
+            }).on("click", "._produk", function() { //pilih produk
+                var rowData = $(this).data('row');
+                console.log(rowData);
+            }).on("keyup", "#ur_nota_pembelian", function() { //pilih produk
+                var text = $('#ur_nota_pembelian').val()
 
-                    total = addCommas(total)
-                    $('#ur_harga_total').val(total);
-                }).on("keyup", "#ur_nota_pembelian", function() { //pilih produk
-                    var text = $('#ur_nota_pembelian').val()
+                $('.detail_nota_pembelian').val(text)
+            }).on("keyup", "#ur_nominal_bayar", function() {
+                var nominal_bayar = getFloatValue($('#ur_nominal_bayar'))
+                var harga_total = getFloatValue($('#ur_harga_total'))
+                var sts_angsuran = '0';
 
-                    $('.detail_nota_pembelian').val(text)
-                }).on("blur", "#detail_qty_pesan, #detail_qty_retur", function() {
+                var total = harga_total - nominal_bayar;
+                if (total > 0) {
+                    sts_angsuran = '1';
+                }
+
+                addCommas(total);
+                $('#ur_sisa_bayar').val(total)
+                $('#ur_sts_angsuran').val(sts_angsuran)
+            }).on("blur click",
+                "#detail_qty_pesan, #detail_qty_retur, #detail_qty_bersih, #detail_harga_satuan,#detail_harga_total",
+                function() {
+                    // Mendapatkan baris terdekat
                     var currentRow = $(this).closest('tr');
 
-                    var qtyPesan = parseFloat(currentRow.find('#detail_qty_pesan').val().replace(/\./g, ''));
-                    var qtyRetur = parseFloat(currentRow.find('#detail_qty_retur').val().replace(/\./g, ''));
+                    // Update detail_qty_bersih berdasarkan detail_qty_pesan dan detail_qty_retur
+                    updateField(currentRow, 'detail_qty_bersih', ['#detail_qty_pesan', '#detail_qty_retur'],
+                        function(qtyPesan, qtyRetur) {
+                            return qtyPesan - (isNaN(qtyRetur) ? 0 : qtyRetur);
+                        });
 
-                    var total = qtyPesan - qtyRetur;
+                    // Update detail_harga_total berdasarkan detail_qty_bersih dan detail_harga_satuan
+                    updateField(currentRow, 'detail_harga_total', ['#detail_qty_bersih',
+                            '#detail_harga_satuan'
+                        ],
+                        function(qtyBersih, hargaSatuan) {
+                            return qtyBersih * hargaSatuan;
+                        });
 
-                    total = addCommas(total)
-                    currentRow.find('#detail_qty_bersih').val(total);
-                })
-                .on("blur", "#detail_harga_satuan", function() {
-                    var currentRow = $(this).closest('tr');
-
-                    var hargaSatuan = parseFloat(currentRow.find('#detail_harga_satuan').val().replace(/\./g,
-                        ''));
-                    var qty_bersih = parseFloat(currentRow.find('#detail_qty_bersih').val().replace(/\./g, ''));
-
-                    var total = qty_bersih * hargaSatuan;
-
-                    total = addCommas(total)
-                    currentRow.find('#detail_harga_total').val(total);
+                    // Update total pada ur_harga_total berdasarkan detail_harga_total
+                    updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });
+
+        // Fungsi untuk memperbarui nilai field berdasarkan field-field lainnya
+        function updateField(row, fieldId, sourceIds, calculateFunction) {
+            // Mengumpulkan nilai dari field-field sumber
+            var values = sourceIds.map(function(id) {
+                return getFloatValue(row.find(id));
+            });
+
+            // Menghitung nilai baru menggunakan fungsi kalkulasi
+            var total = calculateFunction.apply(null, values);
+
+            // Menyimpan nilai baru ke dalam field target
+            row.find('#' + fieldId).val(addCommas(total));
+        }
+
+        // Fungsi untuk menghitung dan memperbarui total dari field-field tertentu
+        function updateTotal(totalFieldId, itemClass) {
+            // Menghitung total dari field-field dengan kelas tertentu
+            var total = 0;
+            $(itemClass).each(function() {
+                total += getFloatValue($(this));
+            });
+
+            // Menyimpan nilai total ke dalam field total
+            $(totalFieldId).val(addCommas(total));
+        }
+
+        // Fungsi untuk mendapatkan nilai float dari elemen input dengan memperhatikan pemisah ribuan
+        function getFloatValue(element) {
+            return parseFloat(element.val().replace(/\./g, '')) || 0;
+        }
+
+        // Fungsi untuk menambahkan pemisah ribuan pada angka
+        function addCommas(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
 @endpush
