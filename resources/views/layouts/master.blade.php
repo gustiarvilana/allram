@@ -41,6 +41,9 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
+    {{-- SweetAlert2 --}}
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
+
     <style>
         #ajax-wait {
             display: none;
@@ -229,6 +232,9 @@
     <script src="{{ asset('assets') }}/plugins/select2/js/select2.full.min.js"></script>
     <script src="{{ asset('assets') }}/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
+    {{-- sweetAlert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var errorAlerts = document.querySelectorAll('.alert');
@@ -264,6 +270,8 @@
             $("input[data-bootstrap-switch]").each(function() {
                 $(this).bootstrapSwitch('state', $(this).prop('checked'));
             })
+
+            setupCSRFToken();
         });
 
         $(document).ajaxStart(function() {
@@ -396,7 +404,25 @@
         function addCommas(number) {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
+
+
+        {{-- csrf --}}
+        // Fungsi untuk mendapatkan token CSRF dari meta tag dalam HTML
+        function getCSRFToken() {
+            return $('meta[name="csrf-token"]').attr('content');
+        }
+
+        // Fungsi untuk mengatur token CSRF dalam header setiap permintaan AJAX
+        function setupCSRFToken() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': getCSRFToken()
+                }
+            });
+        }
     </script>
+
+
 
     @stack('js')
 

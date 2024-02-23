@@ -47,5 +47,7 @@ class AlterTable extends Seeder
             ADD IF NOT EXISTS `tgl_input` int(11) DEFAULT NULL AFTER `opr_input`,
             ADD IF NOT EXISTS `harga_beli` int(11) DEFAULT NULL AFTER `tgl_input`;"
         );
+
+        DB::statement("ALTER TABLE `d_pembelian` ADD UNIQUE (`nota_pembelian`);");
     }
 }

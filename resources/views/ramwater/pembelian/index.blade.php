@@ -63,7 +63,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped">
+                                            <table class="table table-striped" id="table-pembelian">
                                                 <thead>
                                                     <tr>
                                                         <th>Supplier</th>
@@ -95,7 +95,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-produk">
+                                            <table class="table table-striped" id="table-detail">
                                                 <thead>
                                                     <tr>
                                                         <th>nama</th>
@@ -119,7 +119,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary btn-add-pembelian-close">Close</button>
+                    <button class="btn btn-success btn-add-pembelian-simpan"><i class="fas fa-save"></i>
+                        Simpan</button>
+                    {{-- <button class="btn btn-secondary btn-add-pembelian-simpan">Close</button> --}}
                 </div>
             </div>
         </div>
@@ -174,7 +176,8 @@
                     {
                         data: 'nama',
                         render: function(data, type, row) {
-                            return data;
+                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                data + '</span></div>';
                         }
                     },
                     {
@@ -219,7 +222,7 @@
 
             });
 
-            var tableProduk = $("#table-produk").DataTable({
+            var tableDetail = $("#table-detail").DataTable({
                 info: false,
                 bPaginate: false,
                 bLengthChange: false,
@@ -227,6 +230,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: '{{ route('produk.data') }}',
+                // dom: 'Brtip',
                 dom: 'Brtip',
                 buttons: [{
                     extend: "excel",
@@ -256,15 +260,15 @@
                         data: 'nama',
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
-                            return '<a href="#" class="_produk" data-row=\'' + row_data + '\'>' +
-                                data + '</a>';
+                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                data + '</span></div>';
+
                         }
                     },
                     {
                         data: 'nota_pembelian',
                         render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_nota_pembelian" name="nota_pembelian" id="detail_nota_pembelian" value="' +
-                                row.nota_pembelian + '">';
+                            return '<input type="text" class="form-control money detail_nota_pembelian" name="nota_pembelian" id="detail_nota_pembelian">';
                         }
                     },
                     {
@@ -331,46 +335,124 @@
 
             });
 
+            $('#modal-pembelian').on('hidden.bs.modal', function() {
+                console.log('Modal Pembelian telah disembunyikan');
+                $("#modal-pembelian").modal("hide");
+                $('#pembelian-uraian').empty();
+            });
+
             $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#modal-pembelian").modal("show");
             }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
+            }).on("click", ".btn-add-pembelian-simpan", function() {
+                var dataArrayDetail = [];
+                $('#table-detail tbody tr').each(function() {
+                    var hargaTotal = $(this).find('#detail_harga_total').val();
+
+                    if (hargaTotal && parseFloat(hargaTotal) !== 0) {
+                        var rowData = {
+                            nota_pembelian: $(this).find('#detail_nota_pembelian').val(),
+                            kd_produk: $(this).find('#detail_kd_produk').val(),
+                            qty_pesan: $(this).find('#detail_qty_pesan').val(),
+                            qty_retur: $(this).find('#detail_qty_retur').val(),
+                            qty_bersih: $(this).find('#detail_qty_bersih').val(),
+                            harga_satuan: $(this).find('#detail_harga_satuan').val(),
+                            harga_total: hargaTotal,
+                        };
+                        dataArrayDetail.push(rowData);
+                    }
+                });
+
+
+                var pembelianData = {
+                    nota_pembelian: $('#table-pembelian #ur_nota_pembelian').val(),
+                    tgl_pembelian: $('#table-pembelian #ur_tgl_pembelian').val(),
+                    kd_supplier: $('#table-pembelian #ur_kd_supplier').val(),
+                    jns_pembelian: $('#table-pembelian #ur_jns_pembelian').val(),
+                    harga_total: $('#table-pembelian #ur_harga_total').val(),
+                    nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
+                    sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
+                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val()
+                };
+
+                $.ajax({
+                    url: '{{ route('pembelian.store') }}',
+                    method: 'POST',
+                    data: {
+                        _token: getCSRFToken(),
+                        dataArrayDetail: JSON.stringify(dataArrayDetail),
+                        pembelianData: JSON.stringify(pembelianData)
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses!',
+                                text: response.message,
+                            });
+                            return;
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message,
+                        });
+
+                    },
+                    error: function(error) {
+                        var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        } else if (error.statusText) {
+                            errorMessage = error.statusText;
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: errorMessage,
+                        });
+                    }
+                });
             }).on("click", "#btn-penjualan-input", function() { //btn_input_click
                 var rowData = $(this).data('row');
                 var row =
                     '<tr>' +
-                    '<td> <input type="text" name="" id="" value="' + rowData.nama +
-                    '" disabled> </td>' +
-                    '<td> <input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
-                    '<td> <input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' +
-                    {{ date('Ymd') }} + '" class="form-control"></td>' +
-                    '<td> <input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
+                    '<td>' +
+                    '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                    rowData.nama + '</span></div>' +
+                    '</td>' +
+                    '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
+                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
+                    '<td><input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
                     .kd_supplier + '" class="form-control"></td>' +
-                    '<td> <input type="text" name="jns_pembelian" id="ur_jns_pembelian" class="form-control"></td>' +
-                    '<td> <input type="text" name="harga_total" id="ur_harga_total" class="form-control money" readonly></td>' +
-                    '<td> <input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
-                    '<td> <input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +
-                    '<td> <input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" readonly></td>' +
+                    '<td>' +
+                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control">' +
+                    '<option value=""></option>' +
+                    '<option value="tunai">Tunai</option>' +
+                    '<option value="tempo">Tempo</option>' +
+                    '</select>' +
+                    '</td>' +
+                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" readonly></td>' +
+                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
+                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +
+                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" readonly></td>' +
                     '</tr>';
 
 
                 $('#pembelian-uraian').append(row);
 
                 $("#modal-pembelian-title").text("Tambah Data");
-                // $("#ur_harga_total").prop("readonly", true);
                 $("#modal-pembelian").modal("show");
-            }).on("click", ".ur_supplier", function() { //hapus next row
-                $(this).closest('tr').nextAll().remove();
-            }).on("click", "._produk", function() { //pilih produk
-                var rowData = $(this).data('row');
-                console.log(rowData);
-            }).on("keyup", "#ur_nota_pembelian", function() { //pilih produk
+            }).on("keyup", "#ur_nota_pembelian", function() {
                 var text = $('#ur_nota_pembelian').val()
 
                 $('.detail_nota_pembelian').val(text)
-            }).on("keyup", "#ur_nominal_bayar", function() {
+            }).on("keyup", "#ur_nominal_bayar,.detail_harga_satuan", function() {
                 var nominal_bayar = getFloatValue($('#ur_nominal_bayar'))
                 var harga_total = getFloatValue($('#ur_harga_total'))
                 var sts_angsuran = '0';
@@ -382,8 +464,8 @@
 
                 $('#ur_sisa_bayar').val(addCommas(total))
                 $('#ur_sts_angsuran').val(sts_angsuran)
-            }).on("blur click",
-                "#detail_qty_pesan, #detail_qty_retur, #detail_qty_bersih, #detail_harga_satuan,#detail_harga_total",
+            }).on("keyup change",
+                ".detail_qty_pesan, .detail_qty_retur, .detail_qty_bersih, .detail_harga_satuan,.detail_harga_total,.ur_harga_total",
                 function() {
                     // Mendapatkan baris terdekat
                     var currentRow = $(this).closest('tr');
@@ -406,5 +488,16 @@
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });
+
+        function test() {
+            var qty_pesan = $('#detail_qty_pesan').val('101')
+            var qty_retur = $('#detail_qty_retur').val('1')
+            var harga_satuan = $('#detail_harga_satuan').val('10000')
+
+            var ur_nota_pembelian = $('#ur_nota_pembelian').val('test_nota_pembelian')
+            var detail_nota_pembelian = $('.detail_nota_pembelian').val('test_nota_pembelian')
+            var jns_pembelian = $('#ur_jns_pembelian').val('tunai')
+            var nominal_bayar = $('#ur_nominal_bayar').val('200000')
+        }
     </script>
 @endpush

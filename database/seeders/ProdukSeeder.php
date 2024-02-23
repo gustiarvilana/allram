@@ -16,6 +16,7 @@ class ProdukSeeder extends Seeder
     {
         DB::table('t_master_produk')->upsert([
             [
+                'id'        => '1',
                 'kd_produk' => '1',
                 'satker'    => 'ramwater',
                 'nama'      => 'Aqua Galon SET',
@@ -23,6 +24,7 @@ class ProdukSeeder extends Seeder
                 'type'      => '19L',
             ],
             [
+                'id'        => '2',
                 'kd_produk' => '2',
                 'satker'    => 'ramwater',
                 'nama'      => 'Aqua Galon Air',
@@ -30,6 +32,7 @@ class ProdukSeeder extends Seeder
                 'type'      => '19L',
             ],
             [
+                'id'        => '3',
                 'kd_produk' => '3',
                 'satker'    => 'ramwater',
                 'nama'      => 'Aqua Galon Botol',
@@ -37,6 +40,7 @@ class ProdukSeeder extends Seeder
                 'type'      => 'Botol Galon',
             ],
             [
+                'id'        => '4',
                 'kd_produk' => '4',
                 'satker'    => 'ramwater',
                 'nama'      => 'Lemineral Galon',
