@@ -142,7 +142,11 @@ class PembelianService
         } elseif ($jns == 'update') {
             return $this->dPembelianModel->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $pembelianData);
         } else {
-            throw new \Exception('Nota Pembelian pernah diinput!');
+            if (config('constants.ramwater.VALIDASI_UPSERT')) {
+                throw new \Exception('Nota Pembelian pernah diinput!');
+            } else {
+                return $this->dPembelianModel->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $pembelianData);
+            }
         }
     }
 
