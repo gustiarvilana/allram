@@ -54,6 +54,15 @@
         .main-sidebar {
             background-color: #333 !important
         }
+
+        .popup {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1;
+        }
     </style>
 
 </head>
@@ -177,6 +186,8 @@
         </footer>
     </div>
     <!-- ./wrapper -->
+
+    <div id="popup" class="popup"></div>
 
 
     <!-- jQuery -->
@@ -428,21 +439,67 @@
             });
         }
 
-        function setupHoverShapes(table) {
+        function setupHoverShapes(table, cell) {
             // Tambahkan event mouseover dan mouseout
             table.on('mouseover', 'td', function() {
-                var colIdx = $(table).dataTable().api().column(this).index();
-                var cellData = $(table).dataTable().api().cell(this).data();
+                var colIdx = $(table).DataTable().column($(this).index()).index();
+                var cellData = $(table).DataTable().cell(this).data();
 
                 // Cek apakah mouseover pada kolom 'nota_pembelian'
-                if (colIdx === 1) {
-                    alert('Data Kolom: ' + cellData);
+                if (colIdx === cell) {
+                    showPopup(this, 'Data Kolom: ' + cellData);
                 }
             });
 
             // Tambahkan event mouseout untuk menutup shapes atau popup
-            table.on('mouseout', 'td', function() {});
+            table.on('mouseout', function() {
+                // Set a delay before hiding the popup
+                hideTimeout = setTimeout(function() {
+                    hidePopup();
+                }, 6000); // Adjust the delay time as needed
+            });
+
+            function showPopup(element, content) {
+                var popup = $('#popup');
+                popup.html(content);
+
+                // Get the mouse position
+                var mouseX = event.clientX;
+                var mouseY = event.clientY;
+
+                // Set the popup position above the cursor
+                var leftPosition = mouseX;
+                var topPosition = mouseY - popup.height();
+
+                popup.css({
+                    display: 'block',
+                    left: leftPosition + 'px',
+                    top: topPosition + 'px'
+                });
+            }
+
+
+            function hidePopup() {
+                var popup = $('#popup');
+                popup.css('display', 'none');
+            }
         }
+
+        // function setupHoverShapes(table) {
+        //     // Tambahkan event mouseover dan mouseout
+        //     table.on('mouseover', 'td', function() {
+        //         var colIdx = $(table).dataTable().api().column(this).index();
+        //         var cellData = $(table).dataTable().api().cell(this).data();
+
+        //         // Cek apakah mouseover pada kolom 'nota_pembelian'
+        //         if (colIdx === 1) {
+        //             alert('Data Kolom: ' + cellData);
+        //         }
+        //     });
+
+        //     // Tambahkan event mouseout untuk menutup shapes atau popup
+        //     table.on('mouseout', 'td', function() {});
+        // }
     </script>
 
 

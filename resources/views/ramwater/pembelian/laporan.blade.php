@@ -258,7 +258,7 @@
                 }],
                 initComplete: function() {
                     initializeColumnSearch(this);
-                    // setupHoverShapes(this);
+                    // setupHoverShapes(this, 5);
                 }
             });
 
