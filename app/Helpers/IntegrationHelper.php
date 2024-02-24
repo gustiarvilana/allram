@@ -11,6 +11,9 @@ class IntegrationHelper
         $this->key = "encryp123";
     }
 
+    // $id = $this->integrationHelper->decrypt(base64_decode($id), $this->integrationHelper->getKey());
+    // 'id' => base64_encode($this->integrationHelper->encrypt($row['id'],$this->integrationHelper->getKey())),
+
     public function encrypt($data)
     {
         $cipher = 'aes-256-cbc';

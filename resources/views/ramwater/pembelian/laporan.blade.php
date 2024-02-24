@@ -19,10 +19,12 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12 table-responsive">
-                                    <table class="table table-striped table-inverse" id="table-pembelian-laporan">
+                                    <table class="table table-striped table-inverse text-center"
+                                        id="table-pembelian-laporan">
                                         <thead>
                                             <tr>
-                                                <th width="5%">No</th>
+                                                {{-- <th width="5%">No</th> --}}
+                                                <th>Supplier</th>
                                                 <th>nota_pembelian</th>
                                                 <th>tgl_pembelian</th>
                                                 <th>kd_supplier</th>
@@ -55,7 +57,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-pembelian-title">Modal title</h5>
-                    <button type="button" class="close btn-add-pembelian-close">
+                    <button type="button" class="close btn-add-pembelian-close" id="btn-add-pembelian-close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -76,6 +78,7 @@
                                                         <th>Supplier</th>
                                                         <th>nota_pembelian</th>
                                                         <th>jns_pembelian</th>
+                                                        <th>kd_gudang</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
                                                         <th>sisa_bayar</th>
@@ -104,7 +107,6 @@
                                                 <thead>
                                                     <tr>
                                                         <th>nama</th>
-                                                        <th>nota_pembelian</th>
                                                         <th>kd_produk</th>
                                                         <th>type</th>
                                                         <th>qty_pesan</th>
@@ -124,7 +126,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success btn-add-pembelian-simpan"><i class="fas fa-save"></i>
+                    <button class="btn btn-success btn-add-pembelian-simpan" id="btn-add-pembelian-simpan"><i
+                            class="fas fa-save"></i>
                         Simpan</button>
                     {{-- <button class="btn btn-secondary btn-add-pembelian-simpan">Close</button> --}}
                 </div>
@@ -136,9 +139,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // $("#modal-pembelian").modal("show");
-            // $("#modal-pembelian-title").text("Tambah Data");
-
             var tableLaporanPembelian = $("#table-pembelian-laporan").DataTable({
                 info: false,
                 bPaginate: false,
@@ -175,8 +175,16 @@
                 //         });
                 //     }
                 // }],
-                columns: [{
-                        data: 'DT_RowIndex'
+                columns: [
+                    // {
+                    //     data: 'DT_RowIndex'
+                    // },
+                    {
+                        data: 'nama',
+                        render: function(data, type, row) {
+                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                data + '</span></div>';
+                        }
                     },
                     {
                         data: 'nota_pembelian',
@@ -243,11 +251,18 @@
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
 
-                            var btn_input = '<a id="btn-penjualan-input" data-id="' + row.id +
+                            var btn_edit = '<a id="btn-penjualan-input" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs edit"><i class="fas fa-pencil-alt"></i><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Beli</a>';
+                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Beli</a>';
 
-                            return btn_input;
+                            var btn_delete = '<a id="btn-penjualan-delete" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-danger btn-xs" style="white-space: nowrap;" delete"><i class="fas fa-trash-alt"> Delete</a>';
+
+                            // You can customize the buttons as needed
+
+                            return '<div style="white-space: nowrap;">' + btn_edit + ' ' +
+                                btn_delete + '</div>';
                         },
                     },
                 ],
@@ -258,7 +273,7 @@
                 }],
                 initComplete: function() {
                     initializeColumnSearch(this);
-                    // setupHoverShapes(this, 5);
+                    // setupHoverShapes(this, 2);
                 }
             });
 
@@ -271,10 +286,10 @@
             $("body").on("click", "#btn-add-pembelian", function() {
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#modal-pembelian").modal("show");
-            }).on("click", ".btn-add-pembelian-close", function() {
+            }).on("click", "#btn-add-pembelian-close", function() {
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
-            }).on("click", ".btn-add-pembelian-simpan", function() {
+            }).on("click", "#btn-add-pembelian-simpan", function() {
                 var dataArrayDetail = [];
                 $('#table-detail tbody tr').each(function() {
                     var hargaTotal = $(this).find('#detail_harga_total').val();
@@ -301,11 +316,9 @@
                     harga_total: $('#table-pembelian #ur_harga_total').val(),
                     nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
                     sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
-                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val()
+                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
+                    kd_gudang: $('#table-pembelian #ur_kd_gudang').val()
                 };
-
-                console.log(pembelianData);
-                console.log(dataArrayDetail);
 
                 $.ajax({
                     url: '{{ route('pembelian.store') }}',
@@ -313,7 +326,8 @@
                     data: {
                         _token: getCSRFToken(),
                         dataArrayDetail: JSON.stringify(dataArrayDetail),
-                        pembelianData: JSON.stringify(pembelianData)
+                        pembelianData: JSON.stringify(pembelianData),
+                        jns: 'update'
                     },
                     success: function(response) {
                         if (response.success) {
@@ -322,6 +336,7 @@
                                 title: 'Sukses!',
                                 text: response.message,
                             });
+                            $('#btn-add-pembelian-close').click()
                             return;
                         }
                         Swal.fire({
@@ -369,6 +384,8 @@
                     '>Tempo</option>' +
                     '</select>' +
                     '</td>' +
+                    '<td><input type="text" name="kd_gudang" id="ur_kd_gudang" class="form-control money" value="' +
+                    rowData.kd_gudang + '"></td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
                     addCommas(rowData.harga_total) + '" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
@@ -380,8 +397,7 @@
                     '</tr>';
                 $('#pembelian-uraian').append(row);
 
-
-                $("#modal-pembelian-title").text("Tambah Data");
+                $("#modal-pembelian-title").text("Update Data");
 
                 var tableDetail = $("#table-detail  ").DataTable({
                     info: false,
@@ -407,13 +423,6 @@
                                 return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                                     data + '</span></div>';
 
-                            }
-                        },
-                        {
-                            data: 'nota_pembelian',
-                            render: function(data, type, row) {
-                                return '<input readonly type="text" class="form-control money detail_nota_pembelian" name="nota_pembelian" id="detail_nota_pembelian"value="' +
-                                    data + '">';
                             }
                         },
                         {
@@ -475,7 +484,7 @@
                         }
                     ],
                     columnDefs: [{
-                            targets: [1, 2, 4, 5, 6, 7, 8],
+                            targets: [1, 2, 3, 4, 5, 6, 7],
                             searchable: false,
                             orderable: false
                         },
@@ -494,6 +503,61 @@
                 });
 
                 $("#modal-pembelian").modal("show");
+            }).on("click", "#btn-penjualan-delete", function() {
+                var deleteButton = $(this);
+                var id = deleteButton.data('id');
+                var url_delete = '{{ route('pembelian.destroy', ['pembelian' => ':id']) }}';
+                url_delete = url_delete.replace(':id', id);
+
+                // Use SweetAlert for confirmation
+                Swal.fire({
+                    title: 'Anda Yakin?',
+                    text: 'Data akan dihapus, dan tidak bisa dikembalikan!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    cancelButtonText: 'Tidak',
+                    confirmButtonText: 'Ya, Hapus Data!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url_delete,
+                            type: 'DELETE',
+                            data: {
+                                _token: getCSRFToken(),
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire('Terhapus!', 'Data berhasil dihapus.',
+                                        'success');
+                                    return;
+                                }
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.message,
+                                });
+
+                            },
+                            error: function(error) {
+                                var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                                if (error.responseJSON && error.responseJSON.message) {
+                                    errorMessage = error.responseJSON.message;
+                                } else if (error.statusText) {
+                                    errorMessage = error.statusText;
+                                }
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Kesalahan!',
+                                    text: errorMessage,
+                                });
+                            }
+                        });
+                    }
+                });
             }).on("keyup", "#ur_nota_pembelian", function() {
                 var text = $('#ur_nota_pembelian').val()
 

@@ -48,6 +48,16 @@ class AlterTable extends Seeder
             ADD IF NOT EXISTS `harga_beli` int(11) DEFAULT NULL AFTER `tgl_input`;"
         );
 
-        DB::statement("ALTER TABLE `d_pembelian` ADD UNIQUE (`nota_pembelian`);");
+        DB::statement(
+            "ALTER TABLE `d_pembelian`
+            ADD IF NOT EXISTS `kd_gudang` varchar(50) DEFAULT NULL AFTER `sts_angsuran`,
+            ADD UNIQUE (`nota_pembelian`);"
+        );
+
+        DB::statement(
+            "ALTER TABLE `d_pembelian_detail`
+            ADD IF NOT EXISTS `kd_gudang` varchar(50) DEFAULT NULL AFTER `harga_total`
+            ;"
+        );
     }
 }

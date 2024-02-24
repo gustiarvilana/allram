@@ -49,7 +49,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-pembelian-title">Modal title</h5>
-                    <button type="button" class="close btn-add-pembelian-close">
+                    <button type="button" class="close btn-add-pembelian-close" id="btn-add-pembelian-close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -71,6 +71,7 @@
                                                         <th>tgl_pembelian</th>
                                                         <th>kd_supplier</th>
                                                         <th>jns_pembelian</th>
+                                                        <th>kd_gudang</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
                                                         <th>sisa_bayar</th>
@@ -99,7 +100,6 @@
                                                 <thead>
                                                     <tr>
                                                         <th>nama</th>
-                                                        <th>nota_pembelian</th>
                                                         <th>kd_produk</th>
                                                         <th>type</th>
                                                         <th>qty_pesan</th>
@@ -119,7 +119,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success btn-add-pembelian-simpan"><i class="fas fa-save"></i>
+                    <button class="btn btn-success btn-add-pembelian-simpan" id="btn-add-pembelian-simpan"><i
+                            class="fas fa-save"></i>
                         Simpan</button>
                     {{-- <button class="btn btn-secondary btn-add-pembelian-simpan">Close</button> --}}
                 </div>
@@ -269,12 +270,6 @@
                         }
                     },
                     {
-                        data: 'nota_pembelian',
-                        render: function(data, type, row) {
-                            return '<input readonly type="text" class="form-control money detail_nota_pembelian" name="nota_pembelian" id="detail_nota_pembelian">';
-                        }
-                    },
-                    {
                         data: 'kd_produk',
                         render: function(data, type, row) {
                             return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
@@ -319,7 +314,7 @@
                     }
                 ],
                 columnDefs: [{
-                        targets: [4, 5, 6, 7, 8],
+                        targets: [4, 5, 6, 7],
                         searchable: false,
                         orderable: false
                     },
@@ -347,17 +342,16 @@
             $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#modal-pembelian").modal("show");
-            }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
+            }).on("click", "#btn-add-pembelian-close", function() { //close-pembelian
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
-            }).on("click", ".btn-add-pembelian-simpan", function() {
+            }).on("click", "#btn-add-pembelian-simpan", function() {
                 var dataArrayDetail = [];
                 $('#table-detail tbody tr').each(function() {
                     var hargaTotal = $(this).find('#detail_harga_total').val();
 
                     if (hargaTotal && parseFloat(hargaTotal) !== 0) {
                         var rowData = {
-                            nota_pembelian: $(this).find('#detail_nota_pembelian').val(),
                             kd_produk: $(this).find('#detail_kd_produk').val(),
                             qty_pesan: $(this).find('#detail_qty_pesan').val(),
                             qty_retur: $(this).find('#detail_qty_retur').val(),
@@ -378,7 +372,8 @@
                     harga_total: $('#table-pembelian #ur_harga_total').val(),
                     nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
                     sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
-                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val()
+                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
+                    kd_gudang: $('#table-pembelian #ur_kd_gudang').val()
                 };
 
                 $.ajax({
@@ -396,6 +391,7 @@
                                 title: 'Sukses!',
                                 text: response.message,
                             });
+                            $('#btn-add-pembelian-close').click()
                             return;
                         }
                         Swal.fire({
@@ -432,7 +428,7 @@
                     '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
                     '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
                     '<td><input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
-                    .kd_supplier + '" class="form-control"></td>' +
+                    .kd_supplier + '" class="form-control" readonly></td>' +
                     '<td>' +
                     '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control">' +
                     '<option value=""></option>' +
@@ -440,6 +436,7 @@
                     '<option value="tempo">Tempo</option>' +
                     '</select>' +
                     '</td>' +
+                    '<td><input type="text" name="kd_gudang" id="ur_kd_gudang" class="form-control" value="{{ config('constants.ramwater')['GUDANG_UTAMA'] }}"></td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
                     '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +
@@ -491,16 +488,5 @@
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });
-
-        function test() {
-            var qty_pesan = $('#detail_qty_pesan').val('101')
-            var qty_retur = $('#detail_qty_retur').val('1')
-            var harga_satuan = $('#detail_harga_satuan').val('10000')
-
-            var ur_nota_pembelian = $('#ur_nota_pembelian').val('test_nota_pembelian')
-            var detail_nota_pembelian = $('.detail_nota_pembelian').val('test_nota_pembelian')
-            var jns_pembelian = $('#ur_jns_pembelian').val('tunai')
-            var nominal_bayar = $('#ur_nominal_bayar').val('200000')
-        }
     </script>
 @endpush

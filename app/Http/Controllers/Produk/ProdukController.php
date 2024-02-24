@@ -21,7 +21,7 @@ class ProdukController extends Controller
     {
         $input = $request->query('nota_pembelian');
 
-        $this->model->setSatker($this->const['satker'] ?? null);
+        $this->model->setSatker($this->const['SATKER'] ?? null);
         if ($input) {
             $produk = $this->model->getProduk($input);
         } else {

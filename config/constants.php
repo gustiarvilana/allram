@@ -3,6 +3,7 @@
 
 return [
     'ramwater' => [
-        'satker' => 'ramwater',
+        'SATKER' => 'ramwater',
+        'GUDANG_UTAMA' => '1',
     ]
 ];

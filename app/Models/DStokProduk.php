@@ -20,8 +20,8 @@ class DStokProduk extends Model
 
     public function incrementStok($dataDetail)
     {
-        dd('stok');
+        dd($dataDetail['qty_bersih']);
         $this->where('kd_produk', $dataDetail['kd_produk'])
-            ->increment('qty', $dataDetail['qty_bersih']);
+            ->increment('stok', $dataDetail['qty_bersih']);
     }
 }

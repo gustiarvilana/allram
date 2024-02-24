@@ -22,4 +22,9 @@ class DPembelianModel extends Model
 
         return $pembelian;
     }
+
+    public function getIdAttribute()
+    {
+        return base64_encode($this->integrationHelper->encrypt($this->id, $this->integrationHelper->getKey()));
+    }
 }

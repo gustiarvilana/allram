@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ramwater\Pembelian;
 
+use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\SupplierModel;
 use App\Services\PembelianService;
@@ -16,6 +17,7 @@ class PembelianController extends Controller
     {
         $this->supplier = $supplierModel;
         $this->pembelianService = $pembelianService;
+        $this->integrationHelper = new IntegrationHelper;
     }
 
     public function data()
@@ -37,9 +39,14 @@ class PembelianController extends Controller
     {
         $pembelianData = json_decode($request->input('pembelianData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
+        $jns = $request->input('jns');
 
-        // dd($pembelianData);
+        return $this->pembelianService->storePembelian($pembelianData, $dataArrayDetail, $jns);
+    }
 
-        return $this->pembelianService->storePembelian($pembelianData, $dataArrayDetail);
+    public function destroy($id)
+    {
+        $id = $this->integrationHelper->decrypt(base64_decode($id), $this->integrationHelper->getKey());
+        return $this->pembelianService->destroyPembelian($id);
     }
 }
