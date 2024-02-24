@@ -17,17 +17,23 @@ class ProdukController extends Controller
         $this->const = config('constants.ramwater');
     }
 
-    public function data()
+    public function data(Request $request)
     {
+        $input = $request->query('nota_pembelian');
+
         $this->model->setSatker($this->const['satker'] ?? null);
-        $produk = $this->model->getProduk();
+        if ($input) {
+            $produk = $this->model->getProduk($input);
+        } else {
+            $produk = $this->model->getProduk();
+        }
+
 
         return datatables()
             ->of($produk)
             ->addIndexColumn()
             ->make(true);
     }
-
 
     public function laporan()
     {

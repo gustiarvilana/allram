@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Pembelian
+    Laporan Pembelian
 @endsection
 
 @section('content')
@@ -14,19 +14,25 @@
                 <div class="card-body">
                     <div class="card card-success">
                         <div class="card-header">
-                            <h3 class="card-title">Supplier</h3>
+                            <h3 class="card-title">Laporan Pembelian</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12 table-responsive">
-                                    <table class="table table-striped table-inverse" id="table-supplier">
+                                    <table class="table table-striped table-inverse" id="table-pembelian-laporan">
                                         <thead>
                                             <tr>
-                                                {{-- <th width="5%">No</th> --}}
-                                                <th>Supplier</th>
-                                                <th>merek</th>
-                                                <th>alamat</th>
-                                                <th>no_tlp</th>
+                                                <th width="5%">No</th>
+                                                <th>nota_pembelian</th>
+                                                <th>tgl_pembelian</th>
+                                                <th>kd_supplier</th>
+                                                <th>jns_pembelian</th>
+                                                <th>harga_total</th>
+                                                <th>nominal_bayar</th>
+                                                <th>sisa_bayar</th>
+                                                <th>sts_angsuran</th>
+                                                <th>opr_input</th>
+                                                <th>tgl_input</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -66,10 +72,9 @@
                                             <table class="table table-striped" id="table-pembelian">
                                                 <thead>
                                                     <tr>
+                                                        <th>tgl_pembelian</th>
                                                         <th>Supplier</th>
                                                         <th>nota_pembelian</th>
-                                                        <th>tgl_pembelian</th>
-                                                        <th>kd_supplier</th>
                                                         <th>jns_pembelian</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
@@ -134,14 +139,14 @@
             // $("#modal-pembelian").modal("show");
             // $("#modal-pembelian-title").text("Tambah Data");
 
-            var tableSupplier = $("#table-supplier").DataTable({
+            var tableLaporanPembelian = $("#table-pembelian-laporan").DataTable({
                 info: false,
                 bPaginate: false,
                 bLengthChange: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('pembelian.data') }}',
+                ajax: '{{ route('pembelian.laporan.data') }}',
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'
@@ -170,33 +175,65 @@
                 //         });
                 //     }
                 // }],
-                columns: [
-                    // {
-                    //     data: 'DT_RowIndex',
-                    //     searchable: false,
-                    //     shrotable: false
-                    // },
-                    {
-                        data: 'nama',
-                        render: function(data, type, row) {
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-                        }
+                columns: [{
+                        data: 'DT_RowIndex'
                     },
                     {
-                        data: 'merek',
+                        data: 'nota_pembelian',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
-                        data: 'alamat',
+                        data: 'tgl_pembelian',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
-                        data: 'no_tlp',
+                        data: 'kd_supplier',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'jns_pembelian',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'harga_total',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    },
+                    {
+                        data: 'nominal_bayar',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    },
+                    {
+                        data: 'sisa_bayar',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    },
+                    {
+                        data: 'sts_angsuran',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'opr_input',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'detail_tgl_input',
                         render: function(data, type, row) {
                             return data;
                         }
@@ -208,134 +245,21 @@
 
                             var btn_input = '<a id="btn-penjualan-input" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs edit"><i class="fas fa-pencil-alt"></i> Input Beli</a>';
+                                '\' class="btn btn-success btn-xs edit"><i class="fas fa-pencil-alt"></i><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Beli</a>';
 
                             return btn_input;
                         },
                     },
                 ],
                 columnDefs: [{
-                    targets: [4],
+                    targets: [0, 11],
                     searchable: false,
                     orderable: false
                 }],
                 initComplete: function() {
                     initializeColumnSearch(this);
+                    // setupHoverShapes(this);
                 }
-
-            });
-
-            var tableDetail = $("#table-detail").DataTable({
-                info: false,
-                bPaginate: false,
-                bLengthChange: false,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: '{{ route('produk.data') }}',
-                // dom: 'Brtip',
-                dom: 'Brtip',
-                buttons: [{
-                    extend: "excel",
-                    text: "Export Data",
-                    className: "btn-excel",
-                    action: function(e, dt, node, config) {
-                        $.getJSON('#', function(
-                            data) {
-                            var result = data.map(function(row) {
-                                return {
-                                    fullname: row.fullname,
-                                    group_name: row.group_name,
-                                    satker: row.satker,
-                                    active: (row.active == '0') ? 'Not Active' :
-                                        (row.active == '1') ? 'Active' :
-                                        'Unknown',
-                                    username: row.username,
-                                    email: row.email,
-                                    phone: row.phone
-                                };
-                            });
-                            downloadXLSX(result);
-                        });
-                    }
-                }],
-                columns: [{
-                        data: 'nama',
-                        render: function(data, type, row) {
-                            var row_data = JSON.stringify(row);
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-
-                        }
-                    },
-                    {
-                        data: 'nota_pembelian',
-                        render: function(data, type, row) {
-                            return '<input readonly type="text" class="form-control money detail_nota_pembelian" name="nota_pembelian" id="detail_nota_pembelian">';
-                        }
-                    },
-                    {
-                        data: 'kd_produk',
-                        render: function(data, type, row) {
-                            return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
-                                row.kd_produk + '">';
-                        }
-                    },
-                    {
-                        data: 'type',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'qty_pesan',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan">';
-                        }
-                    },
-                    {
-                        data: 'qty_retur',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur">';
-                        }
-                    },
-                    {
-                        data: 'qty_bersih',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" readonly>';
-                        }
-                    },
-                    {
-                        data: 'harga_satuan',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan">';
-                        }
-                    },
-                    {
-                        data: 'harga_total',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" readonly>';
-                        }
-                    }
-                ],
-                columnDefs: [{
-                        targets: [4, 5, 6, 7, 8],
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        targets: [0, 1],
-                        orderable: false
-                    },
-                    {
-                        targets: [1, 2], // Indeks kolom yang ingin disembunyikan (dimulai dari 0)
-                        readonly: false
-                    }
-                ],
-                initComplete: function() {
-                    initializeColumnSearch(this);
-                }
-
             });
 
             $('#modal-pembelian').on('hidden.bs.modal', function() {
@@ -344,10 +268,10 @@
                 $('#pembelian-uraian').empty();
             });
 
-            $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
+            $("body").on("click", "#btn-add-pembelian", function() {
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#modal-pembelian").modal("show");
-            }).on("click", ".btn-add-pembelian-close", function() { //close-pembelian
+            }).on("click", ".btn-add-pembelian-close", function() {
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
             }).on("click", ".btn-add-pembelian-simpan", function() {
@@ -369,7 +293,6 @@
                     }
                 });
 
-
                 var pembelianData = {
                     nota_pembelian: $('#table-pembelian #ur_nota_pembelian').val(),
                     tgl_pembelian: $('#table-pembelian #ur_tgl_pembelian').val(),
@@ -380,6 +303,9 @@
                     sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
                     sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val()
                 };
+
+                console.log(pembelianData);
+                console.log(dataArrayDetail);
 
                 $.ajax({
                     url: '{{ route('pembelian.store') }}',
@@ -425,31 +351,148 @@
                 var rowData = $(this).data('row');
                 var row =
                     '<tr>' +
+                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
                     '<td>' +
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                     rowData.nama + '</span></div>' +
                     '</td>' +
-                    '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
-                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
-                    '<td><input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
-                    .kd_supplier + '" class="form-control"></td>' +
+                    '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control" value="' +
+                    rowData.nota_pembelian + '"></td>' +
+                    '<input type="hidden" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
+                    .kd_supplier + '" class="form-control">' +
                     '<td>' +
                     '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control">' +
                     '<option value=""></option>' +
-                    '<option value="tunai">Tunai</option>' +
-                    '<option value="tempo">Tempo</option>' +
+                    '<option value="tunai" ' + (rowData.jns_pembelian === 'tunai' ? 'selected' : '') +
+                    '>Tunai</option>' +
+                    '<option value="tempo" ' + (rowData.jns_pembelian === 'tempo' ? 'selected' : '') +
+                    '>Tempo</option>' +
                     '</select>' +
                     '</td>' +
-                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" readonly></td>' +
-                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
-                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" readonly></td>' +
+                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
+                    addCommas(rowData.harga_total) + '" readonly></td>' +
+                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
+                    addCommas(rowData.nominal_bayar) + '"></td>' +
+                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" value="' +
+                    addCommas(rowData.sisa_bayar) + '" readonly></td>' +
+                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" value="' +
+                    addCommas(rowData.sts_angsuran) + '" readonly></td>' +
                     '</tr>';
-
-
                 $('#pembelian-uraian').append(row);
 
+
                 $("#modal-pembelian-title").text("Tambah Data");
+
+                var tableDetail = $("#table-detail  ").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('produk.data') }}?nota_pembelian=' + rowData.nota_pembelian +
+                            '',
+                        data: {
+                            nota_pembelian: rowData.nota_pembelian
+                        },
+                    },
+                    // dom: 'Brtip',
+                    dom: 'Brtip',
+                    columns: [{
+                            data: 'nama',
+                            render: function(data, type, row) {
+                                var row_data = JSON.stringify(row);
+                                return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                    data + '</span></div>';
+
+                            }
+                        },
+                        {
+                            data: 'nota_pembelian',
+                            render: function(data, type, row) {
+                                return '<input readonly type="text" class="form-control money detail_nota_pembelian" name="nota_pembelian" id="detail_nota_pembelian"value="' +
+                                    data + '">';
+                            }
+                        },
+                        {
+                            data: 'kd_produk',
+                            render: function(data, type, row) {
+                                return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                    data + '">';
+                            }
+                        },
+                        {
+                            data: 'type',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'qty_pesan',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan" value="' +
+                                    value + '">';
+                            }
+                        },
+                        {
+                            data: 'qty_retur',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur" value="' +
+                                    value + '">';
+                            }
+                        },
+                        {
+                            data: 'qty_bersih',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" value="' +
+                                    addCommas(value) + '" readonly>';
+                            }
+                        },
+                        {
+                            data: 'harga_satuan',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan" value="' +
+                                    addCommas(value) + '">';
+                            }
+                        },
+                        {
+                            data: 'harga_total',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+                                return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" value="' +
+                                    addCommas(value) + '" readonly>';
+                            }
+                        }
+                    ],
+                    columnDefs: [{
+                            targets: [1, 2, 4, 5, 6, 7, 8],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [0, 1],
+                            orderable: false
+                        },
+                        {
+                            // targets: [1, 2],
+                            visible: false
+                        }
+                    ],
+                    initComplete: function() {
+                        initializeColumnSearch(this);
+                    }
+                });
+
                 $("#modal-pembelian").modal("show");
             }).on("keyup", "#ur_nota_pembelian", function() {
                 var text = $('#ur_nota_pembelian').val()
@@ -491,16 +534,5 @@
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });
-
-        function test() {
-            var qty_pesan = $('#detail_qty_pesan').val('101')
-            var qty_retur = $('#detail_qty_retur').val('1')
-            var harga_satuan = $('#detail_harga_satuan').val('10000')
-
-            var ur_nota_pembelian = $('#ur_nota_pembelian').val('test_nota_pembelian')
-            var detail_nota_pembelian = $('.detail_nota_pembelian').val('test_nota_pembelian')
-            var jns_pembelian = $('#ur_jns_pembelian').val('tunai')
-            var nominal_bayar = $('#ur_nominal_bayar').val('200000')
-        }
     </script>
 @endpush

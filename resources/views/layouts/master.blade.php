@@ -306,6 +306,13 @@
         }
 
         function initializeColumnSearch(table) {
+            // Hapus semua elemen input pencarian sebelum membuat yang baru
+            var api = table.api();
+            var container = api.table().container ? api.table().container() : api.fnSettings()
+                .nTable; // Periksa versi dan gunakan pemanggilan yang sesuai
+
+            $(container).find('.input-group').remove();
+
             table.api().columns().every(function() {
                 var column = this;
                 var title = column.header().textContent;
@@ -419,6 +426,22 @@
                     'X-CSRF-TOKEN': getCSRFToken()
                 }
             });
+        }
+
+        function setupHoverShapes(table) {
+            // Tambahkan event mouseover dan mouseout
+            table.on('mouseover', 'td', function() {
+                var colIdx = $(table).dataTable().api().column(this).index();
+                var cellData = $(table).dataTable().api().cell(this).data();
+
+                // Cek apakah mouseover pada kolom 'nota_pembelian'
+                if (colIdx === 1) {
+                    alert('Data Kolom: ' + cellData);
+                }
+            });
+
+            // Tambahkan event mouseout untuk menutup shapes atau popup
+            table.on('mouseout', 'td', function() {});
         }
     </script>
 

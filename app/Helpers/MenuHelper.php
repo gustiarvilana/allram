@@ -20,7 +20,7 @@ class MenuHelper
                 ->where('d.is_active', '1')
                 ->where('b.tahun', date('Y'))
                 ->where('c.kd_role', $role)
-                ->orderBy('d.order')
+                ->orderBy('d.order', 'asc')
                 ->get();
 
             return $query;
@@ -34,7 +34,7 @@ class MenuHelper
             ->where('a.kd_parent', $kd_parent)
             ->where('b.tahun', date('Y'))
             ->where('b.kd_role', Auth::user()->kd_role)
-            ->orderBy('a.order', 'desc')
+            ->orderBy('a.order', 'asc')
             ->get();
 
         if (count($children) > 0) {

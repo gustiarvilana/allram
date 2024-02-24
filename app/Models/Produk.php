@@ -15,12 +15,19 @@ class Produk extends Model
 
     private $satker;
 
-    public function getProduk()
+    public function getProduk($nota_pembelian = null)
     {
-        $produk = DB::table('t_master_produk');
+        $produk = DB::table('t_master_produk as a');
+
+        if ($nota_pembelian) {
+            $produk->leftJoin('d_pembelian_detail as b', function ($join) use ($nota_pembelian) {
+                $join->on('a.kd_produk', '=', 'b.kd_produk')
+                    ->where('b.nota_pembelian', '=', $nota_pembelian);
+            });
+        }
 
         if ($this->satker != null) {
-            $produk->where('satker', '=', $this->satker);
+            $produk->where('a.satker', '=', $this->satker);
         }
 
         return $produk;
