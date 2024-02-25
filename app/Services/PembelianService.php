@@ -10,6 +10,7 @@ use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PembelianService
 {
@@ -35,6 +36,7 @@ class PembelianService
             $pembelianData_fix = $this->preparePembelianData($pembelianData);
 
             return DB::transaction(function () use ($pembelianData_fix, $dataArrayDetail) {
+
                 $pembelian = $this->upsertPembelian($pembelianData_fix);
 
                 $pembelian['nota_pembelian'] = $pembelianData_fix['nota_pembelian'];
@@ -51,16 +53,27 @@ class PembelianService
 
     public function destroyPembelian($id)
     {
+        Log::info("hapus: mulai");
         $pembelian = $this->dPembelianModel->find($id);
-        $pembelianDetail = $this->dPembelianDetailModel->where('nota_pembelian', '=', $pembelian->nota_pembelian)->get();
+
+        $pembelianDetail = $this->dPembelianDetailModel
+            ->where('nota_pembelian', '=', $pembelian->nota_pembelian)
+            ->where('kd_gudang', '=', $pembelian->kd_gudang)
+            ->get();
 
         try {
-            foreach ($pembelianDetail as $detail) {
-                $this->dStokProduk->incrementStok($detail);
-            }
-            $pembelian->delete();
-            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
-        } catch (\Throwable $th) {
+            return DB::transaction(function () use ($pembelian, $pembelianDetail) {
+                foreach ($pembelianDetail as $detail) {
+                    Log::info('hapus: validateStok stok');
+                    if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->validateStok($detail);
+                    Log::info('hapus: decrementStok stok');
+                    if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($detail);
+                }
+                Log::info('hapus: pembelian hapus');
+                $pembelian->delete();
+                return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
+            });
+        } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
@@ -92,15 +105,6 @@ class PembelianService
             ) {
                 throw new \Exception('Semua kolom pada Tabel Pembelian Detail harus terisi.');
             }
-        }
-    }
-
-    protected function validateStok($dataDetail)
-    {
-        $stok = $this->dStokProduk->where('kd_produk', $dataDetail['kd_produk'])->first();
-
-        if (!$stok || $stok->qty < $dataDetail['qty_pesan']) {
-            throw new \Exception('Stok tidak mencukupi.');
         }
     }
 
@@ -160,7 +164,7 @@ class PembelianService
         $detail = $this->dPembelianDetailModel->where('nota_pembelian', $pembelian->nota_pembelian)->get();
         if ($detail->count() > 0) {
             foreach ($detail as $row) {
-                // $this->dStokProduk->incrementStok($row);
+                if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($row);
             }
             $this->dPembelianDetailModel->where('nota_pembelian', $pembelian->nota_pembelian)->delete();
         }
@@ -172,6 +176,7 @@ class PembelianService
             $dataDetail['kd_gudang'] = $pembelian->kd_gudang;
 
             $dataDetail = $this->dPembelianDetailModel->create($dataDetail);
+            if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->incrementStok($dataDetail);
         }
     }
 

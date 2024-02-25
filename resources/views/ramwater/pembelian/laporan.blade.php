@@ -531,6 +531,7 @@
                                 if (response.success) {
                                     Swal.fire('Terhapus!', 'Data berhasil dihapus.',
                                         'success');
+                                    tableLaporanPembelian.ajax.reload();
                                     return;
                                 }
                                 Swal.fire({
@@ -556,8 +557,6 @@
                                 });
                             }
                         });
-                        tableLaporanPembelian.ajax.reload();
-                        tableDetail.ajax.reload();
                     }
                 });
             }).on("keyup", "#ur_nota_pembelian", function() {
