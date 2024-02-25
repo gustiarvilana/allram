@@ -5,6 +5,7 @@
 namespace App\Services;
 
 use App\Helpers\FormatHelper;
+use App\Models\DOps;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
@@ -17,9 +18,14 @@ class PembelianService
     protected $dStokProduk;
     protected $dPembelianModel;
     protected $dPembelianDetailModel;
+    protected $dOps;
     protected $jns;
-    public function __construct(DStokProduk $dStokProduk, DPembelianModel $dPembelianModel, DPembelianDetailModel $dPembelianDetailModel)
-    {
+    public function __construct(
+        DStokProduk $dStokProduk,
+        DPembelianModel $dPembelianModel,
+        DPembelianDetailModel $dPembelianDetailModel,
+        DOps $dOps
+    ) {
         $this->dStokProduk = $dStokProduk;
         $this->dPembelianModel = $dPembelianModel;
         $this->dPembelianDetailModel = $dPembelianDetailModel;
@@ -35,13 +41,15 @@ class PembelianService
 
             $pembelianData_fix = $this->preparePembelianData($pembelianData);
 
-            return DB::transaction(function () use ($pembelianData_fix, $dataArrayDetail) {
+            return DB::transaction(function () use ($pembelianData_fix, $dataArrayDetail) { //rollback if error
 
+                // save: d_penjualan
                 $pembelian = $this->upsertPembelian($pembelianData_fix);
 
                 $pembelian['nota_pembelian'] = $pembelianData_fix['nota_pembelian'];
                 $pembelian['kd_gudang']      = $pembelianData_fix['kd_gudang'];
 
+                // save: d_penjualan_detail + stok
                 $this->upsertPembelianDetail($pembelian, $dataArrayDetail);
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
@@ -63,14 +71,20 @@ class PembelianService
 
         try {
             return DB::transaction(function () use ($pembelian, $pembelianDetail) {
+                // update d_stok_produk
                 foreach ($pembelianDetail as $detail) {
                     Log::info('hapus: validateStok stok');
                     if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->validateStok($detail);
                     Log::info('hapus: decrementStok stok');
                     if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($detail);
                 }
-                Log::info('hapus: pembelian hapus');
+
+                // hapus d_pembelian&child
                 $pembelian->delete();
+                Log::info('hapus: pembelian hapus');
+
+                // hapus: d_pembayaran
+                // hapus: d_ops
                 return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
             });
         } catch (\Exception $e) {
