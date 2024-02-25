@@ -54,9 +54,14 @@ class PembelianService
         $pembelian = $this->dPembelianModel->find($id);
         $pembelianDetail = $this->dPembelianDetailModel->where('nota_pembelian', '=', $pembelian->nota_pembelian)->get();
 
-        foreach ($pembelianDetail as $detail) {
-            dd($detail);
-            $this->dStokProduk->incrementStok($detail);
+        try {
+            foreach ($pembelianDetail as $detail) {
+                // $this->dStokProduk->incrementStok($detail);
+            }
+            $pembelian->delete();
+            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 

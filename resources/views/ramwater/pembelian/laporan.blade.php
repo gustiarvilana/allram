@@ -556,6 +556,8 @@
                                 });
                             }
                         });
+                        tableLaporanPembelian.ajax.reload();
+                        tableDetail.ajax.reload();
                     }
                 });
             }).on("keyup", "#ur_nota_pembelian", function() {
