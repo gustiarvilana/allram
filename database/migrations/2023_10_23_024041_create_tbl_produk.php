@@ -18,32 +18,32 @@ class CreateTblProduk extends Migration
             $table->timestamps();
         });
 
-        Schema::create('t_operasional', function (Blueprint $table) {
+        Schema::create('t_ops', function (Blueprint $table) {
             $table->id();
-            $table->string('kd_operasional')->index();
-            $table->string('nama_operasional');
+            $table->string('kd_ops')->index();
+            $table->string('nama_ops');
             $table->timestamps();
         });
-        Schema::create('d_operasional', function (Blueprint $table) {
+        Schema::create('d_ops', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('tanggal');
             $table->string('satker');
             $table->string('nik');
-            $table->string('kd_operasional');
+            $table->string('kd_ops');
             $table->integer('jumlah');
             $table->integer('harga');
             $table->integer('total');
             $table->text('keterangan')->nullable();
             $table->timestamps();
 
-            $table->foreign('kd_operasional')->references('kd_operasional')->on('t_operasional')->onDelete('cascade');
+            $table->foreign('kd_ops')->references('kd_ops')->on('t_ops')->onDelete('cascade');
         });
     }
 
     public function down()
     {
         Schema::dropIfExists('t_master_produk');
-        Schema::dropIfExists('t_operasional');
-        Schema::dropIfExists('d_operasional');
+        Schema::dropIfExists('t_ops');
+        Schema::dropIfExists('d_ops');
     }
 }

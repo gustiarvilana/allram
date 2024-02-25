@@ -14,10 +14,10 @@ class AlterTable extends Seeder
      */
     public function run()
     {
-        // t_operasional
+        // t_ops
         DB::statement(
-            "ALTER TABLE `t_operasional`
-            ADD IF NOT EXISTS `tipe` varchar(11) DEFAULT NULL AFTER `nama_operasional`,
+            "ALTER TABLE `t_ops`
+            ADD IF NOT EXISTS `tipe` varchar(11) DEFAULT NULL AFTER `nama_ops`,
             ADD IF NOT EXISTS `opr_input` varchar(11) DEFAULT NULL AFTER `tipe`,
             ADD IF NOT EXISTS `tgl_input` int(11) DEFAULT NULL AFTER `opr_input`;"
         );
@@ -57,6 +57,12 @@ class AlterTable extends Seeder
         DB::statement(
             "ALTER TABLE `d_pembelian_detail`
             ADD IF NOT EXISTS `kd_gudang` varchar(50) DEFAULT NULL AFTER `harga_total`
+            ;"
+        );
+
+        DB::statement(
+            "ALTER TABLE `d_supplier`
+            ADD IF NOT EXISTS `kd_ops` varchar(50) DEFAULT NULL AFTER `no_tlp`
             ;"
         );
     }

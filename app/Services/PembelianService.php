@@ -55,9 +55,9 @@ class PembelianService
         $pembelianDetail = $this->dPembelianDetailModel->where('nota_pembelian', '=', $pembelian->nota_pembelian)->get();
 
         foreach ($pembelianDetail as $detail) {
+            dd($detail);
             $this->dStokProduk->incrementStok($detail);
         }
-        dd($pembelian->nota_pembelian);
     }
 
     //..

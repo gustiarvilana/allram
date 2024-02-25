@@ -14,9 +14,9 @@ class TSeeder extends Seeder
      */
     public function run()
     {
-        // t_operasional
-        DB::statement("INSERT IGNORE INTO `t_operasional`
-            (`id`, `kd_operasional`, `nama_operasional`, `tipe`, `opr_input`, `tgl_input`, `created_at`, `updated_at`)
+        // t_ops
+        DB::statement("INSERT IGNORE INTO `t_ops`
+            (`id`, `kd_ops`, `nama_ops`, `tipe`, `opr_input`, `tgl_input`, `created_at`, `updated_at`)
             VALUES
             (1, 2100, 'Modal', 'H', 'System', 0, 'System', 'System'),
             (2, 2101, 'Modal Di Setor', 'H', 'System', 0, 'System', 'System'),
