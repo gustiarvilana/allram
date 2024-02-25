@@ -336,8 +336,6 @@
             $('#modal-pembelian').on('hidden.bs.modal', function() {
                 console.log('Modal Pembelian telah disembunyikan');
                 $("#modal-pembelian").modal("hide");
-                tableLaporanPembelian.ajax.reload();
-                tableDetail.ajax.reload();
                 $('#pembelian-uraian').empty();
             });
 
@@ -346,8 +344,6 @@
                 $("#modal-pembelian").modal("show");
             }).on("click", "#btn-add-pembelian-close", function() { //close-pembelian
                 $("#modal-pembelian").modal("hide");
-                tableSupplier.ajax.reload();
-                tableDetail.ajax.reload();
                 $('#pembelian-uraian').empty();
             }).on("click", "#btn-add-pembelian-simpan", function() {
                 var dataArrayDetail = [];
@@ -366,7 +362,6 @@
                         dataArrayDetail.push(rowData);
                     }
                 });
-
 
                 var pembelianData = {
                     nota_pembelian: $('#table-pembelian #ur_nota_pembelian').val(),

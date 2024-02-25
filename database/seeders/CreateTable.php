@@ -67,7 +67,6 @@ class CreateTable extends Seeder
             "CREATE TABLE IF NOT EXISTS `d_stok_produk` (
                     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                     `kd_produk` varchar(255) NOT NULL,
-                    `nama` varchar(50) DEFAULT NULL,
                     `kd_gudang` varchar(50) DEFAULT NULL,
                     `stok` int(11) DEFAULT NULL,
                     `opr_input` varchar(50) DEFAULT NULL,

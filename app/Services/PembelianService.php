@@ -56,7 +56,7 @@ class PembelianService
 
         try {
             foreach ($pembelianDetail as $detail) {
-                // $this->dStokProduk->incrementStok($detail);
+                $this->dStokProduk->incrementStok($detail);
             }
             $pembelian->delete();
             return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);

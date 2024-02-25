@@ -512,13 +512,13 @@
                 // Use SweetAlert for confirmation
                 Swal.fire({
                     title: 'Anda Yakin?',
-                    text: 'Data akan dihapus, dan tidak bisa dikembalikan!',
+                    text: 'Pastikan Produk masih di Gudang Utama!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
                     cancelButtonText: 'Tidak',
-                    confirmButtonText: 'Ya, Hapus Data!'
+                    confirmButtonText: 'Ya, Produk masih di Gudang Utama!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
