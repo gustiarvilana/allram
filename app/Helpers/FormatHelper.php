@@ -26,10 +26,10 @@ class FormatHelper
         return $data;
     }
 
-    public static function uploadFile(UploadedFile $file, $folder, $prefix = null)
+    public static function uploadFile(UploadedFile $file, $folder, $prefix)
     {
         try {
-            $filename = ($prefix ? $prefix . '_' : '') . $file->getClientOriginalName();
+            $filename = $prefix . '.' . $file->getClientOriginalExtension();
             $file->storeAs($folder, $filename, 'public');
 
             $pathFile = "storage/{$folder}/{$filename}";

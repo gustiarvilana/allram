@@ -111,11 +111,9 @@
                                             <div class="row">
                                                 <div class="col text-center" id="image-container">
                                                     <a href="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
-                                                        target="_blank"
-                                                        style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); display: inline-block;">
+                                                        target="_blank" class="a">
                                                         <img src="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
-                                                            alt="Faktur pembelian"
-                                                            style="width: 400px; height: 200px; border-radius: 5px;">
+                                                            alt="Faktur pembelian" class="img">
                                                     </a>
                                                 </div>
                                             </div>

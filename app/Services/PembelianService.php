@@ -50,7 +50,7 @@ class PembelianService
 
                 //save: file
                 if ($file !== 0) {
-                    $filename = FormatHelper::uploadFile($file, 'path_file');
+                    $filename = FormatHelper::uploadFile($file, 'pemeblian/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
                     $pembelian->path_file = $filename;
                     $pembelian->save();
                 }

@@ -100,20 +100,6 @@
                                                 <input class="form-control" type="file" name="path_file" id="path_file">
                                             </div>
                                         </div>
-                                        <div class="col d-flex flex-column align-items-center">
-                                            <div class="row">
-                                                <div class="col text-center">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBkSAzKRbxdYdFD4fwchue1adTVTEDItvD5c2Vb185zw&s"
-                                                        class="img-fluid rounded-circle" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col text-center">
-                                                    <a class="btn btn-success" href="#"> <i class="fa fa-download"
-                                                            aria-hidden="true"></i> Download</a>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
                                 </div>
