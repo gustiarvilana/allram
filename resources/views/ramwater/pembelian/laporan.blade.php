@@ -109,15 +109,23 @@
                                         </div>
                                         <div class="col d-flex flex-column align-items-center">
                                             <div class="row">
-                                                <div class="col text-center">
-                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBkSAzKRbxdYdFD4fwchue1adTVTEDItvD5c2Vb185zw&s"
-                                                        class="img-fluid rounded-circle" alt="">
+                                                <div class="col text-center" id="image-container">
+                                                    <a href="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
+                                                        target="_blank"
+                                                        style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); display: inline-block;">
+                                                        <img src="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
+                                                            alt="Faktur pembelian"
+                                                            style="width: 400px; height: 200px; border-radius: 5px;">
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col text-center">
-                                                    <a class="btn btn-success" href="#"> <i class="fa fa-download"
-                                                            aria-hidden="true"></i> Download</a>
+                                                    <a class="btn btn-success"
+                                                        href="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
+                                                        id="download-btn" download>
+                                                        <i class="fa fa-download" aria-hidden="true"></i> Download
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -440,6 +448,11 @@
                     '</tr>';
                 $('#pembelian-uraian').append(row);
 
+                var pathFile = "{{ asset('/') }}" + rowData.path_file;
+                console.log(pathFile);
+                $('#image-container a').attr('href', pathFile);
+                $('#image-container img').attr('src', pathFile);
+                $('#download-btn').attr('href', pathFile);
                 $("#modal-pembelian-title").text("Update Data");
 
                 var tableDetail = $("#table-detail  ").DataTable({

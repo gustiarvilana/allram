@@ -32,7 +32,9 @@ class FormatHelper
             $filename = ($prefix ? $prefix . '_' : '') . $file->getClientOriginalName();
             $file->storeAs($folder, $filename, 'public');
 
-            return $filename;
+            $pathFile = "storage/{$folder}/{$filename}";
+
+            return $pathFile;
         } catch (\Exception $e) {
             Log::error('Error uploading file: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
