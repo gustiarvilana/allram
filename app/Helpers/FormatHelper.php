@@ -2,6 +2,10 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+
 class FormatHelper
 {
     public static function addDots($value)
@@ -20,5 +24,19 @@ class FormatHelper
 
 
         return $data;
+    }
+
+    public static function uploadFile(UploadedFile $file, $folder, $prefix = null)
+    {
+        try {
+            $filename = ($prefix ? $prefix . '_' : '') . $file->getClientOriginalName();
+            $file->storeAs($folder, $filename, 'public');
+
+            return $filename;
+        } catch (\Exception $e) {
+            Log::error('Error uploading file: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return null;
+        }
     }
 }

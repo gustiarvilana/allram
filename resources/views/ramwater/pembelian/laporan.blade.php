@@ -78,7 +78,6 @@
                                                         <th>Supplier</th>
                                                         <th>nota_pembelian</th>
                                                         <th>jns_pembelian</th>
-                                                        <th>kd_gudang</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
                                                         <th>sisa_bayar</th>
@@ -89,6 +88,41 @@
                                             </table>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <span>Upload Faktur</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Faktur</label>
+                                                <input class="form-control" type="file" name="path_file" id="path_file">
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex flex-column align-items-center">
+                                            <div class="row">
+                                                <div class="col text-center">
+                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBkSAzKRbxdYdFD4fwchue1adTVTEDItvD5c2Vb185zw&s"
+                                                        class="img-fluid rounded-circle" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col text-center">
+                                                    <a class="btn btn-success" href="#"> <i class="fa fa-download"
+                                                            aria-hidden="true"></i> Download</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -112,6 +146,7 @@
                                                         <th>qty_pesan</th>
                                                         <th>qty_retur</th>
                                                         <th>qty_bersih</th>
+                                                        <th>kd_gudang</th>
                                                         <th>harga_satuan</th>
                                                         <th>harga_total</th>
                                                     </tr>
@@ -251,9 +286,13 @@
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
 
+                            var btn_show = '<a id="btn-penjualan-show" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" show"><i class="fa fa-eye" aria-hidden="true"></i> Lihat Beli</a>';
+
                             var btn_edit = '<a id="btn-penjualan-input" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Beli</a>';
+                                '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Edit Beli</a>';
 
                             var btn_delete = '<a id="btn-penjualan-delete" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
@@ -261,8 +300,8 @@
 
                             // You can customize the buttons as needed
 
-                            return '<div style="white-space: nowrap;">' + btn_edit + ' ' +
-                                btn_delete + '</div>';
+                            return '<div style="white-space: nowrap;">' + btn_show + ' ' +
+                                btn_edit + ' ' + btn_delete + '</div>';
                         },
                     },
                 ],
@@ -290,6 +329,8 @@
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
             }).on("click", "#btn-add-pembelian-simpan", function() {
+                var imageFile = $('#path_file')[0].files[0];
+
                 var dataArrayDetail = [];
                 $('#table-detail tbody tr').each(function() {
                     var hargaTotal = $(this).find('#detail_harga_total').val();
@@ -302,6 +343,7 @@
                             qty_retur: $(this).find('#detail_qty_retur').val(),
                             qty_bersih: $(this).find('#detail_qty_bersih').val(),
                             harga_satuan: $(this).find('#detail_harga_satuan').val(),
+                            kd_gudang: $(this).find('#detail_kd_gudang').val(),
                             harga_total: hargaTotal,
                         };
                         dataArrayDetail.push(rowData);
@@ -317,18 +359,21 @@
                     nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
                     sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
                     sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
-                    kd_gudang: $('#table-pembelian #ur_kd_gudang').val()
                 };
+
+                var formData = new FormData();
+                formData.append('_token', getCSRFToken());
+                formData.append('path_file', imageFile);
+                formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
+                formData.append('pembelianData', JSON.stringify(pembelianData));
+                formData.append('jns', 'update');
 
                 $.ajax({
                     url: '{{ route('pembelian.store') }}',
                     method: 'POST',
-                    data: {
-                        _token: getCSRFToken(),
-                        dataArrayDetail: JSON.stringify(dataArrayDetail),
-                        pembelianData: JSON.stringify(pembelianData),
-                        jns: 'update'
-                    },
+                    processData: false,
+                    contentType: false,
+                    data: formData,
                     success: function(response) {
                         if (response.success) {
                             Swal.fire({
@@ -362,7 +407,7 @@
                         });
                     }
                 });
-            }).on("click", "#btn-penjualan-input", function() { //btn_input_click
+            }).on("click", "#btn-penjualan-input", function() {
                 var rowData = $(this).data('row');
                 var row =
                     '<tr>' +
@@ -384,8 +429,6 @@
                     '>Tempo</option>' +
                     '</select>' +
                     '</td>' +
-                    '<td><input type="text" name="kd_gudang" id="ur_kd_gudang" class="form-control money" value="' +
-                    rowData.kd_gudang + '"></td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
                     addCommas(rowData.harga_total) + '" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
@@ -466,6 +509,15 @@
                             }
                         },
                         {
+                            data: 'kd_gudang',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_kd_gudang" name="kd_gudang" id="detail_kd_gudang" value="' +
+                                    addCommas(value) + '">';
+                            }
+                        },
+                        {
                             data: 'harga_satuan',
                             render: function(data, type, row) {
                                 var value = (data !== null) ? data : 0;
@@ -503,6 +555,8 @@
                 });
 
                 $("#modal-pembelian").modal("show");
+            }).on("click", "#btn-penjualan-show", function() {
+                console.log('show');
             }).on("click", "#btn-penjualan-delete", function() {
                 var deleteButton = $(this);
                 var id = deleteButton.data('id');

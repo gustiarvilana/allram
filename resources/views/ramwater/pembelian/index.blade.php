@@ -71,7 +71,6 @@
                                                         <th>tgl_pembelian</th>
                                                         <th>kd_supplier</th>
                                                         <th>jns_pembelian</th>
-                                                        <th>kd_gudang</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
                                                         <th>sisa_bayar</th>
@@ -90,7 +89,42 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-primary">
-                                <div class="card-header card-success">
+                                <div class="card-header">
+                                    <span>Upload Faktur</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Faktur</label>
+                                                <input class="form-control" type="file" name="path_file" id="path_file">
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex flex-column align-items-center">
+                                            <div class="row">
+                                                <div class="col text-center">
+                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBkSAzKRbxdYdFD4fwchue1adTVTEDItvD5c2Vb185zw&s"
+                                                        class="img-fluid rounded-circle" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col text-center">
+                                                    <a class="btn btn-success" href="#"> <i class="fa fa-download"
+                                                            aria-hidden="true"></i> Download</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
                                     <span>Detail</span>
                                 </div>
                                 <div class="card-body">
@@ -105,6 +139,7 @@
                                                         <th>qty_pesan</th>
                                                         <th>qty_retur</th>
                                                         <th>qty_bersih</th>
+                                                        <th>kd_gudang</th>
                                                         <th>harga_satuan</th>
                                                         <th>harga_total</th>
                                                     </tr>
@@ -301,6 +336,15 @@
                         }
                     },
                     {
+                        data: 'kd_gudang',
+                        render: function(data, type, row) {
+                            var gudang = @json(config('constants.ramwater.GUDANG_UTAMA'));
+                            return '<input type="text" class="form-control money detail_kd_gudang" name="kd_gudang" id="detail_kd_gudang" value="' +
+                                gudang + '">';
+                        }
+
+                    },
+                    {
                         data: 'harga_satuan',
                         render: function(data, type, row) {
                             return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan">';
@@ -314,7 +358,7 @@
                     }
                 ],
                 columnDefs: [{
-                        targets: [4, 5, 6, 7],
+                        targets: [4, 5, 6, 7, 8],
                         searchable: false,
                         orderable: false
                     },
@@ -346,6 +390,8 @@
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
             }).on("click", "#btn-add-pembelian-simpan", function() {
+                var imageFile = $('#path_file')[0].files[0];
+
                 var dataArrayDetail = [];
                 $('#table-detail tbody tr').each(function() {
                     var hargaTotal = $(this).find('#detail_harga_total').val();
@@ -357,6 +403,7 @@
                             qty_retur: $(this).find('#detail_qty_retur').val(),
                             qty_bersih: $(this).find('#detail_qty_bersih').val(),
                             harga_satuan: $(this).find('#detail_harga_satuan').val(),
+                            kd_gudang: $(this).find('#detail_kd_gudang').val(),
                             harga_total: hargaTotal,
                         };
                         dataArrayDetail.push(rowData);
@@ -372,17 +419,22 @@
                     nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
                     sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
                     sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
-                    kd_gudang: $('#table-pembelian #ur_kd_gudang').val()
+                    path_file: $('#path_file').val(),
                 };
+
+                var formData = new FormData();
+                formData.append('_token', getCSRFToken());
+                formData.append('path_file', imageFile);
+                formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
+                formData.append('pembelianData', JSON.stringify(pembelianData));
+
 
                 $.ajax({
                     url: '{{ route('pembelian.store') }}',
                     method: 'POST',
-                    data: {
-                        _token: getCSRFToken(),
-                        dataArrayDetail: JSON.stringify(dataArrayDetail),
-                        pembelianData: JSON.stringify(pembelianData)
-                    },
+                    processData: false,
+                    contentType: false,
+                    data: formData,
                     success: function(response) {
                         if (response.success) {
                             Swal.fire({
@@ -435,7 +487,6 @@
                     '<option value="tempo">Tempo</option>' +
                     '</select>' +
                     '</td>' +
-                    '<td><input type="text" name="kd_gudang" id="ur_kd_gudang" class="form-control" value="{{ config('constants.ramwater')['GUDANG_UTAMA'] }}"></td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
                     '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +

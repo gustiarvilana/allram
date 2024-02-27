@@ -37,11 +37,16 @@ class PembelianController extends Controller
 
     public function store(Request $request)
     {
+
         $pembelianData = json_decode($request->input('pembelianData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
-        $jns = $request->input('jns');
+        $file = $request->file('path_file');
 
-        return $this->pembelianService->storePembelian($pembelianData, $dataArrayDetail, $jns);
+        if ($request->input('jns')) {
+            $pembelianData['jns'] = $request->input('jns');
+        }
+
+        return $this->pembelianService->storePembelian($pembelianData, $dataArrayDetail, $file);
     }
 
     public function destroy($id)

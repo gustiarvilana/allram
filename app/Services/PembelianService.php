@@ -31,23 +31,31 @@ class PembelianService
         $this->dPembelianDetailModel = $dPembelianDetailModel;
     }
 
-    public function storePembelian($pembelianData, $dataArrayDetail, $jns = null)
+    public function storePembelian($pembelianData, $dataArrayDetail, $file)
     {
-        if ($jns) {
-            $this->setJns($jns);
+
+
+        if (isset($pembelianData['jns'])) {
+            $this->setJns($pembelianData['jns']);
         }
         try {
             $this->validateData($pembelianData, $dataArrayDetail);
 
             $pembelianData_fix = $this->preparePembelianData($pembelianData);
 
-            return DB::transaction(function () use ($pembelianData_fix, $dataArrayDetail) { //rollback if error
+            return DB::transaction(function () use ($pembelianData_fix, $dataArrayDetail, $file) { //rollback if error
 
                 // save: d_penjualan
                 $pembelian = $this->upsertPembelian($pembelianData_fix);
 
+                //save: file
+                if ($file !== 0) {
+                    $filename = FormatHelper::uploadFile($file, 'path_file');
+                    $pembelian->path_file = $filename;
+                    $pembelian->save();
+                }
+
                 $pembelian['nota_pembelian'] = $pembelianData_fix['nota_pembelian'];
-                $pembelian['kd_gudang']      = $pembelianData_fix['kd_gudang'];
 
                 // save: d_penjualan_detail + stok
                 $this->upsertPembelianDetail($pembelian, $dataArrayDetail);
@@ -66,7 +74,6 @@ class PembelianService
 
         $pembelianDetail = $this->dPembelianDetailModel
             ->where('nota_pembelian', '=', $pembelian->nota_pembelian)
-            ->where('kd_gudang', '=', $pembelian->kd_gudang)
             ->get();
 
         try {
@@ -94,7 +101,7 @@ class PembelianService
 
     //..
 
-    protected function validateData($pembelianData, $dataArrayDetail)
+    public function validateData($pembelianData, $dataArrayDetail)
     {
         if (
             empty($pembelianData['nota_pembelian']) ||
@@ -103,8 +110,7 @@ class PembelianService
             empty($pembelianData['jns_pembelian']) ||
             empty($pembelianData['harga_total']) ||
             empty($pembelianData['nominal_bayar']) ||
-            empty($pembelianData['sisa_bayar']) ||
-            empty($pembelianData['kd_gudang'])
+            empty($pembelianData['sisa_bayar'])
         ) {
             throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
         }
@@ -115,6 +121,7 @@ class PembelianService
                 empty($dataDetail['qty_pesan']) ||
                 empty($dataDetail['qty_bersih']) ||
                 empty($dataDetail['harga_satuan']) ||
+                empty($dataDetail['kd_gudang']) ||
                 empty($dataDetail['harga_total'])
             ) {
                 throw new \Exception('Semua kolom pada Tabel Pembelian Detail harus terisi.');
@@ -122,7 +129,7 @@ class PembelianService
         }
     }
 
-    protected function preparePembelianData($pembelianData)
+    public function preparePembelianData($pembelianData)
     {
         $pembelianData = [
             'opr_input'      => Auth::user()->nik,
@@ -135,13 +142,12 @@ class PembelianService
             'tgl_pembelian'  => $pembelianData['tgl_pembelian'],
             'kd_supplier'    => $pembelianData['kd_supplier'],
             'jns_pembelian'  => $pembelianData['jns_pembelian'],
-            'kd_gudang'      => $pembelianData['kd_gudang'],
         ];
 
         return $pembelianData;
     }
 
-    protected function prepareDetailData($dataDetail)
+    public function prepareDetailData($dataDetail)
     {
         $dataDetail['qty_pesan']    = $dataDetail['qty_pesan'] ? FormatHelper::removeDots($dataDetail['qty_pesan']) : 0;
         $dataDetail['qty_retur']    = $dataDetail['qty_retur'] ? FormatHelper::removeDots($dataDetail['qty_retur']) : 0;
@@ -149,14 +155,14 @@ class PembelianService
         $dataDetail['harga_satuan'] = $dataDetail['harga_satuan'] ? FormatHelper::removeDots($dataDetail['harga_satuan']) : 0;
         $dataDetail['harga_total']  = $dataDetail['harga_total'] ? FormatHelper::removeDots($dataDetail['harga_total']) : 0;
         $dataDetail['kd_produk']    = $dataDetail['kd_produk'];
+        $dataDetail['kd_gudang']    = $dataDetail['kd_gudang'];
 
         $dataDetail['nota_pembelian'] = null;
-        $dataDetail['kd_gudang']      = null;
 
         return $dataDetail;
     }
 
-    protected function upsertPembelian($pembelianData)
+    public function upsertPembelian($pembelianData)
     {
         $jns = $this->getJns();
         $data = $this->dPembelianModel->where('nota_pembelian', '=', $pembelianData['nota_pembelian'])->first();
@@ -187,7 +193,6 @@ class PembelianService
             $dataDetail = $this->prepareDetailData($dataDetail);
 
             $dataDetail['nota_pembelian'] = $pembelian->nota_pembelian;
-            $dataDetail['kd_gudang'] = $pembelian->kd_gudang;
 
             $dataDetail = $this->dPembelianDetailModel->create($dataDetail);
             if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->incrementStok($dataDetail);

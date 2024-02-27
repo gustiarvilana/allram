@@ -50,8 +50,7 @@ class AlterTable extends Seeder
 
         DB::statement(
             "ALTER TABLE `d_pembelian`
-            ADD IF NOT EXISTS `kd_gudang` varchar(50) DEFAULT NULL AFTER `sts_angsuran`,
-            ADD UNIQUE (`nota_pembelian`);"
+            ADD IF NOT EXISTS `path_file` varchar(50) DEFAULT NULL AFTER `sts_angsuran`;"
         );
 
         DB::statement(
