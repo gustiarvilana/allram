@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ramwater\Pembelian;
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\SupplierModel;
+use App\Models\TGudang;
 use App\Services\PembelianService;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,13 @@ class PembelianController extends Controller
 {
     protected  $supplier;
     protected $pembelianService;
+    protected $tGudang;
 
-    public function __construct(SupplierModel $supplierModel, PembelianService $pembelianService)
+    public function __construct(SupplierModel $supplierModel, PembelianService $pembelianService, TGudang $tGudang)
     {
         $this->supplier = $supplierModel;
         $this->pembelianService = $pembelianService;
+        $this->tGudang = $tGudang;
         $this->integrationHelper = new IntegrationHelper;
     }
 
@@ -32,7 +35,10 @@ class PembelianController extends Controller
 
     public function index()
     {
-        return view('ramwater.pembelian.index');
+        $data = [
+            'gudang' => $this->tGudang->get(),
+        ];
+        return view('ramwater.pembelian.index', $data);
     }
 
     public function store(Request $request)

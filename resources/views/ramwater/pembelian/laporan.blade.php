@@ -176,11 +176,14 @@
             </div>
         </div>
     </div>
+
+    @include('ramwater.pembelian.modal-show')
 @endsection
 
 @push('js')
     <script>
         $(document).ready(function() {
+            // Example usage
             var tableLaporanPembelian = $("#table-pembelian-laporan").DataTable({
                 info: false,
                 bPaginate: false,
@@ -308,7 +311,7 @@
                                 '" data-row=\'' + row_data +
                                 '\' class="btn btn-success btn-xs" style="white-space: nowrap" show"><i class="fa fa-eye" aria-hidden="true"></i> Lihat Beli</a>';
 
-                            var btn_edit = '<a id="btn-penjualan-input" data-id="' + row.id +
+                            var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
                                 '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Edit Beli</a>';
 
@@ -425,7 +428,7 @@
                         });
                     }
                 });
-            }).on("click", "#btn-penjualan-input", function() {
+            }).on("click", "#btn-penjualan-edit", function() {
                 var rowData = $(this).data('row');
                 var row =
                     '<tr>' +
@@ -578,7 +581,95 @@
 
                 $("#modal-pembelian").modal("show");
             }).on("click", "#btn-penjualan-show", function() {
-                console.log('show');
+                var rowData = $(this).data('row');
+
+                var tableDetail = $("#modal-show-detail").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('pembelian.laporan.detailData') }}?nota_pembelian=' +
+                            rowData
+                            .nota_pembelian +
+                            '',
+                        data: {
+                            nota_pembelian: rowData.nota_pembelian
+                        },
+                    },
+                    // dom: 'Brtip',
+                    dom: 'tip',
+                    columns: [{
+                            data: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'kd_produk',
+                            render: function(data, type, row) {
+                                return row.nama;
+                            }
+                        },
+                        {
+                            data: 'qty_pesan',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'qty_retur',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'qty_bersih',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'harga_satuan',
+                            render: function(data, type, row) {
+                                return addCommas('data');
+                            }
+                        },
+                        {
+                            data: 'harga_total',
+                            render: function(data, type, row) {
+                                return addCommas('data');
+                            }
+                        },
+                        {
+                            data: 'kd_gudang',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                    ],
+                    columnDefs: [{
+                            targets: [0, 1, 2, 3, 4, 5, 6, 7],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [0, 1],
+                            orderable: false
+                        },
+                        {
+                            // targets: [1, 2],
+                            visible: false
+                        }
+                    ],
+                    initComplete: function() {
+                        initializeColumnSearch(this);
+                    }
+                });
+
+                $('#penjualan-show #modal-title').text('Pembelian Detail')
+                $('#penjualan-show #modal-header').text('No Nota: ' + rowData.nota_pembelian)
+                $('#penjualan-show').modal('show')
             }).on("click", "#btn-penjualan-delete", function() {
                 var deleteButton = $(this);
                 var id = deleteButton.data('id');

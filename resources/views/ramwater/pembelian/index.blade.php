@@ -324,12 +324,19 @@
                     {
                         data: 'kd_gudang',
                         render: function(data, type, row) {
-                            var gudang = @json(config('constants.ramwater.GUDANG_UTAMA'));
-                            return '<input type="text" class="form-control money detail_kd_gudang" name="kd_gudang" id="detail_kd_gudang" value="' +
-                                gudang + '">';
-                        }
+                            var selectOptions = '<option value="">== Pilih Gudang ==</option>';
 
+                            @foreach ($gudang as $item)
+                                selectOptions +=
+                                    '<option value="{{ $item->kd_gudang }}">{{ $item->nama }}</option>';
+                            @endforeach
+
+                            return '<select name="kd_gudang" id="kd_gudang" class="form-control">' +
+                                selectOptions +
+                                '</select>';
+                        }
                     },
+
                     {
                         data: 'harga_satuan',
                         render: function(data, type, row) {
