@@ -458,16 +458,17 @@
 
                 // Cek apakah mouseover pada kolom 'nota_pembelian'
                 if (colIdx === cell) {
-                    showPopup(this, 'Data Kolom: ' + cellData);
+                    // showPopup(this, 'Data Kolom: ' + cellData);
+                    showPopup(this, '<img src="{{ asset('') }}' + cellData +
+                        '" alt="Faktur pembelian" style="width: 500px;height: 250px;border-radius: 5px;">');
                 }
             });
 
             // Tambahkan event mouseout untuk menutup shapes atau popup
             table.on('mouseout', function() {
                 // Set a delay before hiding the popup
-                hideTimeout = setTimeout(function() {
-                    hidePopup();
-                }, 6000); // Adjust the delay time as needed
+                hidePopup();
+                // hideTimeout = setTimeout(function() {}, 8000); // Adjust the delay time as needed
             });
 
             function showPopup(element, content) {
@@ -479,8 +480,18 @@
                 var mouseY = event.clientY;
 
                 // Set the popup position above the cursor
-                var leftPosition = mouseX;
-                var topPosition = mouseY - popup.height();
+                var leftPosition = mouseX - 400
+                var topPosition = mouseY - popup.height() - 75;
+
+                // Check if the popup exceeds the right edge of the screen
+                if (leftPosition + popup.width() > $(window).width()) {
+                    leftPosition = $(window).width() - popup.width();
+                }
+
+                // Check if the popup exceeds the top edge of the screen
+                if (topPosition < 0) {
+                    topPosition = 5;
+                }
 
                 popup.css({
                     display: 'block',
@@ -488,6 +499,7 @@
                     top: topPosition + 'px'
                 });
             }
+
 
 
             function hidePopup() {

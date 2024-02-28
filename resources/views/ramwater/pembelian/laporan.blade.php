@@ -35,6 +35,7 @@
                                                 <th>sts_angsuran</th>
                                                 <th>opr_input</th>
                                                 <th>tgl_input</th>
+                                                <th>Faktur</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -288,6 +289,17 @@
                         }
                     },
                     {
+                        data: 'path_file',
+                        render: function(data, type, row) {
+                            return '<a href="{{ asset('') }}' + row.path_file +
+                                '" target="_blank" class="a">' +
+                                '<img src="{{ asset('') }}' + row.path_file +
+                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                '</a>';
+                        }
+                    },
+
+                    {
                         data: 'id',
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
@@ -318,7 +330,7 @@
                 }],
                 initComplete: function() {
                     initializeColumnSearch(this);
-                    // setupHoverShapes(this, 2);
+                    setupHoverShapes(this, 11);
                 }
             });
 
@@ -447,7 +459,6 @@
                 $('#pembelian-uraian').append(row);
 
                 var pathFile = "{{ asset('/') }}" + rowData.path_file;
-                console.log(pathFile);
                 $('#image-container a').attr('href', pathFile);
                 $('#image-container img').attr('src', pathFile);
                 $('#download-btn').attr('href', pathFile);
