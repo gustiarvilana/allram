@@ -19,8 +19,7 @@ class DPembelianModel extends Model
     {
         $pembelian = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
-            ->orderBy('a.created_at', 'desc')
-            ->select('a.*', 'b.nama', 'a.tgl_input as detail_tgl_input');
+            ->select('a.*', 'b.nama');
 
         return $pembelian;
     }
@@ -30,8 +29,7 @@ class DPembelianModel extends Model
         $pembelian = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
             ->where('a.nota_pembelian', '=', $this->getNota_pembelian())
-            ->orderBy('a.created_at', 'desc')
-            ->select('a.*', 'b.nama', 'a.tgl_input as detail_tgl_input')
+            ->select('a.*', 'b.nama')
             ->first();
 
         return $pembelian;

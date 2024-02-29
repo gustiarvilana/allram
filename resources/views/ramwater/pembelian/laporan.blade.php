@@ -196,36 +196,13 @@
                 buttons: [
                     'copy', 'excel', 'pdf'
                 ],
-                // buttons: [{
-                //     extend: "excel",
-                //     text: "Export Data",
-                //     className: "btn-excel",
-                //     action: function(e, dt, node, config) {
-                //         $.getJSON('#', function(
-                //             data) {
-                //             var result = data.map(function(row) {
-                //                 return {
-                //                     fullname: row.fullname,
-                //                     group_name: row.group_name,
-                //                     satker: row.satker,
-                //                     active: (row.active == '0') ? 'Not Active' :
-                //                         (row.active == '1') ? 'Active' :
-                //                         'Unknown',
-                //                     username: row.username,
-                //                     email: row.email,
-                //                     phone: row.phone
-                //                 };
-                //             });
-                //             downloadXLSX(result);
-                //         });
-                //     }
-                // }],
                 columns: [
                     // {
                     //     data: 'DT_RowIndex'
                     // },
                     {
                         data: 'nama',
+                        name: 'b.nama',
                         render: function(data, type, row) {
                             return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                                 data + '</span></div>';
@@ -233,66 +210,77 @@
                     },
                     {
                         data: 'nota_pembelian',
+                        name: 'a.nota_pembelian',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'tgl_pembelian',
+                        name: 'a.tgl_pembelian',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'kd_supplier',
+                        name: 'a.kd_supplier',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'jns_pembelian',
+                        name: 'a.jns_pembelian',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'harga_total',
+                        name: 'a.harga_total',
                         render: function(data, type, row) {
                             return addCommas(data);
                         }
                     },
                     {
                         data: 'nominal_bayar',
+                        name: 'a.nominal_bayar',
                         render: function(data, type, row) {
                             return addCommas(data);
                         }
                     },
                     {
                         data: 'sisa_bayar',
+                        name: 'a.sisa_bayar',
                         render: function(data, type, row) {
                             return addCommas(data);
                         }
                     },
                     {
                         data: 'sts_angsuran',
+                        name: 'a.sts_angsuran',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'opr_input',
+                        name: 'a.opr_input',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
-                        data: 'detail_tgl_input',
+                        data: 'tgl_input',
+                        name: 'a.tgl_input',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'path_file',
+                        name: 'a.path_file',
                         render: function(data, type, row) {
                             return '<a href="{{ asset('') }}' + row.path_file +
                                 '" target="_blank" class="a">' +
@@ -304,6 +292,7 @@
 
                     {
                         data: 'id',
+                        name: 'a.id',
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
 
@@ -327,7 +316,7 @@
                     },
                 ],
                 columnDefs: [{
-                    targets: [0, 11],
+                    targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
                     searchable: false,
                     orderable: false
                 }],
