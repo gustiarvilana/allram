@@ -331,7 +331,7 @@
                                     '<option value="{{ $item->kd_gudang }}">{{ $item->nama }}</option>';
                             @endforeach
 
-                            return '<select name="kd_gudang" id="kd_gudang" class="form-control">' +
+                            return '<select name="kd_gudang" id="detail_kd_gudang" class="form-control">' +
                                 selectOptions +
                                 '</select>';
                         }
@@ -486,10 +486,10 @@
                     '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" readonly></td>' +
                     '</tr>';
 
-
                 $('#pembelian-uraian').append(row);
 
                 $("#modal-pembelian-title").text("Tambah Data");
+                $("#ur_nominal_bayar").val('0');
                 $("#modal-pembelian").modal("show");
             }).on("keyup", "#ur_nota_pembelian", function() {
                 var text = $('#ur_nota_pembelian').val()

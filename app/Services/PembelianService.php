@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Helpers\FormatHelper;
 use App\Models\DOps;
+use App\Models\DPembayaran;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
@@ -18,44 +19,51 @@ class PembelianService
     protected $dStokProduk;
     protected $dPembelianModel;
     protected $dPembelianDetailModel;
+    protected $dPembayaran;
     protected $dOps;
     protected $jns;
     public function __construct(
         DStokProduk $dStokProduk,
         DPembelianModel $dPembelianModel,
+        DPembayaran $dPembayaran,
         DPembelianDetailModel $dPembelianDetailModel,
         DOps $dOps
     ) {
         $this->dStokProduk = $dStokProduk;
         $this->dPembelianModel = $dPembelianModel;
+        $this->dPembayaran = $dPembayaran;
         $this->dPembelianDetailModel = $dPembelianDetailModel;
     }
 
     public function storePembelian($pembelianData, $dataArrayDetail, $file)
     {
-
-
         if (isset($pembelianData['jns'])) {
             $this->setJns($pembelianData['jns']);
         }
         try {
             $this->validateData($pembelianData, $dataArrayDetail);
 
-            $pembelianData_fix = $this->preparePembelianData($pembelianData);
+            $pembelianData = $this->preparePembelianData($pembelianData);
 
-            return DB::transaction(function () use ($pembelianData_fix, $dataArrayDetail, $file) { //rollback if error
+            return DB::transaction(function () use ($pembelianData, $dataArrayDetail, $file) { //rollback if error
 
                 // save: d_penjualan
-                $pembelian = $this->upsertPembelian($pembelianData_fix);
+                $pembelian = $this->upsertPembelian($pembelianData);
 
                 //save: file
-                if ($file !== 0) {
+                if ($file) {
                     $filename = FormatHelper::uploadFile($file, 'pemeblian/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
                     $pembelian->path_file = $filename;
                     $pembelian->save();
                 }
 
-                $pembelian['nota_pembelian'] = $pembelianData_fix['nota_pembelian'];
+                // pembayaran
+                if ($pembelianData['nominal_bayar']) {
+                    $pembayaran = $this->preparePembayaranData($pembelianData);
+                    $pembayaran = $this->upsertPembayaran($pembayaran);
+                }
+
+                $pembelian['nota_pembelian'] = $pembelianData['nota_pembelian'];
 
                 // save: d_penjualan_detail + stok
                 $this->upsertPembelianDetail($pembelian, $dataArrayDetail);
@@ -109,7 +117,6 @@ class PembelianService
             empty($pembelianData['kd_supplier']) ||
             empty($pembelianData['jns_pembelian']) ||
             empty($pembelianData['harga_total']) ||
-            empty($pembelianData['nominal_bayar']) ||
             empty($pembelianData['sisa_bayar'])
         ) {
             throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
@@ -156,10 +163,25 @@ class PembelianService
         $dataDetail['harga_total']  = $dataDetail['harga_total'] ? FormatHelper::removeDots($dataDetail['harga_total']) : 0;
         $dataDetail['kd_produk']    = $dataDetail['kd_produk'];
         $dataDetail['kd_gudang']    = $dataDetail['kd_gudang'];
-
         $dataDetail['nota_pembelian'] = null;
 
         return $dataDetail;
+    }
+
+    public function preparePembayaranData($pembelian)
+    {
+        $pembayaran['nota_pembelian'] = $pembelian['nota_pembelian'];
+        $pembayaran['tgl_pembayaran'] = $pembelian['tgl_pembelian'];
+        $pembayaran['nominal_bayar']  = $pembelian['nominal_bayar'];
+        $pembayaran['opr_input']      = Auth::user()->nik;
+        $pembayaran['tgl_input']      = date('Ymd');
+
+        $pembayaran['ket_bayar']      = '';
+        $pembayaran['angs_ke']        = 1;
+        $pembayaran['channel_bayar']  = 1;
+        $pembayaran['path_file']      = '';
+
+        return $pembayaran;
     }
 
     public function upsertPembelian($pembelianData)
@@ -196,6 +218,26 @@ class PembelianService
 
             $dataDetail = $this->dPembelianDetailModel->create($dataDetail);
             if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->incrementStok($dataDetail);
+        }
+    }
+
+    public function upsertPembayaran($pembayaran)
+    {
+        // $pembelian = $this->dPembelianModel->setNota_pembelian($pembayaran['nota_pembelian']);
+        // $pembelian = $this->dPembelianModel->getpembelianByNota();
+        // dd($pembelian);
+        // upsert sts_angsuran
+
+        try {
+            return $this->dPembayaran->updateOrCreate(
+                [
+                    'nota_pembelian' => $pembayaran['nota_pembelian'],
+                    'angs_ke' => $pembayaran['angs_ke'],
+                ],
+                $pembayaran
+            );
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
     }
 

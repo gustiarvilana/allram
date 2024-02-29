@@ -167,7 +167,7 @@ class CreateTable extends Seeder
                 `angs_ke` INT DEFAULT NULL,
                 `nominal_bayar` INT DEFAULT NULL,
                 `channel_bayar` VARCHAR(50) DEFAULT NULL,
-                `ket_bayar` INT DEFAULT NULL,
+                `ket_bayar` TEXT DEFAULT NULL,
                 `path_file` VARCHAR(50) DEFAULT NULL,
                 `opr_input` VARCHAR(50) DEFAULT NULL,
                 `tgl_input` INT DEFAULT NULL,

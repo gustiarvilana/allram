@@ -397,12 +397,13 @@
                     data: formData,
                     success: function(response) {
                         if (response.success) {
+                            tableLaporanPembelian.ajax.reload();
+                            $('#btn-add-pembelian-close').click()
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Sukses!',
                                 text: response.message,
                             });
-                            $('#btn-add-pembelian-close').click()
                             return;
                         }
                         Swal.fire({
@@ -696,9 +697,9 @@
                             },
                             success: function(response) {
                                 if (response.success) {
+                                    tableLaporanPembelian.ajax.reload();
                                     Swal.fire('Terhapus!', 'Data berhasil dihapus.',
                                         'success');
-                                    tableLaporanPembelian.ajax.reload();
                                     return;
                                 }
                                 Swal.fire({
