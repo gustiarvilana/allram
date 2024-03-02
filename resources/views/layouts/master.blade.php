@@ -382,22 +382,6 @@
             $(this).val(nilai).trigger("change");
         });
 
-        function addCommas(nStr) {
-            if (nStr) {
-                nStr += '';
-                x = nStr.split(',');
-                x1 = x[0];
-                x2 = x.length > 1 ? ',' + x[1] : '';
-                var rgx = /(\d+)(\d{3})/;
-                while (rgx.test(x1)) {
-                    x1 = x1.replace(rgx, '$1' + '.' + '$2');
-                }
-                return x1 + x2;
-            } else {
-                return "";
-            }
-        }
-
         // Fungsi untuk memperbarui nilai field berdasarkan field-field lainnya
         function updateField(row, fieldId, sourceIds, calculateFunction) {
             // Mengumpulkan nilai dari field-field sumber
@@ -430,12 +414,11 @@
         }
 
         // Fungsi untuk menambahkan pemisah ribuan pada angka
-        function addCommas(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
+        // function addCommas(number) {
+        //     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        // }
 
 
-        {{-- csrf --}}
         // Fungsi untuk mendapatkan token CSRF dari meta tag dalam HTML
         function getCSRFToken() {
             return $('meta[name="csrf-token"]').attr('content');
@@ -469,8 +452,10 @@
             });
 
             function isImagePath(value) {
-                return value.endsWith('.jpg') || value.endsWith('.jpeg') || value.endsWith('.png') || value.endsWith(
-                    '.gif');
+                if (value) {
+                    return value.endsWith('.jpg') || value.endsWith('.jpeg') || value.endsWith('.png') || value.endsWith(
+                        '.gif');
+                }
             }
 
             // Tambahkan event mouseout untuk menutup shapes atau popup

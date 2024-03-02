@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ramwater\Pembelian;
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\DPembayaran;
+use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class PembayaranController extends Controller
     protected $dPembayaran;
     public function __construct(
         DPembelianModel $dPembelianModel,
-        DPembayaran $dPembayaran
+        DPembayaranModel $dPembayaran
     ) {
         $this->dPembelianModel   = $dPembelianModel;
         $this->dPembayaran       = $dPembayaran;
@@ -26,7 +27,7 @@ class PembayaranController extends Controller
 
     public function data()
     {
-        $supplier = $this->dPembayaran->getpembelian();
+        $supplier = $this->dPembayaran->getPembayaran();
 
         return datatables()
             ->of($supplier)

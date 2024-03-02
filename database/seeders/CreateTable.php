@@ -211,5 +211,20 @@ class CreateTable extends Seeder
                 INDEX `idx_t_transaksi_ops_kd` (`kd_transaksi_ops`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
+
+        // t_transaksi_ops
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `t_channel_bayar` (
+                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+                `kd_channel` varchar(50) DEFAULT NULL,
+                `ur_channel` varchar(50) DEFAULT NULL,
+
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_t_channel_bayar_kd_channel` (`kd_channel`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
     }
 }

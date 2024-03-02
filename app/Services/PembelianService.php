@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Helpers\FormatHelper;
 use App\Models\DOps;
-use App\Models\DPembayaran;
+use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
@@ -25,7 +25,7 @@ class PembelianService
     public function __construct(
         DStokProduk $dStokProduk,
         DPembelianModel $dPembelianModel,
-        DPembayaran $dPembayaran,
+        DPembayaranModel $dPembayaran,
         DPembelianDetailModel $dPembelianDetailModel,
         DOps $dOps
     ) {

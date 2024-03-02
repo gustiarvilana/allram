@@ -72,16 +72,19 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('/laporan', [LaporanPembelianController::class, 'index'])->name('pembelian.index');
             Route::get('laporan/data', [LaporanPembelianController::class, 'data'])->name('pembelian.laporan.data');
             Route::get('laporan/detailData', [LaporanPembelianController::class, 'detailData'])->name('pembelian.laporan.detailData');
+
+            Route::prefix('pembayaran')->group(function () {
+                Route::get('/', [LaporanPembelianController::class, 'pembayaran'])->name('pembelian.pembayaran');
+                Route::get('/data', [LaporanPembelianController::class, 'pembayaranData'])->name('pembelian.pembayaranData');
+                Route::POST('/', [LaporanPembelianController::class, 'pembayaranStore'])->name('pembelian.pembayaranStore');
+            });
         });
 
         Route::resource('/produk', ProdukController::class)->except('show');
         Route::prefix('produk')->group(function () {
             Route::get('/data', [produkController::class, 'data'])->name('produk.data');
             Route::get('/laporan', [LaporanProdukController::class, 'laporan'])->name('produk.laporan');
-            Route::get(
-                'laporan/data',
-                [LaporanprodukController::class, 'data']
-            )->name('produk.laporan.data');
+            Route::get('laporan/data', [LaporanprodukController::class, 'data'])->name('produk.laporan.data');
         });
     });
 });

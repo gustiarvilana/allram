@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Ramwater\Pembelian;
 
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\DPembayaran;
+use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
+use App\Models\TChannelModel;
 use Illuminate\Http\Request;
 
 class LaporanPembelianController extends Controller
@@ -13,13 +16,16 @@ class LaporanPembelianController extends Controller
     protected $dPembelianModel;
     protected $integrationHelper;
     protected $dPembelianDetailModel;
+    protected $dPembayaranModel;
     public function __construct(
         DPembelianModel $dPembelianModel,
         DPembelianDetailModel $dPembelianDetailModel,
+        DPembayaranModel $dPembayaranModel
     ) {
+        $this->integrationHelper = new IntegrationHelper();
         $this->dPembelianModel = $dPembelianModel;
         $this->dPembelianDetailModel = $dPembelianDetailModel;
-        $this->integrationHelper = new IntegrationHelper();
+        $this->dPembayaranModel = $dPembayaranModel;
     }
 
     public function data()
@@ -49,6 +55,41 @@ class LaporanPembelianController extends Controller
             })
             ->make(true);
     }
+
+    public function pembayaranData(Request $request)
+    {
+        $req = $request->input();
+
+        $supplier = $this->dPembayaranModel->setNotaPembelian($req['nota_pembelian']);
+        $supplier = $this->dPembayaranModel->getPembayaran();
+
+        return response()->json($supplier);
+    }
+
+    public function pembayaran()
+    {
+        $data = [
+            'channels' => TChannelModel::all(),
+        ];
+        return view('ramwater.pembelian.pembayaran', $data);
+    }
+
+    public function pembayaranStore(Request $request)
+    {
+
+        $pembelianData = json_decode($request->input('pembelianData'), true);
+        $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
+        $file = $request->file('path_file');
+
+        if ($request->input('jns')) {
+            $pembelianData['jns'] = $request->input('jns');
+        }
+
+        return $this->pebayaranService->storepembayaran($pembelianData, $dataArrayDetail, $file);
+    }
+
+
+
 
     public function index()
     {

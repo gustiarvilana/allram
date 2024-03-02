@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class DPembayaran extends Model
+class DPembayaranModel extends Model
 {
     use HasFactory;
 
@@ -15,19 +15,21 @@ class DPembayaran extends Model
 
     protected $nota_pembelian;
 
-    public function getPembelianDetail()
+    public function getPembayaran()
     {
-        $pembelian = DB::table('d_pembayaran')
-            ->where('nota_pembelian', '=', $this->getNotaPemebelian());
-        return $pembelian;
+        $pembayaran = DB::table('d_pembayaran')
+            ->where('nota_pembelian', '=', $this->getNotaPembelian())
+            ->get();
+
+        return $pembayaran;
     }
 
-    public function decrementStok($pembayaran)
+    public function decrementAng($pembayaran)
     {
         $produk->decrement('angs_ke', $pembayaran['angs_ke']);
     }
 
-    public function incrementStok($pembayaran)
+    public function incrementAngs($pembayaran)
     {
         $produk->increment('angs_ke', $pembayaran['angs_ke']);
     }
@@ -38,7 +40,7 @@ class DPembayaran extends Model
     /**
      * Get the value of nota_pembelian
      */
-    public function getNota_pembelian()
+    public function getNotaPembelian()
     {
         return $this->nota_pembelian;
     }
@@ -48,7 +50,7 @@ class DPembayaran extends Model
      *
      * @return  self
      */
-    public function setNota_pembelian($nota_pembelian)
+    public function setNotaPembelian($nota_pembelian)
     {
         $this->nota_pembelian = $nota_pembelian;
 
