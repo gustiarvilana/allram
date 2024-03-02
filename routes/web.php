@@ -10,6 +10,7 @@ use App\Http\Controllers\Ramwater\Kasbon\LaporanKasbonController;
 use App\Http\Controllers\Ramwater\Operasional\LaporanOperasionalController;
 use App\Http\Controllers\Ramwater\Operasional\OperasionalController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
+use App\Http\Controllers\Ramwater\Pembelian\PembayaranController;
 use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
 use App\Http\Controllers\Ramwater\Penjualan\DGalonController;
 use App\Http\Controllers\Ramwater\Penjualan\DHutangController;
@@ -73,10 +74,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('laporan/data', [LaporanPembelianController::class, 'data'])->name('pembelian.laporan.data');
             Route::get('laporan/detailData', [LaporanPembelianController::class, 'detailData'])->name('pembelian.laporan.detailData');
 
+            Route::resource('/pembayaran', PembayaranController::class)->except('show');
             Route::prefix('pembayaran')->group(function () {
-                Route::get('/', [LaporanPembelianController::class, 'pembayaran'])->name('pembelian.pembayaran');
-                Route::get('/data', [LaporanPembelianController::class, 'pembayaranData'])->name('pembelian.pembayaranData');
-                Route::POST('/', [LaporanPembelianController::class, 'pembayaranStore'])->name('pembelian.pembayaranStore');
+                Route::get('/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
             });
         });
 

@@ -8,6 +8,7 @@ use App\Models\DPembayaran;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
+use App\Models\TChannelModel;
 use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
@@ -15,32 +16,37 @@ class PembayaranController extends Controller
     protected $dPembelianModel;
     protected $integrationHelper;
     protected $dPembelianDetailModel;
-    protected $dPembayaran;
+    protected $dPembayaranModel;
     public function __construct(
         DPembelianModel $dPembelianModel,
-        DPembayaranModel $dPembayaran
+        DPembayaranModel $dPembayaranModel
     ) {
         $this->dPembelianModel   = $dPembelianModel;
-        $this->dPembayaran       = $dPembayaran;
+        $this->dPembayaranModel       = $dPembayaranModel;
         $this->integrationHelper = new IntegrationHelper();
     }
 
-    public function data()
+    public function data(Request $request)
     {
-        $supplier = $this->dPembayaran->getPembayaran();
+        $req = $request->input();
 
-        return datatables()
-            ->of($supplier)
-            ->addIndexColumn()
-            ->addColumn('id', function ($row) {
-                return base64_encode($this->integrationHelper->encrypt($row->id, $this->integrationHelper->getKey()));
-            })
-            ->make(true);
+        $supplier = $this->dPembayaranModel->setNotaPembelian($req['nota_pembelian']);
+        $supplier = $this->dPembayaranModel->getPembayaran();
+
+        return response()->json($supplier);
     }
 
     public function index()
     {
-        return view('ramwater.pembelian.laporan');
+        $data = [
+            'channels' => TChannelModel::all(),
+        ];
+        return view('ramwater.pembelian.pembayaran', $data);
+    }
+
+    public function store()
+    {
+        dd('store');
     }
 
     public function laporan()

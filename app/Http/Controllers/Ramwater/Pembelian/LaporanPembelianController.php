@@ -56,38 +56,6 @@ class LaporanPembelianController extends Controller
             ->make(true);
     }
 
-    public function pembayaranData(Request $request)
-    {
-        $req = $request->input();
-
-        $supplier = $this->dPembayaranModel->setNotaPembelian($req['nota_pembelian']);
-        $supplier = $this->dPembayaranModel->getPembayaran();
-
-        return response()->json($supplier);
-    }
-
-    public function pembayaran()
-    {
-        $data = [
-            'channels' => TChannelModel::all(),
-        ];
-        return view('ramwater.pembelian.pembayaran', $data);
-    }
-
-    public function pembayaranStore(Request $request)
-    {
-
-        $pembelianData = json_decode($request->input('pembelianData'), true);
-        $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
-        $file = $request->file('path_file');
-
-        if ($request->input('jns')) {
-            $pembelianData['jns'] = $request->input('jns');
-        }
-
-        return $this->pebayaranService->storepembayaran($pembelianData, $dataArrayDetail, $file);
-    }
-
 
 
 

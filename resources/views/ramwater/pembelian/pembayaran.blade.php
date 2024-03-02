@@ -376,7 +376,7 @@
                 });
 
                 $.ajax({
-                    url: '{{ route('pembelian.pembayaranStore') }}',
+                    url: '{{ route('pembayaran.store') }}',
                     method: 'POST',
                     processData: false,
                     contentType: false,
@@ -463,8 +463,7 @@
                 // $("#table-detail").append
 
                 $.ajax({
-                    url: '{{ route('pembelian.pembayaranData') }}?nota_pembelian=' + rowData
-                        .nota_pembelian,
+                    url: '{{ route('pembayaran.data') }}?nota_pembelian=' + rowData.nota_pembelian,
                     method: 'GET',
                     processData: false,
                     contentType: false,
