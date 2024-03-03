@@ -9,6 +9,7 @@ use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use App\Models\TChannelModel;
+use App\Services\PembayaranService;
 use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
@@ -16,13 +17,16 @@ class PembayaranController extends Controller
     protected $dPembelianModel;
     protected $integrationHelper;
     protected $dPembelianDetailModel;
+    protected $pembayaranService;
     protected $dPembayaranModel;
     public function __construct(
         DPembelianModel $dPembelianModel,
-        DPembayaranModel $dPembayaranModel
+        DPembayaranModel $dPembayaranModel,
+        PembayaranService $pembayaranService
     ) {
         $this->dPembelianModel   = $dPembelianModel;
         $this->dPembayaranModel       = $dPembayaranModel;
+        $this->pembayaranService       = $pembayaranService;
         $this->integrationHelper = new IntegrationHelper();
     }
 
@@ -30,10 +34,10 @@ class PembayaranController extends Controller
     {
         $req = $request->input();
 
-        $supplier = $this->dPembayaranModel->setNotaPembelian($req['nota_pembelian']);
-        $supplier = $this->dPembayaranModel->getPembayaran();
+        $bayar = $this->dPembayaranModel->setNotaPembelian($req['nota_pembelian']);
+        $bayar = $this->dPembayaranModel->getPembayaran();
 
-        return response()->json($supplier);
+        return response()->json($bayar);
     }
 
     public function index()
@@ -44,9 +48,18 @@ class PembayaranController extends Controller
         return view('ramwater.pembelian.pembayaran', $data);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        dd('store');
+
+        $pembelianData = json_decode($request->input('pembelianData'), true);
+        $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
+        $file = $request->file('path_file');
+
+        if ($request->input('jns')) {
+            $pembelianData['jns'] = $request->input('jns');
+        }
+
+        return $this->pembayaranService->storePembayaran($pembelianData, $dataArrayDetail, $file);
     }
 
     public function laporan()

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Pembelian
+    Laporan Pembayaran
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <div class="card card-success">
                         <div class="card-header">
-                            <h3 class="card-title">Laporan Pembelian</h3>
+                            <h3 class="card-title">Laporan Pembayaran</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -156,6 +156,7 @@
                                                         <th>nominal_bayar</th>
                                                         <th>channel_bayar</th>
                                                         <th>ket_bayar</th>
+                                                        <th>File</th>
                                                         <th><i class="fa fa-cog" aria-hidden="true"></i></th>
                                                     </tr>
                                                 </thead>
@@ -337,16 +338,19 @@
                 $('#table-detail-edit tr').each(function() {
 
                     var rowData = {
-                        bayar_nota_pembelian: $(this).find('#bayar_nota_pembelian')
+                        id: $(this).find('#bayar_id')
                             .val(),
-                        bayar_tgl_pembayaran: $(this).find('#bayar_tgl_pembayaran')
+                        nota_pembelian: $(this).find('#bayar_nota_pembelian')
                             .val(),
-                        bayar_angs_ke: $(this).find('#bayar_angs_ke').val(),
-                        bayar_nominal_bayar: $(this).find('#bayar_nominal_bayar')
+                        tgl_pembayaran: $(this).find('#bayar_tgl_pembayaran')
                             .val(),
-                        bayar_channel_bayar: $(this).find('#bayar_channel_bayar')
+                        angs_ke: $(this).find('#bayar_angs_ke').val(),
+                        nominal_bayar: $(this).find('#bayar_nominal_bayar')
                             .val(),
-                        bayar_ket_bayar: $(this).find('#bayar_ket_bayar').val(),
+                        channel_bayar: $(this).find('#bayar_channel_bayar')
+                            .val(),
+                        ket_bayar: $(this).find('#bayar_ket_bayar').val(),
+                        path_file: $(this).find('#bayar_path_file').val(),
 
                     };
                     dataArrayDetail.push(rowData);
@@ -364,7 +368,7 @@
                     sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
                     path_file: $('#path_file').val(),
                 };
-
+                console.log(dataArrayDetail);
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
                 formData.append('path_file', imageFile);
@@ -470,10 +474,13 @@
                     success: function(response) {
                         // Loop through each object in the response array
                         response.forEach(function(item, index) {
+                            console.log(item);
                             // Create a new row with input fields filled with data from the response
                             var row =
                                 '<tr>' +
                                 '<td>' + (index + 1) + '</td>' + // No column
+                                '<input type="hidden" name="id" id="bayar_id" class="form-control money" value="' +
+                                item.id + '" readonly>' +
                                 '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control money" value="' +
                                 item.nota_pembelian + '" readonly></td>' +
                                 '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
@@ -486,6 +493,13 @@
                                 item.channel_bayar + '" readonly></td>' +
                                 '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control money" value="' +
                                 item.ket_bayar + '" readonly></td>' +
+                                '<input type="hidden" name="path_file" id="bayar_path_file" class="form-control" value="' +
+                                item.path_file + '" readonly>' +
+                                '<td><a href="{{ asset('') }}' + item.path_file +
+                                '" target="_blank" class="a">' +
+                                '<img src="{{ asset('') }}' + item.path_file +
+                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                '</a></td>' +
                                 '<td><a class="btn btn-success" onclick="editRow(' +
                                 index + ')">Edit</a></td>' +
                                 '</tr>';
@@ -498,11 +512,11 @@
                             '<td></td>' + // No column
                             '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control bayar_nota_pembelian money" value="" disabled></td>' +
                             '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control bayar_tgl_pembayaran money" value="' +
-                            '{{ date('ymd') }}' + '"></td>' +
+                            '{{ date('Ymd') }}' + '"></td>' +
                             '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control bayar_angs_ke money" value="" disabled></td>' +
                             '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control bayar_nominal_bayar money" value=""></td>' +
                             '<td>' +
-                            '<select name="channel_bayar" id="channel_bayar" class="form-control channel_bayar">' +
+                            '<select name="channel_bayar" id="bayar_channel_bayar" class="form-control bayar_channel_bayar">' +
                             '<option value="">Pilih Channel</option>' +
                             '@foreach ($channels as $channel)' +
                             '<option value="{{ $channel->kd_channel }}">{{ $channel->ur_channel }}</option>' +
