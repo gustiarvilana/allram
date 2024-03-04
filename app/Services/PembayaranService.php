@@ -167,6 +167,22 @@ class PembayaranService
                 $dataDetail['angs_ke'] = $key + 1;
                 $dataDetail = $this->preparePembayaranData($dataDetail);
 
+                //save: file
+                // if ($file) {
+                //     $filename = FormatHelper::uploadFile($file, 'pemeblian/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
+                //     $dataDetail['path_file'] = $filename;
+
+                //     $pembelian->path_file = $filename;
+                //     $pembelian->save();
+                // }
+                if (!isset($dataDetail['id'])) {
+                    if ($file) {
+                        $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . date('his') . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
+
+                        $dataDetail['path_file'] = $filename;
+                    }
+                }
+
                 $dataDetail['id']             = $dataDetail['id'] ?? null;
                 $dataDetail['nota_pembelian'] = $pembelian['nota_pembelian'] ?? null;
                 $dataDetail['path_file']      = $dataDetail['path_file'] ?? '';

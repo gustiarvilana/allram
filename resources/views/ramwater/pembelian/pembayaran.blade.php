@@ -368,16 +368,15 @@
                     sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
                     path_file: $('#path_file').val(),
                 };
-                console.log(dataArrayDetail);
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
                 formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('pembelianData', JSON.stringify(pembelianData));
 
-                formData.forEach(function(value, key) {
-                    console.log(key, value);
-                });
+                // formData.forEach(function(value, key) {
+                //     console.log(key, value);
+                // });
 
                 $.ajax({
                     url: '{{ route('pembayaran.store') }}',
@@ -474,7 +473,6 @@
                     success: function(response) {
                         // Loop through each object in the response array
                         response.forEach(function(item, index) {
-                            console.log(item);
                             // Create a new row with input fields filled with data from the response
                             var row =
                                 '<tr>' +

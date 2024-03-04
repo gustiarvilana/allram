@@ -30,6 +30,7 @@ class FormatHelper
     {
         try {
             $filename = $prefix . '.' . $file->getClientOriginalExtension();
+            // dd($file);
             $file->storeAs($folder, $filename, 'public');
 
             $pathFile = "storage/{$folder}/{$filename}";
