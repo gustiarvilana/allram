@@ -522,7 +522,9 @@
                             '</select>' +
                             '</td>' +
                             '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control bayar_ket_bayar money" value=""></td>' +
+                            '<td><a class="btn btn-danger btn-hapus"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
                             '</tr>';
+
                         $('#table-detail-edit').append(emptyRow);
                     },
                     error: function(error) {
@@ -540,6 +542,10 @@
                     }
                 });
                 $("#modal-pembelian").modal("show");
+            });
+
+            $('#table-detail-edit').on('click', '.btn-hapus', function() {
+                $(this).closest('tr').remove();
             });
         });
     </script>
