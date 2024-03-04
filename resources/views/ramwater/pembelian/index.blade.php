@@ -97,7 +97,8 @@
                                         <div class="col d-flex align-items-center justify-content-center">
                                             <div class="form-group">
                                                 <label for="path_file">Upload Faktur</label>
-                                                <input class="form-control" type="file" name="path_file" id="path_file">
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
                                             </div>
                                         </div>
                                     </div>
@@ -374,6 +375,7 @@
                 console.log('Modal Pembelian telah disembunyikan');
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
+                $('.path_file').val('');
             });
 
             $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian

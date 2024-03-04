@@ -105,7 +105,8 @@
                                         <div class="col d-flex align-items-center justify-content-center">
                                             <div class="form-group">
                                                 <label for="path_file">Upload Faktur</label>
-                                                <input class="form-control" type="file" name="path_file" id="path_file">
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
                                             </div>
                                         </div>
 
@@ -301,7 +302,7 @@
 
                             var btn_edit = '<a id="btn-pembayaran-edit" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Pembayaran</a>';
+                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i></a>';
 
                             return '<div style="white-space: nowrap;">' + btn_edit + '</div>';
                         },
@@ -323,6 +324,7 @@
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
                 $('#table-detail-edit').empty();
+                $('.path_file').val('');
             });
 
             $('body').on("click", "#btn-add-pembayaran", function() {
@@ -338,17 +340,13 @@
                 $('#table-detail-edit tr').each(function() {
 
                     var rowData = {
-                        id: $(this).find('#bayar_id')
-                            .val(),
-                        nota_pembelian: $(this).find('#bayar_nota_pembelian')
-                            .val(),
-                        tgl_pembayaran: $(this).find('#bayar_tgl_pembayaran')
-                            .val(),
+                        id: $(this).find('#bayar_id').val(),
+                        update: $(this).find('#bayar_update').val(),
+                        nota_pembelian: $(this).find('#bayar_nota_pembelian').val(),
+                        tgl_pembayaran: $(this).find('#bayar_tgl_pembayaran').val(),
                         angs_ke: $(this).find('#bayar_angs_ke').val(),
-                        nominal_bayar: $(this).find('#bayar_nominal_bayar')
-                            .val(),
-                        channel_bayar: $(this).find('#bayar_channel_bayar')
-                            .val(),
+                        nominal_bayar: $(this).find('#bayar_nominal_bayar').val(),
+                        channel_bayar: $(this).find('#bayar_channel_bayar').val(),
                         ket_bayar: $(this).find('#bayar_ket_bayar').val(),
                         path_file: $(this).find('#bayar_path_file').val(),
 
@@ -479,6 +477,7 @@
                                 '<td>' + (index + 1) + '</td>' + // No column
                                 '<input type="hidden" name="id" id="bayar_id" class="form-control money" value="' +
                                 item.id + '" readonly>' +
+                                '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
                                 '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control money" value="' +
                                 item.nota_pembelian + '" readonly></td>' +
                                 '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
@@ -500,9 +499,8 @@
                                 '</a></td>' +
                                 '<td style="white-space: nowrap;">' +
                                 // Menggunakan white-space: nowrap; untuk menghindari wrap
-                                '<a class="btn btn-success" onclick="editRow(' + index +
-                                ')" style="margin-right: 5px;">Edit</a>' +
-                                '<a class="btn btn-danger btn-hapus" style="margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '<a class="btn btn-success btn-xs btn-edit" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></a>' +
+                                '<a class="btn btn-danger btn-xs btn-hapus" style="margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                                 '</td>' +
                                 '</tr>';
 
@@ -526,7 +524,7 @@
                             '</select>' +
                             '</td>' +
                             '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control bayar_ket_bayar money" value=""></td>' +
-                            '<td><a class="btn btn-danger btn-hapus"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
+                            '<td><a class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
                             '</tr>';
 
                         $('#table-detail-edit').append(emptyRow);
@@ -567,6 +565,15 @@
                         tombolHapus.closest('tr').remove();
                     }
                 });
+            }).on('click', '.btn-edit', function() {
+                var data = $(this);
+
+                var id = data.closest('tr').find('#bayar_id').val();
+                data.closest('tr').find('#bayar_update').val(id);
+
+                data.closest('tr').find('#bayar_tgl_pembayaran').removeAttr('readonly');
+                data.closest('tr').find('#bayar_nominal_bayar').removeAttr('readonly');
+
             });
 
         });

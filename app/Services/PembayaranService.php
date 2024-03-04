@@ -162,37 +162,36 @@ class PembayaranService
 
     public function upsertPembayaranDetail($pembelian, $dataArrayDetail, $file)
     {
+        // dd($pembelian, $dataArrayDetail, $file);
         try {
-            foreach ($dataArrayDetail as $key => $dataDetail) {
-                $dataDetail['angs_ke'] = $key + 1;
-                $dataDetail = $this->preparePembayaranData($dataDetail);
+            if ($dataArrayDetail) {
+                foreach ($dataArrayDetail as $key => $dataDetail) {
+                    $dataDetail['angs_ke'] = $key + 1;
+                    $dataDetail = $this->preparePembayaranData($dataDetail);
 
-                //save: file
-                // if ($file) {
-                //     $filename = FormatHelper::uploadFile($file, 'pemeblian/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
-                //     $dataDetail['path_file'] = $filename;
-
-                //     $pembelian->path_file = $filename;
-                //     $pembelian->save();
-                // }
-                if (!isset($dataDetail['id'])) {
-                    if ($file) {
-                        $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . date('his') . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
-
-                        $dataDetail['path_file'] = $filename;
+                    if (!isset($dataDetail['id']) || $dataDetail['update'] == $dataDetail['id']) {
+                        if ($file) {
+                            $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . date('his') . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
+                            $dataDetail['path_file'] = $filename;
+                        }
                     }
+
+                    $dataDetail['id']             = $dataDetail['id'] ?? null;
+                    $dataDetail['nota_pembelian'] = $pembelian['nota_pembelian'] ?? null;
+                    $dataDetail['path_file']      = $dataDetail['path_file'] ?? '';
+                    unset($dataDetail["update"]);
+
+                    if ($key == 0) $this->dPembayaran->where('nota_pembelian', '=', $dataDetail['nota_pembelian'])->delete();
+                    $dataDetail = $this->dPembayaran->updateOrCreate([
+                        'id' => $dataDetail['id'],
+                        'nota_pembelian' => $dataDetail['nota_pembelian'],
+                    ], $dataDetail);
                 }
-
-                $dataDetail['id']             = $dataDetail['id'] ?? null;
-                $dataDetail['nota_pembelian'] = $pembelian['nota_pembelian'] ?? null;
-                $dataDetail['path_file']      = $dataDetail['path_file'] ?? '';
-
-                $dataDetail = $this->dPembayaran->updateOrCreate([
-                    'id' => $dataDetail['id'],
-                    'nota_pembelian' => $dataDetail['nota_pembelian'],
-                ], $dataDetail);
+                return $dataDetail;
+            } else {
+                $this->dPembayaran->where('nota_pembelian', '=', $pembelian['nota_pembelian'])->delete();
+                return;
             }
-            return $dataDetail;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
