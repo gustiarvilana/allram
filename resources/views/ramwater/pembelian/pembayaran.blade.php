@@ -498,8 +498,12 @@
                                 '<img src="{{ asset('') }}' + item.path_file +
                                 '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
                                 '</a></td>' +
-                                '<td><a class="btn btn-success" onclick="editRow(' +
-                                index + ')">Edit</a></td>' +
+                                '<td style="white-space: nowrap;">' +
+                                // Menggunakan white-space: nowrap; untuk menghindari wrap
+                                '<a class="btn btn-success" onclick="editRow(' + index +
+                                ')" style="margin-right: 5px;">Edit</a>' +
+                                '<a class="btn btn-danger btn-hapus" style="margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '</td>' +
                                 '</tr>';
 
                             $('#table-detail-edit').append(row);
@@ -545,8 +549,26 @@
             });
 
             $('#table-detail-edit').on('click', '.btn-hapus', function() {
-                $(this).closest('tr').remove();
+                // Simpan referensi ke tombol yang diklik
+                var tombolHapus = $(this);
+
+                // Tampilkan SweetAlert untuk konfirmasi
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Anda yakin ingin menghapus baris ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    // Jika pengguna mengonfirmasi, hapus baris
+                    if (result.isConfirmed) {
+                        tombolHapus.closest('tr').remove();
+                    }
+                });
             });
+
         });
     </script>
 @endpush
