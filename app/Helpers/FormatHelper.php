@@ -42,4 +42,19 @@ class FormatHelper
             return null;
         }
     }
+
+    public static function deleteFile($filePath)
+    {
+        try {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            Log::error('Error deleting file: ' . $e->getMessage());
+            return false;
+        }
+    }
 }

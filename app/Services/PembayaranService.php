@@ -5,6 +5,7 @@
 namespace App\Services;
 
 use App\Helpers\FormatHelper;
+use App\Helpers\IntegrationHelper;
 use App\Models\DOps;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
@@ -13,6 +14,7 @@ use App\Models\DStokProduk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PembayaranService
 {
@@ -29,6 +31,7 @@ class PembayaranService
         DPembelianDetailModel $dPembelianDetailModel,
         DOps $dOps
     ) {
+        $this->integrationHelper = new IntegrationHelper();
         $this->dStokProduk = $dStokProduk;
         $this->dPembelianModel = $dPembelianModel;
         $this->dPembayaran = $dPembayaran;
@@ -108,9 +111,7 @@ class PembayaranService
             empty($pembelianData['nota_pembelian']) ||
             empty($pembelianData['tgl_pembelian']) ||
             empty($pembelianData['kd_supplier']) ||
-            empty($pembelianData['jns_pembelian']) ||
-            empty($pembelianData['harga_total']) ||
-            empty($pembelianData['sisa_bayar'])
+            empty($pembelianData['jns_pembelian'])
         ) {
             throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
         }
@@ -139,6 +140,7 @@ class PembayaranService
             'tgl_pembelian'  => $pembelianData['tgl_pembelian'],
             'kd_supplier'    => $pembelianData['kd_supplier'],
             'jns_pembelian'  => $pembelianData['jns_pembelian'],
+            'id'             => $this->integrationHelper->decrypt(base64_decode($pembelianData['id']), $this->integrationHelper->getKey()),
         ];
 
         return $pembelianData;
@@ -162,9 +164,9 @@ class PembayaranService
 
     public function upsertPembayaranDetail($pembelian, $dataArrayDetail, $file)
     {
-        // dd($pembelian, $dataArrayDetail, $file);
         try {
             if ($dataArrayDetail) {
+                $totalNominalBayar = 0;
                 foreach ($dataArrayDetail as $key => $dataDetail) {
                     $dataDetail['angs_ke'] = $key + 1;
                     $dataDetail = $this->preparePembayaranData($dataDetail);
@@ -181,12 +183,25 @@ class PembayaranService
                     $dataDetail['path_file']      = $dataDetail['path_file'] ?? '';
                     unset($dataDetail["update"]);
 
-                    if ($key == 0) $this->dPembayaran->where('nota_pembelian', '=', $dataDetail['nota_pembelian'])->delete();
+                    $totalNominalBayar += $dataDetail['nominal_bayar'];
+
                     $dataDetail = $this->dPembayaran->updateOrCreate([
                         'id' => $dataDetail['id'],
                         'nota_pembelian' => $dataDetail['nota_pembelian'],
                     ], $dataDetail);
                 }
+
+                // delete detail pembayaran
+                // $existingIds = collect($dataArrayDetail)->where('id', '!=', null)->pluck('id')->filter();
+                // $row_delete = $this->dPembayaran->where('nota_pembelian', '=', $pembelian['nota_pembelian'])
+                //     ->whereNotIn('id', $existingIds)
+                //     ->get();
+                // dd($existingIds, $row_delete->pluck('id'));
+                // $this->destroyPembayaran($row_delete);
+
+                // update status + sisa bayar
+                $this->updateStatus($pembelian, $totalNominalBayar, $pembelian['harga_total']);
+
                 return $dataDetail;
             } else {
                 $this->dPembayaran->where('nota_pembelian', '=', $pembelian['nota_pembelian'])->delete();
@@ -194,6 +209,48 @@ class PembayaranService
             }
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function updateStatus($pembelian, $totalNominalBayar, $harga_total)
+    {
+        // dd($pembelian, $totalNominalBayar, $harga_total);
+        $pembelianModel = new DPembelianModel(); // Gantilah Pembelian dengan nama model yang sesuai
+        $pembelian = $pembelianModel->find($pembelian['id']); // Sesuaikan dengan cara Anda mendapatkan model
+        if ($totalNominalBayar == $harga_total) {
+            $pembelian->sts_angsuran = 4;
+            $pembelian->nominal_bayar = $totalNominalBayar;
+            $pembelian->sisa_bayar = $harga_total - $totalNominalBayar;
+            $pembelian->save();
+        } elseif ($totalNominalBayar < $harga_total) {
+            $pembelian->sts_angsuran = 1;
+            $pembelian->nominal_bayar = $totalNominalBayar;
+            $pembelian->sisa_bayar = $harga_total - $totalNominalBayar;
+            $pembelian->save();
+        } elseif ($totalNominalBayar > $harga_total) {
+            throw new \Exception("Pembayaran Terlalu banyak!");
+        };
+    }
+
+    public function destroyPembayaran($arrayRow)
+    {
+        foreach ($arrayRow as $key => $row) {
+            if ($row->path_file) {
+                $pathToDelete = $row->path_file;
+                $publicPath = storage_path('app/public/');
+
+                // Pastikan path_file dimulai dengan "storage/"
+                if (Str::startsWith($pathToDelete, 'storage/')) {
+                    $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
+                }
+
+                // delete
+                FormatHelper::deleteFile($pathToDelete);
+            }
+
+            $row = $this->dPembayaran->find($row['id']); // Sesuaikan dengan cara Anda mendapatkan model
+            $row->delete();
+            Log::info('hapus: pembayaran hapus');
         }
     }
 

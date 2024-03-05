@@ -13,6 +13,8 @@ use App\Models\DStokProduk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PembelianService
 {
@@ -94,7 +96,18 @@ class PembelianService
                     if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($detail);
                 }
 
-                // hapus d_pembelian&child
+
+                // hapus d_pembelian & child
+                $pathToDelete = $pembelian->path_file;
+                $publicPath = storage_path('app/public/');
+
+                // Pastikan path_file dimulai dengan "storage/"
+                if (Str::startsWith($pathToDelete, 'storage/')) {
+                    // Ubah "storage/" menjadi direktori penyimpanan
+                    $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
+                }
+
+                FormatHelper::deleteFile($pathToDelete);
                 $pembelian->delete();
                 Log::info('hapus: pembelian hapus');
 

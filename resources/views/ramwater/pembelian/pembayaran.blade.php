@@ -251,14 +251,22 @@
                         data: 'nominal_bayar',
                         name: 'a.nominal_bayar',
                         render: function(data, type, row) {
-                            return addCommas(data);
+                            if (data == 0) {
+                                return '0';
+                            } else {
+                                return addCommas(data);
+                            }
                         }
                     },
                     {
                         data: 'sisa_bayar',
                         name: 'a.sisa_bayar',
                         render: function(data, type, row) {
-                            return addCommas(data);
+                            if (data == 0) {
+                                return '0';
+                            } else {
+                                return addCommas(data);
+                            }
                         }
                     },
                     {
@@ -356,6 +364,7 @@
                 });
 
                 var pembelianData = {
+                    id: $('#table-pembelian #ur_id').val(),
                     nota_pembelian: $('#table-pembelian #ur_nota_pembelian').val(),
                     tgl_pembelian: $('#table-pembelian #ur_tgl_pembelian').val(),
                     kd_supplier: $('#table-pembelian #ur_kd_supplier').val(),
@@ -419,11 +428,15 @@
 
             }).on("click", "#btn-pembayaran-edit", function() {
                 var rowData = $(this).data('row');
+
                 var row =
                     '<tr>' +
-                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' +
-                    rowData
-                    .tgl_pembelian + '" class="form-control" readonly></td>' +
+                    '<td>' +
+                    '<input type="hidden" name="id" id="ur_id" value="' + rowData.id +
+                    '" class="form-control" readonly>' +
+                    '<input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
+                    .tgl_pembelian + '" class="form-control" readonly>' +
+                    '</td>' +
                     '<td>' +
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                     rowData.nama + '</span></div>' +
@@ -562,6 +575,10 @@
                 }).then((result) => {
                     // Jika pengguna mengonfirmasi, hapus baris
                     if (result.isConfirmed) {
+                        var id = tombolHapus.closest('tr').find('#bayar_id').val();
+                        if (id) {
+                            penjualanDestroy(id)
+                        }
                         tombolHapus.closest('tr').remove();
                     }
                 });
@@ -575,7 +592,52 @@
                 data.closest('tr').find('#bayar_nominal_bayar').removeAttr('readonly');
 
             });
-
         });
+
+        function penjualanDestroy(id) {
+            var url = '{{ route('pembayaran.destroy', ['pembayaran' => ':pembayaran']) }}';
+            url = url.replace(':pembayaran', id);
+
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                processData: false,
+                contentType: false,
+                data: {
+                    'id': id,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $("#table-pembelian-laporan").DataTable().ajax.reload();
+                        // $('#btn-add-pembayaran-close').click()
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: 'Sukses!',
+                        //     text: response.message,
+                        // });
+                        return;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response.message,
+                    });
+                },
+                error: function(error) {
+                    var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                    if (error.responseJSON && error.responseJSON.message) {
+                        errorMessage = error.responseJSON.message;
+                    } else if (error.statusText) {
+                        errorMessage = error.statusText;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan!',
+                        text: errorMessage,
+                    });
+                }
+            });
+        }
     </script>
 @endpush
