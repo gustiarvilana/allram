@@ -588,7 +588,6 @@
 
                 data.closest('tr').find('#bayar_update').val(id);
 
-                // $('.path_file').prop('disabled', true);
                 $('.form-control').prop('readonly', true);
 
                 data.closest('tr').find('#bayar_tgl_pembayaran').removeAttr('readonly');
