@@ -584,13 +584,15 @@
                 });
             }).on('click', '.btn-edit', function() {
                 var data = $(this);
-
                 var id = data.closest('tr').find('#bayar_id').val();
+
                 data.closest('tr').find('#bayar_update').val(id);
+
+                // $('.path_file').prop('disabled', true);
+                $('.form-control').prop('readonly', true);
 
                 data.closest('tr').find('#bayar_tgl_pembayaran').removeAttr('readonly');
                 data.closest('tr').find('#bayar_nominal_bayar').removeAttr('readonly');
-
             });
         });
 
