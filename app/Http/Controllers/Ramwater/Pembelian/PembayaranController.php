@@ -103,9 +103,6 @@ class PembayaranController extends Controller
         $pembayaran->delete();
 
 
-
-        Log::info("mulai");
-
         $pembelianModel = new DPembelianModel(); // Gantilah Pembelian dengan nama model yang sesuai
         $pembelian = $pembelianModel->find($pembelian->id);
 
@@ -114,19 +111,16 @@ class PembayaranController extends Controller
         $totalNominalBayar = $totalNominalBayar->sum('nominal_bayar');
 
         if ($totalNominalBayar == $pembelian->harga_total) {
-            Log::info("sama");
             $pembelian->sts_angsuran = 4;
             $pembelian->nominal_bayar = $totalNominalBayar;
             $pembelian->sisa_bayar = $pembelian->harga_total - $totalNominalBayar;
             $pembelian->save();
         } elseif ($totalNominalBayar < $pembelian->harga_total) {
-            Log::info("kurang dari total");
             $pembelian->sts_angsuran = 1;
             $pembelian->nominal_bayar = $totalNominalBayar;
             $pembelian->sisa_bayar = $pembelian->harga_total - $totalNominalBayar;
             $pembelian->save();
         } elseif ($totalNominalBayar > $pembelian->harga_total) {
-            Log::info("lebih dari total");
             throw new \Exception("Pembayaran Terlalu banyak!");
         };
 

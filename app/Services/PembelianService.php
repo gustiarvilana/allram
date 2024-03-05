@@ -10,6 +10,8 @@ use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
+use App\Models\DTransaksiOps;
+use App\Models\SupplierModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,19 +24,23 @@ class PembelianService
     protected $dPembelianModel;
     protected $dPembelianDetailModel;
     protected $dPembayaran;
-    protected $dOps;
+    protected $supplierModel;
+    protected $dtransaksiOps;
     protected $jns;
     public function __construct(
         DStokProduk $dStokProduk,
         DPembelianModel $dPembelianModel,
         DPembayaranModel $dPembayaran,
         DPembelianDetailModel $dPembelianDetailModel,
-        DOps $dOps
+        SupplierModel $supplierModel,
+        DTransaksiOps $dtransaksiOps
     ) {
         $this->dStokProduk = $dStokProduk;
         $this->dPembelianModel = $dPembelianModel;
         $this->dPembayaran = $dPembayaran;
         $this->dPembelianDetailModel = $dPembelianDetailModel;
+        $this->supplierModel = $supplierModel;
+        $this->dtransaksiOps = $dtransaksiOps;
     }
 
     public function storePembelian($pembelianData, $dataArrayDetail, $file)
@@ -69,6 +75,9 @@ class PembelianService
 
                 // save: d_penjualan_detail + stok
                 $this->upsertPembelianDetail($pembelian, $dataArrayDetail);
+
+                // save: ops
+                $this->upsertOps($pembelian);
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
@@ -108,11 +117,10 @@ class PembelianService
                 }
 
                 FormatHelper::deleteFile($pathToDelete);
+
                 $pembelian->delete();
                 Log::info('hapus: pembelian hapus');
 
-                // hapus: d_pembayaran
-                // hapus: d_ops
                 return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
             });
         } catch (\Exception $e) {
@@ -197,6 +205,20 @@ class PembelianService
         return $pembayaran;
     }
 
+    public function prepareOpsnData($pembelian)
+    {
+        $supplier = $this->supplierModel->where('kd_supplier', '=', $pembelian['kd_supplier'])->first();
+
+        $ops['nota_pembelian'] = $pembelian['nota_pembelian'];
+        $ops['tgl_transaksi']  = $pembelian['tgl_pembelian'];
+        $ops['kd_ops']         = $supplier->kd_ops;
+        $ops['jns_trs']        = config('constants.ramwater.KD_TRANSAKSI_BIAYA');
+        $ops['nominal']        = $pembelian['harga_total'];
+        $ops['ket_transaksi']  = '';
+
+        return $ops;
+    }
+
     public function upsertPembelian($pembelianData)
     {
         $jns = $this->getJns();
@@ -211,6 +233,17 @@ class PembelianService
             } else {
                 return $this->dPembelianModel->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $pembelianData);
             }
+        }
+    }
+
+    public function upsertOps($pembelianData)
+    {
+        $data = $this->prepareOpsnData($pembelianData);
+
+        try {
+            return $this->dtransaksiOps->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $data);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
     }
 

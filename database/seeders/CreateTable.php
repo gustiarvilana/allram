@@ -186,7 +186,7 @@ class CreateTable extends Seeder
                 `nota_pembelian` varchar(50) DEFAULT NULL,
                 `tgl_transaksi` INT DEFAULT NULL,
                 `kd_ops` varchar(50) DEFAULT NULL,
-                `jns_trs` INT DEFAULT NULL,
+                `jns_trs` varchar(50) DEFAULT NULL,
                 `nominal` INT DEFAULT NULL,
                 `ket_transaksi` TEXT DEFAULT NULL,
 
