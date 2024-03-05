@@ -286,7 +286,7 @@
                         data: 'nama',
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                            return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
                                 data + '</span></div>';
 
                         }
@@ -393,6 +393,7 @@
 
                     if (hargaTotal && parseFloat(hargaTotal) !== 0) {
                         var rowData = {
+                            nama: $(this).find('#detail_nama').text(),
                             kd_produk: $(this).find('#detail_kd_produk').val(),
                             qty_pesan: $(this).find('#detail_qty_pesan').val(),
                             qty_retur: $(this).find('#detail_qty_retur').val(),
@@ -423,43 +424,99 @@
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('pembelianData', JSON.stringify(pembelianData));
 
+                //
+                var detailPembelianHTML = '<div>';
 
-                $.ajax({
-                    url: '{{ route('pembelian.store') }}',
-                    method: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sukses!',
-                                text: response.message,
-                            });
-                            $('#btn-add-pembelian-close').click()
-                            return;
-                        }
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: response.message,
-                        });
+                var detailPembelianHTML = `
+                    <table class="table table-striped" id="table-detail">
+                        <thead style="background-color: #4CAF50; color: white; padding: 10px;">
+                            <tr>
+                                <th>nama</th>
+                                <th>pesan</th>
+                                <th>retur</th>
+                                <th>bersih</th>
+                                <th>kd_gudang</th>
+                                <th>harga_satuan</th>
+                                <th>harga_total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
 
-                    },
-                    error: function(error) {
-                        var errorMessage = "Terjadi kesalahan dalam operasi.";
+                dataArrayDetail.forEach(function(rowData) {
+                    detailPembelianHTML += `
+                        <tr>
+                            <td>${rowData.nama}</td>
+                            <td>${rowData.qty_pesan}</td>
+                            <td>${rowData.qty_retur}</td>
+                            <td>${rowData.qty_bersih}</td>
+                            <td>${rowData.kd_gudang}</td>
+                            <td>${rowData.harga_satuan}</td>
+                            <td>${rowData.harga_total}</td>
+                        </tr>
+                    `;
+                });
 
-                        if (error.responseJSON && error.responseJSON.message) {
-                            errorMessage = error.responseJSON.message;
-                        } else if (error.statusText) {
-                            errorMessage = error.statusText;
-                        }
+                detailPembelianHTML += `
+                        </tbody>
+                    </table>
+                `;
 
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Kesalahan!',
-                            text: errorMessage,
+                // Menambahkan total keseluruhan
+                detailPembelianHTML +=
+                    `<p><strong>Total Keseluruhan:</strong> <b>${pembelianData.harga_total}</b></p>`;
+
+                detailPembelianHTML += '</div>';
+
+                Swal.fire({
+                    title: 'Konfirmasi Pembelian',
+                    html: detailPembelianHTML, // Menggunakan variabel detailPembelianHTML
+                    showCancelButton: true,
+                    confirmButtonText: 'Simpan',
+                    cancelButtonText: 'Batal',
+                    icon: 'question',
+                    width: '80%', // Sesuaikan lebar sesuai kebutuhan
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route('pembelian.store') }}',
+                            method: 'POST',
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sukses!',
+                                        text: response.message,
+                                    });
+                                    $('#btn-add-pembelian-close').click()
+                                    return;
+                                }
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.message,
+                                });
+
+                            },
+                            error: function(error) {
+                                var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                                if (error.responseJSON && error.responseJSON.message) {
+                                    errorMessage = error.responseJSON.message;
+                                } else if (error.statusText) {
+                                    errorMessage = error.statusText;
+                                }
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Kesalahan!',
+                                    text: errorMessage,
+                                });
+                            }
                         });
                     }
                 });

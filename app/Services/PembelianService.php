@@ -223,6 +223,7 @@ class PembelianService
     {
         $jns = $this->getJns();
         $data = $this->dPembelianModel->where('nota_pembelian', '=', $pembelianData['nota_pembelian'])->first();
+
         if (!$data) {
             return $this->dPembelianModel->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $pembelianData);
         } elseif ($jns == 'update') {
@@ -259,6 +260,7 @@ class PembelianService
 
         foreach ($dataArrayDetail as $dataDetail) {
             $dataDetail = $this->prepareDetailData($dataDetail);
+            unset($dataDetail["nama"]);
 
             $dataDetail['nota_pembelian'] = $pembelian->nota_pembelian;
 
