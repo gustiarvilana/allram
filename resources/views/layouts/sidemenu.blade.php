@@ -7,6 +7,7 @@
         @php
             $count_child = MenuHelper::countChildren($menu->kd_menu)->where('kd_parent', '!=', null);
         @endphp
+
         <li class="nav-item" id="item_menu-{{ $menu->kd_menu }}">
             {{-- <li class="nav-item menu-is-opening menu-open"> --}}
             <a href="{{ url('/') . $menu->link_menu }}"

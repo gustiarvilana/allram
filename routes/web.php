@@ -3,23 +3,10 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
-use App\Http\Controllers\Ramwater\DatangBarang\DatangBarangControler;
-use App\Http\Controllers\Ramwater\DatangBarang\LaporanDatangBarangControler;
-use App\Http\Controllers\Ramwater\Kasbon\KasbonController;
-use App\Http\Controllers\Ramwater\Kasbon\LaporanKasbonController;
-use App\Http\Controllers\Ramwater\Operasional\LaporanOperasionalController;
-use App\Http\Controllers\Ramwater\Operasional\OperasionalController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController;
 use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
-use App\Http\Controllers\Ramwater\Penjualan\DGalonController;
-use App\Http\Controllers\Ramwater\Penjualan\DHutangController;
-use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanControler;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
-use App\Http\Controllers\Ramwater\Penjualan\PenjualandetailController;
-use App\Http\Controllers\Ramwater\Pinjaman\LaporanPinjamanController;
-use App\Http\Controllers\Ramwater\Pinjaman\PinjamanController;
-use App\Http\Controllers\Ramwater\Report\RamwaterController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\SecurityController;
 use App\Http\Controllers\Security\UserController;
@@ -67,6 +54,13 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         // Route::get('/monitoring/data', [RamwaterController::class, 'monitoring_data'])->name('ramwater.dashboard.monitoring.monitoring_data');
         // Route::get('/monitoring', [RamwaterController::class, 'monitoring'])->name('ramwater.dashboard.monitoring');
 
+        Route::resource('/produk', ProdukController::class)->except('show');
+        Route::prefix('produk')->group(function () {
+            Route::get('/data', [produkController::class, 'data'])->name('produk.data');
+            Route::get('/laporan', [LaporanProdukController::class, 'laporan'])->name('produk.laporan');
+            Route::get('laporan/data', [LaporanprodukController::class, 'data'])->name('produk.laporan.data');
+        });
+
         Route::resource('/pembelian', PembelianController::class)->except('show');
         Route::prefix('pembelian')->group(function () {
             Route::get('/data', [PembelianController::class, 'data'])->name('pembelian.data');
@@ -80,11 +74,17 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             });
         });
 
-        Route::resource('/produk', ProdukController::class)->except('show');
-        Route::prefix('produk')->group(function () {
-            Route::get('/data', [produkController::class, 'data'])->name('produk.data');
-            Route::get('/laporan', [LaporanProdukController::class, 'laporan'])->name('produk.laporan');
-            Route::get('laporan/data', [LaporanprodukController::class, 'data'])->name('produk.laporan.data');
+        Route::resource('/penjualan', PenjualanController::class)->except('show');
+        Route::prefix('penjualan')->group(function () {
+            Route::get('/data', [penjualanController::class, 'data'])->name('penjualan.data');
+            Route::get('/laporan', [LaporanpenjualanController::class, 'index'])->name('penjualan.index');
+            Route::get('laporan/data', [LaporanpenjualanController::class, 'data'])->name('penjualan.laporan.data');
+            Route::get('laporan/detailData', [LaporanpenjualanController::class, 'detailData'])->name('penjualan.laporan.detailData');
+
+            Route::resource('/pembayaran', PembayaranController::class)->except('show');
+            Route::prefix('pembayaran')->group(function () {
+                Route::get('/data', [PembayaranController::class, 'data'])->name('penjualan.pembayaran.data');
+            });
         });
     });
 });
