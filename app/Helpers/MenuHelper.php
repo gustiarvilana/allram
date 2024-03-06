@@ -39,7 +39,7 @@ class MenuHelper
 
         if (count($children) > 0) {
             foreach ($children as $child) {
-                echo "<ul class='nav nav-treeview ml-2'>";
+                echo "<ul class='nav nav-treeview ml-3'>";
                 echo "<li class='nav-item ";
                 if ($child->link_menu == '/' . $currentUrl) {
                     echo "menu-open";
