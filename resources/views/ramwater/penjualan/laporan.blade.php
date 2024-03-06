@@ -246,22 +246,14 @@
                         data: 'nominal_bayar',
                         name: 'a.nominal_bayar',
                         render: function(data, type, row) {
-                            if (data == 0 || data == null) {
-                                return '0';
-                            } else {
-                                return addCommas(data);
-                            }
+                            return addCommas(data);
                         }
                     },
                     {
                         data: 'sisa_bayar',
                         name: 'a.sisa_bayar',
                         render: function(data, type, row) {
-                            if (data == 0 || data == null) {
-                                return '0';
-                            } else {
-                                return addCommas(data);
-                            }
+                            return addCommas(data);
                         }
                     },
                     {

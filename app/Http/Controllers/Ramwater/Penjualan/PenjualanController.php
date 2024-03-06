@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ramwater\Penjualan;
 
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Produk;
 use App\Models\SupplierModel;
 use App\Models\TGudang;
 use App\Services\PembelianService;
@@ -11,21 +12,19 @@ use Illuminate\Http\Request;
 
 class PenjualanController extends Controller
 {
-    protected  $supplier;
-    protected $pembelianService;
     protected $tGudang;
+    protected $produkMOdel;
 
-    public function __construct(SupplierModel $supplierModel, PembelianService $pembelianService, TGudang $tGudang)
+    public function __construct(TGudang $tGudang, Produk $produkMOdel)
     {
-        $this->supplier = $supplierModel;
-        $this->pembelianService = $pembelianService;
-        $this->tGudang = $tGudang;
         $this->integrationHelper = new IntegrationHelper;
+        $this->tGudang = $tGudang;
+        $this->produkMOdel = $produkMOdel;
     }
 
     public function data()
     {
-        $supplier = $this->supplier->getSupplier();
+        $supplier = $this->produkMOdel->getProduk();
 
         return datatables()
             ->of($supplier)
@@ -38,12 +37,11 @@ class PenjualanController extends Controller
         $data = [
             'gudang' => $this->tGudang->get(),
         ];
-        return view('ramwater.pembelian.index', $data);
+        return view('ramwater.penjualan.index', $data);
     }
 
     public function store(Request $request)
     {
-
         $pembelianData = json_decode($request->input('pembelianData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
         $file = $request->file('path_file');

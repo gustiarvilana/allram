@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fas fa-truck-loading"></i> <b>Pembelian</b>
+    <i class="fa fa-cart-plus" aria-hidden="true"></i> <b>Penjualan</b>
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <div class="card card-success">
                         <div class="card-header">
-                            <h3 class="card-title">Supplier</h3>
+                            <h3 class="card-title">Pelanggan</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -22,10 +22,14 @@
                                     <table class="table table-striped table-inverse" id="table-supplier">
                                         <thead>
                                             <tr>
-                                                {{-- <th width="5%">No</th> --}}
-                                                <th>Supplier</th>
-                                                <th>merek</th>
+                                                <th width="5%">No</th>
+                                                <th>kd_pelanggan</th>
+                                                <th>nama</th>
                                                 <th>alamat</th>
+                                                <th>kd_kec</th>
+                                                <th>kd_kel</th>
+                                                <th>kd_kota</th>
+                                                <th>kd_pos</th>
                                                 <th>no_tlp</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
@@ -43,12 +47,12 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal-pembelian" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="modal-penjualan" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-pembelian-title">Modal title</h5>
+                    <h5 class="modal-title" id="modal-penjualan-title">Modal title</h5>
                     <button type="button" class="close btn-add-pembelian-close" id="btn-add-pembelian-close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -58,26 +62,32 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Uraian Pembelian</span>
+                                    <span>Uraian Penjualan</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-pembelian">
+                                            <table class="table table-striped" id="table-penjualan">
                                                 <thead>
                                                     <tr>
-                                                        <th>Supplier</th>
-                                                        <th>nota_pembelian</th>
-                                                        <th>tgl_pembelian</th>
-                                                        <th>kd_supplier</th>
-                                                        <th>jns_pembelian</th>
+                                                        <th>nota_penjualan</th>
+                                                        <th>tgl_penjualan</th>
+                                                        <th>id_pelanggan</th>
+                                                        <th>jns_pembayaran</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
                                                         <th>sisa_bayar</th>
                                                         <th>sts_angsuran</th>
+                                                        <th>total_galon</th>
+                                                        <th>galon_kembali</th>
+                                                        <th>sisa_galon</th>
+                                                        <th>sts_galon</th>
+                                                        <th>id_sales</th>
+                                                        <th>opr_input</th>
+                                                        <th>tgl_input</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="pembelian-uraian"></tbody>
+                                                <tbody id="penjualan-uraian"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -164,68 +174,74 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('pembelian.data') }}',
+                ajax: '{{ route('pelanggan.data') }}',
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'
                 ],
-                // buttons: [{
-                //     extend: "excel",
-                //     text: "Export Data",
-                //     className: "btn-excel",
-                //     action: function(e, dt, node, config) {
-                //         $.getJSON('#', function(
-                //             data) {
-                //             var result = data.map(function(row) {
-                //                 return {
-                //                     fullname: row.fullname,
-                //                     group_name: row.group_name,
-                //                     satker: row.satker,
-                //                     active: (row.active == '0') ? 'Not Active' :
-                //                         (row.active == '1') ? 'Active' :
-                //                         'Unknown',
-                //                     username: row.username,
-                //                     email: row.email,
-                //                     phone: row.phone
-                //                 };
-                //             });
-                //             downloadXLSX(result);
-                //         });
-                //     }
-                // }],
-                columns: [
-                    // {
-                    //     data: 'DT_RowIndex',
-                    //     searchable: false,
-                    //     shrotable: false
-                    // },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        searchable: false,
+                        shrotable: false
+                    },
                     {
-                        data: 'nama',
+                        data: 'kd_pelanggan',
+                        name: 'kd_pelanggan',
                         render: function(data, type, row) {
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
+                            return data;
                         }
                     },
                     {
-                        data: 'merek',
+                        data: 'nama',
+                        name: 'nama',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'alamat',
+                        name: 'alamat',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'kd_kec',
+                        name: 'kd_kec',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'kd_kel',
+                        name: 'kd_kel',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'kd_kota',
+                        name: 'kd_kota',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'kd_pos',
+                        name: 'kd_pos',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'no_tlp',
+                        name: 'no_tlp',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
-                        data: 'id',
+                        data: 'a.id',
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
 
@@ -238,7 +254,7 @@
                     },
                 ],
                 columnDefs: [{
-                    targets: [4],
+                    targets: [0],
                     searchable: false,
                     orderable: false
                 }],
@@ -382,8 +398,8 @@
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#modal-pembelian").modal("show");
             }).on("click", "#btn-add-pembelian-close", function() { //close-pembelian
-                $("#modal-pembelian").modal("hide");
-                $('#pembelian-uraian').empty();
+                $("#modal-penjualan").modal("hide");
+                $('#penjualan-uraian').empty();
             }).on("click", "#btn-add-pembelian-simpan", function() {
                 var imageFile = $('#path_file')[0].files[0];
 
@@ -407,14 +423,14 @@
                 });
 
                 var pembelianData = {
-                    nota_pembelian: $('#table-pembelian #ur_nota_pembelian').val(),
-                    tgl_pembelian: $('#table-pembelian #ur_tgl_pembelian').val(),
-                    kd_supplier: $('#table-pembelian #ur_kd_supplier').val(),
-                    jns_pembelian: $('#table-pembelian #ur_jns_pembelian').val(),
-                    harga_total: $('#table-pembelian #ur_harga_total').val(),
-                    nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
-                    sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
-                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
+                    nota_pembelian: $('#table-penjualan #ur_nota_pembelian').val(),
+                    tgl_pembelian: $('#table-penjualan #ur_tgl_pembelian').val(),
+                    kd_supplier: $('#table-penjualan #ur_kd_supplier').val(),
+                    jns_pembelian: $('#table-penjualan #ur_jns_pembelian').val(),
+                    harga_total: $('#table-penjualan #ur_harga_total').val(),
+                    nominal_bayar: $('#table-penjualan #ur_nominal_bayar').val(),
+                    sisa_bayar: $('#table-penjualan #ur_sisa_bayar').val(),
+                    sts_angsuran: $('#table-penjualan #ur_sts_angsuran').val(),
                     path_file: $('#path_file').val(),
                 };
 
@@ -522,34 +538,31 @@
                 });
             }).on("click", "#btn-penjualan-input", function() { //btn_input_click
                 var rowData = $(this).data('row');
+                console.log(rowData);
+
                 var row =
                     '<tr>' +
-                    '<td>' +
-                    '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                    rowData.nama + '</span></div>' +
-                    '</td>' +
-                    '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
-                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
-                    '<td><input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
-                    .kd_supplier + '" class="form-control" readonly></td>' +
-                    '<td>' +
-                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control">' +
-                    '<option value=""></option>' +
-                    '<option value="tunai">Tunai</option>' +
-                    '<option value="tempo">Tempo</option>' +
-                    '</select>' +
-                    '</td>' +
-                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" readonly></td>' +
-                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
-                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" readonly></td>' +
+                    '<td><input type="text" name="nota_penjualan" id="ur_nota_penjualan" class="form-control"></td>' +
+                    '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control"></td>' +
+                    '<td><input type="text" name="id_pelanggan" id="ur_id_pelanggan" class="form-control"></td>' +
+                    '<td><input type="text" name="jns_pembayaran" id="ur_jns_pembayaran" class="form-control"></td>' +
+                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control"></td>' +
+                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control"></td>' +
+                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control"></td>' +
+                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control"></td>' +
+                    '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
+                    '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
+                    '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control"></td>' +
+                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control"></td>' +
+                    '<td><input type="text" name="id_sales" id="ur_id_sales" class="form-control"></td>' +
+                    '<td><input type="text" name="opr_input" id="ur_opr_input" class="form-control"></td>' +
+                    '<td><input type="text" name="tgl_input" id="ur_tgl_input" class="form-control"></td>' +
                     '</tr>';
 
-                $('#pembelian-uraian').append(row);
+                $('#penjualan-uraian').append(row);
 
-                $("#modal-pembelian-title").text("Tambah Data");
-                $("#ur_nominal_bayar").val('0');
-                $("#modal-pembelian").modal("show");
+                $("#modal-penjualan-title").text("Input Penjualan");
+                $("#modal-penjualan").modal("show");
             }).on("keyup", "#ur_nota_pembelian", function() {
                 var text = $('#ur_nota_pembelian').val()
 

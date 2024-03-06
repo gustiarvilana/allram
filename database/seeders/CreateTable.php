@@ -226,5 +226,35 @@ class CreateTable extends Seeder
                 INDEX `idx_t_channel_bayar_kd_channel` (`kd_channel`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
+
+        // d_penjualan
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_penjualan` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+                `nota_penjualan` VARCHAR(50) NOT NULL,
+                `tgl_penjualan` VARCHAR(50) NOT NULL,
+                `id_pelanggan` VARCHAR(50) DEFAULT NULL,
+                `jns_pembayaran` VARCHAR(50) DEFAULT NULL,
+                `harga_total` VARCHAR(50) DEFAULT NULL,
+                `nominal_bayar` VARCHAR(50) DEFAULT NULL,
+                `sisa_bayar` VARCHAR(50) DEFAULT NULL,
+                `sts_angsuran` VARCHAR(50) DEFAULT NULL,
+                `total_galon` VARCHAR(50) DEFAULT NULL,
+                `galon_kembali` VARCHAR(50) DEFAULT NULL,
+                `sisa_galon` VARCHAR(50) DEFAULT NULL,
+                `sts_galon` VARCHAR(50) DEFAULT NULL,
+                `id_sales` VARCHAR(50) DEFAULT NULL,
+                `opr_input` VARCHAR(50) DEFAULT NULL,
+                `tgl_input` INT DEFAULT NULL,
+
+                `opr_input` VARCHAR(50) DEFAULT NULL,
+                `tgl_input` INT DEFAULT NULL,
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_nota_pembelian` (`nota_pembelian`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
     }
 }

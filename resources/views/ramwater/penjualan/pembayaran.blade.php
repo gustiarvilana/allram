@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fas fa-money-bill"></i> <b>Laporan Pembayaran</b>
+    <i class="fas fa-money-bill"></i><b> Laporan Pembayaran</b>
 @endsection
 
 @section('content')
@@ -251,8 +251,7 @@
                         data: 'nominal_bayar',
                         name: 'a.nominal_bayar',
                         render: function(data, type, row) {
-                            if (data == 0 || data == null) {
-
+                            if (data == 0) {
                                 return '0';
                             } else {
                                 return addCommas(data);
@@ -263,8 +262,7 @@
                         data: 'sisa_bayar',
                         name: 'a.sisa_bayar',
                         render: function(data, type, row) {
-                            if (data == 0 || data == null) {
-
+                            if (data == 0) {
                                 return '0';
                             } else {
                                 return addCommas(data);

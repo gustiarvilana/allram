@@ -14,6 +14,12 @@ class DStokProduk extends Model
     protected $table = 'd_stok_produk';
     protected $guarded = [];
 
+    protected $produkModel;
+    public function __construct()
+    {
+        $this->produkModel = new Produk();
+    }
+
     public function validateStok($dataDetail)
     {
         $stok = $this->where([
@@ -33,6 +39,7 @@ class DStokProduk extends Model
             'kd_gudang' => $dataDetail['kd_gudang']
         ])->first();
         $produk->decrement('stok', $dataDetail['qty_bersih']);
+        $this->updateAllstok($dataDetail['kd_produk']);
     }
 
     public function incrementStok($dataDetail)
@@ -52,5 +59,15 @@ class DStokProduk extends Model
             ]);
         }
         $produk->increment('stok', $dataDetail['qty_bersih']);
+        $this->updateAllstok($dataDetail['kd_produk']);
+    }
+
+    function updateAllstok($kd_produk)
+    {
+        $allStok = $this->where('kd_produk', '=', $kd_produk)->sum('stok');
+
+        $produk = $this->produkModel->where('kd_produk', '=', $kd_produk)->first();
+        $produk->stok_all = $allStok;
+        $produk->save();
     }
 }

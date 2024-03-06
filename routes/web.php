@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\pelanggan\LaporanPelangganController;
+use App\Http\Controllers\pelanggan\PelangganController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
@@ -59,6 +61,13 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('/data', [produkController::class, 'data'])->name('produk.data');
             Route::get('/laporan', [LaporanProdukController::class, 'laporan'])->name('produk.laporan');
             Route::get('laporan/data', [LaporanprodukController::class, 'data'])->name('produk.laporan.data');
+        });
+
+        Route::resource('/pelanggan', PelangganController::class)->except('show');
+        Route::prefix('pelanggan')->group(function () {
+            Route::get('/data', [PelangganController::class, 'data'])->name('pelanggan.data');
+            Route::get('/laporan', [LaporanPelangganController::class, 'laporan'])->name('pelanggan.laporan');
+            Route::get('laporan/data', [LaporanPelangganController::class, 'data'])->name('pelanggan.laporan.data');
         });
 
         Route::resource('/pembelian', PembelianController::class)->except('show');
