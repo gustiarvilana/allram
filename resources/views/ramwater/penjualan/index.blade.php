@@ -23,13 +23,8 @@
                                         <thead>
                                             <tr>
                                                 <th width="5%">No</th>
-                                                <th>kd_pelanggan</th>
                                                 <th>nama</th>
                                                 <th>alamat</th>
-                                                <th>kd_kec</th>
-                                                <th>kd_kel</th>
-                                                <th>kd_kota</th>
-                                                <th>kd_pos</th>
                                                 <th>no_tlp</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
@@ -70,7 +65,6 @@
                                             <table class="table table-striped" id="table-penjualan">
                                                 <thead>
                                                     <tr>
-                                                        <th>nota_penjualan</th>
                                                         <th>tgl_penjualan</th>
                                                         <th>id_pelanggan</th>
                                                         <th>jns_pembayaran</th>
@@ -83,8 +77,6 @@
                                                         <th>sisa_galon</th>
                                                         <th>sts_galon</th>
                                                         <th>id_sales</th>
-                                                        <th>opr_input</th>
-                                                        <th>tgl_input</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="penjualan-uraian"></tbody>
@@ -185,13 +177,6 @@
                         shrotable: false
                     },
                     {
-                        data: 'kd_pelanggan',
-                        name: 'kd_pelanggan',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
                         data: 'nama',
                         name: 'nama',
                         render: function(data, type, row) {
@@ -201,34 +186,6 @@
                     {
                         data: 'alamat',
                         name: 'alamat',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'kd_kec',
-                        name: 'kd_kec',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'kd_kel',
-                        name: 'kd_kel',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'kd_kota',
-                        name: 'kd_kota',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'kd_pos',
-                        name: 'kd_pos',
                         render: function(data, type, row) {
                             return data;
                         }
@@ -254,7 +211,7 @@
                     },
                 ],
                 columnDefs: [{
-                    targets: [0],
+                    targets: [0, 4],
                     searchable: false,
                     orderable: false
                 }],
@@ -542,21 +499,31 @@
 
                 var row =
                     '<tr>' +
-                    '<td><input type="text" name="nota_penjualan" id="ur_nota_penjualan" class="form-control"></td>' +
-                    '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control"></td>' +
-                    '<td><input type="text" name="id_pelanggan" id="ur_id_pelanggan" class="form-control"></td>' +
-                    '<td><input type="text" name="jns_pembayaran" id="ur_jns_pembayaran" class="form-control"></td>' +
-                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control"></td>' +
+                    '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
+                    {{ date('Ymd') }} + '"></td>' +
+                    '<input type="text" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' + rowData.kd_pelanggan + '">' +
+                    '<td><span><b>' + rowData.nama + '</b></span></td>' +
+                    '<td>' +
+                    '<select name="kd_channel" id="kd_channel" class="form-control">' +
+                    '<option value="">== Pilih Channel ==</option>' +
+                    '@foreach ($channels as $channel)' +
+                    '<option value="{{ $channel->kd_channel }}">{{ $channel->ur_channel }}</option>' +
+                    '@endforeach' +
+                    '</select>' +
+                    '</td>' +
+                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control"></td>' +
-                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control"></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control"></td>' +
-                    '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
+                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control" readonly></td>' +
+                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly></td>' +
+                    '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control" readonly></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
-                    '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control"></td>' +
-                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control"></td>' +
-                    '<td><input type="text" name="id_sales" id="ur_id_sales" class="form-control"></td>' +
-                    '<td><input type="text" name="opr_input" id="ur_opr_input" class="form-control"></td>' +
-                    '<td><input type="text" name="tgl_input" id="ur_tgl_input" class="form-control"></td>' +
+                    '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly></td>' +
+                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control" readonly></td>' +
+                    '<td><input type="text" name="kd_sales" id="ur_kd_sales" class="form-control" readonly></td>' +
+                    '<input type="hidden" name="opr_input" id="ur_opr_input" class="form-control" value="' +
+                    {{ Auth::user()->nik }} + '">' +
+                    '<input type="hidden" name="tgl_input" id="ur_tgl_input" class="form-control" value="' +
+                    {{ date('Ymd') }} + '">' +
                     '</tr>';
 
                 $('#penjualan-uraian').append(row);

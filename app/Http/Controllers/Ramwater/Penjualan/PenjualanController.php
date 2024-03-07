@@ -6,6 +6,7 @@ use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Produk;
 use App\Models\SupplierModel;
+use App\Models\TChannelModel;
 use App\Models\TGudang;
 use App\Services\PembelianService;
 use Illuminate\Http\Request;
@@ -14,12 +15,14 @@ class PenjualanController extends Controller
 {
     protected $tGudang;
     protected $produkMOdel;
+    protected $tChannelModel;
 
-    public function __construct(TGudang $tGudang, Produk $produkMOdel)
+    public function __construct()
     {
         $this->integrationHelper = new IntegrationHelper;
-        $this->tGudang = $tGudang;
-        $this->produkMOdel = $produkMOdel;
+        $this->tGudang = new TGudang;
+        $this->produkMOdel = new Produk;
+        $this->tChannelModel = new TChannelModel();
     }
 
     public function data()
@@ -36,6 +39,7 @@ class PenjualanController extends Controller
     {
         $data = [
             'gudang' => $this->tGudang->get(),
+            'channels' => $this->tChannelModel->get(),
         ];
         return view('ramwater.penjualan.index', $data);
     }

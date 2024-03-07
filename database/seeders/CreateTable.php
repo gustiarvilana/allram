@@ -234,8 +234,8 @@ class CreateTable extends Seeder
 
                 `nota_penjualan` VARCHAR(50) NOT NULL,
                 `tgl_penjualan` VARCHAR(50) NOT NULL,
-                `id_pelanggan` VARCHAR(50) DEFAULT NULL,
-                `jns_pembayaran` VARCHAR(50) DEFAULT NULL,
+                `kd_pelanggan` VARCHAR(50) DEFAULT NULL,
+                `kd_channel` VARCHAR(50) DEFAULT NULL,
                 `harga_total` VARCHAR(50) DEFAULT NULL,
                 `nominal_bayar` VARCHAR(50) DEFAULT NULL,
                 `sisa_bayar` VARCHAR(50) DEFAULT NULL,
@@ -244,16 +244,14 @@ class CreateTable extends Seeder
                 `galon_kembali` VARCHAR(50) DEFAULT NULL,
                 `sisa_galon` VARCHAR(50) DEFAULT NULL,
                 `sts_galon` VARCHAR(50) DEFAULT NULL,
-                `id_sales` VARCHAR(50) DEFAULT NULL,
-                `opr_input` VARCHAR(50) DEFAULT NULL,
-                `tgl_input` INT DEFAULT NULL,
+                `kd_sales` VARCHAR(50) DEFAULT NULL,
 
                 `opr_input` VARCHAR(50) DEFAULT NULL,
                 `tgl_input` INT DEFAULT NULL,
                 `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
-                INDEX `idx_nota_pembelian` (`nota_pembelian`)
+                INDEX `idx_nota_penjualan` (`nota_penjualan`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
     }
