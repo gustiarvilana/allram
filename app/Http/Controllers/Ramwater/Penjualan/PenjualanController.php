@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ramwater\Penjualan;
 
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Karyawan;
 use App\Models\Produk;
 use App\Models\SupplierModel;
 use App\Models\TChannelModel;
@@ -16,6 +17,7 @@ class PenjualanController extends Controller
     protected $tGudang;
     protected $produkMOdel;
     protected $tChannelModel;
+    protected $karyawan;
 
     public function __construct()
     {
@@ -23,6 +25,7 @@ class PenjualanController extends Controller
         $this->tGudang = new TGudang;
         $this->produkMOdel = new Produk;
         $this->tChannelModel = new TChannelModel();
+        $this->karyawan = new Karyawan();
     }
 
     public function data()
@@ -40,6 +43,7 @@ class PenjualanController extends Controller
         $data = [
             'gudang' => $this->tGudang->get(),
             'channels' => $this->tChannelModel->get(),
+            'saless' => $this->karyawan->where('jabatan', '=', 'sales')->get(),
         ];
         return view('ramwater.penjualan.index', $data);
     }

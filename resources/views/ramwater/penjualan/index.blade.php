@@ -83,17 +83,12 @@
                                             <table class="table table-striped" id="table-penjualan">
                                                 <thead>
                                                     <tr>
-                                                        <th>tgl_penjualan</th>
-                                                        <th>id_pelanggan</th>
-                                                        <th>jns_pembayaran</th>
+                                                        <th>Tgl</th>
+                                                        <th>channel</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
-                                                        <th>sisa_bayar</th>
-                                                        <th>sts_angsuran</th>
                                                         <th>total_galon</th>
                                                         <th>galon_kembali</th>
-                                                        <th>sisa_galon</th>
-                                                        <th>sts_galon</th>
                                                         <th>id_sales</th>
                                                     </tr>
                                                 </thead>
@@ -101,28 +96,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <span>Upload Faktur</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="form-group">
-                                                <label for="path_file">Upload Faktur</label>
-                                                <input class="form-control path_file" type="file" name="path_file"
-                                                    id="path_file">
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -187,13 +160,8 @@
                 autoWidth: false,
                 ajax: '{{ route('pelanggan.data') }}',
                 dom: 'Brtip',
-                // buttons: [
-                //     'copy', 'excel', 'pdf'
-                // ],
                 buttons: [{
-                    // extend: "excel",
                     text: "Tambah Pelanggan",
-                    // className: "btn-excel",
                     action: function() {
                         $('#modal-add .modal-title').html(
                             '<i class="fa fa-users" aria-hidden="true"></i> <b>Tambah Pelanggan</b>'
@@ -403,6 +371,17 @@
                 $('.path_file').val('');
             });
 
+            $('body').on('keyup', '#ur_total_galon,#ur_galon_kembali', function() {
+                var sisa = $('#ur_total_galon').val() - $('#ur_galon_kembali').val();
+                if (sisa < 0) {
+                    $('#ur_galon_kembali').val('0');
+                    alert("Galon terlalu banyak");
+                }
+                $('#ur_sisa_galon').val(sisa);
+                if (sisa > 0) $('#ur_sts_galon').val('1');
+                if (sisa = 0) $('#ur_sts_galon').val('0');
+            });
+
             $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#modal-pembelian").modal("show");
@@ -559,15 +538,12 @@
                 add_pelanggan();
             }).on("click", "#btn-pelanggan-input", function() { //btn_input_click
                 var rowData = $(this).data('row');
-                console.log(rowData);
-
                 var row =
                     '<tr>' +
                     '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
                     {{ date('Ymd') }} + '"></td>' +
                     '<input type="text" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
                     rowData.kd_pelanggan + '">' +
-                    '<td><span><b>' + rowData.nama + '</b></span></td>' +
                     '<td>' +
                     '<select name="kd_channel" id="kd_channel" class="form-control">' +
                     '<option value="">== Pilih Channel ==</option>' +
@@ -577,14 +553,23 @@
                     '</select>' +
                     '</td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control" readonly></td>' +
-                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control"></td>' +
-                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control" readonly></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly></td>' +
-                    '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control" readonly></td>' +
+                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
+                    '<input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control" readonly>' +
+                    '<input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly>' +
+                    '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
-                    '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly></td>' +
-                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control" readonly></td>' +
-                    '<td><input type="text" name="kd_sales" id="ur_kd_sales" class="form-control" readonly></td>' +
+                    '<input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly>' +
+                    '<input type="text" name="sts_galon" id="ur_sts_galon" class="form-control" readonly>' +
+
+                    '<td>' +
+                    '<select name="kd_channel" id="kd_channel" class="form-control">' +
+                    '<option value="">== Pilih Channel ==</option>' +
+                    '@foreach ($saless as $sales)' +
+                    '<option value="{{ $sales->nik }}">{{ $sales->nama }}</option>' +
+                    '@endforeach' +
+                    '</select>' +
+                    '</td>' +
+
                     '<input type="hidden" name="opr_input" id="ur_opr_input" class="form-control" value="' +
                     {{ Auth::user()->nik }} + '">' +
                     '<input type="hidden" name="tgl_input" id="ur_tgl_input" class="form-control" value="' +
@@ -593,7 +578,7 @@
 
                 $('#penjualan-uraian').append(row);
 
-                $("#modal-penjualan-title").text("Input Penjualan");
+                $("#modal-penjualan-title").text("Input Penjualan " + rowData.nama);
                 $("#modal-penjualan").modal("show");
             }).on("click", "#btn-pelanggan-delete", function() {
                 var deleteButton = $(this);
@@ -629,7 +614,6 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Gagal!',
-                                    // text: response.message,
                                 });
 
                             },
@@ -670,16 +654,13 @@
             }).on("keyup change",
                 ".detail_qty_pesan, .detail_qty_retur, .detail_qty_bersih, .detail_harga_satuan,.detail_harga_total,.ur_harga_total",
                 function() {
-                    // Mendapatkan baris terdekat
                     var currentRow = $(this).closest('tr');
 
-                    // Update detail_qty_bersih berdasarkan detail_qty_pesan dan detail_qty_retur
                     updateField(currentRow, 'detail_qty_bersih', ['#detail_qty_pesan', '#detail_qty_retur'],
                         function(qtyPesan, qtyRetur) {
                             return qtyPesan - (isNaN(qtyRetur) ? 0 : qtyRetur);
                         });
 
-                    // Update detail_harga_total berdasarkan detail_qty_bersih dan detail_harga_satuan
                     updateField(currentRow, 'detail_harga_total', ['#detail_qty_bersih',
                             '#detail_harga_satuan'
                         ],
@@ -687,7 +668,6 @@
                             return qtyBersih * hargaSatuan;
                         });
 
-                    // Update total pada ur_harga_total berdasarkan detail_harga_total
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });

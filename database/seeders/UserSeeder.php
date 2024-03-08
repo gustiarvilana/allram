@@ -36,7 +36,8 @@ class UserSeeder extends Seeder
 
         DB::table('d_karyawan')->upsert([
             [
-                'nik'       => 2134,
+                'id'        => 1,
+                'nik'       => '2134',
                 'nama'      => 'Superuser',
                 'satker'    => '',
                 'alamat'    => 'alamat User',
@@ -46,6 +47,7 @@ class UserSeeder extends Seeder
                 'reference' => '',
             ],
             [
+                'id'        => 2,
                 'nik'       => '2135',
                 'nama'      => 'margana',
                 'satker'    => 'ramwater',
@@ -56,6 +58,7 @@ class UserSeeder extends Seeder
                 'reference' => '',
             ],
             [
+                'id'        => 3,
                 'nik'       => '2136',
                 'nama'      => 'Rista',
                 'satker'    => 'ramwater',
@@ -66,6 +69,7 @@ class UserSeeder extends Seeder
                 'reference' => '',
             ],
             [
+                'id'        => 4,
                 'nik'       => '2137',
                 'nama'      => 'Nama Sales 1',
                 'satker'    => 'ramwater',
@@ -76,6 +80,7 @@ class UserSeeder extends Seeder
                 'reference' => '',
             ],
             [
+                'id'        => 5,
                 'nik'       => '2138',
                 'nama'      => 'Nama Sales 2',
                 'satker'    => 'ramwater',
@@ -86,6 +91,7 @@ class UserSeeder extends Seeder
                 'reference' => '',
             ],
             [
+                'id'        => 6,
                 'nik'       => '2139',
                 'nama'      => 'Nama Sales 3',
                 'satker'    => 'ramwater',
@@ -96,6 +102,7 @@ class UserSeeder extends Seeder
                 'reference' => '',
             ],
             [
+                'id'        => 7,
                 'nik'       => '2140',
                 'nama'      => 'ramwater',
                 'satker'    => 'ramwater',
