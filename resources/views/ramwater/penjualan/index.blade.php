@@ -263,8 +263,8 @@
                     targets: [0, 4, 5],
                     searchable: false,
                     orderable: false,
-                },{
-                    targets: [3,4,5],
+                }, {
+                    targets: [3, 4, 5],
                     className: 'text-center'
                 }],
                 initComplete: function() {
@@ -557,7 +557,7 @@
                 $('#modal-add .modal-title').html(
                     '<i class="fa fa-user" aria-hidden="true"></i> <b>Edit Pelanggan</b>');
                 add_pelanggan();
-            }).on("click", "#btn-penjualan-input", function() { //btn_input_click
+            }).on("click", "#btn-pelanggan-input", function() { //btn_input_click
                 var rowData = $(this).data('row');
                 console.log(rowData);
 
@@ -595,6 +595,62 @@
 
                 $("#modal-penjualan-title").text("Input Penjualan");
                 $("#modal-penjualan").modal("show");
+            }).on("click", "#btn-pelanggan-delete", function() {
+                var deleteButton = $(this);
+                var id = deleteButton.data('id');
+                var url_delete = '{{ route('pelanggan.destroy', ['pelanggan' => ':id']) }}';
+                url_delete = url_delete.replace(':id', id);
+
+                // Use SweetAlert for confirmation
+                Swal.fire({
+                    title: 'Anda Yakin?',
+                    text: 'Anda akan menghapus pelanggan ini!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    cancelButtonText: 'Tidak',
+                    confirmButtonText: 'Ya'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url_delete,
+                            type: 'DELETE',
+                            data: {
+                                _token: getCSRFToken(),
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    tableSupplier.ajax.reload();
+                                    Swal.fire('Terhapus!', 'Data berhasil dihapus.',
+                                        'success');
+                                    return;
+                                }
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    // text: response.message,
+                                });
+
+                            },
+                            error: function(error) {
+                                var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                                if (error.responseJSON && error.responseJSON.message) {
+                                    errorMessage = error.responseJSON.message;
+                                } else if (error.statusText) {
+                                    errorMessage = error.statusText;
+                                }
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Kesalahan!',
+                                    text: errorMessage,
+                                });
+                            }
+                        });
+                    }
+                });
             }).on("keyup", "#ur_nota_pembelian", function() {
                 var text = $('#ur_nota_pembelian').val()
 

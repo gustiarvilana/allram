@@ -41,6 +41,20 @@ class PelangganController extends Controller
         return back()->with('error', 'Operasi gagal dilakukan!');
     }
 
+    public function destroy($id)
+    {
+        // $id = $this->integrationHelper->decrypt(base64_decode($id), $this->integrationHelper->getKey());
+
+        $pelanggan = $this->model->find($id);
+
+        try {
+            $pelanggan->delete();
+            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' =>  $e->getMessage()]);
+        }
+    }
+
 
     public function laporan()
     {
