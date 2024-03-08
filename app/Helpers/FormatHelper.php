@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FormatHelper
@@ -56,5 +57,34 @@ class FormatHelper
             Log::error('Error deleting file: ' . $e->getMessage());
             return false;
         }
+    }
+
+    public static function generateCode($table, $prefix = false, $length = 5)
+    {
+        $lastRecord = DB::table($table)->orderBy('created_at', 'desc')->first();
+
+        if ($lastRecord) {
+            $lastCode = $lastRecord->kd_pelanggan;
+            $lastNumber = intval(substr($lastCode, -5));
+        } else {
+            $lastNumber = 0;
+        }
+
+        $nextNumber = $lastNumber + 1;
+
+        $formattedNumber = str_pad($nextNumber, $length, '0', STR_PAD_LEFT);
+
+        if ($prefix) {
+            $kode = $prefix . '-' . date('ym')  . $formattedNumber;
+        } else {
+            $kode = date('ym') . '-' . $formattedNumber;
+        }
+
+
+        if (DB::table($table)->where('kd_pelanggan', $kode)->exists()) {
+            return self::generateCode($table, $prefix);
+        }
+
+        return $kode;
     }
 }

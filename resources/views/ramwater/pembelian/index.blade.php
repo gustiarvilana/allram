@@ -470,13 +470,13 @@
 
                 Swal.fire({
                     title: 'Konfirmasi Pembelian',
-                    html: detailPembelianHTML, // Menggunakan variabel detailPembelianHTML
+                    html: detailPembelianHTML,
                     showCancelButton: true,
                     confirmButtonText: 'Simpan',
                     cancelButtonText: 'Batal',
                     icon: 'question',
-                    width: '80%', // Sesuaikan lebar sesuai kebutuhan
-
+                    width: '80%',
+                    scrollbarPadding: true,
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({

@@ -9,7 +9,24 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    {{-- <a class="btn btn-success btn-xs" id="btn-add-pembelian">Tambah Data</a> --}}
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 text-center">
+                            {{-- Alert --}}
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+                            {{-- /Alert --}}
+                        </div>
+                    </div>
+
                 </div>
                 <div class="card-body">
                     <div class="card card-success">
@@ -26,6 +43,7 @@
                                                 <th>nama</th>
                                                 <th>alamat</th>
                                                 <th>no_tlp</th>
+                                                <th><i class="fa fa-cart-plus" aria-hidden="true"></i> Penjualan</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -151,6 +169,7 @@
             </div>
         </div>
     </div>
+    @include('ramwater.penjualan.modal-pelanggan')
 @endsection
 
 @push('js')
@@ -168,9 +187,20 @@
                 autoWidth: false,
                 ajax: '{{ route('pelanggan.data') }}',
                 dom: 'Brtip',
-                buttons: [
-                    'copy', 'excel', 'pdf'
-                ],
+                // buttons: [
+                //     'copy', 'excel', 'pdf'
+                // ],
+                buttons: [{
+                    // extend: "excel",
+                    text: "Tambah Pelanggan",
+                    // className: "btn-excel",
+                    action: function() {
+                        $('#modal-add .modal-title').html(
+                            '<i class="fa fa-users" aria-hidden="true"></i> <b>Tambah Pelanggan</b>'
+                        );
+                        add_pelanggan();
+                    }
+                }],
                 columns: [{
                         data: 'DT_RowIndex',
                         searchable: false,
@@ -202,18 +232,40 @@
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
 
-                            var btn_input = '<a id="btn-penjualan-input" data-id="' + row.id +
+                            var btn_input = '<a id="btn-pelanggan-input" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs edit"><i class="fas fa-pencil-alt"></i> Input Beli</a>';
+                                '\' class="btn btn-success btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> Input</a>';
 
-                            return btn_input;
+                            return '<div class="text-center">' + btn_input + '</div>';
                         },
+
+                    },
+                    {
+                        data: 'a.id',
+                        render: function(data, type, row) {
+                            var row_data = JSON.stringify(row);
+
+                            var btn_edit = '<a id="btn-pelanggan-edit" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-primary btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> edit</a>';
+
+                            var btn_delete = '<a id="btn-pelanggan-delete" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-danger btn-xs mx-1 delete" style="white-space: nowrap;"><i class="fas fa-trash"></i></a>';
+
+                            return '<div class="text-center">' + btn_edit + ' ' + btn_delete +
+                                '</div>';
+                        },
+
                     },
                 ],
                 columnDefs: [{
-                    targets: [0, 4],
+                    targets: [0, 4, 5],
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                },{
+                    targets: [3,4,5],
+                    className: 'text-center'
                 }],
                 initComplete: function() {
                     initializeColumnSearch(this);
@@ -443,13 +495,13 @@
 
                 Swal.fire({
                     title: 'Konfirmasi Pembelian',
-                    html: detailPembelianHTML, // Menggunakan variabel detailPembelianHTML
+                    html: detailPembelianHTML,
                     showCancelButton: true,
                     confirmButtonText: 'Simpan',
                     cancelButtonText: 'Batal',
                     icon: 'question',
-                    width: '80%', // Sesuaikan lebar sesuai kebutuhan
-
+                    width: '80%',
+                    scrollbarPadding: true,
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
@@ -493,6 +545,18 @@
                         });
                     }
                 });
+            }).on("click", "#btn-pelanggan-edit", function() {
+                var rowData = $(this).data('row');
+
+                $('#modal-add #id').val(rowData.id)
+                $('#modal-add #kd_pelanggan').val(rowData.kd_pelanggan)
+                $('#modal-add #nama').val(rowData.nama)
+                $('#modal-add #alamat').val(rowData.alamat)
+                $('#modal-add #no_tlp').val(rowData.no_tlp)
+
+                $('#modal-add .modal-title').html(
+                    '<i class="fa fa-user" aria-hidden="true"></i> <b>Edit Pelanggan</b>');
+                add_pelanggan();
             }).on("click", "#btn-penjualan-input", function() { //btn_input_click
                 var rowData = $(this).data('row');
                 console.log(rowData);
@@ -501,7 +565,8 @@
                     '<tr>' +
                     '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
                     {{ date('Ymd') }} + '"></td>' +
-                    '<input type="text" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' + rowData.kd_pelanggan + '">' +
+                    '<input type="text" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
+                    rowData.kd_pelanggan + '">' +
                     '<td><span><b>' + rowData.nama + '</b></span></td>' +
                     '<td>' +
                     '<select name="kd_channel" id="kd_channel" class="form-control">' +
@@ -570,5 +635,9 @@
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });
+
+        function add_pelanggan() {
+            $('#modal-add').modal('show');
+        }
     </script>
 @endpush

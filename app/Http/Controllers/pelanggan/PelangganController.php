@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DPelangganModel;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PelangganController extends Controller
 {
@@ -27,6 +28,19 @@ class PelangganController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+
+    public function store(Request $request)
+    {
+        $req = $request->input();
+
+        return DB::transaction(function () use ($req) {
+            $this->model->simpan($req);
+
+            return back()->with(['success' => 'Pelanggan berhasil ditambahkan!']);
+        });
+        return back()->with('error', 'Operasi gagal dilakukan!');
+    }
+
 
     public function laporan()
     {
