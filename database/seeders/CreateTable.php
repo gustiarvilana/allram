@@ -162,12 +162,14 @@ class CreateTable extends Seeder
         DB::statement(
             "CREATE TABLE IF NOT EXISTS `d_pembayaran` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                `nota_pembelian` VARCHAR(50) NOT NULL,
-                `tgl_pembayaran` INT DEFAULT NULL,
+                `nota_pembelian` VARCHAR(50) DEFAULT NULL,
+                `nota_penjualan` VARCHAR(50) DEFAULT NULL,
+                `tgl` INT DEFAULT NULL,
                 `angs_ke` INT DEFAULT NULL,
                 `nominal_bayar` INT DEFAULT NULL,
                 `channel_bayar` VARCHAR(50) DEFAULT NULL,
                 `ket_bayar` TEXT DEFAULT NULL,
+                `jns_pembayaran` INT DEFAULT NULL,
                 `path_file` VARCHAR(50) DEFAULT NULL,
                 `opr_input` VARCHAR(50) DEFAULT NULL,
                 `tgl_input` INT DEFAULT NULL,
@@ -176,6 +178,7 @@ class CreateTable extends Seeder
                 PRIMARY KEY (`id`),
                 INDEX `idx_nota_pembayaran` (`nota_pembelian`),
                 CONSTRAINT `fk_nota_pembayaran` FOREIGN KEY (`nota_pembelian`) REFERENCES `d_pembelian` (`nota_pembelian`) ON DELETE CASCADE
+                CONSTRAINT `fk_nota_penjualan` FOREIGN KEY (`nota_penjualan`) REFERENCES `d_penjualan` (`nota_penjualan`) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
 
@@ -252,6 +255,26 @@ class CreateTable extends Seeder
                 `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
                 INDEX `idx_nota_penjualan` (`nota_penjualan`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // d_penjualan_detail
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_penjualan_detail` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+                `nota_penjualan` VARCHAR(50) NOT NULL,
+                `kd_produk` VARCHAR(50) NOT NULL,
+                `qty_pesan` VARCHAR(50) NOT NULL,
+                `qty_retur` INT NOT NULL,
+                `qty_bersih` INT NOT NULL,
+                `harga_satuan` INT NOT NULL,
+                `harga_total` BIGINT NOT NULL,
+
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_nota_penjualan_detail` (`nota_penjualan`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
     }

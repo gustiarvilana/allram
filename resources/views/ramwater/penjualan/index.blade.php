@@ -83,13 +83,20 @@
                                             <table class="table table-striped" id="table-penjualan">
                                                 <thead>
                                                     <tr>
-                                                        <th>Tgl</th>
-                                                        <th>channel</th>
+                                                        <th>tgl_penjualan</th>
+                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
+                                                        <th>kd_channel</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
+                                                        {{-- <th>sisa_bayar</th> --}}
+                                                        {{-- <th>sts_angsuran</th> --}}
                                                         <th>total_galon</th>
                                                         <th>galon_kembali</th>
-                                                        <th>id_sales</th>
+                                                        {{-- <th>sisa_galon</th> --}}
+                                                        {{-- <th>sts_galon</th> --}}
+                                                        <th>kd_sales</th>
+                                                        {{-- <th>opr_input</th> --}}
+                                                        {{-- <th>tgl_input</th> --}}
                                                     </tr>
                                                 </thead>
                                                 <tbody id="penjualan-uraian"></tbody>
@@ -389,7 +396,6 @@
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
             }).on("click", "#btn-add-pembelian-simpan", function() {
-                var imageFile = $('#path_file')[0].files[0];
 
                 var dataArrayDetail = [];
                 $('#table-detail tbody tr').each(function() {
@@ -410,23 +416,27 @@
                     }
                 });
 
-                var pembelianData = {
-                    nota_pembelian: $('#table-penjualan #ur_nota_pembelian').val(),
-                    tgl_pembelian: $('#table-penjualan #ur_tgl_pembelian').val(),
-                    kd_supplier: $('#table-penjualan #ur_kd_supplier').val(),
-                    jns_pembelian: $('#table-penjualan #ur_jns_pembelian').val(),
-                    harga_total: $('#table-penjualan #ur_harga_total').val(),
-                    nominal_bayar: $('#table-penjualan #ur_nominal_bayar').val(),
-                    sisa_bayar: $('#table-penjualan #ur_sisa_bayar').val(),
-                    sts_angsuran: $('#table-penjualan #ur_sts_angsuran').val(),
-                    path_file: $('#path_file').val(),
+                var penjualanData = {
+                    tgl_penjualan: $('#penjualan-uraian #ur_tgl_penjualan').val(),
+                    kd_pelanggan: $('#penjualan-uraian #ur_kd_pelanggan').val(),
+                    kd_channel: $('#penjualan-uraian #ur_kd_channel').val(),
+                    harga_total: $('#penjualan-uraian #ur_harga_total').val(),
+                    nominal_bayar: $('#penjualan-uraian #ur_nominal_bayar').val(),
+                    sisa_bayar: $('#penjualan-uraian #ur_sisa_bayar').val(),
+                    sts_angsuran: $('#penjualan-uraian #ur_sts_angsuran').val(),
+                    total_galon: $('#penjualan-uraian #ur_total_galon').val(),
+                    galon_kembali: $('#penjualan-uraian #ur_galon_kembali').val(),
+                    sisa_galon: $('#penjualan-uraian #ur_sisa_galon').val(),
+                    sts_galon: $('#penjualan-uraian #ur_sts_galon').val(),
+                    kd_sales: $('#penjualan-uraian #ur_kd_sales').val(),
+                    opr_input: $('#penjualan-uraian #ur_opr_input').val(),
+                    tgl_input: $('#penjualan-uraian #ur_tgl_input').val(),
                 };
 
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
-                formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
-                formData.append('pembelianData', JSON.stringify(pembelianData));
+                formData.append('penjualanData', JSON.stringify(penjualanData));
 
                 //
                 var detailPembelianHTML = '<div>';
@@ -468,7 +478,7 @@
 
                 // Menambahkan total keseluruhan
                 detailPembelianHTML +=
-                    `<p><strong>Total Keseluruhan:</strong> <b>${pembelianData.harga_total}</b></p>`;
+                    `<p><strong>Total Keseluruhan:</strong> <b>${penjualanData.harga_total}</b></p>`;
 
                 detailPembelianHTML += '</div>';
 
@@ -484,7 +494,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ route('pembelian.store') }}',
+                            url: '{{ route('penjualan.store') }}',
                             method: 'POST',
                             processData: false,
                             contentType: false,
@@ -542,10 +552,10 @@
                     '<tr>' +
                     '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
                     {{ date('Ymd') }} + '"></td>' +
-                    '<input type="text" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
+                    '<input type="hidden" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
                     rowData.kd_pelanggan + '">' +
                     '<td>' +
-                    '<select name="kd_channel" id="kd_channel" class="form-control">' +
+                    '<select name="kd_channel" id="ur_kd_channel" class="form-control">' +
                     '<option value="">== Pilih Channel ==</option>' +
                     '@foreach ($channels as $channel)' +
                     '<option value="{{ $channel->kd_channel }}">{{ $channel->ur_channel }}</option>' +
@@ -554,15 +564,15 @@
                     '</td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
-                    '<input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control" readonly>' +
-                    '<input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly>' +
+                    '<input type="hidden" name="sisa_bayar" id="ur_sisa_bayar" class="form-control" readonly>' +
+                    '<input type="hidden" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly>' +
                     '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
-                    '<input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly>' +
-                    '<input type="text" name="sts_galon" id="ur_sts_galon" class="form-control" readonly>' +
+                    '<input type="hidden" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly>' +
+                    '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control" readonly>' +
 
                     '<td>' +
-                    '<select name="kd_channel" id="kd_channel" class="form-control">' +
+                    '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +
                     '<option value="">== Pilih Channel ==</option>' +
                     '@foreach ($saless as $sales)' +
                     '<option value="{{ $sales->nik }}">{{ $sales->nama }}</option>' +

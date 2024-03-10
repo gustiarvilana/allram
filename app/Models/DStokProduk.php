@@ -34,10 +34,10 @@ class DStokProduk extends Model
 
     public function decrementStok($dataDetail)
     {
-        $produk = $this->where([
-            'kd_produk' => $dataDetail['kd_produk'],
-            'kd_gudang' => $dataDetail['kd_gudang']
-        ])->first();
+        if (!$dataDetail['kd_gudang']) ['kd_gudang' => $dataDetail['kd_gudang']];
+        $where = ['kd_produk' => $dataDetail['kd_produk']];
+
+        $produk = $this->where($where)->first();
         $produk->decrement('stok', $dataDetail['qty_bersih']);
         $this->updateAllstok($dataDetail['kd_produk']);
     }

@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Ramwater\Penjualan;
 
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\DPembelianModel;
 use App\Models\Karyawan;
 use App\Models\Produk;
 use App\Models\SupplierModel;
 use App\Models\TChannelModel;
 use App\Models\TGudang;
 use App\Services\PembelianService;
+use App\Services\PenjualanService;
 use Illuminate\Http\Request;
 
 class PenjualanController extends Controller
@@ -18,14 +20,16 @@ class PenjualanController extends Controller
     protected $produkMOdel;
     protected $tChannelModel;
     protected $karyawan;
+    protected $penjualanService;
 
-    public function __construct()
+    public function __construct(PenjualanService $penjualanService)
     {
         $this->integrationHelper = new IntegrationHelper;
         $this->tGudang = new TGudang;
         $this->produkMOdel = new Produk;
         $this->tChannelModel = new TChannelModel();
         $this->karyawan = new Karyawan();
+        $this->penjualanService = $penjualanService;
     }
 
     public function data()
@@ -50,20 +54,19 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
-        $pembelianData = json_decode($request->input('pembelianData'), true);
+        $penjualanData = json_decode($request->input('penjualanData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
-        $file = $request->file('path_file');
 
         if ($request->input('jns')) {
-            $pembelianData['jns'] = $request->input('jns');
+            $penjualanData['jns'] = $request->input('jns');
         }
 
-        return $this->pembelianService->storePembelian($pembelianData, $dataArrayDetail, $file);
+        return $this->penjualanService->storepenjualan($penjualanData, $dataArrayDetail);
     }
 
     public function destroy($id)
     {
         $id = $this->integrationHelper->decrypt(base64_decode($id), $this->integrationHelper->getKey());
-        return $this->pembelianService->destroyPembelian($id);
+        return $this->penjualanService->destroypenjualan($id);
     }
 }
