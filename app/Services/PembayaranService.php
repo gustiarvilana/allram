@@ -148,18 +148,21 @@ class PembayaranService
 
     public function preparePembayaranData($pembayaran)
     {
-        $pembayaran['nota_pembelian'] = $pembayaran['nota_pembelian'];
-        $pembayaran['tgl_pembayaran'] = $pembayaran['tgl_pembayaran'];
-        $pembayaran['nominal_bayar']  = $pembayaran['nominal_bayar'] ? FormatHelper::removeDots($pembayaran['nominal_bayar']) : 0;
-        $pembayaran['opr_input']      = Auth::user()->nik;
-        $pembayaran['tgl_input']      = date('Ymd');
+        $pembayaran_fix['nota_pembelian'] = $pembayaran['nota_pembelian'];
+        $pembayaran_fix['tgl']            = $pembayaran['tgl_pembayaran'];
+        $pembayaran_fix['nominal_bayar']  = $pembayaran['nominal_bayar'] ? FormatHelper::removeDots($pembayaran['nominal_bayar']) : 0;
+        $pembayaran_fix['opr_input']      = Auth::user()->nik;
+        $pembayaran_fix['tgl_input']      = date('Ymd');
 
-        $pembayaran['ket_bayar']      = $pembayaran['ket_bayar'];
-        $pembayaran['angs_ke']        = $pembayaran['angs_ke'];
-        $pembayaran['channel_bayar']  = $pembayaran['channel_bayar'];
-        $pembayaran['path_file']      = $pembayaran['path_file'] ?? '';
+        $pembayaran_fix['update'] = $pembayaran['update'] ?? '';
 
-        return $pembayaran;
+        $pembayaran_fix['ket_bayar']     = $pembayaran['ket_bayar'];
+        $pembayaran_fix['angs_ke']       = $pembayaran['angs_ke'];
+        $pembayaran_fix['channel_bayar'] = $pembayaran['channel_bayar'];
+        $pembayaran_fix['path_file']     = $pembayaran['path_file'] ?? '';
+        $pembayaran_fix['id']            = $pembayaran['id'] ?? '';
+
+        return $pembayaran_fix;
     }
 
     public function upsertPembayaranDetail($pembelian, $dataArrayDetail, $file)
@@ -167,39 +170,34 @@ class PembayaranService
         try {
             if ($dataArrayDetail) {
                 $totalNominalBayar = 0;
+
                 foreach ($dataArrayDetail as $key => $dataDetail) {
                     $dataDetail['angs_ke'] = $key + 1;
-                    $dataDetail = $this->preparePembayaranData($dataDetail);
 
-                    if (!isset($dataDetail['id']) || $dataDetail['update'] == $dataDetail['id']) {
+                    $dataDetail_fix = $this->preparePembayaranData($dataDetail);
+
+                    if (!isset($dataDetail_fix['id']) || $dataDetail_fix['update'] == $dataDetail_fix['id']) {
+                        // dd('filr');
                         if ($file) {
                             $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . date('his') . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
-                            $dataDetail['path_file'] = $filename;
+                            $dataDetail_fix['path_file'] = $filename;
                         }
                     }
 
-                    $dataDetail['id']             = $dataDetail['id'] ?? null;
-                    $dataDetail['nota_pembelian'] = $pembelian['nota_pembelian'] ?? null;
-                    $dataDetail['path_file']      = $dataDetail['path_file'] ?? '';
-                    unset($dataDetail["update"]);
+                    $dataDetail_fix['id']             = $dataDetail['id'] ?? null;
+                    $dataDetail_fix['nota_pembelian'] = $pembelian['nota_pembelian'] ?? null;
+                    $dataDetail_fix['path_file']      = $dataDetail_fix['path_file'] ?? '';
+                    unset($dataDetail_fix["update"]);
 
                     $totalNominalBayar += $dataDetail['nominal_bayar'];
 
                     $dataDetail = $this->dPembayaran->updateOrCreate([
-                        'id' => $dataDetail['id'],
-                        'nota_pembelian' => $dataDetail['nota_pembelian'],
-                    ], $dataDetail);
+                        'id' => $dataDetail_fix['id'],
+                        'nota_pembelian' => $dataDetail_fix['nota_pembelian'],
+                        'angs_ke' => $dataDetail_fix['angs_ke'],
+                    ], $dataDetail_fix);
                 }
 
-                // delete detail pembayaran
-                // $existingIds = collect($dataArrayDetail)->where('id', '!=', null)->pluck('id')->filter();
-                // $row_delete = $this->dPembayaran->where('nota_pembelian', '=', $pembelian['nota_pembelian'])
-                //     ->whereNotIn('id', $existingIds)
-                //     ->get();
-                // dd($existingIds, $row_delete->pluck('id'));
-                // $this->destroyPembayaran($row_delete);
-
-                // update status + sisa bayar
                 $this->updateStatus($pembelian, $totalNominalBayar, $pembelian['harga_total']);
 
                 return $dataDetail;

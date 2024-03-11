@@ -496,11 +496,11 @@
                                 '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control money" value="' +
                                 item.nota_pembelian + '" readonly></td>' +
                                 '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
-                                item.tgl_pembayaran + '" readonly></td>' +
+                                item.tgl + '" readonly></td>' +
                                 '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +
                                 item.angs_ke + '" readonly></td>' +
                                 '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control money" value="' +
-                                item.nominal_bayar + '" readonly></td>' +
+                                addCommas(item.nominal_bayar) + '" readonly></td>' +
                                 '<td><input type="text" name="channel_bayar" id="bayar_channel_bayar" class="form-control money" value="' +
                                 item.channel_bayar + '" readonly></td>' +
                                 '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control money" value="' +
@@ -613,11 +613,11 @@
                     if (response.success) {
                         $("#table-pembelian-laporan").DataTable().ajax.reload();
                         // $('#btn-add-pembayaran-close').click()
-                        // Swal.fire({
-                        //     icon: 'success',
-                        //     title: 'Sukses!',
-                        //     text: response.message,
-                        // });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses!',
+                            text: response.message,
+                        });
                         return;
                     }
                     Swal.fire({

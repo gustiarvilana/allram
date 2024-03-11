@@ -50,7 +50,6 @@ class PembelianService
         }
         try {
             $this->validateData($pembelianData, $dataArrayDetail);
-
             $pembelianData = $this->preparePembelianData($pembelianData);
 
             return DB::transaction(function () use ($pembelianData, $dataArrayDetail, $file) { //rollback if error
@@ -192,7 +191,7 @@ class PembelianService
     public function preparePembayaranData($pembelian)
     {
         $pembayaran['nota_pembelian'] = $pembelian['nota_pembelian'];
-        $pembayaran['tgl_pembayaran'] = $pembelian['tgl_pembelian'];
+        $pembayaran['tgl'] = $pembelian['tgl_pembelian'];
         $pembayaran['nominal_bayar']  = $pembelian['nominal_bayar'];
         $pembayaran['opr_input']      = Auth::user()->nik;
         $pembayaran['tgl_input']      = date('Ymd');
