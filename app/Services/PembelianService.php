@@ -258,13 +258,16 @@ class PembelianService
         }
 
         foreach ($dataArrayDetail as $dataDetail) {
-            $dataDetail = $this->prepareDetailData($dataDetail);
-            unset($dataDetail["nama"]);
+            Log::info('service');
+            if ($dataDetail['harga_satuan'] > 0) {
+                $dataDetail = $this->prepareDetailData($dataDetail);
+                unset($dataDetail["nama"]);
 
-            $dataDetail['nota_pembelian'] = $pembelian->nota_pembelian;
+                $dataDetail['nota_pembelian'] = $pembelian->nota_pembelian;
 
-            $dataDetail = $this->dPembelianDetailModel->create($dataDetail);
-            if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->incrementStok($dataDetail);
+                $dataDetail = $this->dPembelianDetailModel->create($dataDetail);
+                if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->incrementStok($dataDetail);
+            }
         }
     }
 

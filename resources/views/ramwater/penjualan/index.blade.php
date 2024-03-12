@@ -325,6 +325,7 @@
                     {
                         data: 'kd_gudang',
                         render: function(data, type, row) {
+                            console.log(row);
                             var selectOptions = '<option value="">== Pilih Gudang ==</option>';
 
                             @foreach ($gudang as $item)

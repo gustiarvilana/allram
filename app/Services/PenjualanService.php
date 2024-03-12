@@ -14,6 +14,7 @@ use App\Models\DTransaksiOps;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\SupplierModel;
+use App\Models\TOps;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +31,7 @@ class PenjualanService
     protected $dtransaksiOps;
     protected $penjualanModel;
     protected $penjualanDetailModel;
+    protected $tOps;
     protected $jns;
     public function __construct(
         DStokProduk $dStokProduk,
@@ -37,7 +39,8 @@ class PenjualanService
         SupplierModel $supplierModel,
         Penjualan $penjualanModel,
         PenjualanDetail $penjualanDetailModel,
-        DTransaksiOps $dtransaksiOps
+        DTransaksiOps $dtransaksiOps,
+        TOps $tOps
     ) {
         $this->dStokProduk           = $dStokProduk;
         $this->dPembelianDetailModel = $dPembelianDetailModel;
@@ -45,6 +48,7 @@ class PenjualanService
         $this->dtransaksiOps         = $dtransaksiOps;
         $this->penjualanModel        = $penjualanModel;
         $this->penjualanDetailModel  = $penjualanDetailModel;
+        $this->tOps                  = $tOps;
         $this->dPembayaran           = new DPembayaranModel();
     }
 
@@ -59,7 +63,6 @@ class PenjualanService
             $this->validateData($penjualanData, $dataArrayDetail);
 
             $penjualanData_fix = $this->preparepenjualanData($penjualanData);
-
             return DB::transaction(function () use ($penjualanData_fix, $dataArrayDetail) { //rollback if error
 
                 // save: d_penjualan
@@ -71,14 +74,10 @@ class PenjualanService
                 // pembayaran
                 if ($penjualanData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
-                    dd(['done' => $pembayaran]);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
                 }
 
                 $penjualan['nota_penjualan'] = $penjualanData_fix['nota_penjualan'];
-
-                // save: ops
-                $this->upsertOps($penjualan);
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
@@ -191,6 +190,7 @@ class PenjualanService
         $dataDetail_fix['harga_satuan'] = $dataDetail['harga_satuan'] ? FormatHelper::removeDots($dataDetail['harga_satuan']) : 0;
         $dataDetail_fix['harga_total']  = $dataDetail['harga_total'] ? FormatHelper::removeDots($dataDetail['harga_total']) : 0;
         $dataDetail_fix['kd_produk']    = $dataDetail['kd_produk'];
+        $dataDetail_fix['kd_gudang']    = $dataDetail['kd_gudang'];
 
         return $dataDetail_fix;
     }
@@ -219,34 +219,35 @@ class PenjualanService
         return $pembayaran;
     }
 
-    public function prepareOpsnData($pembelian)
+    public function prepareOpsnData($penjualanData)
     {
-        $supplier = $this->supplierModel->where('kd_supplier', '=', $pembelian['kd_supplier'])->first();
+        $namaOps = $this->tOps->getPenjualanOps($penjualanData['kd_produk'])->first();
 
-        $ops['nota_pembelian'] = $pembelian['nota_pembelian'];
-        $ops['tgl_transaksi']  = $pembelian['tgl_pembelian'];
-        $ops['kd_ops']         = $supplier->kd_ops;
-        $ops['jns_trs']        = config('constants.ramwater.KD_TRANSAKSI_BIAYA');
-        $ops['nominal']        = $pembelian['harga_total'];
+        $ops['nota_pembelian'] = $penjualanData['nota_pembelian'];
+        $ops['tgl_transaksi']  = $penjualanData['tgl_penjualan'];
+        $ops['kd_ops']         = $namaOps->kd_ops ?? '0';
+        $ops['jns_trs']        = config('constants.ramwater.KD_TRANSAKSI_Pendapatan');
+        $ops['nominal']        = $penjualanData['harga_total'];
         $ops['ket_transaksi']  = '';
 
         return $ops;
     }
 
-    public function upsertpenjualan($penjaualanData)
+    public function upsertpenjualan($penjualanData)
     {
         $jns = $this->getJns();
-        $data = $this->penjualanModel->where('nota_penjualan', '=', $penjaualanData['nota_penjualan'])->first();
+        $data = $this->penjualanModel->where('nota_penjualan', '=', $penjualanData['nota_penjualan'])->first();
 
         if (!$data) {
-            return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjaualanData['nota_penjualan']], $penjaualanData);
+            return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjualanData['nota_penjualan']], $penjualanData);
         } elseif ($jns == 'update') {
-            return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjaualanData['nota_penjualan']], $penjaualanData);
+            return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjualanData['nota_penjualan']], $penjualanData);
         } else {
             if (config('constants.ramwater.VALIDASI_UPSERT')) {
-                throw new \Exception('Nota Pembelian pernah diinput!');
+                return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjualanData['nota_penjualan']], $penjualanData);
+                // throw new \Exception('Nota Pembelian pernah diinput!');
             } else {
-                return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjaualanData['nota_penjualan']], $penjaualanData);
+                return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjualanData['nota_penjualan']], $penjualanData);
             }
         }
     }
@@ -256,28 +257,32 @@ class PenjualanService
         $detail = $this->penjualanDetailModel->where('nota_penjualan', $penjualan->nota_penjualan)->get();
         if ($detail->count() > 0) {
             foreach ($detail as $row) {
+                $row['kd_gudang'] = 1;
+                // dd($row);
                 if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->incrementStok($row);
             }
             $this->penjualanDetailModel->where('nota_penjualan', $penjualan->nota_penjualan)->delete();
         }
         foreach ($dataArrayDetail as $dataDetail) {
             $dataDetail_fix = $this->prepareDetailData($dataDetail);
-            // unset($dataDetail["nama"]);
 
             $dataDetail_fix['nota_penjualan'] = $penjualan->nota_penjualan;
 
-            $dataDetail_fix = $this->penjualanDetailModel->create($dataDetail_fix);
             if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($dataDetail_fix);
+            unset($dataDetail_fix['kd_gudang']);
+            $dataDetail_fix = $this->penjualanDetailModel->create($dataDetail_fix);
+
+            // save: ops
+            $this->upsertOps($dataDetail_fix);
         }
     }
 
 
-    public function upsertOps($pembelianData)
+    public function upsertOps($penjualanData)
     {
-        $data = $this->prepareOpsnData($pembelianData);
-
+        $data = $this->prepareOpsnData($penjualanData);
         try {
-            return $this->dtransaksiOps->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $data);
+            return $this->dtransaksiOps->updateOrCreate(['nota_pembelian' => $penjualanData['nota_pembelian']], $data);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -293,7 +298,7 @@ class PenjualanService
         try {
             return $this->dPembayaran->updateOrCreate(
                 [
-                    'nota_pembelian' => $pembayaran['nota_pembelian'],
+                    'nota_penjualan' => $pembayaran['nota_penjualan'],
                     'angs_ke' => $pembayaran['angs_ke'],
                 ],
                 $pembayaran
