@@ -470,14 +470,6 @@
                     '</tr>';
                 $('#pembelian-uraian').append(row);
 
-                // var pathFile = "{{ asset('/') }}" + rowData.path_file;
-                // $('#image-container a').attr('href', pathFile);
-                // $('#image-container img').attr('src', pathFile);
-                // $('#download-btn').attr('href', pathFile);
-                // $("##modal-pembayaran-title").text("Update Data");
-
-                // $("#table-detail").append
-
                 $.ajax({
                     url: '{{ route('pembayaran.data') }}?nota_pembelian=' + rowData.nota_pembelian,
                     method: 'GET',
@@ -515,7 +507,7 @@
                                 '<td style="white-space: nowrap;">' +
                                 // Menggunakan white-space: nowrap; untuk menghindari wrap
                                 '<a class="btn btn-success btn-xs btn-edit" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></a>' +
-                                '<a class="btn btn-danger btn-xs btn-hapus" style="margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '<a class="btn btn-danger btn-xs btn-hapus" style="margin-right: 5px;" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                                 '</td>' +
                                 '</tr>';
 
@@ -566,33 +558,49 @@
             $('#table-detail-edit').on('click', '.btn-hapus', function() {
                 // Simpan referensi ke tombol yang diklik
                 var tombolHapus = $(this);
+                var id = tombolHapus.closest('tr').find('#bayar_id').val();
 
-                // Tampilkan SweetAlert untuk konfirmasi
-                Swal.fire({
-                    title: 'Konfirmasi',
-                    text: 'Anda yakin ingin menghapus baris ini?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Hapus!'
-                }).then((result) => {
-                    // Jika pengguna mengonfirmasi, hapus baris
-                    if (result.isConfirmed) {
-                        var id = tombolHapus.closest('tr').find('#bayar_id').val();
-                        if (id) {
-                            penjualanDestroy(id)
+                if (id) {
+                    // Tampilkan SweetAlert untuk konfirmasi
+                    Swal.fire({
+                        title: 'Konfirmasi Admin',
+                        text: 'Masukkan password admin untuk melanjutkan:',
+                        input: 'password',
+                        inputAttributes: {
+                            autocapitalize: 'off',
+                            placeholder: 'Password admin'
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: 'Konfirmasi',
+                        cancelButtonText: 'Batal',
+                        showLoaderOnConfirm: true,
+                        preConfirm: (password) => {
+                            // Disini Anda bisa melakukan validasi password admin
+                            // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
+
+                            // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
+                            if (password !== 'passwordadmin') {
+                                Swal.showValidationMessage('Password admin salah');
+                            }
                         }
-                        tombolHapus.closest('tr').remove();
-                    }
-                });
+                    }).then((result) => {
+                        // Jika pengguna mengonfirmasi, hapus baris
+                        if (result.isConfirmed) {
+                            if (id) {
+                                penjualanDestroy(id)
+                            }
+                            tombolHapus.closest('tr').remove();
+                        }
+                    });
+                } else {
+                    tombolHapus.closest('tr').remove();
+                }
+
             }).on('click', '.btn-edit', function() {
                 var data = $(this);
                 var id = data.closest('tr').find('#bayar_id').val();
 
                 data.closest('tr').find('#bayar_update').val(id);
-
-                $('.form-control').prop('readonly', true);
 
                 data.closest('tr').find('#bayar_tgl_pembayaran').removeAttr('readonly');
                 data.closest('tr').find('#bayar_nominal_bayar').removeAttr('readonly');

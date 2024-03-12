@@ -178,7 +178,7 @@ class PembayaranService
 
                     if (!isset($dataDetail_fix['id']) || $dataDetail_fix['update'] == $dataDetail_fix['id']) {
                         if ($file) {
-                            $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . date('his') . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
+                            $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian'] . '_' . $dataDetail_fix['angs_ke']);
                             $dataDetail_fix['path_file'] = $filename;
                         }
                     }
@@ -190,7 +190,6 @@ class PembayaranService
 
                     $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
 
-                    // dd($dataDetail_fix);
                     $dataDetail = $this->dPembayaran->updateOrCreate([
                         'id' => $dataDetail_fix['id'],
                         'nota_pembelian' => $dataDetail_fix['nota_pembelian'],

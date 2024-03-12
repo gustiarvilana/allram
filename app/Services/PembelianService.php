@@ -136,8 +136,7 @@ class PembelianService
             empty($pembelianData['tgl_pembelian']) ||
             empty($pembelianData['kd_supplier']) ||
             empty($pembelianData['jns_pembelian']) ||
-            empty($pembelianData['harga_total']) ||
-            empty($pembelianData['sisa_bayar'])
+            empty($pembelianData['harga_total'])
         ) {
             throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
         }
