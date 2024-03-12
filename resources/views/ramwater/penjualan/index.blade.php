@@ -376,6 +376,7 @@
                 console.log('Modal Pembelian telah disembunyikan');
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
+                $('#penjualan-uraian').empty();
                 $('.path_file').val('');
             });
 

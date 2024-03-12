@@ -64,7 +64,7 @@ class FormatHelper
         $lastRecord = DB::table($table)->orderBy('created_at', 'desc')->first();
 
         if ($lastRecord) {
-            $lastCode = $lastRecord->kd_pelanggan;
+            $lastCode = $lastRecord->nota_penjualan;
             $lastNumber = intval(substr($lastCode, -5));
         } else {
             $lastNumber = 0;
@@ -81,7 +81,7 @@ class FormatHelper
         }
 
 
-        if (DB::table($table)->where('kd_pelanggan', $kode)->exists()) {
+        if (DB::table($table)->where('nota_penjualan', $kode)->exists()) {
             return self::generateCode($table, $prefix);
         }
 
