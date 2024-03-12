@@ -522,27 +522,29 @@
                             $('#table-detail-edit').append(row);
                         });
 
-                        var emptyRow =
-                            '<tr>' +
-                            '<td></td>' + // No column
-                            '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control bayar_nota_pembelian money" value="" disabled></td>' +
-                            '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control bayar_tgl_pembayaran money" value="' +
-                            '{{ date('Ymd') }}' + '"></td>' +
-                            '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control bayar_angs_ke money" value="" disabled></td>' +
-                            '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control bayar_nominal_bayar money" value=""></td>' +
-                            '<td>' +
-                            '<select name="channel_bayar" id="bayar_channel_bayar" class="form-control bayar_channel_bayar">' +
-                            '<option value="">Pilih Channel</option>' +
-                            '@foreach ($channels as $channel)' +
-                            '<option value="{{ $channel->kd_channel }}">{{ $channel->ur_channel }}</option>' +
-                            '@endforeach' +
-                            '</select>' +
-                            '</td>' +
-                            '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control bayar_ket_bayar money" value=""></td>' +
-                            '<td><a class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
-                            '</tr>';
+                        if (rowData.sts_angsuran != 4) {
+                            var emptyRow =
+                                '<tr>' +
+                                '<td></td>' + // No column
+                                '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control bayar_nota_pembelian money" value="" disabled></td>' +
+                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control bayar_tgl_pembayaran money" value="' +
+                                '{{ date('Ymd') }}' + '"></td>' +
+                                '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control bayar_angs_ke money" value="" disabled></td>' +
+                                '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control bayar_nominal_bayar money" value=""></td>' +
+                                '<td>' +
+                                '<select name="channel_bayar" id="bayar_channel_bayar" class="form-control bayar_channel_bayar">' +
+                                '<option value="">Pilih Channel</option>' +
+                                '@foreach ($channels as $channel)' +
+                                '<option value="{{ $channel->kd_channel }}">{{ $channel->ur_channel }}</option>' +
+                                '@endforeach' +
+                                '</select>' +
+                                '</td>' +
+                                '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control bayar_ket_bayar money" value=""></td>' +
+                                '<td><a class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
+                                '</tr>';
 
-                        $('#table-detail-edit').append(emptyRow);
+                            $('#table-detail-edit').append(emptyRow);
+                        }
                     },
                     error: function(error) {
                         var errorMessage = "Terjadi kesalahan dalam operasi.";
@@ -612,7 +614,7 @@
                 success: function(response) {
                     if (response.success) {
                         $("#table-pembelian-laporan").DataTable().ajax.reload();
-                        // $('#btn-add-pembayaran-close').click()
+                        $('#btn-add-pembayaran-close').click()
                         Swal.fire({
                             icon: 'success',
                             title: 'Sukses!',

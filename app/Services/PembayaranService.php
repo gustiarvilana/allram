@@ -190,10 +190,10 @@ class PembayaranService
 
                     $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
 
+                    // dd($dataDetail_fix);
                     $dataDetail = $this->dPembayaran->updateOrCreate([
                         'id' => $dataDetail_fix['id'],
                         'nota_pembelian' => $dataDetail_fix['nota_pembelian'],
-                        'angs_ke' => $dataDetail_fix['angs_ke'],
                     ], $dataDetail_fix);
                 }
 
