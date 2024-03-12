@@ -325,7 +325,6 @@
                     {
                         data: 'kd_gudang',
                         render: function(data, type, row) {
-                            console.log(row);
                             var selectOptions = '<option value="">== Pilih Gudang ==</option>';
 
                             @foreach ($gudang as $item)
@@ -566,7 +565,7 @@
                     '</td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
-                    '<input type="hidden" name="sisa_bayar" id="ur_sisa_bayar" class="form-control" readonly>' +
+                    '<input type="hidden" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly>' +
                     '<input type="hidden" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly>' +
                     '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +

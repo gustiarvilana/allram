@@ -376,10 +376,21 @@
         }
 
         // generate csrf
-        $('body').on('keyup', '.money', function() {
+        $('body').on('blur keyup', '.money', function() {
             var nilai1 = this.value.replace(/[^a-z0-9\s]/gi, '');
             var nilai = addCommas(nilai1);
-            $(this).val(nilai).trigger("change");
+            var input = $(this)
+            input.val(nilai).trigger("change");
+
+            $('.money').each(function() {
+                var cek = $(this).val();
+                if (parseInt(cek) < 0) {
+                    input.val('').trigger("change");
+                    $(this).val('').trigger("change");
+                    alert("Input Salah!");
+                }
+            });
+
         });
 
         // Fungsi untuk memperbarui nilai field berdasarkan field-field lainnya

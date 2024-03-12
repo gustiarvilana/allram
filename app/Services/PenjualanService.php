@@ -59,7 +59,6 @@ class PenjualanService
             $this->setJns($penjualanData['jns']);
         }
         try {
-
             $this->validateData($penjualanData, $dataArrayDetail);
 
             $penjualanData_fix = $this->preparepenjualanData($penjualanData);
@@ -67,6 +66,7 @@ class PenjualanService
             return DB::transaction(function () use ($penjualanData_fix, $dataArrayDetail) { //rollback if error
                 // save: d_penjualan
                 $penjualan = $this->upsertpenjualan($penjualanData_fix);
+                dd('done');
 
                 // save: d_penjualan_detail + stok
                 $this->upsertpenjualanDetail($penjualan, $dataArrayDetail);
@@ -131,6 +131,7 @@ class PenjualanService
 
     public function validateData($penjualanData, $dataArrayDetail)
     {
+        // dd($penjualanData, $dataArrayDetail);
         if (
             empty($penjualanData['tgl_penjualan']) ||
             empty($penjualanData['kd_pelanggan']) ||
@@ -150,6 +151,7 @@ class PenjualanService
                 empty($dataDetail['qty_pesan']) ||
                 empty($dataDetail['qty_bersih']) ||
                 empty($dataDetail['harga_satuan']) ||
+                empty($dataDetail['kd_gudang']) ||
                 empty($dataDetail['harga_total'])
             ) {
                 throw new \Exception('Semua kolom pada Tabel Penjualan Detail harus terisi.');
@@ -291,11 +293,6 @@ class PenjualanService
 
     public function upsertPembayaran($pembayaran)
     {
-        // $pembelian = $this->dPembelianModel->setNota_pembelian($pembayaran['nota_pembelian']);
-        // $pembelian = $this->dPembelianModel->getpembelianByNota();
-        // dd($pembelian);
-        // upsert sts_angsuran
-
         try {
             return $this->dPembayaran->updateOrCreate(
                 [
