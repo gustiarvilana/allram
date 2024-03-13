@@ -320,7 +320,6 @@
             } else {
                 return "";
             }
-
         }
 
         function formatRupiah(number) {

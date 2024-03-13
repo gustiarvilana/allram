@@ -341,7 +341,9 @@
                     {
                         data: 'harga_satuan',
                         render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan">';
+                            return '<span id="harga" style="display: none;">' + row.harga +
+                                '</span> <input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan" value="' +
+                                addCommas(row.harga) + '">';
                         }
                     },
                     {
@@ -667,6 +669,15 @@
                 function() {
                     var currentRow = $(this).closest('tr');
 
+                    var val_harga = getFloatValue(currentRow.find('#detail_harga_satuan'));
+                    $('#detail_harga_satuan').on('blur', function() {
+                        var currentInput = $(this);
+                        var h_awal = $('#harga').text();
+                        var cek = cek_harga(h_awal, val_harga);
+
+                        // currentInput.val(addCommas(h_awal));
+                    })
+
                     updateField(currentRow, 'detail_qty_bersih', ['#detail_qty_pesan', '#detail_qty_retur'],
                         function(qtyPesan, qtyRetur) {
                             return qtyPesan - (isNaN(qtyRetur) ? 0 : qtyRetur);
@@ -685,6 +696,23 @@
 
         function add_pelanggan() {
             $('#modal-add').modal('show');
+        }
+
+        function cek_harga(harga, val) {
+            if (val < harga) {
+                return Swal.fire({
+                    icon: "info",
+                    title: 'Kurang Harga',
+                    // text: response.message,
+                });
+            };
+            if (val > harga) {
+                return Swal.fire({
+                    icon: "info",
+                    title: 'Lebih Harga',
+                    // text: response.message,
+                });
+            };
         }
     </script>
 @endpush

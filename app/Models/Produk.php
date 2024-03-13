@@ -26,6 +26,8 @@ class Produk extends Model
             });
         }
 
+        $produk->leftJoin('t_harga_jual as c', 'a.kd_produk', '=', 'c.kd_produk');
+
         if ($this->satker != null) {
             $produk->where('a.satker', '=', $this->satker);
         }
