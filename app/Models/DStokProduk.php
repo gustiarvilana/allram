@@ -34,9 +34,10 @@ class DStokProduk extends Model
 
     public function decrementStok($dataDetail)
     {
-        if (!$dataDetail['kd_gudang']) ['kd_gudang' => $dataDetail['kd_gudang']];
-
-        $where = ['kd_produk' => $dataDetail['kd_produk']];
+        $where = [
+            'kd_produk' => $dataDetail['kd_produk'],
+            'kd_gudang' => $dataDetail['kd_gudang']
+        ];
         $produk = $this->where($where)->first();
 
         if (!$produk || $produk->stok - $dataDetail['qty_bersih'] < 0) throw new \Exception('Stok tidak mencukupi.');

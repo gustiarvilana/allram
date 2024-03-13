@@ -574,7 +574,7 @@
 
                     '<td>' +
                     '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +
-                    '<option value="">== Pilih Channel ==</option>' +
+                    '<option value="">== Pilih Sales ==</option>' +
                     '@foreach ($saless as $sales)' +
                     '<option value="{{ $sales->nik }}">{{ $sales->nama }}</option>' +
                     '@endforeach' +

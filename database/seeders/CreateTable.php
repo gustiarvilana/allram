@@ -158,84 +158,12 @@ class CreateTable extends Seeder
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
 
-        // d_pembayaran
-        DB::statement(
-            "CREATE TABLE IF NOT EXISTS `d_pembayaran` (
-                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                `nota_pembelian` VARCHAR(50) DEFAULT NULL,
-                `nota_penjualan` VARCHAR(50) DEFAULT NULL,
-                `tgl` INT DEFAULT NULL,
-                `angs_ke` INT DEFAULT NULL,
-                `nominal_bayar` INT DEFAULT NULL,
-                `channel_bayar` VARCHAR(50) DEFAULT NULL,
-                `ket_bayar` TEXT DEFAULT NULL,
-                `jns_pembayaran` INT DEFAULT NULL,
-                `path_file` VARCHAR(50) DEFAULT NULL,
-                `opr_input` VARCHAR(50) DEFAULT NULL,
-                `tgl_input` INT DEFAULT NULL,
-                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`),
-                INDEX `idx_nota_pembayaran` (`nota_pembelian`),
-                CONSTRAINT `fk_nota_pembayaran` FOREIGN KEY (`nota_pembelian`) REFERENCES `d_pembelian` (`nota_pembelian`) ON DELETE CASCADE,
-                CONSTRAINT `fk_nota_penjualan` FOREIGN KEY (`nota_penjualan`) REFERENCES `d_penjualan` (`nota_penjualan`) ON DELETE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
-        );
-
-        // d_transaksi_ops
-        DB::statement(
-            "CREATE TABLE IF NOT EXISTS `d_transaksi_ops` (
-                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `nota_pembelian` varchar(50) DEFAULT NULL,
-                `tgl_transaksi` INT DEFAULT NULL,
-                `kd_ops` varchar(50) DEFAULT NULL,
-                `jns_trs` varchar(50) DEFAULT NULL,
-                `nominal` INT DEFAULT NULL,
-                `ket_transaksi` TEXT DEFAULT NULL,
-
-                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`),
-                INDEX `idx_d_transaksi_nota_pembelian` (`nota_pembelian`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
-        );
-
-        // t_transaksi_ops
-        DB::statement(
-            "CREATE TABLE IF NOT EXISTS `t_transaksi_ops` (
-                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
-                `kd_transaksi_ops` varchar(50) DEFAULT NULL,
-                `ur_transaksi_ops` varchar(50) DEFAULT NULL,
-
-                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`),
-                INDEX `idx_t_transaksi_ops_kd` (`kd_transaksi_ops`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
-        );
-
-        // t_transaksi_ops
-        DB::statement(
-            "CREATE TABLE IF NOT EXISTS `t_channel_bayar` (
-                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
-                `kd_channel` varchar(50) DEFAULT NULL,
-                `ur_channel` varchar(50) DEFAULT NULL,
-
-                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`),
-                INDEX `idx_t_channel_bayar_kd_channel` (`kd_channel`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
-        );
-
         // d_penjualan
         DB::statement(
             "CREATE TABLE IF NOT EXISTS `d_penjualan` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 
-                `nota_penjualan` VARCHAR(50) NOT NULL,
+                `nota_penjualan` VARCHAR(50) DEFAULT NULL,
                 `tgl_penjualan` VARCHAR(50) NOT NULL,
                 `kd_pelanggan` VARCHAR(50) DEFAULT NULL,
                 `kd_channel` VARCHAR(50) DEFAULT NULL,
@@ -276,6 +204,78 @@ class CreateTable extends Seeder
                 PRIMARY KEY (`id`),
                 CONSTRAINT `fk_d_penjualan_detail_nota_penjualan` FOREIGN KEY (`nota_penjualan`) REFERENCES `d_penjualan` (`nota_penjualan`) ON DELETE CASCADE,
                 INDEX `idx_nota_penjualan_detail` (`nota_penjualan`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // d_transaksi_ops
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_transaksi_ops` (
+                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nota_pembelian` varchar(50) DEFAULT NULL,
+                `tgl_transaksi` INT DEFAULT NULL,
+                `kd_ops` varchar(50) DEFAULT NULL,
+                `jns_trs` varchar(50) DEFAULT NULL,
+                `nominal` INT DEFAULT NULL,
+                `ket_transaksi` TEXT DEFAULT NULL,
+
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_d_transaksi_nota_pembelian` (`nota_pembelian`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // t_jns_ops
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `t_jns_ops` (
+                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+                `kd_jns_ops` varchar(50) DEFAULT NULL,
+                `ur_jns_ops` varchar(50) DEFAULT NULL,
+
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_t_jns_ops_kd` (`kd_jns_ops`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // t_channel_bayar
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `t_channel_bayar` (
+                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+
+                `kd_channel` varchar(50) DEFAULT NULL,
+                `ur_channel` varchar(50) DEFAULT NULL,
+
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_t_channel_bayar_kd_channel` (`kd_channel`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
+        // d_pembayaran
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_pembayaran` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nota_pembelian` VARCHAR(50) DEFAULT NULL,
+                `nota_penjualan` VARCHAR(50) DEFAULT NULL,
+                `tgl` INT DEFAULT NULL,
+                `angs_ke` INT DEFAULT NULL,
+                `nominal_bayar` INT DEFAULT NULL,
+                `channel_bayar` VARCHAR(50) DEFAULT NULL,
+                `ket_bayar` TEXT DEFAULT NULL,
+                `jns_pembayaran` INT DEFAULT NULL,
+                `path_file` VARCHAR(50) DEFAULT NULL,
+                `opr_input` VARCHAR(50) DEFAULT NULL,
+                `tgl_input` INT DEFAULT NULL,
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_nota_pembayaran` (`nota_pembelian`),
+                CONSTRAINT `fk_nota_pembayaran` FOREIGN KEY (`nota_pembelian`) REFERENCES `d_pembelian` (`nota_pembelian`) ON DELETE CASCADE,
+                CONSTRAINT `fk_nota_penjualan` FOREIGN KEY (`nota_penjualan`) REFERENCES `d_penjualan` (`nota_penjualan`) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
     }

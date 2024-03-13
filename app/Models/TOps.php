@@ -16,9 +16,7 @@ class TOps extends Model
     {
         if ($kd_produk) {
             $produk = Produk::where('kd_produk', '=', $kd_produk)->first();
-            $ops = $this->where('nama_ops', 'like', '%' . $produk->nama . '%');
-
-            return $ops;
+            return $produk;
         }
     }
 }

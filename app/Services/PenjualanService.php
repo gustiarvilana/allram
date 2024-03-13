@@ -66,7 +66,6 @@ class PenjualanService
             return DB::transaction(function () use ($penjualanData_fix, $dataArrayDetail) { //rollback if error
                 // save: d_penjualan
                 $penjualan = $this->upsertpenjualan($penjualanData_fix);
-                dd('done');
 
                 // save: d_penjualan_detail + stok
                 $this->upsertpenjualanDetail($penjualan, $dataArrayDetail);
@@ -76,6 +75,7 @@ class PenjualanService
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
                 }
+
                 $penjualan['nota_penjualan'] = $penjualanData_fix['nota_penjualan'];
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
@@ -138,7 +138,6 @@ class PenjualanService
             empty($penjualanData['kd_channel']) ||
             empty($penjualanData['harga_total']) ||
             empty($penjualanData['nominal_bayar']) ||
-            empty($penjualanData['kd_sales']) ||
             empty($penjualanData['opr_input']) ||
             empty($penjualanData['tgl_input'])
         ) {
@@ -273,7 +272,6 @@ class PenjualanService
             $dataDetail_fix = $this->penjualanDetailModel->create($dataDetail_fix);
 
             // save: ops
-            $dataDetail_fix['tgl_penjualan'] = $penjualan['tgl_penjualan'];
             $this->upsertOps($dataDetail_fix);
         }
     }
@@ -284,7 +282,8 @@ class PenjualanService
         $data = $this->prepareOpsnData($penjualanData);
         try {
             return $this->dtransaksiOps->updateOrCreate([
-                'nota_pembelian' => $penjualanData['nota_pembelian']
+                'nota_pembelian' => $penjualanData['nota_pembelian'],
+                'kd_ops' => $penjualanData['kd_ops']
             ], $data);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());

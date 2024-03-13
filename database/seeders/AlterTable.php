@@ -43,7 +43,8 @@ class AlterTable extends Seeder
             "ALTER TABLE `t_master_produk`
             ADD IF NOT EXISTS `kd_supplier` varchar(11) DEFAULT NULL AFTER `type`,
             ADD IF NOT EXISTS `stok_all` int(11) DEFAULT NULL AFTER `kd_supplier`,
-            ADD IF NOT EXISTS `opr_input` varchar(11) DEFAULT NULL AFTER `stok_all`,
+            ADD IF NOT EXISTS `kd_ops` int(11) DEFAULT NULL AFTER `stok_all`,
+            ADD IF NOT EXISTS `opr_input` varchar(11) DEFAULT NULL AFTER `kd_ops`,
             ADD IF NOT EXISTS `tgl_input` int(11) DEFAULT NULL AFTER `opr_input`,
             ADD IF NOT EXISTS `harga_beli` int(11) DEFAULT NULL AFTER `tgl_input`;"
         );
