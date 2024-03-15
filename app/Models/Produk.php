@@ -15,25 +15,31 @@ class Produk extends Model
 
     private $satker;
 
-    public function getProduk($nota_pembelian = null)
+    public function getProduk($nota = null)
     {
         $produk = DB::table('t_master_produk as a');
 
-        if ($nota_pembelian) {
-            $produk->leftJoin('d_pembelian_detail as b', function ($join) use ($nota_pembelian) {
-                $join->on('a.kd_produk', '=', 'b.kd_produk')
-                    ->where('b.nota_pembelian', '=', $nota_pembelian);
-            });
+        if ($nota) {
+            if (!empty($nota['nota_pembelian'])) {
+                $produk->join('d_pembelian_detail as b', function ($join) use ($nota) {
+                    $join->on('a.kd_produk', '=', 'b.kd_produk')
+                        ->where('b.nota_pembelian', '=', $nota['nota_pembelian']);
+                });
+            } elseif (!empty($nota['nota_penjualan'])) {
+                $produk->join('d_penjualan_detail as b', function ($join) use ($nota) {
+                    $join->on('a.kd_produk', '=', 'b.kd_produk')
+                        ->where('b.nota_penjualan', '=', $nota['nota_penjualan']);
+                });
+            }
         }
 
-        $produk->leftJoin('t_harga_jual as c', 'a.kd_produk', '=', 'c.kd_produk');
-
-        if ($this->satker != null) {
+        if (!empty($this->satker)) {
             $produk->where('a.satker', '=', $this->satker);
         }
 
         return $produk;
     }
+
 
 
     function setSatker($satker)

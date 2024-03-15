@@ -88,7 +88,7 @@
                                                         <th>kd_channel</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
-                                                        {{-- <th>sisa_bayar</th> --}}
+                                                        <th>sisa_bayar</th>
                                                         {{-- <th>sts_angsuran</th> --}}
                                                         <th>total_galon</th>
                                                         <th>galon_kembali</th>
@@ -567,7 +567,7 @@
                     '</td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money"></td>' +
-                    '<input type="hidden" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly>' +
+                    '<td><input type="hidden" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" readonly></td>' +
                     '<input type="hidden" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly>' +
                     '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +

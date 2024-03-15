@@ -102,7 +102,6 @@ class PembayaranController extends Controller
         }
         $pembayaran->delete();
 
-
         $pembelianModel = new DPembelianModel(); // Gantilah Pembelian dengan nama model yang sesuai
         $pembelian = $pembelianModel->find($pembelian->id);
 

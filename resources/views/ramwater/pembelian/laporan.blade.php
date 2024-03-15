@@ -596,7 +596,7 @@
                                 var value = (data !== null) ? data : 0;
 
                                 return '<input type="text" class="form-control money detail_kd_gudang" name="kd_gudang" id="detail_kd_gudang" value="' +
-                                    addCommas(value) + '">';
+                                    addCommas(value) + '" readonly>';
                             }
                         },
                         {

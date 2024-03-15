@@ -196,6 +196,7 @@ class CreateTable extends Seeder
                 `qty_pesan` VARCHAR(50) NOT NULL,
                 `qty_retur` INT NOT NULL,
                 `qty_bersih` INT NOT NULL,
+                `kd_gudang` INT NOT NULL,
                 `harga_satuan` INT NOT NULL,
                 `harga_total` BIGINT NOT NULL,
 

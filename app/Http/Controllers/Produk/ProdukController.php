@@ -19,7 +19,10 @@ class ProdukController extends Controller
 
     public function data(Request $request)
     {
-        $input = $request->query('nota_pembelian');
+        $input = [
+            'nota_pembelian' => $request->query('nota_pembelian'),
+            'nota_penjualan' => $request->query('nota_penjualan'),
+        ];
 
         $this->model->setSatker($this->const['SATKER'] ?? null);
         if ($input) {
@@ -27,7 +30,6 @@ class ProdukController extends Controller
         } else {
             $produk = $this->model->getProduk();
         }
-
 
         return datatables()
             ->of($produk)

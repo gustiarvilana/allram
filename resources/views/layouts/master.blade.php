@@ -74,6 +74,10 @@
             height: 200px;
             border-radius: 5px;
         }
+
+        .form-control {
+            width: auto;
+        }
     </style>
 
 </head>

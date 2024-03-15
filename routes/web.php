@@ -8,6 +8,7 @@ use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController;
 use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
+use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\SecurityController;
@@ -86,7 +87,7 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/penjualan', PenjualanController::class)->except('show');
         Route::prefix('penjualan')->group(function () {
             Route::get('/data', [penjualanController::class, 'data'])->name('penjualan.data');
-            Route::get('/laporan', [LaporanpenjualanController::class, 'index'])->name('penjualan.laporan.index');
+            Route::get('/laporan', [LaporanPenjualanController::class, 'index'])->name('penjualan.laporan.index');
             Route::get('laporan/data', [LaporanpenjualanController::class, 'data'])->name('penjualan.laporan.data');
             Route::get('laporan/detailData', [LaporanpenjualanController::class, 'detailData'])->name('penjualan.laporan.detailData');
 

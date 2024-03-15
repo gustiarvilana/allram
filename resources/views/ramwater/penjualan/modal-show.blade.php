@@ -27,7 +27,6 @@
                                             <th>qty_bersih</th>
                                             <th>harga_satuan</th>
                                             <th>harga_total</th>
-                                            <th>kd_gudang</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

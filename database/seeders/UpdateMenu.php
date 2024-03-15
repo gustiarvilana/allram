@@ -23,7 +23,9 @@ class UpdateMenu extends Seeder
             (11, 11, 3, null, 'Pembayaran', 'Ramwater Pembayaran', '/ramwater/pembelian/pembayaran', '#', 'ri-calendar-todo-line', 3, 1),
 
             (12, 12, 4, null, 'Penjualan', 'Ramwater penjualan', '#', '#', 'fas fa-cart-plus', 3, 1),
-            (13, 13, 12, null, 'Input', 'Ramwater Input penjualan', '/ramwater/penjualan', '#', 'fas fa-cart-plus', 1, 1)
+            (13, 13, 12, null, 'Input', 'Ramwater Input penjualan', '/ramwater/penjualan', '#', 'fas fa-cart-plus', 1, 1),
+            (14, 14, 12, null, 'Laporan', 'Ramwater Laporan penjualan', '/ramwater/penjualan/laporan', '#', 'ri-calendar-todo-line', 2, 1),
+            (15, 15, 12, null, 'Pembayaran', 'Ramwater Pembayaran penjualan', '/ramwater/penjualan/pembayaran', '#', 'ri-calendar-todo-line', 3, 1)
         ");
 
 
@@ -41,7 +43,11 @@ class UpdateMenu extends Seeder
             (23, '99', '12', '2024'),
             (24, '1', '12', '2024'),
             (25, '99', '13', '2024'),
-            (26, '1', '13', '2024')
+            (26, '1', '13', '2024'),
+            (27, '99', '14', '2024'),
+            (28, '1', '14', '2024'),
+            (29, '99', '15', '2024'),
+            (30, '1', '15', '2024')
         ");
     }
 }

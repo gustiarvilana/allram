@@ -293,6 +293,7 @@
                     },
                     {
                         data: 'kd_produk',
+                        name: 'a.kd_produk',
                         render: function(data, type, row) {
                             return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
                                 row.kd_produk + '">';
@@ -300,30 +301,35 @@
                     },
                     {
                         data: 'type',
+                        name: 'type',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
                         data: 'qty_pesan',
+                        name: 'qty_pesan',
                         render: function(data, type, row) {
                             return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan">';
                         }
                     },
                     {
                         data: 'qty_retur',
+                        name: 'qty_retur',
                         render: function(data, type, row) {
                             return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur">';
                         }
                     },
                     {
                         data: 'qty_bersih',
+                        name: 'qty_bersih',
                         render: function(data, type, row) {
                             return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" readonly>';
                         }
                     },
                     {
                         data: 'kd_gudang',
+                        name: 'kd_gudang',
                         render: function(data, type, row) {
                             var selectOptions = '<option value="">== Pilih Gudang ==</option>';
 
@@ -340,12 +346,14 @@
 
                     {
                         data: 'harga_satuan',
+                        name: 'harga_satuan',
                         render: function(data, type, row) {
                             return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan">';
                         }
                     },
                     {
                         data: 'harga_total',
+                        name: 'harga_total',
                         render: function(data, type, row) {
                             return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" readonly>';
                         }

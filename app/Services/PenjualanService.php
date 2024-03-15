@@ -131,7 +131,6 @@ class PenjualanService
 
     public function validateData($penjualanData, $dataArrayDetail)
     {
-        // dd($penjualanData, $dataArrayDetail);
         if (
             empty($penjualanData['tgl_penjualan']) ||
             empty($penjualanData['kd_pelanggan']) ||
@@ -268,7 +267,7 @@ class PenjualanService
             $dataDetail_fix['nota_penjualan'] = $penjualan->nota_penjualan;
 
             if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($dataDetail_fix);
-            unset($dataDetail_fix['kd_gudang']);
+            // unset($dataDetail_fix['kd_gudang']);
             $dataDetail_fix = $this->penjualanDetailModel->create($dataDetail_fix);
 
             // save: ops
