@@ -37,7 +37,7 @@ class PembayaranController extends Controller
     {
         $req = $request->input();
 
-        $bayar = $this->dPembayaranModel->setNotaPembelian($req['nota_pembelian']);
+        $bayar = $this->dPembayaranModel->setNota($req['nota_pembelian']);
         $bayar = $this->dPembayaranModel->getPembayaran();
 
         // $bayar = $bayar->map(function ($row) {

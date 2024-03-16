@@ -13,12 +13,13 @@ class DPembayaranModel extends Model
     protected $table = 'd_pembayaran';
     protected $guarded = [];
 
-    protected $nota_pembelian;
+    protected $nota;
 
     public function getPembayaran()
     {
         $pembayaran = DB::table('d_pembayaran')
-            ->where('nota_pembelian', '=', $this->getNotaPembelian())
+            ->where('nota_pembelian', '=', $this->getNota())
+            ->orWhere('nota_penjualan', '=', $this->getNota())
             ->get();
 
         return $pembayaran;
@@ -40,19 +41,19 @@ class DPembayaranModel extends Model
     /**
      * Get the value of nota_pembelian
      */
-    public function getNotaPembelian()
+    public function getNota()
     {
-        return $this->nota_pembelian;
+        return $this->nota;
     }
 
     /**
-     * Set the value of nota_pembelian
+     * Set the value of nota
      *
      * @return  self
      */
-    public function setNotaPembelian($nota_pembelian)
+    public function setNota($nota)
     {
-        $this->nota_pembelian = $nota_pembelian;
+        $this->nota = $nota;
 
         return $this;
     }

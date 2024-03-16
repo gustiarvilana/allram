@@ -6,33 +6,30 @@ use App\Helpers\FormatHelper;
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\DPelangganModel;
-use App\Models\DPembayaran;
 use App\Models\DPembayaranModel;
-use App\Models\DPenjualanDetailModel;
 use App\Models\DPenjualanModel;
 use App\Models\Karyawan;
 use App\Models\TChannelModel;
 use App\Models\TGudang;
-use App\Services\PembayaranService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PembayaranController extends Controller
 {
-
     protected $integrationHelper;
+    protected $dPembayaranModel;
 
     public function __construct()
     {
         $this->integrationHelper = new IntegrationHelper();
+        $this->dPembayaranModel = new DPembayaranModel();
     }
 
     public function data(Request $request)
     {
         $req = $request->input();
 
-        $bayar = $this->dPembayaranModel->setNotaPenjualan($req['nota_penjualan']);
+        $bayar = $this->dPembayaranModel->setNota($req['nota_penjualan']);
         $bayar = $this->dPembayaranModel->getPembayaran();
 
         return response()->json($bayar);
@@ -51,7 +48,6 @@ class PembayaranController extends Controller
 
     public function store(Request $request)
     {
-
         $penjualanData = json_decode($request->input('penjualanData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
         $file = $request->file('path_file');

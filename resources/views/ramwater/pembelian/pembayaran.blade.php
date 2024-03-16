@@ -187,7 +187,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // Example usage
             var tableLaporanPembelian = $("#table-pembelian-laporan").DataTable({
                 info: false,
                 bPaginate: false,

@@ -87,7 +87,6 @@ class PembelianService
 
     public function destroyPembelian($id)
     {
-        Log::info("hapus: mulai");
         $pembelian = $this->dPembelianModel->find($id);
 
         $pembelianDetail = $this->dPembelianDetailModel
@@ -98,12 +97,9 @@ class PembelianService
             return DB::transaction(function () use ($pembelian, $pembelianDetail) {
                 // update d_stok_produk
                 foreach ($pembelianDetail as $detail) {
-                    Log::info('hapus: validateStok stok');
                     if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->validateStok($detail);
-                    Log::info('hapus: decrementStok stok');
                     if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($detail);
                 }
-
 
                 // hapus d_pembelian & child
                 $pathToDelete = $pembelian->path_file;
@@ -118,7 +114,6 @@ class PembelianService
                 FormatHelper::deleteFile($pathToDelete);
 
                 $pembelian->delete();
-                Log::info('hapus: pembelian hapus');
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
             });
@@ -240,7 +235,7 @@ class PembelianService
         $data = $this->prepareOpsnData($pembelianData);
 
         try {
-            return $this->dtransaksiOps->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $data);
+            return $this->dtransaksiOps->updateOrCreate(['nota_pembelian' => $data['nota_pembelian']], $data);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -272,16 +267,10 @@ class PembelianService
 
     public function upsertPembayaran($pembayaran)
     {
-        // $pembelian = $this->dPembelianModel->setNota_pembelian($pembayaran['nota_pembelian']);
-        // $pembelian = $this->dPembelianModel->getpembelianByNota();
-        // dd($pembelian);
-        // upsert sts_angsuran
-
         try {
             return $this->dPembayaran->updateOrCreate(
                 [
                     'nota_pembelian' => $pembayaran['nota_pembelian'],
-                    'angs_ke' => $pembayaran['angs_ke'],
                 ],
                 $pembayaran
             );

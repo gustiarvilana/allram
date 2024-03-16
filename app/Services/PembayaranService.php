@@ -28,8 +28,7 @@ class PembayaranService
         DStokProduk $dStokProduk,
         DPembelianModel $dPembelianModel,
         DPembayaranModel $dPembayaran,
-        DPembelianDetailModel $dPembelianDetailModel,
-        DOps $dOps
+        DPembelianDetailModel $dPembelianDetailModel
     ) {
         $this->integrationHelper = new IntegrationHelper();
         $this->dStokProduk = $dStokProduk;
@@ -51,18 +50,6 @@ class PembayaranService
 
                 // save: d_penjualan_detail + stok
                 $this->upsertPembayaranDetail($pembelianData, $dataArrayDetail, $file);
-                // dd($pembelianData, $dataArrayDetail, $file);
-
-                // // save: d_penjualan
-                // $pembelian = $this->upsertPembelian($pembelianData);
-
-                // // pembayaran
-                // if ($pembelianData['nominal_bayar']) {
-                //     $pembayaran = $this->preparePembayaranData($pembelianData);
-                //     $pembayaran = $this->upsertPembayaran($pembayaran);
-                // }
-
-                // $pembelian['nota_pembelian'] = $pembelianData['nota_pembelian'];
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
@@ -249,59 +236,6 @@ class PembayaranService
             Log::info('hapus: pembayaran hapus');
         }
     }
-
-    // public function prepareDetailData($dataDetail)
-    // {
-    //     $dataDetail['qty_pesan']    = $dataDetail['qty_pesan'] ? FormatHelper::removeDots($dataDetail['qty_pesan']) : 0;
-    //     $dataDetail['qty_retur']    = $dataDetail['qty_retur'] ? FormatHelper::removeDots($dataDetail['qty_retur']) : 0;
-    //     $dataDetail['qty_bersih']   = $dataDetail['qty_bersih'] ? FormatHelper::removeDots($dataDetail['qty_bersih']) : 0;
-    //     $dataDetail['harga_satuan'] = $dataDetail['harga_satuan'] ? FormatHelper::removeDots($dataDetail['harga_satuan']) : 0;
-    //     $dataDetail['harga_total']  = $dataDetail['harga_total'] ? FormatHelper::removeDots($dataDetail['harga_total']) : 0;
-    //     $dataDetail['kd_produk']    = $dataDetail['kd_produk'];
-    //     $dataDetail['kd_gudang']    = $dataDetail['kd_gudang'];
-    //     $dataDetail['nota_pembelian'] = null;
-
-    //     return $dataDetail;
-    // }
-
-    // public function upsertPembelian($pembelianData)
-    // {
-    //     $jns = $this->getJns();
-    //     $data = $this->dPembelianModel->where('nota_pembelian', '=', $pembelianData['nota_pembelian'])->first();
-    //     if (!$data) {
-    //         return $this->dPembelianModel->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $pembelianData);
-    //     } elseif ($jns == 'update') {
-    //         return $this->dPembelianModel->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $pembelianData);
-    //     } else {
-    //         if (config('constants.ramwater.VALIDASI_UPSERT')) {
-    //             throw new \Exception('Nota Pembelian pernah diinput!');
-    //         } else {
-    //             return $this->dPembelianModel->updateOrCreate(['nota_pembelian' => $pembelianData['nota_pembelian']], $pembelianData);
-    //         }
-    //     }
-    // }
-
-    // public function upsertPembayaran($pembayaran)
-    // {
-    //     // $pembelian = $this->dPembelianModel->setNota_pembelian($pembayaran['nota_pembelian']);
-    //     // $pembelian = $this->dPembelianModel->getpembelianByNota();
-    //     // dd($pembelian);
-    //     // upsert sts_angsuran
-
-    //     try {
-    //         return $this->dPembayaran->updateOrCreate(
-    //             [
-    //                 'nota_pembelian' => $pembayaran['nota_pembelian'],
-    //                 'angs_ke' => $pembayaran['angs_ke'],
-    //             ],
-    //             $pembayaran
-    //         );
-    //     } catch (\Exception $e) {
-    //         throw new \Exception($e->getMessage());
-    //     }
-    // }
-
-    // ..
 
     protected function setJns($jns)
     {

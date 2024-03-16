@@ -110,15 +110,15 @@
                                             <table class="table table-striped" id="table-detail">
                                                 <thead>
                                                     <tr>
-                                                        <th>nama</th>
-                                                        <th>kd_produk</th>
-                                                        <th>type</th>
-                                                        <th>qty_pesan</th>
-                                                        <th>qty_retur</th>
-                                                        <th>qty_bersih</th>
-                                                        <th>kd_gudang</th>
-                                                        <th>harga_satuan</th>
-                                                        <th>harga_total</th>
+                                                        <th>No</th>
+                                                        <th>nota_penjualan</th>
+                                                        <th>tgl_pembayaran</th>
+                                                        <th>angs_ke</th>
+                                                        <th>nominal_bayar</th>
+                                                        <th>channel_bayar</th>
+                                                        <th>ket_bayar</th>
+                                                        <th>File</th>
+                                                        <th><i class="fa fa-cog" aria-hidden="true"></i></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody> </tbody>
@@ -269,6 +269,7 @@
                 console.log('Modal penjualan telah disembunyikan');
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
+                $('#table-detail').empty();
             });
 
             $("body").on("click", "#btn-add-penjualan", function() {
@@ -476,265 +477,97 @@
 
                 $('#penjualan-uraian').append(row);
 
-
                 var pathFile = "{{ asset('/') }}" + rowData.path_file;
                 $('#image-container a').attr('href', pathFile);
                 $('#image-container img').attr('src', pathFile);
                 $('#download-btn').attr('href', pathFile);
                 $("#modal-penjualan-title").text("Update Data");
 
-                var tableDetail = $("#table-detail  ").DataTable({
-                    info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
-                    processing: true,
-                    serverSide: true,
-                    autoWidth: false,
-                    bDestroy: true,
-                    ajax: {
-                        url: '{{ route('produk.data') }}?nota_penjualan=' + rowData.nota_penjualan,
-                        data: {
-                            nota_penjualan: rowData.nota_penjualan
-                        },
+                $.ajax({
+                    url: '{{ route('penjualan.pembayaran.data') }}?nota_penjualan=' + rowData
+                        .nota_penjualan,
+                    method: 'GET',
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Loop through each object in the response array
+                        response.forEach(function(item, index) {
+                            // Create a new row with input fields filled with data from the response
+                            var row =
+                                '<tr>' +
+                                '<td>' + (index + 1) + '</td>' + // No column
+                                '<input type="hidden" name="id" id="bayar_id" class="form-control money" value="' +
+                                item.id + '" readonly>' +
+                                '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
+                                '<td><input type="text" name="nota_penjualan" id="bayar_nota_penjualan" class="form-control money" value="' +
+                                item.nota_penjualan + '" readonly></td>' +
+                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
+                                item.tgl + '" readonly></td>' +
+                                '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +
+                                item.angs_ke + '" readonly></td>' +
+                                '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control money" value="' +
+                                addCommas(item.nominal_bayar) + '" readonly></td>' +
+                                '<td><input type="text" name="channel_bayar" id="bayar_channel_bayar" class="form-control money" value="' +
+                                item.channel_bayar + '" readonly></td>' +
+                                '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control money" value="' +
+                                item.ket_bayar + '" readonly></td>' +
+                                '<input type="hidden" name="path_file" id="bayar_path_file" class="form-control" value="' +
+                                item.path_file + '" readonly>' +
+                                '<td><a href="{{ asset('') }}' + item.path_file +
+                                '" target="_blank" class="a">' +
+                                '<img src="{{ asset('') }}' + item.path_file +
+                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                '</a></td>' +
+                                '<td style="white-space: nowrap;">' +
+                                // Menggunakan white-space: nowrap; untuk menghindari wrap
+                                '<a class="btn btn-success btn-xs btn-edit" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></a>' +
+                                '<a class="btn btn-danger btn-xs btn-hapus" style="margin-right: 5px;" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '</td>' +
+                                '</tr>';
+
+                            $('#table-detail').append(row);
+                        });
+
+                        if (rowData.sts_angsuran != 4) {
+                            var emptyRow =
+                                '<tr>' +
+                                '<td></td>' + // No column
+                                '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control bayar_nota_pembelian money" value="" disabled></td>' +
+                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control bayar_tgl_pembayaran money" value="' +
+                                '{{ date('Ymd') }}' + '"></td>' +
+                                '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control bayar_angs_ke money" value="" disabled></td>' +
+                                '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control bayar_nominal_bayar money" value=""></td>' +
+                                '<td>' +
+                                '<select name="channel_bayar" id="bayar_channel_bayar" class="form-control bayar_channel_bayar">' +
+                                '<option value="">Pilih Channel</option>' +
+                                '@foreach ($channels as $channel)' +
+                                '<option value="{{ $channel->kd_channel }}">{{ $channel->ur_channel }}</option>' +
+                                '@endforeach' +
+                                '</select>' +
+                                '</td>' +
+                                '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control bayar_ket_bayar money" value=""></td>' +
+                                '<td><a class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
+                                '</tr>';
+
+                            $('#table-detail').append(emptyRow);
+                        }
                     },
-                    // dom: 'Brtip',
-                    dom: 'Brtip',
-                    columns: [{
-                            data: 'nama',
-                            render: function(data, type, row) {
-                                var row_data = JSON.stringify(row);
-                                return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
-                                    data + '</span></div>';
-
-                            }
-                        },
-                        {
-                            data: 'kd_produk',
-                            render: function(data, type, row) {
-                                return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
-                                    data + '">';
-                            }
-                        },
-                        {
-                            data: 'type',
-                            render: function(data, type, row) {
-                                return data;
-                            }
-                        },
-                        {
-                            data: 'qty_pesan',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan" value="' +
-                                    value + '">';
-                            }
-                        },
-                        {
-                            data: 'qty_retur',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur" value="' +
-                                    value + '">';
-                            }
-                        },
-                        {
-                            data: 'qty_bersih',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" value="' +
-                                    addCommas(value) + '" readonly>';
-                            }
-                        },
-                        {
-                            data: 'kd_gudang',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_kd_gudang" name="kd_gudang" id="detail_kd_gudang" value="' +
-                                    addCommas(value) + '" readonly>';
-                            }
-                        },
-                        {
-                            data: 'harga_satuan',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan" value="' +
-                                    addCommas(value) + '">';
-                            }
-                        },
-                        {
-                            data: 'harga_total',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-                                return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" value="' +
-                                    addCommas(value) + '" readonly>';
-                            }
+                    error: function(error) {
+                        var errorMessage = "Terjadi kesalahan dalam operasi.";
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        } else if (error.statusText) {
+                            errorMessage = error.statusText;
                         }
-                    ],
-                    columnDefs: [{
-                            targets: [1, 2, 3, 4, 5, 6, 7],
-                            searchable: false,
-                            orderable: false
-                        },
-                        {
-                            targets: [0, 1],
-                            orderable: false
-                        },
-                        {
-                            // targets: [1, 2],
-                            visible: false
-                        }
-                    ],
-                    initComplete: function() {
-                        initializeColumnSearch(this);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: errorMessage,
+                        });
                     }
                 });
 
                 $("#modal-penjualan").modal("show");
-            }).on("click", "#btn-penjualan-show", function() {
-                var rowData = $(this).data('row');
-
-                var tableDetail = $("#modal-show-detail").DataTable({
-                    info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
-                    processing: true,
-                    serverSide: true,
-                    autoWidth: false,
-                    bDestroy: true,
-                    ajax: {
-                        url: '{{ route('penjualan.laporan.detailData') }}?nota_penjualan=' +
-                            rowData
-                            .nota_penjualan +
-                            '',
-                        data: {
-                            nota_penjualan: rowData.nota_penjualan
-                        },
-                    },
-                    // dom: 'Brtip',
-                    dom: 'tip',
-                    columns: [{
-                            data: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'kd_produk',
-                            render: function(data, type, row) {
-                                return row.nama;
-                            }
-                        },
-                        {
-                            data: 'qty_pesan',
-                            render: function(data, type, row) {
-                                return addCommas(data);
-                            }
-                        },
-                        {
-                            data: 'qty_retur',
-                            render: function(data, type, row) {
-                                return addCommas(data);
-                            }
-                        },
-                        {
-                            data: 'qty_bersih',
-                            render: function(data, type, row) {
-                                return addCommas(data);
-                            }
-                        },
-                        {
-                            data: 'harga_satuan',
-                            render: function(data, type, row) {
-                                return addCommas('data');
-                            }
-                        },
-                        {
-                            data: 'harga_total',
-                            render: function(data, type, row) {
-                                return addCommas('data');
-                            }
-                        },
-                    ],
-                    columnDefs: [{
-                            targets: [0, 1, 2, 3, 4, 5, 6],
-                            searchable: false,
-                            orderable: false
-                        },
-                        {
-                            targets: [0, 1],
-                            orderable: false
-                        },
-                        {
-                            // targets: [1, 2],
-                            visible: false
-                        }
-                    ],
-                    initComplete: function() {
-                        initializeColumnSearch(this);
-                    }
-                });
-
-                $('#penjualan-show #modal-title').text('penjualan Detail')
-                $('#penjualan-show #modal-header').text('No Nota: ' + rowData.nota_penjualan)
-                $('#penjualan-show').modal('show')
-            }).on("click", "#btn-penjualan-delete", function() {
-                var deleteButton = $(this);
-                var id = deleteButton.data('id');
-                var url_delete = '{{ route('penjualan.destroy', ['penjualan' => ':id']) }}';
-                url_delete = url_delete.replace(':id', id);
-
-                // Use SweetAlert for confirmation
-                Swal.fire({
-                    title: 'Anda Yakin?',
-                    text: 'Pastikan Produk masih di Gudang Utama!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    cancelButtonText: 'Tidak',
-                    confirmButtonText: 'Ya, Produk masih di Gudang Utama!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: url_delete,
-                            type: 'DELETE',
-                            data: {
-                                _token: getCSRFToken(),
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    tableLaporanpenjualan.ajax.reload();
-                                    Swal.fire('Terhapus!', 'Data berhasil dihapus.',
-                                        'success');
-                                    return;
-                                }
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal!',
-                                    text: response.message,
-                                });
-
-                            },
-                            error: function(error) {
-                                var errorMessage = "Terjadi kesalahan dalam operasi.";
-
-                                if (error.responseJSON && error.responseJSON.message) {
-                                    errorMessage = error.responseJSON.message;
-                                } else if (error.statusText) {
-                                    errorMessage = error.statusText;
-                                }
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Kesalahan!',
-                                    text: errorMessage,
-                                });
-                            }
-                        });
-                    }
-                });
             }).on("keyup", "#ur_nota_penjualan", function() {
                 var text = $('#ur_nota_penjualan').val()
 

@@ -5,10 +5,8 @@
 namespace App\Services;
 
 use App\Helpers\FormatHelper;
-use App\Models\DOps;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
-use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
 use App\Models\DTransaksiOps;
 use App\Models\Penjualan;
@@ -17,9 +15,6 @@ use App\Models\SupplierModel;
 use App\Models\TOps;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class PenjualanService
 {
@@ -54,7 +49,6 @@ class PenjualanService
 
     public function storePenjualan($penjualanData, $dataArrayDetail)
     {
-
         if (isset($penjualanData['jns'])) {
             $this->setJns($penjualanData['jns']);
         }
@@ -114,6 +108,7 @@ class PenjualanService
                     FormatHelper::deleteFile($pathToDelete);
                 }
 
+                $this->dPembayaran->where('nota_penjualan', '=', $penjualan->nota_penjualan)->delete();
                 $this->dtransaksiOps->where('nota_pembelian', '=', $penjualan->nota_penjualan)->delete();
                 $penjualan->delete();
 
@@ -278,8 +273,8 @@ class PenjualanService
         $data = $this->prepareOpsnData($penjualanData);
         try {
             return $this->dtransaksiOps->updateOrCreate([
-                'nota_pembelian' => $penjualanData['nota_penjualan'],
-                'kd_ops' => $penjualanData['kd_ops']
+                'nota_pembelian' => $data['nota_pembelian'],
+                'kd_ops'         => $data['kd_ops']
             ], $data);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -292,7 +287,6 @@ class PenjualanService
             return $this->dPembayaran->updateOrCreate(
                 [
                     'nota_penjualan' => $pembayaran['nota_penjualan'],
-                    'angs_ke' => $pembayaran['angs_ke'],
                 ],
                 $pembayaran
             );
