@@ -85,40 +85,37 @@ class PenjualanService
         }
     }
 
-    public function destroyPembelian($id)
+    public function destroyPenjualan($id)
     {
-        Log::info("hapus: mulai");
-        $pembelian = $this->dPembelianModel->find($id);
+        $penjualan = $this->penjualanModel->find($id);
 
-        $pembelianDetail = $this->dPembelianDetailModel
-            ->where('nota_pembelian', '=', $pembelian->nota_pembelian)
+        $penjualanDetail = $this->penjualanDetailModel
+            ->where('nota_penjualan', '=', $penjualan->nota_penjualan)
             ->get();
 
         try {
-            return DB::transaction(function () use ($pembelian, $pembelianDetail) {
+            return DB::transaction(function () use ($penjualan, $penjualanDetail) {
                 // update d_stok_produk
-                foreach ($pembelianDetail as $detail) {
-                    Log::info('hapus: validateStok stok');
+                foreach ($penjualanDetail as $detail) {
                     if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->validateStok($detail);
-                    Log::info('hapus: decrementStok stok');
-                    if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($detail);
+                    if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->incrementStok($detail);
                 }
 
+                if ($penjualan->path_file) {
+                    $pathToDelete = $penjualan->path_file;
+                    $publicPath = storage_path('app/public/');
 
-                // hapus d_pembelian & child
-                $pathToDelete = $pembelian->path_file;
-                $publicPath = storage_path('app/public/');
+                    // Pastikan path_file dimulai dengan "storage/"
+                    if (Str::startsWith($pathToDelete, 'storage/')) {
+                        // Ubah "storage/" menjadi direktori penyimpanan
+                        $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
+                    }
 
-                // Pastikan path_file dimulai dengan "storage/"
-                if (Str::startsWith($pathToDelete, 'storage/')) {
-                    // Ubah "storage/" menjadi direktori penyimpanan
-                    $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
+                    FormatHelper::deleteFile($pathToDelete);
                 }
 
-                FormatHelper::deleteFile($pathToDelete);
-
-                $pembelian->delete();
-                Log::info('hapus: pembelian hapus');
+                $this->dtransaksiOps->where('nota_pembelian', '=', $penjualan->nota_penjualan)->delete();
+                $penjualan->delete();
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
             });
@@ -136,7 +133,6 @@ class PenjualanService
             empty($penjualanData['kd_pelanggan']) ||
             empty($penjualanData['kd_channel']) ||
             empty($penjualanData['harga_total']) ||
-            empty($penjualanData['nominal_bayar']) ||
             empty($penjualanData['opr_input']) ||
             empty($penjualanData['tgl_input'])
         ) {
@@ -221,9 +217,11 @@ class PenjualanService
     {
         $namaOps = $this->tOps->getPenjualanOps($penjualanData['kd_produk'])->first();
 
+        if (!$namaOps->kd_ops) throw new \Exception("kd_ops Belum diatur!");
+
         $ops['nota_pembelian'] = $penjualanData['nota_penjualan'];
         $ops['tgl_transaksi']  = $penjualanData['tgl_penjualan'];
-        $ops['kd_ops']         = $namaOps->kd_ops ?? '0';
+        $ops['kd_ops']         = $namaOps->kd_ops;
         $ops['jns_trs']        = config('constants.ramwater.KD_TRANSAKSI_Pendapatan');
         $ops['nominal']        = $penjualanData['harga_total'];
         $ops['ket_transaksi']  = '';
@@ -243,7 +241,6 @@ class PenjualanService
         } else {
             if (config('constants.ramwater.VALIDASI_UPSERT')) {
                 return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjualanData['nota_penjualan']], $penjualanData);
-                // throw new \Exception('Nota Pembelian pernah diinput!');
             } else {
                 return $this->penjualanModel->updateOrCreate(['nota_penjualan' => $penjualanData['nota_penjualan']], $penjualanData);
             }
@@ -269,7 +266,7 @@ class PenjualanService
             if (config('constants.ramwater.VALIDASI_STOCK')) $this->dStokProduk->decrementStok($dataDetail_fix);
             // unset($dataDetail_fix['kd_gudang']);
             $dataDetail_fix = $this->penjualanDetailModel->create($dataDetail_fix);
-
+            $dataDetail_fix['tgl_penjualan'] = $penjualan->tgl_penjualan;
             // save: ops
             $this->upsertOps($dataDetail_fix);
         }
@@ -281,7 +278,7 @@ class PenjualanService
         $data = $this->prepareOpsnData($penjualanData);
         try {
             return $this->dtransaksiOps->updateOrCreate([
-                'nota_pembelian' => $penjualanData['nota_pembelian'],
+                'nota_pembelian' => $penjualanData['nota_penjualan'],
                 'kd_ops' => $penjualanData['kd_ops']
             ], $data);
         } catch (\Exception $e) {

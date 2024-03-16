@@ -587,7 +587,7 @@
                         }
                     ],
                     columnDefs: [{
-                            targets: [1, 2, 3, 4, 5, 6, 7],
+                            targets: [1, 2, 3, 4, 5, 6, 7, 8],
                             searchable: false,
                             orderable: false
                         },
@@ -658,13 +658,13 @@
                         {
                             data: 'harga_satuan',
                             render: function(data, type, row) {
-                                return addCommas('data');
+                                return addCommas(data);
                             }
                         },
                         {
                             data: 'harga_total',
                             render: function(data, type, row) {
-                                return addCommas('data');
+                                return addCommas(data);
                             }
                         },
                     ],

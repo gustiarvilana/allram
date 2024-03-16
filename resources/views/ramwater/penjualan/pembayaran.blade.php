@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fas fa-money-bill"></i><b> Laporan Pembayaran</b>
+    <i class="fa fa-file" aria-hidden="true"></i> <b>Laporan Pembayaran Penjualan</b>
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    {{-- <a class="btn btn-success btn-xs" id="btn-add-pembelian">Tambah Data</a> --}}
+                    {{-- <a class="btn btn-success btn-xs" id="btn-add-penjualan">Tambah Data</a> --}}
                 </div>
                 <div class="card-body">
                     <div class="card card-success">
@@ -20,22 +20,20 @@
                             <div class="row">
                                 <div class="col-md-12 table-responsive">
                                     <table class="table table-striped table-inverse text-center"
-                                        id="table-pembelian-laporan">
+                                        id="table-penjualan-laporan">
                                         <thead>
                                             <tr>
-                                                {{-- <th width="5%">No</th> --}}
-                                                <th>Supplier</th>
-                                                <th>nota_pembelian</th>
-                                                <th>tgl_pembelian</th>
-                                                <th>kd_supplier</th>
-                                                <th>jns_pembelian</th>
+                                                <th width="5%">No</th>
+                                                <th>nota_penjualan</th>
+                                                <th>Nama Pelanggan</th>
+                                                <th>tgl_penjualan</th>
+                                                <th>Sales</th>
                                                 <th>harga_total</th>
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
                                                 <th>opr_input</th>
                                                 <th>tgl_input</th>
-                                                <th>Faktur</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -52,13 +50,13 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal-pembelian" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="modal-penjualan" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-pembelian-title">Pembayaran title</h5>
-                    <button type="button" class="close btn-add-pembayaran-close" id="btn-add-pembayaran-close">
+                    <h5 class="modal-title" id="modal-penjualan-title">Modal title</h5>
+                    <button type="button" class="close btn-add-penjualan-close" id="btn-add-penjualan-close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -67,72 +65,34 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Uraian Pembelian</span>
+                                    <span>Uraian penjualan</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-pembelian">
+                                            <table class="table table-striped" id="table-penjualan">
                                                 <thead>
                                                     <tr>
-                                                        <th>tgl_pembelian</th>
-                                                        <th>Supplier</th>
-                                                        <th>nota_pembelian</th>
-                                                        <th>jns_pembelian</th>
+                                                        <th>tgl_penjualan</th>
+                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
+                                                        <th>kd_channel</th>
                                                         <th>harga_total</th>
                                                         <th>nominal_bayar</th>
                                                         <th>sisa_bayar</th>
                                                         <th>sts_angsuran</th>
+                                                        <th>total_galon</th>
+                                                        <th>galon_kembali</th>
+                                                        {{-- <th>sisa_galon</th> --}}
+                                                        {{-- <th>sts_galon</th> --}}
+                                                        <th>kd_sales</th>
+                                                        {{-- <th>opr_input</th> --}}
+                                                        {{-- <th>tgl_input</th> --}}
                                                     </tr>
                                                 </thead>
-                                                <tbody id="pembelian-uraian"></tbody>
+                                                <tbody id="penjualan-uraian"></tbody>
                                             </table>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <span>Upload Faktur</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="form-group">
-                                                <label for="path_file">Upload Faktur</label>
-                                                <input class="form-control path_file" type="file" name="path_file"
-                                                    id="path_file">
-                                            </div>
-                                        </div>
-
-                                        {{-- <div class="col d-flex flex-column align-items-center">
-                                            <div class="row">
-                                                <div class="col text-center" id="image-container">
-                                                    <a href="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
-                                                        target="_blank" class="a">
-                                                        <img src="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
-                                                            alt="Faktur pembelian" class="img">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col text-center">
-                                                    <a class="btn btn-success"
-                                                        href="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
-                                                        id="download-btn" download>
-                                                        <i class="fa fa-download" aria-hidden="true"></i> Download
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div> --}}
-
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -147,63 +107,68 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped">
+                                            <table class="table table-striped" id="table-detail">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>nota_pembelian</th>
-                                                        <th>tgl_pembayaran</th>
-                                                        <th>angs_ke</th>
-                                                        <th>nominal_bayar</th>
-                                                        <th>channel_bayar</th>
-                                                        <th>ket_bayar</th>
-                                                        <th>File</th>
-                                                        <th><i class="fa fa-cog" aria-hidden="true"></i></th>
+                                                        <th>nama</th>
+                                                        <th>kd_produk</th>
+                                                        <th>type</th>
+                                                        <th>qty_pesan</th>
+                                                        <th>qty_retur</th>
+                                                        <th>qty_bersih</th>
+                                                        <th>kd_gudang</th>
+                                                        <th>harga_satuan</th>
+                                                        <th>harga_total</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="table-detail-edit"> </tbody>
+                                                <tbody> </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success btn-pembayaran-simpan" id="btn-pembayaran-simpan"><i
+                    <button class="btn btn-success btn-add-penjualan-simpan" id="btn-add-penjualan-simpan"><i
                             class="fas fa-save"></i>
                         Simpan</button>
-                    <button class="btn btn-secondary" id="btn-add-pembayaran-close">Close</button>
+                    {{-- <button class="btn btn-secondary btn-add-penjualan-simpan">Close</button> --}}
                 </div>
             </div>
         </div>
     </div>
 
-    @include('ramwater.pembelian.modal-show')
+    @include('ramwater.penjualan.modal-show')
 @endsection
 
 @push('js')
     <script>
         $(document).ready(function() {
-            // Example usage
-            var tableLaporanPembelian = $("#table-pembelian-laporan").DataTable({
+            var tableLaporanpenjualan = $("#table-penjualan-laporan").DataTable({
                 info: false,
                 bPaginate: false,
                 bLengthChange: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('pembelian.laporan.data') }}',
+                ajax: '{{ route('penjualan.laporan.data') }}',
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'
                 ],
-                columns: [
-                    // {
-                    //     data: 'DT_RowIndex'
-                    // },
+                columns: [{
+                        data: 'DT_RowIndex'
+                    },
+
+                    {
+                        data: 'nota_penjualan',
+                        name: 'a.nota_penjualan',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
                     {
                         data: 'nama',
                         name: 'b.nama',
@@ -213,31 +178,18 @@
                         }
                     },
                     {
-                        data: 'nota_pembelian',
-                        name: 'a.nota_pembelian',
+                        data: 'tgl_penjualan',
+                        name: 'a.tgl_penjualan',
                         render: function(data, type, row) {
                             return data;
                         }
                     },
                     {
-                        data: 'tgl_pembelian',
-                        name: 'a.tgl_pembelian',
+                        data: 'nama_sales',
+                        name: 'nama_sales',
                         render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'kd_supplier',
-                        name: 'a.kd_supplier',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'jns_pembelian',
-                        name: 'a.jns_pembelian',
-                        render: function(data, type, row) {
-                            return data;
+                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                data + '</span></div>';
                         }
                     },
                     {
@@ -251,22 +203,14 @@
                         data: 'nominal_bayar',
                         name: 'a.nominal_bayar',
                         render: function(data, type, row) {
-                            if (data == 0) {
-                                return '0';
-                            } else {
-                                return addCommas(data);
-                            }
+                            return addCommas(data);
                         }
                     },
                     {
                         data: 'sisa_bayar',
                         name: 'a.sisa_bayar',
                         render: function(data, type, row) {
-                            if (data == 0) {
-                                return '0';
-                            } else {
-                                return addCommas(data);
-                            }
+                            return addCommas(data);
                         }
                     },
                     {
@@ -291,354 +235,545 @@
                         }
                     },
                     {
-                        data: 'path_file',
-                        name: 'a.path_file',
-                        render: function(data, type, row) {
-                            return '<a href="{{ asset('') }}' + row.path_file +
-                                '" target="_blank" class="a">' +
-                                '<img src="{{ asset('') }}' + row.path_file +
-                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
-                                '</a>';
-                        }
-                    },
-
-                    {
                         data: 'id',
                         name: 'a.id',
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
 
-                            var btn_edit = '<a id="btn-pembayaran-edit" data-id="' + row.id +
+                            var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i></a>';
+                                '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Edit</a>';
 
                             return '<div style="white-space: nowrap;">' + btn_edit + '</div>';
                         },
                     },
                 ],
                 columnDefs: [{
-                    targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
-                    searchable: false,
-                    orderable: false
-                }],
+                        targets: [0, 5, 6, 7, 8, 9, 10, 11],
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
+                        targets: [5, 6, 7],
+                        className: 'text-right'
+                    }
+                ],
+
                 initComplete: function() {
                     initializeColumnSearch(this);
-                    setupHoverShapes(this, 11);
+                    // setupHoverShapes(this, 11);
                 }
             });
 
-            $('#modal-pembelian').on('hidden.bs.modal', function() {
-                console.log('Modal Pembelian telah disembunyikan');
-                $("#modal-pembelian").modal("hide");
-                $('#pembelian-uraian').empty();
-                $('#table-detail-edit').empty();
-                $('.path_file').val('');
+            $('#modal-penjualan').on('hidden.bs.modal', function() {
+                console.log('Modal penjualan telah disembunyikan');
+                $("#modal-penjualan").modal("hide");
+                $('#penjualan-uraian').empty();
             });
 
-            $('body').on("click", "#btn-add-pembayaran", function() {
-                $("##modal-pembayaran-title").text("Tambah Data");
-                $("##modal-pembayaran").modal("show");
-            }).on("click", "#btn-add-pembayaran-close", function() {
-                $("#modal-pembelian").modal("hide");
-                $('#pembelian-uraian').empty();
-            }).on("click", "#btn-pembayaran-simpan", function() {
-                var imageFile = $('#path_file')[0].files[0];
-
+            $("body").on("click", "#btn-add-penjualan", function() {
+                $("#modal-penjualan-title").text("Tambah Data");
+                $("#modal-penjualan").modal("show");
+            }).on("click", "#btn-add-penjualan-close", function() {
+                $("#modal-penjualan").modal("hide");
+                $('#penjualan-uraian').empty();
+            }).on("click", "#btn-add-penjualan-simpan", function() {
                 var dataArrayDetail = [];
-                $('#table-detail-edit tr').each(function() {
+                $('#table-detail tbody tr').each(function() {
+                    var hargaTotal = $(this).find('#detail_harga_total').val();
 
-                    var rowData = {
-                        id: $(this).find('#bayar_id').val(),
-                        update: $(this).find('#bayar_update').val(),
-                        nota_pembelian: $(this).find('#bayar_nota_pembelian').val(),
-                        tgl_pembayaran: $(this).find('#bayar_tgl_pembayaran').val(),
-                        angs_ke: $(this).find('#bayar_angs_ke').val(),
-                        nominal_bayar: $(this).find('#bayar_nominal_bayar').val(),
-                        channel_bayar: $(this).find('#bayar_channel_bayar').val(),
-                        ket_bayar: $(this).find('#bayar_ket_bayar').val(),
-                        path_file: $(this).find('#bayar_path_file').val(),
-
-                    };
-                    dataArrayDetail.push(rowData);
-
+                    if (hargaTotal && parseFloat(hargaTotal) !== 0) {
+                        var rowData = {
+                            nama: $(this).find('#detail_nama').text(),
+                            nota_penjualan: $(this).find('#detail_nota_penjualan').val(),
+                            kd_produk: $(this).find('#detail_kd_produk').val(),
+                            qty_pesan: $(this).find('#detail_qty_pesan').val(),
+                            qty_retur: $(this).find('#detail_qty_retur').val(),
+                            qty_bersih: $(this).find('#detail_qty_bersih').val(),
+                            harga_satuan: $(this).find('#detail_harga_satuan').val(),
+                            kd_gudang: $(this).find('#detail_kd_gudang').val(),
+                            harga_total: hargaTotal,
+                        };
+                        dataArrayDetail.push(rowData);
+                    }
                 });
 
-                var pembelianData = {
-                    id: $('#table-pembelian #ur_id').val(),
-                    nota_pembelian: $('#table-pembelian #ur_nota_pembelian').val(),
-                    tgl_pembelian: $('#table-pembelian #ur_tgl_pembelian').val(),
-                    kd_supplier: $('#table-pembelian #ur_kd_supplier').val(),
-                    jns_pembelian: $('#table-pembelian #ur_jns_pembelian').val(),
-                    harga_total: $('#table-pembelian #ur_harga_total').val(),
-                    nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
-                    sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
-                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
-                    path_file: $('#path_file').val(),
+                var penjualanData = {
+                    nota_penjualan: $('#penjualan-uraian #ur_nota_penjualan').val(),
+                    tgl_penjualan: $('#penjualan-uraian #ur_tgl_penjualan').val(),
+                    kd_pelanggan: $('#penjualan-uraian #ur_kd_pelanggan').val(),
+                    kd_channel: $('#penjualan-uraian #ur_kd_channel').val(),
+                    harga_total: $('#penjualan-uraian #ur_harga_total').val(),
+                    nominal_bayar: $('#penjualan-uraian #ur_nominal_bayar').val(),
+                    sisa_bayar: $('#penjualan-uraian #ur_sisa_bayar').val(),
+                    sts_angsuran: $('#penjualan-uraian #ur_sts_angsuran').val(),
+                    total_galon: $('#penjualan-uraian #ur_total_galon').val(),
+                    galon_kembali: $('#penjualan-uraian #ur_galon_kembali').val(),
+                    sisa_galon: $('#penjualan-uraian #ur_sisa_galon').val(),
+                    sts_galon: $('#penjualan-uraian #ur_sts_galon').val(),
+                    kd_sales: $('#penjualan-uraian #ur_kd_sales').val(),
+                    opr_input: $('#penjualan-uraian #ur_opr_input').val(),
+                    tgl_input: $('#penjualan-uraian #ur_tgl_input').val(),
                 };
+
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
-                formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
-                formData.append('pembelianData', JSON.stringify(pembelianData));
+                formData.append('penjualanData', JSON.stringify(penjualanData));
+                formData.append('jns', 'update');
 
-                // formData.forEach(function(value, key) {
-                //     console.log(key, value);
-                // });
+                //
+                var detailpenjualanHTML = '<div>';
 
-                $.ajax({
-                    url: '{{ route('pembayaran.store') }}',
-                    method: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
-                            tableLaporanPembelian.ajax.reload();
-                            $('#btn-add-pembayaran-close').click()
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sukses!',
-                                text: response.message,
-                            });
-                            return;
-                        }
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: response.message,
-                        });
+                var detailpenjualanHTML = `
+                    <table class="table table-striped" id="table-detail">
+                        <thead style="background-color: #4CAF50; color: white; padding: 10px;">
+                            <tr>
+                                <th>nama</th>
+                                <th>pesan</th>
+                                <th>retur</th>
+                                <th>bersih</th>
+                                <th>kd_gudang</th>
+                                <th>harga_satuan</th>
+                                <th>harga_total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
 
-                    },
-                    error: function(error) {
-                        var errorMessage = "Terjadi kesalahan dalam operasi.";
+                dataArrayDetail.forEach(function(rowData) {
+                    detailpenjualanHTML += `
+                        <tr>
+                            <td>${rowData.nama}</td>
+                            <td>${rowData.qty_pesan}</td>
+                            <td>${rowData.qty_retur}</td>
+                            <td>${rowData.qty_bersih}</td>
+                            <td>${rowData.kd_gudang}</td>
+                            <td>${rowData.harga_satuan}</td>
+                            <td>${rowData.harga_total}</td>
+                        </tr>
+                    `;
+                });
 
-                        if (error.responseJSON && error.responseJSON.message) {
-                            errorMessage = error.responseJSON.message;
-                        } else if (error.statusText) {
-                            errorMessage = error.statusText;
-                        }
+                detailpenjualanHTML += `
+                        </tbody>
+                    </table>
+                `;
 
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Kesalahan!',
-                            text: errorMessage,
+                // Menambahkan total keseluruhan
+                detailpenjualanHTML +=
+                    `<p><strong>Total Keseluruhan:</strong> <b>${penjualanData.harga_total}</b></p>`;
+
+                detailpenjualanHTML += '</div>';
+
+                Swal.fire({
+                    title: 'Konfirmasi penjualan',
+                    html: detailpenjualanHTML, // Menggunakan variabel detailpenjualanHTML
+                    showCancelButton: true,
+                    confirmButtonText: 'Simpan',
+                    cancelButtonText: 'Batal',
+                    icon: 'question',
+                    width: '80%', // Sesuaikan lebar sesuai kebutuhan
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{ route('penjualan.store') }}',
+                            method: 'POST',
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            success: function(response) {
+                                if (response.success) {
+                                    tableLaporanpenjualan.ajax.reload();
+                                    $('#btn-add-penjualan-close').click()
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sukses!',
+                                        text: response.message,
+                                    });
+                                    return;
+                                }
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.message,
+                                });
+
+                            },
+                            error: function(error) {
+                                var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                                if (error.responseJSON && error.responseJSON.message) {
+                                    errorMessage = error.responseJSON.message;
+                                } else if (error.statusText) {
+                                    errorMessage = error.statusText;
+                                }
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Kesalahan!',
+                                    text: errorMessage,
+                                });
+                            }
                         });
                     }
                 });
 
-            }).on("click", "#btn-pembayaran-edit", function() {
+            }).on("click", "#btn-penjualan-edit", function() {
                 var rowData = $(this).data('row');
 
                 var row =
                     '<tr>' +
+                    '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
+                    {{ date('Ymd') }} + '"></td>' +
+                    '<input type="hidden" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
+                    rowData.kd_pelanggan + '">' +
                     '<td>' +
-                    '<input type="hidden" name="id" id="ur_id" value="' + rowData.id +
-                    '" class="form-control" readonly>' +
-                    '<input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
-                    .tgl_pembelian + '" class="form-control" readonly>' +
-                    '</td>' +
-                    '<td>' +
-                    '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                    rowData.nama + '</span></div>' +
-                    '</td>' +
-                    '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control" value="' +
-                    rowData.nota_pembelian + '" readonly></td>' +
-                    '<input type="hidden" name="kd_supplier" id="ur_kd_supplier" value="' +
-                    rowData
-                    .kd_supplier + '" class="form-control">' +
-                    '<td>' +
-                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control" disabled="true">' +
-                    '<option value="" ></option>' +
-                    '<option value="tunai" ' + (rowData.jns_pembelian === 'tunai' ? 'selected' :
-                        '') +
-                    '>Tunai</option>' +
-                    '<option value="tempo" ' + (rowData.jns_pembelian === 'tempo' ? 'selected' :
-                        '') +
-                    '>Tempo</option>' +
+                    '<select name="kd_channel" id="ur_kd_channel" class="form-control">' +
+                    '<option value="">== Pilih Channel ==</option>' +
+                    '@foreach ($channels as $channel)' +
+                    '<option value="{{ $channel->kd_channel }}" ' + (rowData.kd_pelanggan ==
+                        '{{ $channel->kd_channel }}' ? 'selected' : '') +
+                    '>{{ $channel->ur_channel }}</option>' +
+                    '@endforeach' +
                     '</select>' +
                     '</td>' +
-                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
+                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control" value="' +
                     addCommas(rowData.harga_total) + '" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
-                    addCommas(rowData.nominal_bayar) + '" readonly></td>' +
+                    addCommas(rowData.nominal_bayar) + '"></td>' +
                     '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" value="' +
                     addCommas(rowData.sisa_bayar) + '" readonly></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" value="' +
-                    addCommas(rowData.sts_angsuran) + '" readonly></td>' +
+                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" value="' +
+                    rowData.sts_angsuran + '" readonly></td>' +
+                    '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control" value="' +
+                    addCommas(rowData.total_galon) + '"></td>' +
+                    '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control" value="' +
+                    addCommas(rowData.galon_kembali) + '"></td>' +
+                    '<input type="hidden" name="sisa_galon" id="ur_sisa_galon" class="form-control"  value="' +
+                    addCommas(rowData.sisa_galon) + '" readonly>' +
+                    '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
+                    rowData.sts_galon + '" readonly>' +
+
+                    '<td>' +
+                    '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +
+                    '<option value="">== Pilih Sales ==</option>' +
+                    '@foreach ($saless as $sales)' +
+                    '<option value="{{ $sales->nik }}" ' + (rowData.kd_sales == '{{ $sales->nik }}' ?
+                        'selected' : '') + '>{{ $sales->nama }}</option>' +
+                    '@endforeach' +
+                    '</select>' +
+                    '</td>' +
+
+                    '<input type="hidden" name="opr_input" id="ur_opr_input" class="form-control" value="' +
+                    {{ Auth::user()->nik }} + '">' +
+                    '<input type="hidden" name="nota_penjualan" id="ur_nota_penjualan" class="form-control" value="' +
+                    rowData.nota_penjualan + '">' +
+                    '<input type="hidden" name="tgl_input" id="ur_tgl_input" class="form-control" value="' +
+                    {{ date('Ymd') }} + '">' +
                     '</tr>';
-                $('#pembelian-uraian').append(row);
 
-                // var pathFile = "{{ asset('/') }}" + rowData.path_file;
-                // $('#image-container a').attr('href', pathFile);
-                // $('#image-container img').attr('src', pathFile);
-                // $('#download-btn').attr('href', pathFile);
-                // $("##modal-pembayaran-title").text("Update Data");
+                $('#penjualan-uraian').append(row);
 
-                // $("#table-detail").append
 
-                $.ajax({
-                    url: '{{ route('pembayaran.data') }}?nota_pembelian=' + rowData.nota_pembelian,
-                    method: 'GET',
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        // Loop through each object in the response array
-                        response.forEach(function(item, index) {
-                            // Create a new row with input fields filled with data from the response
-                            var row =
-                                '<tr>' +
-                                '<td>' + (index + 1) + '</td>' + // No column
-                                '<input type="hidden" name="id" id="bayar_id" class="form-control money" value="' +
-                                item.id + '" readonly>' +
-                                '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
-                                '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control money" value="' +
-                                item.nota_pembelian + '" readonly></td>' +
-                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
-                                item.tgl_pembayaran + '" readonly></td>' +
-                                '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +
-                                item.angs_ke + '" readonly></td>' +
-                                '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control money" value="' +
-                                item.nominal_bayar + '" readonly></td>' +
-                                '<td><input type="text" name="channel_bayar" id="bayar_channel_bayar" class="form-control money" value="' +
-                                item.channel_bayar + '" readonly></td>' +
-                                '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control money" value="' +
-                                item.ket_bayar + '" readonly></td>' +
-                                '<input type="hidden" name="path_file" id="bayar_path_file" class="form-control" value="' +
-                                item.path_file + '" readonly>' +
-                                '<td><a href="{{ asset('') }}' + item.path_file +
-                                '" target="_blank" class="a">' +
-                                '<img src="{{ asset('') }}' + item.path_file +
-                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
-                                '</a></td>' +
-                                '<td style="white-space: nowrap;">' +
-                                // Menggunakan white-space: nowrap; untuk menghindari wrap
-                                '<a class="btn btn-success btn-xs btn-edit" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></a>' +
-                                '<a class="btn btn-danger btn-xs btn-hapus" style="margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
-                                '</td>' +
-                                '</tr>';
+                var pathFile = "{{ asset('/') }}" + rowData.path_file;
+                $('#image-container a').attr('href', pathFile);
+                $('#image-container img').attr('src', pathFile);
+                $('#download-btn').attr('href', pathFile);
+                $("#modal-penjualan-title").text("Update Data");
 
-                            $('#table-detail-edit').append(row);
-                        });
-
-                        var emptyRow =
-                            '<tr>' +
-                            '<td></td>' + // No column
-                            '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control bayar_nota_pembelian money" value="" disabled></td>' +
-                            '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control bayar_tgl_pembayaran money" value="' +
-                            '{{ date('Ymd') }}' + '"></td>' +
-                            '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control bayar_angs_ke money" value="" disabled></td>' +
-                            '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control bayar_nominal_bayar money" value=""></td>' +
-                            '<td>' +
-                            '<select name="channel_bayar" id="bayar_channel_bayar" class="form-control bayar_channel_bayar">' +
-                            '<option value="">Pilih Channel</option>' +
-                            '@foreach ($channels as $channel)' +
-                            '<option value="{{ $channel->kd_channel }}">{{ $channel->ur_channel }}</option>' +
-                            '@endforeach' +
-                            '</select>' +
-                            '</td>' +
-                            '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control bayar_ket_bayar money" value=""></td>' +
-                            '<td><a class="btn btn-danger btn-xs btn-hapus"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
-                            '</tr>';
-
-                        $('#table-detail-edit').append(emptyRow);
+                var tableDetail = $("#table-detail  ").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('produk.data') }}?nota_penjualan=' + rowData.nota_penjualan,
+                        data: {
+                            nota_penjualan: rowData.nota_penjualan
+                        },
                     },
-                    error: function(error) {
-                        var errorMessage = "Terjadi kesalahan dalam operasi.";
-                        if (error.responseJSON && error.responseJSON.message) {
-                            errorMessage = error.responseJSON.message;
-                        } else if (error.statusText) {
-                            errorMessage = error.statusText;
+                    // dom: 'Brtip',
+                    dom: 'Brtip',
+                    columns: [{
+                            data: 'nama',
+                            render: function(data, type, row) {
+                                var row_data = JSON.stringify(row);
+                                return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
+                                    data + '</span></div>';
+
+                            }
+                        },
+                        {
+                            data: 'kd_produk',
+                            render: function(data, type, row) {
+                                return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                    data + '">';
+                            }
+                        },
+                        {
+                            data: 'type',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'qty_pesan',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan" value="' +
+                                    value + '">';
+                            }
+                        },
+                        {
+                            data: 'qty_retur',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur" value="' +
+                                    value + '">';
+                            }
+                        },
+                        {
+                            data: 'qty_bersih',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" value="' +
+                                    addCommas(value) + '" readonly>';
+                            }
+                        },
+                        {
+                            data: 'kd_gudang',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_kd_gudang" name="kd_gudang" id="detail_kd_gudang" value="' +
+                                    addCommas(value) + '" readonly>';
+                            }
+                        },
+                        {
+                            data: 'harga_satuan',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+
+                                return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan" value="' +
+                                    addCommas(value) + '">';
+                            }
+                        },
+                        {
+                            data: 'harga_total',
+                            render: function(data, type, row) {
+                                var value = (data !== null) ? data : 0;
+                                return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" value="' +
+                                    addCommas(value) + '" readonly>';
+                            }
                         }
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Kesalahan!',
-                            text: errorMessage,
-                        });
+                    ],
+                    columnDefs: [{
+                            targets: [1, 2, 3, 4, 5, 6, 7],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [0, 1],
+                            orderable: false
+                        },
+                        {
+                            // targets: [1, 2],
+                            visible: false
+                        }
+                    ],
+                    initComplete: function() {
+                        initializeColumnSearch(this);
                     }
                 });
-                $("#modal-pembelian").modal("show");
-            });
 
-            $('#table-detail-edit').on('click', '.btn-hapus', function() {
-                // Simpan referensi ke tombol yang diklik
-                var tombolHapus = $(this);
+                $("#modal-penjualan").modal("show");
+            }).on("click", "#btn-penjualan-show", function() {
+                var rowData = $(this).data('row');
 
-                // Tampilkan SweetAlert untuk konfirmasi
+                var tableDetail = $("#modal-show-detail").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('penjualan.laporan.detailData') }}?nota_penjualan=' +
+                            rowData
+                            .nota_penjualan +
+                            '',
+                        data: {
+                            nota_penjualan: rowData.nota_penjualan
+                        },
+                    },
+                    // dom: 'Brtip',
+                    dom: 'tip',
+                    columns: [{
+                            data: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'kd_produk',
+                            render: function(data, type, row) {
+                                return row.nama;
+                            }
+                        },
+                        {
+                            data: 'qty_pesan',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'qty_retur',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'qty_bersih',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'harga_satuan',
+                            render: function(data, type, row) {
+                                return addCommas('data');
+                            }
+                        },
+                        {
+                            data: 'harga_total',
+                            render: function(data, type, row) {
+                                return addCommas('data');
+                            }
+                        },
+                    ],
+                    columnDefs: [{
+                            targets: [0, 1, 2, 3, 4, 5, 6],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [0, 1],
+                            orderable: false
+                        },
+                        {
+                            // targets: [1, 2],
+                            visible: false
+                        }
+                    ],
+                    initComplete: function() {
+                        initializeColumnSearch(this);
+                    }
+                });
+
+                $('#penjualan-show #modal-title').text('penjualan Detail')
+                $('#penjualan-show #modal-header').text('No Nota: ' + rowData.nota_penjualan)
+                $('#penjualan-show').modal('show')
+            }).on("click", "#btn-penjualan-delete", function() {
+                var deleteButton = $(this);
+                var id = deleteButton.data('id');
+                var url_delete = '{{ route('penjualan.destroy', ['penjualan' => ':id']) }}';
+                url_delete = url_delete.replace(':id', id);
+
+                // Use SweetAlert for confirmation
                 Swal.fire({
-                    title: 'Konfirmasi',
-                    text: 'Anda yakin ingin menghapus baris ini?',
+                    title: 'Anda Yakin?',
+                    text: 'Pastikan Produk masih di Gudang Utama!',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Hapus!'
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    cancelButtonText: 'Tidak',
+                    confirmButtonText: 'Ya, Produk masih di Gudang Utama!'
                 }).then((result) => {
-                    // Jika pengguna mengonfirmasi, hapus baris
                     if (result.isConfirmed) {
-                        var id = tombolHapus.closest('tr').find('#bayar_id').val();
-                        if (id) {
-                            penjualanDestroy(id)
-                        }
-                        tombolHapus.closest('tr').remove();
+                        $.ajax({
+                            url: url_delete,
+                            type: 'DELETE',
+                            data: {
+                                _token: getCSRFToken(),
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    tableLaporanpenjualan.ajax.reload();
+                                    Swal.fire('Terhapus!', 'Data berhasil dihapus.',
+                                        'success');
+                                    return;
+                                }
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.message,
+                                });
+
+                            },
+                            error: function(error) {
+                                var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                                if (error.responseJSON && error.responseJSON.message) {
+                                    errorMessage = error.responseJSON.message;
+                                } else if (error.statusText) {
+                                    errorMessage = error.statusText;
+                                }
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Kesalahan!',
+                                    text: errorMessage,
+                                });
+                            }
+                        });
                     }
                 });
-            }).on('click', '.btn-edit', function() {
-                var data = $(this);
-                var id = data.closest('tr').find('#bayar_id').val();
+            }).on("keyup", "#ur_nota_penjualan", function() {
+                var text = $('#ur_nota_penjualan').val()
 
-                data.closest('tr').find('#bayar_update').val(id);
+                $('.detail_nota_penjualan').val(text)
+            }).on("keyup", "#ur_nominal_bayar,.detail_harga_satuan", function() {
+                var nominal_bayar = getFloatValue($('#ur_nominal_bayar'))
+                var harga_total = getFloatValue($('#ur_harga_total'))
+                var sts_angsuran = '0';
 
-                $('.form-control').prop('readonly', true);
-
-                data.closest('tr').find('#bayar_tgl_pembayaran').removeAttr('readonly');
-                data.closest('tr').find('#bayar_nominal_bayar').removeAttr('readonly');
-            });
-        });
-
-        function penjualanDestroy(id) {
-            var url = '{{ route('pembayaran.destroy', ['pembayaran' => ':pembayaran']) }}';
-            url = url.replace(':pembayaran', id);
-
-            $.ajax({
-                url: url,
-                method: 'DELETE',
-                processData: false,
-                contentType: false,
-                data: {
-                    'id': id,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $("#table-pembelian-laporan").DataTable().ajax.reload();
-                        // $('#btn-add-pembayaran-close').click()
-                        // Swal.fire({
-                        //     icon: 'success',
-                        //     title: 'Sukses!',
-                        //     text: response.message,
-                        // });
-                        return;
-                    }
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        text: response.message,
-                    });
-                },
-                error: function(error) {
-                    var errorMessage = "Terjadi kesalahan dalam operasi.";
-
-                    if (error.responseJSON && error.responseJSON.message) {
-                        errorMessage = error.responseJSON.message;
-                    } else if (error.statusText) {
-                        errorMessage = error.statusText;
-                    }
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Kesalahan!',
-                        text: errorMessage,
-                    });
+                var total = harga_total - nominal_bayar;
+                if (total > 0) {
+                    sts_angsuran = '1';
                 }
-            });
-        }
+
+                $('#ur_sisa_bayar').val(addCommas(total))
+                $('#ur_sts_angsuran').val(sts_angsuran)
+            }).on("keyup change",
+                ".detail_qty_pesan, .detail_qty_retur, .detail_qty_bersih, .detail_harga_satuan,.detail_harga_total,.ur_harga_total",
+                function() {
+                    // Mendapatkan baris terdekat
+                    var currentRow = $(this).closest('tr');
+
+                    // Update detail_qty_bersih berdasarkan detail_qty_pesan dan detail_qty_retur
+                    updateField(currentRow, 'detail_qty_bersih', ['#detail_qty_pesan', '#detail_qty_retur'],
+                        function(qtyPesan, qtyRetur) {
+                            return qtyPesan - (isNaN(qtyRetur) ? 0 : qtyRetur);
+                        });
+
+                    // Update detail_harga_total berdasarkan detail_qty_bersih dan detail_harga_satuan
+                    updateField(currentRow, 'detail_harga_total', ['#detail_qty_bersih',
+                            '#detail_harga_satuan'
+                        ],
+                        function(qtyBersih, hargaSatuan) {
+                            return qtyBersih * hargaSatuan;
+                        });
+
+                    // Update total pada ur_harga_total berdasarkan detail_harga_total
+                    updateTotal('#ur_harga_total', '.detail_harga_total');
+                });
+        });
     </script>
 @endpush

@@ -9,6 +9,7 @@ use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController;
 use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
 use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
+use App\Http\Controllers\Ramwater\Penjualan\PembayaranController as PenjualanPembayaranController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
 use App\Http\Controllers\Security\KaryawanController;
 use App\Http\Controllers\Security\SecurityController;
@@ -91,9 +92,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('laporan/data', [LaporanpenjualanController::class, 'data'])->name('penjualan.laporan.data');
             Route::get('laporan/detailData', [LaporanpenjualanController::class, 'detailData'])->name('penjualan.laporan.detailData');
 
-            Route::resource('/pembayaran', PembayaranController::class)->except('show');
+            Route::resource('/pembayaran', PenjualanPembayaranController::class)->except('show');
             Route::prefix('pembayaran')->group(function () {
-                Route::get('/data', [PembayaranController::class, 'data'])->name('penjualan.pembayaran.data');
+                Route::get('/data', [PenjualanPembayaranController::class, 'data'])->name('penjualan.pembayaran.data');
             });
         });
     });

@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col-md-12 table-responsive">
                                 <table class="table table-bordered" id="modal-show-detail">
-                                    <thead>
+                                    <thead class="bg-primary">
                                         <tr>
                                             <th>No</th>
                                             <th>kd_produk</th>
