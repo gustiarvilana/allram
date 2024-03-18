@@ -11,10 +11,12 @@ use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
+use App\Models\Penjualan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\TryCatch;
 
 class PembayaranService
 {
@@ -44,14 +46,14 @@ class PembayaranService
         }
         try {
             $this->validateData($pembelianData, $dataArrayDetail);
-
             return DB::transaction(function () use ($pembelianData, $dataArrayDetail, $file) { //rollback if error
-                $pembelianData = $this->preparePembelianData($pembelianData);
+                if (isset($pembelianData['nota_pembelian'])) $data = $this->preparePembelianData($pembelianData);
+                if (isset($pembelianData['nota_penjualan'])) $data = $this->preparePenjualanData($pembelianData);
 
                 // save: d_penjualan_detail + stok
-                $this->upsertPembayaranDetail($pembelianData, $dataArrayDetail, $file);
-
+                $this->upsertPembayaranDetail($data, $dataArrayDetail, $file);
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
+                dd('asd');
             });
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
@@ -94,13 +96,23 @@ class PembayaranService
 
     public function validateData($pembelianData, $dataArrayDetail)
     {
-        if (
-            empty($pembelianData['nota_pembelian']) ||
-            empty($pembelianData['tgl_pembelian']) ||
-            empty($pembelianData['kd_supplier']) ||
-            empty($pembelianData['jns_pembelian'])
-        ) {
-            throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
+        if (isset(($pembelianData['nota_pembelian']))) {
+            if (
+                empty($pembelianData['nota_pembelian']) ||
+                empty($pembelianData['tgl_pembelian']) ||
+                empty($pembelianData['kd_supplier']) ||
+                empty($pembelianData['jns_pembelian'])
+            ) {
+                throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
+            }
+        } else {
+            if (
+                empty($pembelianData['nota_penjualan']) ||
+                empty($pembelianData['tgl_penjualan']) ||
+                empty($pembelianData['kd_pelanggan'])
+            ) {
+                throw new \Exception('Semua kolom pada Tabel Penjualan harus terisi.');
+            }
         }
 
         foreach ($dataArrayDetail as $dataDetail) {
@@ -133,10 +145,38 @@ class PembayaranService
         return $pembelianData;
     }
 
+    public function preparePenjualanData($pembelianData)
+    {
+        $penjualanData_fix = [
+            'nota_penjualan' => $pembelianData['nota_penjualan'] ?? FormatHelper::generateCode('d_penjualan', 'RJ', 5),
+            'tgl_penjualan'  => $pembelianData['tgl_penjualan'],
+            'kd_pelanggan'   => $pembelianData['kd_pelanggan'],
+            'kd_channel'     => $pembelianData['kd_channel'],
+            'harga_total'    => $pembelianData['harga_total'] ? FormatHelper::removeDots($pembelianData['harga_total']) : 0,
+            'nominal_bayar'  => $pembelianData['nominal_bayar'] ? FormatHelper::removeDots($pembelianData['nominal_bayar']) : 0,
+            'sisa_bayar'     => $pembelianData['sisa_bayar'] ? FormatHelper::removeDots($pembelianData['sisa_bayar']) : 0,
+            'sts_angsuran'   => $pembelianData['sts_angsuran'],
+            'total_galon'    => $pembelianData['total_galon'],
+            'galon_kembali'  => $pembelianData['galon_kembali'],
+            'sisa_galon'     => $pembelianData['sisa_galon'],
+            'sts_galon'      => $pembelianData['sts_galon'],
+            'kd_sales'       => $pembelianData['kd_sales'],
+            'opr_input'      => Auth::user()->nik,
+            'tgl_input'      => date('Ymd'),
+        ];
+        return $penjualanData_fix;
+    }
+
     public function preparePembayaranData($pembayaran)
     {
-        $pembayaran_fix['nota_pembelian'] = $pembayaran['nota_pembelian'];
-        $pembayaran_fix['tgl']            = $pembayaran['tgl_pembayaran'];
+        if (isset($pembayaran['nota_pembelian'])) {
+            $pembayaran_fix['nota_pembelian'] = $pembayaran['nota_pembelian'];
+            $pembayaran_fix['tgl']            = $pembayaran['tgl_pembayaran'];
+        } else {
+            $pembayaran_fix['nota_penjualan'] = $pembayaran['nota_penjualan'];
+            $pembayaran_fix['tgl']            = $pembayaran['tgl_pembayaran'];
+        }
+
         $pembayaran_fix['nominal_bayar']  = $pembayaran['nominal_bayar'] ? FormatHelper::removeDots($pembayaran['nominal_bayar']) : 0;
         $pembayaran_fix['opr_input']      = Auth::user()->nik;
         $pembayaran_fix['tgl_input']      = date('Ymd');
@@ -152,7 +192,7 @@ class PembayaranService
         return $pembayaran_fix;
     }
 
-    public function upsertPembayaranDetail($pembelian, $dataArrayDetail, $file)
+    public function upsertPembayaranDetail($data, $dataArrayDetail, $file)
     {
         try {
             if ($dataArrayDetail) {
@@ -160,34 +200,36 @@ class PembayaranService
 
                 foreach ($dataArrayDetail as $key => $dataDetail) {
                     $dataDetail['angs_ke'] = $key + 1;
+                    if (isset($data['nota_penjualan'])) $dataDetail['nota_penjualan'] = $data['nota_penjualan'];
 
                     $dataDetail_fix = $this->preparePembayaranData($dataDetail);
 
                     if (!isset($dataDetail_fix['id']) || $dataDetail_fix['update'] == $dataDetail_fix['id']) {
                         if ($file) {
-                            $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian'] . '_' . $dataDetail_fix['angs_ke']);
+                            if (isset($data['nota_pembelian'])) $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $data['nota_pembelian'] . '/' . $data['tgl_pembelian'] . '/' . $data['kd_supplier'], $data['nota_pembelian'] . '_' . $dataDetail_fix['angs_ke']);
+                            if (isset($data['nota_penjualan'])) $filename = FormatHelper::uploadFile($file, 'penjualan/' . $data['nota_penjualan'] . '/' . $data['tgl_penjualan'] . '/' . $data['kd_pelanggan'], $data['nota_penjualan'] . '_' . $dataDetail_fix['angs_ke']);
                             $dataDetail_fix['path_file'] = $filename;
                         }
                     }
 
                     $dataDetail_fix['id']             = $dataDetail['id'] ?? null;
-                    $dataDetail_fix['nota_pembelian'] = $pembelian['nota_pembelian'] ?? null;
+                    $dataDetail_fix['nota_pembelian'] = $data['nota_pembelian'] ?? null;
+                    $dataDetail_fix['nota_penjualan'] = $data['nota_penjualan'] ?? null;
                     $dataDetail_fix['path_file']      = $dataDetail_fix['path_file'] ?? '';
                     unset($dataDetail_fix["update"]);
 
                     $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
-
                     $dataDetail = $this->dPembayaran->updateOrCreate([
-                        'id' => $dataDetail_fix['id'],
+                        'id'             => $dataDetail_fix['id'],
                         'nota_pembelian' => $dataDetail_fix['nota_pembelian'],
                     ], $dataDetail_fix);
                 }
 
-                $this->updateStatus($pembelian, $totalNominalBayar, $pembelian['harga_total']);
+                $this->updateStatus($data, $totalNominalBayar, $data['harga_total']);
 
                 return $dataDetail;
             } else {
-                $this->dPembayaran->where('nota_pembelian', '=', $pembelian['nota_pembelian'])->delete();
+                $this->dPembayaran->where('nota_pembelian', '=', $data['nota_pembelian'])->delete();
                 return;
             }
         } catch (\Exception $e) {
@@ -195,24 +237,37 @@ class PembayaranService
         }
     }
 
-    public function updateStatus($pembelian, $totalNominalBayar, $harga_total)
+    public function updateStatus($data, $totalNominalBayar, $harga_total)
     {
-        // dd($pembelian, $totalNominalBayar, $harga_total);
-        $pembelianModel = new DPembelianModel(); // Gantilah Pembelian dengan nama model yang sesuai
-        $pembelian = $pembelianModel->find($pembelian['id']); // Sesuaikan dengan cara Anda mendapatkan model
+        $pembelianModel = new DPembelianModel();
+        $penjualanModel = new Penjualan();
+
+        if (isset($data['nota_pembelian'])) $data = $pembelianModel->find($data['id']);
+        if (isset($data['nota_penjualan'])) $data = $penjualanModel->where('nota_penjualan', '=', $data['nota_penjualan'])->first();
+
         if ($totalNominalBayar == $harga_total) {
-            $pembelian->sts_angsuran = 4;
-            $pembelian->nominal_bayar = $totalNominalBayar;
-            $pembelian->sisa_bayar = $harga_total - $totalNominalBayar;
-            $pembelian->save();
+            $data->sts_angsuran = 4;
         } elseif ($totalNominalBayar < $harga_total) {
-            $pembelian->sts_angsuran = 1;
-            $pembelian->nominal_bayar = $totalNominalBayar;
-            $pembelian->sisa_bayar = $harga_total - $totalNominalBayar;
-            $pembelian->save();
+            $data->sts_angsuran = 1;
         } elseif ($totalNominalBayar > $harga_total) {
             throw new \Exception("Pembayaran Terlalu banyak!");
         };
+
+        if (isset($data->total_galon)) {
+            if ($data->total_galon > 0) {
+                if ($data->sisa_galon == 0) {
+                    $data->sts_galon = 4;
+                } elseif ($data->sisa_galon > 0) {
+                    $data->sts_galon = 1;
+                } elseif ($data->sisa_galon < 0) {
+                    throw new \Exception("Pengembalian Galon Terlalu banyak!");
+                };
+            }
+        }
+
+        $data->nominal_bayar = $totalNominalBayar;
+        $data->sisa_bayar = $harga_total - $totalNominalBayar;
+        return $data->save();
     }
 
     public function destroyPembayaran($arrayRow)

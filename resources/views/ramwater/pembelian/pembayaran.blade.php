@@ -387,7 +387,7 @@
                 // });
 
                 $.ajax({
-                    url: '{{ route('pembayaran.store') }}',
+                    url: '{{ route('pembelian.pembayaran.store') }}',
                     method: 'POST',
                     processData: false,
                     contentType: false,

@@ -82,6 +82,7 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::resource('/pembayaran', PembayaranController::class)->except('show');
             Route::prefix('pembayaran')->group(function () {
                 Route::get('/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
+                Route::post('/store', [PembayaranController::class, 'store'])->name('pembelian.pembayaran.store');
             });
         });
 
@@ -95,6 +96,7 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::resource('/pembayaran', PenjualanPembayaranController::class)->except('show');
             Route::prefix('pembayaran')->group(function () {
                 Route::get('/data', [PenjualanPembayaranController::class, 'data'])->name('penjualan.pembayaran.data');
+                Route::post('/store', [PenjualanPembayaranController::class, 'store'])->name('penjualan.pembayaran.store');
             });
         });
     });

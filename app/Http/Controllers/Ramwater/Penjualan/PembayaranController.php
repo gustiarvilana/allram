@@ -11,6 +11,7 @@ use App\Models\DPenjualanModel;
 use App\Models\Karyawan;
 use App\Models\TChannelModel;
 use App\Models\TGudang;
+use App\Services\PembayaranService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -18,11 +19,13 @@ class PembayaranController extends Controller
 {
     protected $integrationHelper;
     protected $dPembayaranModel;
+    protected $pembayaranService;
 
-    public function __construct()
+    public function __construct(PembayaranService $pembayaranService)
     {
         $this->integrationHelper = new IntegrationHelper();
         $this->dPembayaranModel = new DPembayaranModel();
+        $this->pembayaranService = $pembayaranService;
     }
 
     public function data(Request $request)

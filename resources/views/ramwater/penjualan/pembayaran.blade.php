@@ -121,7 +121,7 @@
                                                         <th><i class="fa fa-cog" aria-hidden="true"></i></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody> </tbody>
+                                                <tbody id="table-detail-edit"> </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -280,23 +280,22 @@
                 $('#penjualan-uraian').empty();
             }).on("click", "#btn-add-penjualan-simpan", function() {
                 var dataArrayDetail = [];
-                $('#table-detail tbody tr').each(function() {
-                    var hargaTotal = $(this).find('#detail_harga_total').val();
+                $('#table-detail-edit tr').each(function() {
 
-                    if (hargaTotal && parseFloat(hargaTotal) !== 0) {
-                        var rowData = {
-                            nama: $(this).find('#detail_nama').text(),
-                            nota_penjualan: $(this).find('#detail_nota_penjualan').val(),
-                            kd_produk: $(this).find('#detail_kd_produk').val(),
-                            qty_pesan: $(this).find('#detail_qty_pesan').val(),
-                            qty_retur: $(this).find('#detail_qty_retur').val(),
-                            qty_bersih: $(this).find('#detail_qty_bersih').val(),
-                            harga_satuan: $(this).find('#detail_harga_satuan').val(),
-                            kd_gudang: $(this).find('#detail_kd_gudang').val(),
-                            harga_total: hargaTotal,
-                        };
-                        dataArrayDetail.push(rowData);
-                    }
+                    var rowData = {
+                        id: $(this).find('#bayar_id').val(),
+                        update: $(this).find('#bayar_update').val(),
+                        nota_pembelian: $(this).find('#bayar_nota_pembelian').val(),
+                        tgl_pembayaran: $(this).find('#bayar_tgl_pembayaran').val(),
+                        angs_ke: $(this).find('#bayar_angs_ke').val(),
+                        nominal_bayar: $(this).find('#bayar_nominal_bayar').val(),
+                        channel_bayar: $(this).find('#bayar_channel_bayar').val(),
+                        ket_bayar: $(this).find('#bayar_ket_bayar').val(),
+                        path_file: $(this).find('#bayar_path_file').val(),
+
+                    };
+                    dataArrayDetail.push(rowData);
+
                 });
 
                 var penjualanData = {
@@ -323,100 +322,43 @@
                 formData.append('penjualanData', JSON.stringify(penjualanData));
                 formData.append('jns', 'update');
 
-                //
-                var detailpenjualanHTML = '<div>';
+                $.ajax({
+                    url: '{{ route('penjualan.pembayaran.store') }}',
+                    method: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            tableLaporanpenjualan.ajax.reload();
+                            $('#btn-add-penjualan-close').click()
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses!',
+                                text: response.message,
+                            });
+                            return;
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message,
+                        });
 
-                var detailpenjualanHTML = `
-                    <table class="table table-striped" id="table-detail">
-                        <thead style="background-color: #4CAF50; color: white; padding: 10px;">
-                            <tr>
-                                <th>nama</th>
-                                <th>pesan</th>
-                                <th>retur</th>
-                                <th>bersih</th>
-                                <th>kd_gudang</th>
-                                <th>harga_satuan</th>
-                                <th>harga_total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
+                    },
+                    error: function(error) {
+                        var errorMessage = "Terjadi kesalahan dalam operasi.";
 
-                dataArrayDetail.forEach(function(rowData) {
-                    detailpenjualanHTML += `
-                        <tr>
-                            <td>${rowData.nama}</td>
-                            <td>${rowData.qty_pesan}</td>
-                            <td>${rowData.qty_retur}</td>
-                            <td>${rowData.qty_bersih}</td>
-                            <td>${rowData.kd_gudang}</td>
-                            <td>${rowData.harga_satuan}</td>
-                            <td>${rowData.harga_total}</td>
-                        </tr>
-                    `;
-                });
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        } else if (error.statusText) {
+                            errorMessage = error.statusText;
+                        }
 
-                detailpenjualanHTML += `
-                        </tbody>
-                    </table>
-                `;
-
-                // Menambahkan total keseluruhan
-                detailpenjualanHTML +=
-                    `<p><strong>Total Keseluruhan:</strong> <b>${penjualanData.harga_total}</b></p>`;
-
-                detailpenjualanHTML += '</div>';
-
-                Swal.fire({
-                    title: 'Konfirmasi penjualan',
-                    html: detailpenjualanHTML, // Menggunakan variabel detailpenjualanHTML
-                    showCancelButton: true,
-                    confirmButtonText: 'Simpan',
-                    cancelButtonText: 'Batal',
-                    icon: 'question',
-                    width: '80%', // Sesuaikan lebar sesuai kebutuhan
-
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '{{ route('penjualan.store') }}',
-                            method: 'POST',
-                            processData: false,
-                            contentType: false,
-                            data: formData,
-                            success: function(response) {
-                                if (response.success) {
-                                    tableLaporanpenjualan.ajax.reload();
-                                    $('#btn-add-penjualan-close').click()
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Sukses!',
-                                        text: response.message,
-                                    });
-                                    return;
-                                }
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal!',
-                                    text: response.message,
-                                });
-
-                            },
-                            error: function(error) {
-                                var errorMessage = "Terjadi kesalahan dalam operasi.";
-
-                                if (error.responseJSON && error.responseJSON.message) {
-                                    errorMessage = error.responseJSON.message;
-                                } else if (error.statusText) {
-                                    errorMessage = error.statusText;
-                                }
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Kesalahan!',
-                                    text: errorMessage,
-                                });
-                            }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: errorMessage,
                         });
                     }
                 });
