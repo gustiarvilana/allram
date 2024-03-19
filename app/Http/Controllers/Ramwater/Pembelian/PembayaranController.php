@@ -85,7 +85,6 @@ class PembayaranController extends Controller
     {
         $pembayaran = $this->dPembayaranModel->where('id', '=', $id)->first();
         $pembelian = $this->dPembelianModel->where('nota_pembelian', '=', $pembayaran->nota_pembelian)->first();
-        $bayarDetails = $this->dPembayaranModel->where('nota_pembelian', '=', $pembayaran->nota_pembelian)->get();
 
         if ($pembayaran->path_file) {
             // hapus d_pembelian & child
@@ -103,7 +102,7 @@ class PembayaranController extends Controller
         $pembayaran->delete();
 
 
-        $pembelianModel = new DPembelianModel(); // Gantilah Pembelian dengan nama model yang sesuai
+        $pembelianModel = new DPembelianModel();
         $pembelian = $pembelianModel->find($pembelian->id);
 
         $totalNominalBayar = new DPembayaranModel();
@@ -123,7 +122,6 @@ class PembayaranController extends Controller
         } elseif ($totalNominalBayar > $pembelian->harga_total) {
             throw new \Exception("Pembayaran Terlalu banyak!");
         };
-
 
         return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
     }

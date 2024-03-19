@@ -83,6 +83,7 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::prefix('pembayaran')->group(function () {
                 Route::get('/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
                 Route::post('/store', [PembayaranController::class, 'store'])->name('pembelian.pembayaran.store');
+                Route::delete('/destroy/{id}', [PembayaranController::class, 'destroy'])->name('pembelian.pembayaran.destroy');
             });
         });
 
@@ -97,6 +98,7 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::prefix('pembayaran')->group(function () {
                 Route::get('/data', [PenjualanPembayaranController::class, 'data'])->name('penjualan.pembayaran.data');
                 Route::post('/store', [PenjualanPembayaranController::class, 'store'])->name('penjualan.pembayaran.store');
+                Route::delete('/destroy/{id}', [PenjualanPembayaranController::class, 'destroy'])->name('penjualan.pembayaran.destroy');
             });
         });
     });

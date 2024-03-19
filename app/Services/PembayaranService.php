@@ -53,7 +53,6 @@ class PembayaranService
                 // save: d_penjualan_detail + stok
                 $this->upsertPembayaranDetail($data, $dataArrayDetail, $file);
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
-                dd('asd');
             });
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);

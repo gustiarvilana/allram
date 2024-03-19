@@ -561,41 +561,41 @@
 
                 pembayaranDestroy(id)
 
-                // if (id) {
-                //     // Tampilkan SweetAlert untuk konfirmasi
-                //     Swal.fire({
-                //         title: 'Konfirmasi Admin',
-                //         text: 'Masukkan password admin untuk melanjutkan:',
-                //         input: 'password',
-                //         inputAttributes: {
-                //             autocapitalize: 'off',
-                //             placeholder: 'Password admin'
-                //         },
-                //         showCancelButton: true,
-                //         confirmButtonText: 'Konfirmasi',
-                //         cancelButtonText: 'Batal',
-                //         showLoaderOnConfirm: true,
-                //         preConfirm: (password) => {
-                //             // Disini Anda bisa melakukan validasi password admin
-                //             // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
+                if (id) {
+                    // Tampilkan SweetAlert untuk konfirmasi
+                    Swal.fire({
+                        title: 'Konfirmasi Admin',
+                        text: 'Masukkan password admin untuk melanjutkan:',
+                        input: 'password',
+                        inputAttributes: {
+                            autocapitalize: 'off',
+                            placeholder: 'Password admin'
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: 'Konfirmasi',
+                        cancelButtonText: 'Batal',
+                        showLoaderOnConfirm: true,
+                        preConfirm: (password) => {
+                            // Disini Anda bisa melakukan validasi password admin
+                            // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
 
-                //             // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
-                //             if (password !== 'passwordadmin') {
-                //                 Swal.showValidationMessage('Password admin salah');
-                //             }
-                //         }
-                //     }).then((result) => {
-                //         // Jika pengguna mengonfirmasi, hapus baris
-                //         if (result.isConfirmed) {
-                //             if (id) {
-                //                 pembayaranDestroy(id)
-                //             }
-                //             tombolHapus.closest('tr').remove();
-                //         }
-                //     });
-                // } else {
-                //     tombolHapus.closest('tr').remove();
-                // }
+                            // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
+                            if (password !== 'passwordadmin') {
+                                Swal.showValidationMessage('Password admin salah');
+                            }
+                        }
+                    }).then((result) => {
+                        // Jika pengguna mengonfirmasi, hapus baris
+                        if (result.isConfirmed) {
+                            if (id) {
+                                pembayaranDestroy(id)
+                            }
+                            tombolHapus.closest('tr').remove();
+                        }
+                    });
+                } else {
+                    tombolHapus.closest('tr').remove();
+                }
 
             }).on('click', '.btn-edit', function() {
                 var data = $(this);
@@ -609,7 +609,7 @@
         });
 
         function pembayaranDestroy(id) {
-            var url = '{{ route('pembayaran.destroy', ['pembayaran' => ':pembayaran']) }}';
+            var url = '{{ route('pembelian.pembayaran.destroy', ['id' => ':pembayaran']) }}';
             url = url.replace(':pembayaran', id);
 
             $.ajax({
@@ -622,7 +622,7 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        $("#table-pembelian-laporan").DataTable().ajax.reload();
+                        tableLaporanPembelian.DataTable().ajax.reload();
                         $('#btn-add-pembayaran-close').click()
                         Swal.fire({
                             icon: 'success',
