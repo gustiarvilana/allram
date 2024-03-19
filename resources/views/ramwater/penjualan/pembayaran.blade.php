@@ -265,6 +265,59 @@
                 }
             });
 
+            $('#table-detail-edit').on('click', '.btn-hapus', function() {
+                // Simpan referensi ke tombol yang diklik
+                var tombolHapus = $(this);
+                var id = tombolHapus.closest('tr').find('#bayar_id').val();
+
+                pembayaranDestroy(id)
+
+                // if (id) {
+                //     // Tampilkan SweetAlert untuk konfirmasi
+                //     Swal.fire({
+                //         title: 'Konfirmasi Admin',
+                //         text: 'Masukkan password admin untuk melanjutkan:',
+                //         input: 'password',
+                //         inputAttributes: {
+                //             autocapitalize: 'off',
+                //             placeholder: 'Password admin'
+                //         },
+                //         showCancelButton: true,
+                //         confirmButtonText: 'Konfirmasi',
+                //         cancelButtonText: 'Batal',
+                //         showLoaderOnConfirm: true,
+                //         preConfirm: (password) => {
+                //             // Disini Anda bisa melakukan validasi password admin
+                //             // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
+
+                //             // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
+                //             if (password !== 'passwordadmin') {
+                //                 Swal.showValidationMessage('Password admin salah');
+                //             }
+                //         }
+                //     }).then((result) => {
+                //         // Jika pengguna mengonfirmasi, hapus baris
+                //         if (result.isConfirmed) {
+                //             if (id) {
+                //                 pembayaranDestroy(id)
+                //             }
+                //             tombolHapus.closest('tr').remove();
+                //         }
+                //     });
+                // } else {
+                //     tombolHapus.closest('tr').remove();
+                // }
+
+            }).on('click', '.btn-edit', function() {
+                var data = $(this);
+                var id = data.closest('tr').find('#bayar_id').val();
+
+                data.closest('tr').find('#bayar_update').val(id);
+
+                data.closest('tr').find('#bayar_tgl_pembayaran').removeAttr('readonly');
+                data.closest('tr').find('#bayar_nominal_bayar').removeAttr('readonly');
+            });
+
             $('#modal-penjualan').on('hidden.bs.modal', function() {
                 console.log('Modal penjualan telah disembunyikan');
                 $("#modal-penjualan").modal("hide");
@@ -550,5 +603,53 @@
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });
+
+        function pembayaranDestroy(id) {
+            console.log(id);
+            return
+            var url = '{{ route('pembayaran.destroy', ['pembayaran' => ':pembayaran']) }}';
+            url = url.replace(':pembayaran', id);
+
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                processData: false,
+                contentType: false,
+                data: {
+                    'id': id,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $("#table-pembelian-laporan").DataTable().ajax.reload();
+                        $('#btn-add-pembayaran-close').click()
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses!',
+                            text: response.message,
+                        });
+                        return;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response.message,
+                    });
+                },
+                error: function(error) {
+                    var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                    if (error.responseJSON && error.responseJSON.message) {
+                        errorMessage = error.responseJSON.message;
+                    } else if (error.statusText) {
+                        errorMessage = error.statusText;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan!',
+                        text: errorMessage,
+                    });
+                }
+            });
+        }
     </script>
 @endpush
