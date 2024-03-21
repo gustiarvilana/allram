@@ -22,12 +22,13 @@ class UpdateMenu extends Seeder
             (10, 10, 3, null, 'Laporan Pembelian', 'Ramwater Pembelian', '/ramwater/pembelian/laporan', '#', 'ri-calendar-todo-line', 2, 1),
             (11, 11, 3, null, 'Pembayaran', 'Ramwater Pembayaran', '/ramwater/pembelian/pembayaran', '#', 'ri-calendar-todo-line', 3, 1),
 
-            (12, 12, 4, null, 'Penjualan', 'Ramwater penjualan', '#', '#', 'fas fa-cart-plus', 3, 1),
+            (12, 12, 4, null, 'Penjualan', 'Ramwater penjualan', '#', '#', 'fas fa-cart-plus', 2, 1),
             (13, 13, 12, null, 'Input', 'Ramwater Input penjualan', '/ramwater/penjualan', '#', 'fas fa-cart-plus', 1, 1),
             (14, 14, 12, null, 'Laporan', 'Ramwater Laporan penjualan', '/ramwater/penjualan/laporan', '#', 'ri-calendar-todo-line', 2, 1),
-            (15, 15, 12, null, 'Pembayaran', 'Ramwater Pembayaran penjualan', '/ramwater/penjualan/pembayaran', '#', 'ri-calendar-todo-line', 3, 1)
+            (15, 15, 12, null, 'Pembayaran', 'Ramwater Pembayaran penjualan', '/ramwater/penjualan/pembayaran', '#', 'ri-calendar-todo-line', 3, 1),
+            (16, 16, 4, null, 'OPS', 'Ramwater OPS', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1),
+            (17, 17, 16, null, 'Input', 'Ramwater Input ops', '/ramwater/ops', '#', 'fa-solid fa-cart-flatbed-suitcase', 1, 1)
         ");
-
 
         DB::statement("INSERT IGNORE INTO `users_role_menu`
             (`id`, `kd_role`, `kd_menu`, `tahun`)
@@ -47,7 +48,11 @@ class UpdateMenu extends Seeder
             (27, '99', '14', '2024'),
             (28, '1', '14', '2024'),
             (29, '99', '15', '2024'),
-            (30, '1', '15', '2024')
+            (30, '1', '15', '2024'),
+            (31, '99', '16', '2024'),
+            (32, '1', '16', '2024'),
+            (33, '99', '17', '2024'),
+            (34, '1', '17', '2024')
         ");
     }
 }

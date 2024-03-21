@@ -218,6 +218,7 @@ class PembayaranService
                     unset($dataDetail_fix["update"]);
 
                     $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
+
                     $dataDetail = $this->dPembayaran->updateOrCreate([
                         'id'             => $dataDetail_fix['id'],
                         'nota_pembelian' => $dataDetail_fix['nota_pembelian'],

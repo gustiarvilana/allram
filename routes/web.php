@@ -8,7 +8,9 @@ use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController;
 use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
+use App\Http\Controllers\Ramwater\Ops\LaporanOpsController;
 use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
+use App\Http\Controllers\Ramwater\Ops\OpsController;
 use App\Http\Controllers\Ramwater\Penjualan\PembayaranController as PenjualanPembayaranController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
 use App\Http\Controllers\Security\KaryawanController;
@@ -100,6 +102,14 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
                 Route::post('/store', [PenjualanPembayaranController::class, 'store'])->name('penjualan.pembayaran.store');
                 Route::delete('/destroy/{id}', [PenjualanPembayaranController::class, 'destroy'])->name('penjualan.pembayaran.destroy');
             });
+        });
+
+        Route::resource('/ops', OpsController::class)->except('show');
+        Route::prefix('ops')->group(function () {
+            Route::get('/data', [OpsController::class, 'data'])->name('ops.data');
+            Route::get('/laporan', [LaporanOpsController::class, 'index'])->name('ops.index');
+            Route::get('laporan/data', [LaporanOpsController::class, 'data'])->name('ops.laporan.data');
+            Route::get('laporan/detailData', [LaporanOpsController::class, 'detailData'])->name('ops.laporan.detailData');
         });
     });
 });

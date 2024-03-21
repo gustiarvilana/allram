@@ -268,7 +268,7 @@ class CreateTable extends Seeder
                 `channel_bayar` VARCHAR(50) DEFAULT NULL,
                 `ket_bayar` TEXT DEFAULT NULL,
                 `jns_pembayaran` INT DEFAULT NULL,
-                `path_file` VARCHAR(50) DEFAULT NULL,
+                `path_file` TEXT DEFAULT NULL,
                 `opr_input` VARCHAR(50) DEFAULT NULL,
                 `tgl_input` INT DEFAULT NULL,
                 `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
