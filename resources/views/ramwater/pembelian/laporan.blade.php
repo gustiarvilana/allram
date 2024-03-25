@@ -23,19 +23,18 @@
                                         id="table-pembelian-laporan">
                                         <thead>
                                             <tr>
+                                                {{-- Tgl. Pembelian, Supplier, Nota, Jns Pembelian, Total Harga, Jml Dibayar, Sisa, Status, File_nota --}}
                                                 {{-- <th width="5%">No</th> --}}
+                                                <th>tgl_pembelian</th>
                                                 <th>Supplier</th>
                                                 <th>nota_pembelian</th>
-                                                <th>tgl_pembelian</th>
                                                 <th>kd_supplier</th>
                                                 <th>jns_pembelian</th>
                                                 <th>harga_total</th>
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
-                                                <th>opr_input</th>
-                                                <th>tgl_input</th>
-                                                <th>Faktur</th>
+                                                <th>File Nota</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -192,13 +191,27 @@
                 autoWidth: false,
                 ajax: '{{ route('pembelian.laporan.data') }}',
                 dom: 'Brtip',
-                buttons: [
-                    'copy', 'excel', 'pdf'
-                ],
+                // buttons: [
+                //     'copy', 'excel', 'pdf'
+                // ],
                 columns: [
                     // {
                     //     data: 'DT_RowIndex'
                     // },
+                    {
+                        data: 'tgl_pembelian',
+                        name: 'a.tgl_pembelian',
+                        render: function(data, type, row) {
+                            var dataString = data.toString();
+
+                            var year = dataString.substring(0, 4);
+                            var month = dataString.substring(4, 6);
+                            var day = dataString.substring(6, 8);
+                            var formattedDate = year + '-' + month + '-' + day;
+
+                            return formattedDate;
+                        }
+                    },
                     {
                         data: 'nama',
                         name: 'b.nama',
@@ -210,13 +223,6 @@
                     {
                         data: 'nota_pembelian',
                         name: 'a.nota_pembelian',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_pembelian',
-                        name: 'a.tgl_pembelian',
                         render: function(data, type, row) {
                             return data;
                         }
@@ -272,20 +278,6 @@
                         }
                     },
                     {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
                         data: 'path_file',
                         name: 'a.path_file',
                         render: function(data, type, row) {
@@ -319,11 +311,12 @@
 
                             return '<div style="white-space: nowrap;">' + btn_show + ' ' +
                                 btn_edit + ' ' + btn_delete + '</div>';
+                            // return '<div style="white-space: nowrap;">' + btn_show + ' ' + '</div>';
                         },
                     },
                 ],
                 columnDefs: [{
-                    targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
+                    targets: [3, 4, 5, 6, 7, 9, 10],
                     searchable: false,
                     orderable: false
                 }],
@@ -689,13 +682,13 @@
                         {
                             data: 'harga_satuan',
                             render: function(data, type, row) {
-                                return addCommas('data');
+                                return addCommas(data);
                             }
                         },
                         {
                             data: 'harga_total',
                             render: function(data, type, row) {
-                                return addCommas('data');
+                                return addCommas(data);
                             }
                         },
                         {

@@ -181,7 +181,14 @@
                         data: 'tgl_penjualan',
                         name: 'a.tgl_penjualan',
                         render: function(data, type, row) {
-                            return data;
+                            var dataString = data.toString();
+
+                            var year = dataString.substring(0, 4);
+                            var month = dataString.substring(4, 6);
+                            var day = dataString.substring(6, 8);
+                            var formattedDate = year + '-' + month + '-' + day;
+
+                            return formattedDate;
                         }
                     },
                     {

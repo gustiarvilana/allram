@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fas fa-money-bill"></i> <b>Laporan Pembayaran</b>
+    <i class="fas fa-money-bill"></i> <b>Laporan Pembayaran Pembelian</b>
 @endsection
 
 @section('content')
@@ -24,17 +24,15 @@
                                         <thead>
                                             <tr>
                                                 {{-- <th width="5%">No</th> --}}
+                                                <th>tgl_pembelian</th>
                                                 <th>Supplier</th>
                                                 <th>nota_pembelian</th>
-                                                <th>tgl_pembelian</th>
                                                 <th>kd_supplier</th>
                                                 <th>jns_pembelian</th>
                                                 <th>harga_total</th>
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
-                                                <th>opr_input</th>
-                                                <th>tgl_input</th>
                                                 <th>Faktur</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
@@ -204,6 +202,20 @@
                     //     data: 'DT_RowIndex'
                     // },
                     {
+                        data: 'tgl_pembelian',
+                        name: 'a.tgl_pembelian',
+                        render: function(data, type, row) {
+                            var dataString = data.toString();
+
+                            var year = dataString.substring(0, 4);
+                            var month = dataString.substring(4, 6);
+                            var day = dataString.substring(6, 8);
+                            var formattedDate = year + '-' + month + '-' + day;
+
+                            return formattedDate;
+                        }
+                    },
+                    {
                         data: 'nama',
                         name: 'b.nama',
                         render: function(data, type, row) {
@@ -214,13 +226,6 @@
                     {
                         data: 'nota_pembelian',
                         name: 'a.nota_pembelian',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_pembelian',
-                        name: 'a.tgl_pembelian',
                         render: function(data, type, row) {
                             return data;
                         }
@@ -278,20 +283,6 @@
                         }
                     },
                     {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
                         data: 'path_file',
                         name: 'a.path_file',
                         render: function(data, type, row) {
@@ -318,7 +309,7 @@
                     },
                 ],
                 columnDefs: [{
-                    targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
+                    targets: [3, 4, 5, 6, 7, 9, 10],
                     searchable: false,
                     orderable: false
                 }],
@@ -513,7 +504,7 @@
                             $('#table-detail-edit').append(row);
                         });
 
-                        if (rowData.sts_angsuran != 4) {
+                        if (rowData.sts_angsuran != 4) { // if lunas
                             var emptyRow =
                                 '<tr>' +
                                 '<td></td>' + // No column
@@ -535,6 +526,12 @@
                                 '</tr>';
 
                             $('#table-detail-edit').append(emptyRow);
+
+                            $('#btn-pembayaran-simpan').show();
+                            // $('.modal .form-control').prop('disabled', false);
+                        } else {
+                            $('#btn-pembayaran-simpan').hide();
+                            $('.modal .form-control').prop('disabled', true);
                         }
                     },
                     error: function(error) {

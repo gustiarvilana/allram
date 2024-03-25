@@ -134,7 +134,9 @@
                     <button class="btn btn-success btn-add-penjualan-simpan" id="btn-add-penjualan-simpan"><i
                             class="fas fa-save"></i>
                         Simpan</button>
-                    {{-- <button class="btn btn-secondary btn-add-penjualan-simpan">Close</button> --}}
+                    <button class="btn btn-secondary" class="close btn btn-secondary btn-add-penjualan-close"
+                        id="btn-add-penjualan-close">Close</button>
+
                 </div>
             </div>
         </div>
@@ -181,7 +183,14 @@
                         data: 'tgl_penjualan',
                         name: 'a.tgl_penjualan',
                         render: function(data, type, row) {
-                            return data;
+                            var dataString = data.toString();
+
+                            var year = dataString.substring(0, 4);
+                            var month = dataString.substring(4, 6);
+                            var day = dataString.substring(6, 8);
+                            var formattedDate = year + '-' + month + '-' + day;
+
+                            return formattedDate;
                         }
                     },
                     {
@@ -543,6 +552,12 @@
                                 '</tr>';
 
                             $('#table-detail').append(emptyRow);
+
+                            $('#btn-add-penjualan-simpan').show();
+                            $('.modal .form-control').prop('disabled', false);
+                        } else {
+                            $('#btn-add-penjualan-simpan').hide();
+                            $('.modal .form-control').prop('disabled', true);
                         }
                     },
                     error: function(error) {

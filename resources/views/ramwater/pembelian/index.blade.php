@@ -248,137 +248,6 @@
 
             });
 
-            var tableDetail = $("#table-detail").DataTable({
-                info: false,
-                bPaginate: false,
-                bLengthChange: false,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: '{{ route('produk.data') }}',
-                // dom: 'Brtip',
-                dom: 'Brtip',
-                buttons: [{
-                    extend: "excel",
-                    text: "Export Data",
-                    className: "btn-excel",
-                    action: function(e, dt, node, config) {
-                        $.getJSON('#', function(
-                            data) {
-                            var result = data.map(function(row) {
-                                return {
-                                    fullname: row.fullname,
-                                    group_name: row.group_name,
-                                    satker: row.satker,
-                                    active: (row.active == '0') ? 'Not Active' :
-                                        (row.active == '1') ? 'Active' :
-                                        'Unknown',
-                                    username: row.username,
-                                    email: row.email,
-                                    phone: row.phone
-                                };
-                            });
-                            downloadXLSX(result);
-                        });
-                    }
-                }],
-                columns: [{
-                        data: 'nama',
-                        render: function(data, type, row) {
-                            var row_data = JSON.stringify(row);
-                            return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-
-                        }
-                    },
-                    {
-                        data: 'kd_produk',
-                        name: 'a.kd_produk',
-                        render: function(data, type, row) {
-                            return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
-                                row.kd_produk + '">';
-                        }
-                    },
-                    {
-                        data: 'type',
-                        name: 'type',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'qty_pesan',
-                        name: 'qty_pesan',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan">';
-                        }
-                    },
-                    {
-                        data: 'qty_retur',
-                        name: 'qty_retur',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur">';
-                        }
-                    },
-                    {
-                        data: 'qty_bersih',
-                        name: 'qty_bersih',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" readonly>';
-                        }
-                    },
-                    {
-                        data: 'kd_gudang',
-                        name: 'kd_gudang',
-                        render: function(data, type, row) {
-                            var selectOptions = '<option value="">== Pilih Gudang ==</option>';
-
-                            @foreach ($gudang as $item)
-                                selectOptions +=
-                                    '<option value="{{ $item->kd_gudang }}">{{ $item->nama }}</option>';
-                            @endforeach
-
-                            return '<select name="kd_gudang" id="detail_kd_gudang" class="form-control">' +
-                                selectOptions +
-                                '</select>';
-                        }
-                    },
-
-                    {
-                        data: 'harga_satuan',
-                        name: 'harga_satuan',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan">';
-                        }
-                    },
-                    {
-                        data: 'harga_total',
-                        name: 'harga_total',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" readonly>';
-                        }
-                    }
-                ],
-                columnDefs: [{
-                        targets: [4, 5, 6, 7, 8],
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        targets: [0, 1],
-                        orderable: false
-                    },
-                    {
-                        targets: [1, 2], // Indeks kolom yang ingin disembunyikan (dimulai dari 0)
-                        readonly: false
-                    }
-                ],
-                initComplete: function() {
-                    initializeColumnSearch(this);
-                }
-
-            });
-
             $('#modal-pembelian').on('hidden.bs.modal', function() {
                 console.log('Modal Pembelian telah disembunyikan');
                 $("#modal-pembelian").modal("hide");
@@ -530,6 +399,7 @@
                 });
             }).on("click", "#btn-penjualan-input", function() { //btn_input_click
                 var rowData = $(this).data('row');
+                var kd_supplier = rowData.kd_supplier;
                 var row =
                     '<tr>' +
                     '<td>' +
@@ -554,6 +424,148 @@
                     '</tr>';
 
                 $('#pembelian-uraian').append(row);
+
+                // detail
+                var tableDetail = $("#table-detail").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('produk.data') }}',
+                        data: {
+                            kd_supplier: kd_supplier
+                        }
+                    },
+                    dom: 'Brtip',
+                    buttons: [{
+                        extend: "excel",
+                        text: "Export Data",
+                        className: "btn-excel",
+                        action: function(e, dt, node, config) {
+                            $.getJSON('#', function(
+                                data) {
+                                var result = data.map(function(row) {
+                                    return {
+                                        fullname: row.fullname,
+                                        group_name: row.group_name,
+                                        satker: row.satker,
+                                        active: (row.active == '0') ?
+                                            'Not Active' : (row
+                                                .active == '1') ?
+                                            'Active' : 'Unknown',
+                                        username: row.username,
+                                        email: row.email,
+                                        phone: row.phone
+                                    };
+                                });
+                                downloadXLSX(result);
+                            });
+                        }
+                    }],
+                    columns: [{
+                            data: 'nama',
+                            render: function(data, type, row) {
+                                var row_data = JSON.stringify(row);
+                                return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
+                                    data + '</span></div>';
+
+                            }
+                        },
+                        {
+                            data: 'kd_produk',
+                            name: 'a.kd_produk',
+                            render: function(data, type, row) {
+                                return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                    row.kd_produk + '">';
+                            }
+                        },
+                        {
+                            data: 'type',
+                            name: 'type',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'qty_pesan',
+                            name: 'qty_pesan',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan">';
+                            }
+                        },
+                        {
+                            data: 'qty_retur',
+                            name: 'qty_retur',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur">';
+                            }
+                        },
+                        {
+                            data: 'qty_bersih',
+                            name: 'qty_bersih',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" readonly>';
+                            }
+                        },
+                        {
+                            data: 'kd_gudang',
+                            name: 'kd_gudang',
+                            render: function(data, type, row) {
+                                var selectOptions =
+                                    '<option value="">== Pilih Gudang ==</option>';
+
+                                @foreach ($gudang as $item)
+                                    selectOptions +=
+                                        '<option value="{{ $item->kd_gudang }}">{{ $item->nama }}</option>';
+                                @endforeach
+
+                                return '<select name="kd_gudang" id="detail_kd_gudang" class="form-control">' +
+                                    selectOptions +
+                                    '</select>';
+                            }
+                        },
+
+                        {
+                            data: 'harga_satuan',
+                            name: 'harga_satuan',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan">';
+                            }
+                        },
+                        {
+                            data: 'harga_total',
+                            name: 'harga_total',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" readonly>';
+                            }
+                        }
+                    ],
+                    columnDefs: [{
+                            targets: [4, 5, 6, 7, 8],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [0, 1],
+                            orderable: false
+                        },
+                        {
+                            targets: [1,
+                                2
+                            ], // Indeks kolom yang ingin disembunyikan (dimulai dari 0)
+                            readonly: false
+                        }
+                    ],
+                    initComplete: function() {
+                        // initializeColumnSearch(this);
+                    }
+
+                });
+                // end detail
 
                 $("#modal-pembelian-title").text("Tambah Data");
                 $("#ur_nominal_bayar").val('0');

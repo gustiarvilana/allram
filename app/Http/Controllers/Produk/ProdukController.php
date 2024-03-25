@@ -22,6 +22,7 @@ class ProdukController extends Controller
         $input = [
             'nota_pembelian' => $request->query('nota_pembelian'),
             'nota_penjualan' => $request->query('nota_penjualan'),
+            'kd_supplier' => $request->query('kd_supplier'),
         ];
 
         $this->model->setSatker($this->const['SATKER'] ?? null);
