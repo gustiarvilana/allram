@@ -75,8 +75,13 @@
             border-radius: 5px;
         }
 
-        .form-control {
+        .modal-transaksi .form-control {
             width: auto;
+        }
+
+        .select2 {
+            width: 100%;
+            height: 100%;
         }
     </style>
 
@@ -282,6 +287,11 @@
 
     <script>
         $(document).ready(function() {
+            //Initialize Select2 Elements
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            })
+
             $('body').on('keyup', '.money', function() {
                 var nilai1 = this.value.replace(/[^a-z0-9\s]/gi, '');
                 var nilai = addCommas(nilai1);

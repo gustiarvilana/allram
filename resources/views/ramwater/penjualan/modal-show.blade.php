@@ -1,6 +1,6 @@
 <!-- Modal -->
-<div class="modal fade" id="penjualan-show" tabindex="-1" role="dialog" aria-labelledby="penjualan-showTitle"
-    aria-hidden="true">
+<div class="modal fade modal-transaksi" id="penjualan-show" tabindex="-1" role="dialog"
+    aria-labelledby="penjualan-showTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">

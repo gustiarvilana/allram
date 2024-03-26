@@ -107,9 +107,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/ops', OpsController::class)->except('show');
         Route::prefix('ops')->group(function () {
             Route::get('/data', [OpsController::class, 'data'])->name('ops.data');
-            Route::get('/laporan', [LaporanOpsController::class, 'index'])->name('ops.index');
-            Route::get('laporan/data', [LaporanOpsController::class, 'data'])->name('ops.laporan.data');
-            Route::get('laporan/detailData', [LaporanOpsController::class, 'detailData'])->name('ops.laporan.detailData');
+            // Route::get('/laporan', [LaporanOpsController::class, 'index'])->name('ops.index');
+            // Route::get('laporan/data', [LaporanOpsController::class, 'data'])->name('ops.laporan.data');
+            // Route::get('laporan/detailData', [LaporanOpsController::class, 'detailData'])->name('ops.laporan.detailData');
         });
     });
 });
