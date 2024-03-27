@@ -40,22 +40,6 @@ class PembayaranController extends Controller
         $bayar = $this->dPembayaranModel->setNota($req['nota_pembelian']);
         $bayar = $this->dPembayaranModel->getPembayaran();
 
-        // $bayar = $bayar->map(function ($row) {
-        //     return [
-        //         'id' => base64_encode($this->integrationHelper->encrypt($row->id, $this->integrationHelper->getKey())),
-        //         // 'nota_pembelian' => $row->nota_pembelian,
-        //         'tgl_pembayaran' => $row->tgl_pembayaran,
-        //         'angs_ke' => $row->angs_ke,
-        //         'nominal_bayar' => $row->nominal_bayar,
-        //         'channel_bayar' => $row->channel_bayar,
-        //         'ket_bayar' => $row->ket_bayar,
-        //         'path_file' => $row->path_file,
-        //         'opr_input' => $row->opr_input,
-        //         'tgl_input' => $row->tgl_input,
-        //         'created_at' => $row->created_at,
-        //         'updated_at' => $row->updated_at,
-        //     ];
-        // });
         return response()->json($bayar);
     }
 

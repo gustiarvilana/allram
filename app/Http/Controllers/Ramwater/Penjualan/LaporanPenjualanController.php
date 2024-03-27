@@ -33,9 +33,13 @@ class LaporanPenjualanController extends Controller
         $this->penjualanDetailModel = $penjualanDetailModel;
     }
 
-    public function data()
+    public function data(Request $request)
     {
+        $jns = $request->input();
+
         $penjualan = $this->penjualanModel->getPenjualan();
+
+        if (isset($jns['jns'])) if ($jns['jns'] == 'penyerahan') $penjualan = $this->penjualanModel->getPenjualanPenyerahan();
 
         return datatables()
             ->of($penjualan)

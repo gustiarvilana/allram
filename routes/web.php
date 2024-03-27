@@ -92,6 +92,8 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/penjualan', PenjualanController::class)->except('show');
         Route::prefix('penjualan')->group(function () {
             Route::get('/data', [penjualanController::class, 'data'])->name('penjualan.data');
+            Route::get('/penyerahan', [penjualanController::class, 'penyerahan'])->name('penjualan.penyerahan');
+            Route::post('/penyerahan', [penjualanController::class, 'penyerahanUpdate'])->name('penjualan.penyerahanUpdate');
             Route::get('/laporan', [LaporanPenjualanController::class, 'index'])->name('penjualan.laporan.index');
             Route::get('laporan/data', [LaporanpenjualanController::class, 'data'])->name('penjualan.laporan.data');
             Route::get('laporan/detailData', [LaporanpenjualanController::class, 'detailData'])->name('penjualan.laporan.detailData');

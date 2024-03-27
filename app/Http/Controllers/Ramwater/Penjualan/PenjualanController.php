@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ramwater\Penjualan;
 
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\DPelangganModel;
 use App\Models\DPembelianModel;
 use App\Models\Karyawan;
 use App\Models\Produk;
@@ -13,6 +14,7 @@ use App\Models\TGudang;
 use App\Services\PembelianService;
 use App\Services\PenjualanService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PenjualanController extends Controller
 {
@@ -68,5 +70,30 @@ class PenjualanController extends Controller
     {
         $id = $this->integrationHelper->decrypt(base64_decode($id), $this->integrationHelper->getKey());
         return $this->penjualanService->destroypenjualan($id);
+    }
+
+    public function penyerahan()
+    {
+        $data = [
+            'pelanggans' => DPelangganModel::get(),
+            'saless'     => Karyawan::where('jabatan', '=', 'sales')->get(),
+            'gudang'     => TGudang::get(),
+            'channels'   => TChannelModel::get(),
+        ];
+        return view('ramwater.penjualan.penyerahan', $data);
+    }
+
+    public function penyerahanUpdate(Request $request)
+    {
+        $nota_penjualan = $request->input('nota_penjualan');
+
+        try {
+            return DB::transaction(function () use ($nota_penjualan) { //rollback if error
+                $this->penjualanService->penyerahanUpdate($nota_penjualan);
+                return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
+            });
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

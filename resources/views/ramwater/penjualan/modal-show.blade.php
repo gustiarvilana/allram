@@ -37,9 +37,66 @@
                 </div>
             </div>
             <div class="modal-footer">
-                {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                <button type="button" class="btn btn-primary" id="save_penyerahan">Konfirmasi</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $('body').on('click', '#save_penyerahan', function() {
+        var rowData = $(this).data('row');
+        // Use SweetAlert for confirmation
+        Swal.fire({
+            title: 'Konfirrmasi?',
+            text: 'Pastikan Produk Sesuai dengan Jumlah Pembelian',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            cancelButtonText: 'Tidak',
+            confirmButtonText: 'Ya!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ route('penjualan.penyerahanUpdate') }}',
+                    type: 'POST',
+                    data: {
+                        nota_penjualan: rowData.nota_penjualan
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#penjualan-show').click();
+                            $("#table-penjualan-laporan").DataTable().ajax.reload();
+                            Swal.fire('Success!', 'Penyerahan Produk Terkonfirmasi.',
+                                'success');
+                            return;
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message,
+                        });
+
+                    },
+                    error: function(error) {
+                        var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        } else if (error.statusText) {
+                            errorMessage = error.statusText;
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: errorMessage,
+                        });
+                    }
+                });
+            }
+        });
+    })
+</script>

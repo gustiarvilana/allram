@@ -268,6 +268,17 @@ class PenjualanService
     }
 
 
+    public function penyerahanUpdate($nota_penjualan)
+    {
+        try {
+            $penjualan = $this->penjualanModel->where('nota_penjualan', '=', $nota_penjualan)->first();
+            $penjualan->sts_penyerahan = 4;
+            return $penjualan->save();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public function upsertOps($penjualanData)
     {
         $data = $this->prepareOpsnData($penjualanData);

@@ -153,7 +153,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('penjualan.laporan.data') }}',
+                ajax: '{{ route('penjualan.laporan.data') }}?jns=penyerahan',
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'
@@ -261,8 +261,7 @@
 
                             // You can customize the buttons as needed
 
-                            return '<div style="white-space: nowrap;">' + btn_edit + ' ' +
-                                btn_delete + '</div>';
+                            return '<div style="white-space: nowrap;">' + btn_show + '</div>';
                         },
                     },
                 ],
@@ -615,6 +614,8 @@
                 $("#modal-penjualan").modal("show");
             }).on("click", "#btn-penjualan-show", function() {
                 var rowData = $(this).data('row');
+
+                $('#save_penyerahan').attr('data-row', JSON.stringify(rowData));
 
                 var tableDetail = $("#modal-show-detail").DataTable({
                     info: false,

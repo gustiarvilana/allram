@@ -65,5 +65,11 @@ class AlterTable extends Seeder
             ADD IF NOT EXISTS `kd_ops` varchar(50) DEFAULT NULL AFTER `no_tlp`
             ;"
         );
+
+        DB::statement(
+            "ALTER TABLE `d_penjualan`
+            ADD IF NOT EXISTS `sts_penyerahan` INT DEFAULT 0 AFTER `sts_angsuran`
+            ;"
+        );
     }
 }
