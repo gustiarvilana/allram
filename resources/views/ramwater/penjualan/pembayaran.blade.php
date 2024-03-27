@@ -101,6 +101,27 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-primary">
+                                <div class="card-header">
+                                    <span>Upload Bukti Pembayaran</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Bukti Pembayaran</label>
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
                                 <div class="card-header card-success">
                                     <span>Detail</span>
                                 </div>
@@ -339,6 +360,8 @@
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
             }).on("click", "#btn-add-penjualan-simpan", function() {
+                var imageFile = $('#path_file')[0].files[0];
+
                 var dataArrayDetail = [];
                 $('#table-detail-edit tr').each(function() {
 
@@ -378,6 +401,7 @@
 
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
+                formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('penjualanData', JSON.stringify(penjualanData));
                 formData.append('jns', 'update');
@@ -554,7 +578,6 @@
                             $('#table-detail').append(emptyRow);
 
                             $('#btn-add-penjualan-simpan').show();
-                            $('.modal .form-control').prop('disabled', false);
                         } else {
                             $('#btn-add-penjualan-simpan').hide();
                             $('.modal .form-control').prop('disabled', true);
