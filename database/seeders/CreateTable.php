@@ -260,8 +260,8 @@ class CreateTable extends Seeder
         DB::statement(
             "CREATE TABLE IF NOT EXISTS `d_pembayaran` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                `nota_pembelian` VARCHAR(50) DEFAULT NULL,
-                `nota_penjualan` VARCHAR(50) DEFAULT NULL,
+                `nota` VARCHAR(50) DEFAULT NULL,
+                `jns_nota` VARCHAR(50) DEFAULT NULL,
                 `tgl` INT DEFAULT NULL,
                 `angs_ke` INT DEFAULT NULL,
                 `nominal_bayar` INT DEFAULT NULL,
