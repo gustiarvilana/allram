@@ -70,8 +70,6 @@ class PenjualanService
                     $pembayaran = $this->upsertPembayaran($pembayaran);
                 }
 
-                $penjualan['nota_penjualan'] = $penjualanData_fix['nota_penjualan'];
-
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
         } catch (\Exception $e) {
@@ -186,17 +184,14 @@ class PenjualanService
 
     public function preparePembayaranData($pembelian)
     {
-        if (isset($pembelian['nota_penjualan'])) {
-            $angs_ke = $this->dPembayaran->where('nota_penjualan', $pembelian['nota_penjualan'])->get()->max('angs_ke') + 1;
-        } elseif (isset($pembelian['nota_pembelian'])) {
-            $angs_ke = $this->dPembayaran->where('nota_pembelian', $pembelian['nota_pembelian'])->get()->max('angs_ke') + 1;
-        }
+        $angs_ke = $this->dPembayaran->where('nota', $pembelian['nota_penjualan'])->get()->max('angs_ke') + 1;
 
-        $pembayaran['nota_penjualan'] = $pembelian['nota_penjualan'];
-        $pembayaran['tgl']            = $pembelian['tgl_penjualan'];
-        $pembayaran['nominal_bayar']  = $pembelian['nominal_bayar'];
-        $pembayaran['opr_input']      = Auth::user()->nik;
-        $pembayaran['tgl_input']      = date('Ymd');
+        $pembayaran['nota']          = $pembelian['nota_penjualan'];
+        $pembayaran['jns_nota']      = 'penjualan';
+        $pembayaran['tgl']           = $pembelian['tgl_penjualan'];
+        $pembayaran['nominal_bayar'] = $pembelian['nominal_bayar'];
+        $pembayaran['opr_input']     = Auth::user()->nik;
+        $pembayaran['tgl_input']     = date('Ymd');
 
         $pembayaran['jns_pembayaran'] = 2;
 
@@ -297,7 +292,7 @@ class PenjualanService
         try {
             return $this->dPembayaran->updateOrCreate(
                 [
-                    'nota_penjualan' => $pembayaran['nota_penjualan'],
+                    'nota' => $pembayaran['nota'],
                 ],
                 $pembayaran
             );

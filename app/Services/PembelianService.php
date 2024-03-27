@@ -184,11 +184,12 @@ class PembelianService
 
     public function preparePembayaranData($pembelian)
     {
-        $pembayaran['nota_pembelian'] = $pembelian['nota_pembelian'];
-        $pembayaran['tgl'] = $pembelian['tgl_pembelian'];
-        $pembayaran['nominal_bayar']  = $pembelian['nominal_bayar'];
-        $pembayaran['opr_input']      = Auth::user()->nik;
-        $pembayaran['tgl_input']      = date('Ymd');
+        $pembayaran['nota']          = $pembelian['nota_pembelian'];
+        $pembayaran['jns_nota']      = 'pembelian';
+        $pembayaran['tgl']           = $pembelian['tgl_pembelian'];
+        $pembayaran['nominal_bayar'] = $pembelian['nominal_bayar'];
+        $pembayaran['opr_input']     = Auth::user()->nik;
+        $pembayaran['tgl_input']     = date('Ymd');
 
         $pembayaran['ket_bayar']      = '';
         $pembayaran['angs_ke']        = 1;
@@ -270,7 +271,7 @@ class PembelianService
         try {
             return $this->dPembayaran->updateOrCreate(
                 [
-                    'nota_pembelian' => $pembayaran['nota_pembelian'],
+                    'nota' => $pembayaran['nota'],
                 ],
                 $pembayaran
             );
