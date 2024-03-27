@@ -18,8 +18,7 @@ class DPembayaranModel extends Model
     public function getPembayaran()
     {
         $pembayaran = DB::table('d_pembayaran')
-            ->where('nota_pembelian', '=', $this->getNota())
-            ->orWhere('nota_penjualan', '=', $this->getNota())
+            ->where('nota', '=', $this->getNota())
             ->get();
 
         return $pembayaran;

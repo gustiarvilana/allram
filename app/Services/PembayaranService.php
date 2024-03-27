@@ -169,16 +169,16 @@ class PembayaranService
     public function preparePembayaranData($pembayaran)
     {
         if (isset($pembayaran['nota_pembelian'])) {
-            $pembayaran_fix['nota_pembelian'] = $pembayaran['nota_pembelian'];
-            $pembayaran_fix['tgl']            = $pembayaran['tgl_pembayaran'];
+            $pembayaran_fix['jns_nota']      = 'pembelian';
         } else {
-            $pembayaran_fix['nota_penjualan'] = $pembayaran['nota_penjualan'];
-            $pembayaran_fix['tgl']            = $pembayaran['tgl_pembayaran'];
+            $pembayaran_fix['jns_nota']      = 'penjualan';
         }
 
-        $pembayaran_fix['nominal_bayar']  = $pembayaran['nominal_bayar'] ? FormatHelper::removeDots($pembayaran['nominal_bayar']) : 0;
-        $pembayaran_fix['opr_input']      = Auth::user()->nik;
-        $pembayaran_fix['tgl_input']      = date('Ymd');
+        $pembayaran_fix['nota']          = $pembayaran['nota'];
+        $pembayaran_fix['tgl']           = $pembayaran['tgl_pembayaran'];
+        $pembayaran_fix['nominal_bayar'] = $pembayaran['nominal_bayar'] ? FormatHelper::removeDots($pembayaran['nominal_bayar']) : 0;
+        $pembayaran_fix['opr_input']     = Auth::user()->nik;
+        $pembayaran_fix['tgl_input']     = date('Ymd');
 
         $pembayaran_fix['update'] = $pembayaran['update'] ?? '';
 
@@ -199,7 +199,8 @@ class PembayaranService
 
                 foreach ($dataArrayDetail as $key => $dataDetail) {
                     $dataDetail['angs_ke'] = $key + 1;
-                    if (isset($data['nota_penjualan'])) $dataDetail['nota_penjualan'] = $data['nota_penjualan'];
+                    if (isset($data['nota_pembelian'])) $dataDetail['nota'] = $data['nota_pembelian'];
+                    if (isset($data['nota_penjualan'])) $dataDetail['nota'] = $data['nota_penjualan'];
 
                     $dataDetail_fix = $this->preparePembayaranData($dataDetail);
 
@@ -212,8 +213,6 @@ class PembayaranService
                     }
 
                     $dataDetail_fix['id']             = $dataDetail['id'] ?? null;
-                    $dataDetail_fix['nota_pembelian'] = $data['nota_pembelian'] ?? null;
-                    $dataDetail_fix['nota_penjualan'] = $data['nota_penjualan'] ?? null;
                     $dataDetail_fix['path_file']      = $dataDetail_fix['path_file'] ?? '';
                     unset($dataDetail_fix["update"]);
 
@@ -221,7 +220,7 @@ class PembayaranService
 
                     $dataDetail = $this->dPembayaran->updateOrCreate([
                         'id'             => $dataDetail_fix['id'],
-                        'nota_pembelian' => $dataDetail_fix['nota_pembelian'],
+                        'nota' => $dataDetail_fix['nota'],
                     ], $dataDetail_fix);
                 }
 

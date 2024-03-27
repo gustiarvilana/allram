@@ -555,44 +555,46 @@
                 // Simpan referensi ke tombol yang diklik
                 var tombolHapus = $(this);
                 var id = tombolHapus.closest('tr').find('#bayar_id').val();
+                // console.log(id);
+                // return;
 
-                pembayaranDestroy(id)
+                if (id) {
+                    pembayaranDestroy(id)
 
-                // if (id) {
-                //     // Tampilkan SweetAlert untuk konfirmasi
-                //     Swal.fire({
-                //         title: 'Konfirmasi Admin',
-                //         text: 'Masukkan password admin untuk melanjutkan:',
-                //         input: 'password',
-                //         inputAttributes: {
-                //             autocapitalize: 'off',
-                //             placeholder: 'Password admin'
-                //         },
-                //         showCancelButton: true,
-                //         confirmButtonText: 'Konfirmasi',
-                //         cancelButtonText: 'Batal',
-                //         showLoaderOnConfirm: true,
-                //         preConfirm: (password) => {
-                //             // Disini Anda bisa melakukan validasi password admin
-                //             // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
+                    // Tampilkan SweetAlert untuk konfirmasi
+                    // Swal.fire({
+                    //     title: 'Konfirmasi Admin',
+                    //     text: 'Masukkan password admin untuk melanjutkan:',
+                    //     input: 'password',
+                    //     inputAttributes: {
+                    //         autocapitalize: 'off',
+                    //         placeholder: 'Password admin'
+                    //     },
+                    //     showCancelButton: true,
+                    //     confirmButtonText: 'Konfirmasi',
+                    //     cancelButtonText: 'Batal',
+                    //     showLoaderOnConfirm: true,
+                    //     preConfirm: (password) => {
+                    //         // Disini Anda bisa melakukan validasi password admin
+                    //         // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
 
-                //             // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
-                //             if (password !== 'passwordadmin') {
-                //                 Swal.showValidationMessage('Password admin salah');
-                //             }
-                //         }
-                //     }).then((result) => {
-                //         // Jika pengguna mengonfirmasi, hapus baris
-                //         if (result.isConfirmed) {
-                //             if (id) {
-                //                 pembayaranDestroy(id)
-                //             }
-                //             tombolHapus.closest('tr').remove();
-                //         }
-                //     });
-                // } else {
-                //     tombolHapus.closest('tr').remove();
-                // }
+                    //         // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
+                    //         if (password !== 'passwordadmin') {
+                    //             Swal.showValidationMessage('Password admin salah');
+                    //         }
+                    //     }
+                    // }).then((result) => {
+                    //     // Jika pengguna mengonfirmasi, hapus baris
+                    //     if (result.isConfirmed) {
+                    //         if (id) {
+                    //             pembayaranDestroy(id)
+                    //         }
+                    //         tombolHapus.closest('tr').remove();
+                    //     }
+                    // });
+                } else {
+                    tombolHapus.closest('tr').remove();
+                }
 
             }).on('click', '.btn-edit', function() {
                 var data = $(this);

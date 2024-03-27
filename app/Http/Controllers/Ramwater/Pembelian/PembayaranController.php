@@ -53,7 +53,6 @@ class PembayaranController extends Controller
 
     public function store(Request $request)
     {
-
         $pembelianData = json_decode($request->input('pembelianData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
         $file = $request->file('path_file');
@@ -61,14 +60,13 @@ class PembayaranController extends Controller
         if ($request->input('jns')) {
             $pembelianData['jns'] = $request->input('jns');
         }
-
         return $this->pembayaranService->storePembayaran($pembelianData, $dataArrayDetail, $file);
     }
 
     public function destroy($id)
     {
         $pembayaran = $this->dPembayaranModel->where('id', '=', $id)->first();
-        $pembelian = $this->dPembelianModel->where('nota_pembelian', '=', $pembayaran->nota_pembelian)->first();
+        $pembelian = $this->dPembelianModel->where('nota_pembelian', '=', $pembayaran->nota)->first();
 
         if ($pembayaran->path_file) {
             // hapus d_pembelian & child
@@ -83,16 +81,16 @@ class PembayaranController extends Controller
 
             FormatHelper::deleteFile($pathToDelete);
         }
-        $pembayaran->delete();
-
 
         $pembelianModel = new DPembelianModel();
         $pembelian = $pembelianModel->find($pembelian->id);
 
         $totalNominalBayar = new DPembayaranModel();
-        $totalNominalBayar = $totalNominalBayar->where('nota_pembelian', '=', $pembelian->nota_pembelian)->get();
+
+        $totalNominalBayar = $totalNominalBayar->where('nota', '=', $pembelian->nota_pembelian)->get();
         $totalNominalBayar = $totalNominalBayar->sum('nominal_bayar');
 
+        $pembayaran->delete();
         if ($totalNominalBayar == $pembelian->harga_total) {
             $pembelian->sts_angsuran = 4;
             $pembelian->nominal_bayar = $totalNominalBayar;
