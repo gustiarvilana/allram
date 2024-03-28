@@ -16,4 +16,14 @@ class UtilityController extends Controller
         $request->session()->put($name, $val);
         return;
     }
+
+    public function add(Request $request)
+    {
+        $a = $request->input('a');
+        $b = $request->input('b');
+
+        $result = $a + $b;
+
+        return response()->json(['result' => $result]);
+    }
 }

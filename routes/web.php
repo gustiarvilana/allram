@@ -22,6 +22,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::post('/add', [UtilityController::class, 'add']);
+
 Route::post('/utility/setsession', [UtilityController::class, 'setSession'])->name('utility.setSession');
 
 Auth::routes();
