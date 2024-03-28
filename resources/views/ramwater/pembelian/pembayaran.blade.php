@@ -192,7 +192,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('pembelian.laporan.data') }}',
+                ajax: '{{ route('pembelian.detail.data') }}',
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'

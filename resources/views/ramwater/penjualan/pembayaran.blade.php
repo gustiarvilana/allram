@@ -176,7 +176,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('penjualan.laporan.data') }}',
+                ajax: '{{ route('penjualan.detail.data') }}',
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'

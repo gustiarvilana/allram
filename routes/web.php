@@ -5,22 +5,18 @@ use App\Http\Controllers\pelanggan\LaporanPelangganController;
 use App\Http\Controllers\pelanggan\PelangganController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
-use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
-use App\Http\Controllers\Ramwater\Pembelian\PembayaranController;
-use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
 use App\Http\Controllers\Ramwater\Ops\LaporanOpsController;
-use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
 use App\Http\Controllers\Ramwater\Ops\OpsController;
-use App\Http\Controllers\Ramwater\Penjualan\PembayaranController as PenjualanPembayaranController;
+use App\Http\Controllers\Ramwater\Pembelian\DetailPembelianController;
+use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
+use App\Http\Controllers\Ramwater\Pembelian\PembayaranController as PembelianPembayaranController;
+use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
+use App\Http\Controllers\Ramwater\Penjualan\DetailPenjualanController;
+use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
+use App\Http\Controllers\Ramwater\Penjualan\PembayaranController as PenjualanPembayaranController;;
+
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
-use App\Http\Controllers\Security\KaryawanController;
-use App\Http\Controllers\Security\SecurityController;
-use App\Http\Controllers\Security\UserController;
-use App\Http\Controllers\Security\UserMenuController;
-use App\Http\Controllers\Security\UserRoleController;
-use App\Http\Controllers\Security\UserRoleMenuController;
 use App\Http\Controllers\Utility\UtilityController;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -62,9 +58,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
 
         Route::resource('/produk', ProdukController::class)->except('show');
         Route::prefix('produk')->group(function () {
-            Route::get('/data', [produkController::class, 'data'])->name('produk.data');
+            Route::get('/data', [ProdukController::class, 'data'])->name('produk.data');
             Route::get('/laporan', [LaporanProdukController::class, 'laporan'])->name('produk.laporan');
-            Route::get('laporan/data', [LaporanprodukController::class, 'data'])->name('produk.laporan.data');
+            Route::get('laporan/data', [LaporanProdukController::class, 'data'])->name('produk.laporan.data');
         });
 
         Route::resource('/pelanggan', PelangganController::class)->except('show');
@@ -77,15 +73,15 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/pembelian', PembelianController::class)->except('show');
         Route::prefix('pembelian')->group(function () {
             Route::get('/data', [PembelianController::class, 'data'])->name('pembelian.data');
-            Route::get('/laporan', [LaporanPembelianController::class, 'index'])->name('pembelian.index');
-            Route::get('laporan/data', [LaporanPembelianController::class, 'data'])->name('pembelian.laporan.data');
-            Route::get('laporan/detailData', [LaporanPembelianController::class, 'detailData'])->name('pembelian.laporan.detailData');
+            Route::get('/detail', [DetailPembelianController::class, 'index'])->name('pembelian.index');
+            Route::get('detail/data', [DetailPembelianController::class, 'data'])->name('pembelian.detail.data');
+            Route::get('detail/detailData', [DetailPembelianController::class, 'detailData'])->name('pembelian.detail.detailData');
 
-            Route::resource('/pembayaran', PembayaranController::class)->except('show');
+            Route::resource('/pembayaran', PembelianPembayaranController::class)->except('show');
             Route::prefix('pembayaran')->group(function () {
-                Route::get('/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
-                Route::post('/store', [PembayaranController::class, 'store'])->name('pembelian.pembayaran.store');
-                Route::delete('/destroy/{id}', [PembayaranController::class, 'destroy'])->name('pembelian.pembayaran.destroy');
+                Route::get('/data', [PembelianPembayaranController::class, 'data'])->name('pembayaran.data');
+                Route::post('/store', [PembelianPembayaranController::class, 'store'])->name('pembelian.pembayaran.store');
+                Route::delete('/destroy/{id}', [PembelianPembayaranController::class, 'destroy'])->name('pembelian.pembayaran.destroy');
             });
         });
 
@@ -94,9 +90,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('/data', [penjualanController::class, 'data'])->name('penjualan.data');
             Route::get('/penyerahan', [penjualanController::class, 'penyerahan'])->name('penjualan.penyerahan');
             Route::post('/penyerahan', [penjualanController::class, 'penyerahanUpdate'])->name('penjualan.penyerahanUpdate');
-            Route::get('/laporan', [LaporanPenjualanController::class, 'index'])->name('penjualan.laporan.index');
-            Route::get('laporan/data', [LaporanpenjualanController::class, 'data'])->name('penjualan.laporan.data');
-            Route::get('laporan/detailData', [LaporanpenjualanController::class, 'detailData'])->name('penjualan.laporan.detailData');
+            Route::get('/detail', [DetailPenjualanController::class, 'index'])->name('penjualan.detail.index');
+            Route::get('detail/data', [DetailPenjualanController::class, 'data'])->name('penjualan.detail.data');
+            Route::get('detail/detailData', [DetailPenjualanController::class, 'detailData'])->name('penjualan.detail.detailData');
 
             Route::resource('/pembayaran', PenjualanPembayaranController::class)->except('show');
             Route::prefix('pembayaran')->group(function () {
@@ -109,9 +105,12 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/ops', OpsController::class)->except('show');
         Route::prefix('ops')->group(function () {
             Route::get('/data', [OpsController::class, 'data'])->name('ops.data');
-            // Route::get('/laporan', [LaporanOpsController::class, 'index'])->name('ops.index');
-            // Route::get('laporan/data', [LaporanOpsController::class, 'data'])->name('ops.laporan.data');
-            // Route::get('laporan/detailData', [LaporanOpsController::class, 'detailData'])->name('ops.laporan.detailData');
+        });
+
+        Route::prefix('laporan')->group(function () {
+            Route::resource('/pembelian', LaporanPembelianController::class);
+            Route::resource('/penjualan', LaporanPenjualanController::class);
+            Route::resource('/ops', LaporanOpsController::class);
         });
     });
 });

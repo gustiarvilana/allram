@@ -153,7 +153,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('penjualan.laporan.data') }}?jns=penyerahan',
+                ajax: '{{ route('penjualan.detail.data') }}?jns=penyerahan',
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'
@@ -626,7 +626,7 @@
                     autoWidth: false,
                     bDestroy: true,
                     ajax: {
-                        url: '{{ route('penjualan.laporan.detailData') }}?nota_penjualan=' +
+                        url: '{{ route('penjualan.detail.detailData') }}?nota_penjualan=' +
                             rowData
                             .nota_penjualan +
                             '',

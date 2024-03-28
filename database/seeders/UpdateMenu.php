@@ -19,15 +19,20 @@ class UpdateMenu extends Seeder
             VALUES
             (8, 3, 4, null, 'Pembelian', 'Ramwater Pembelian', '#', '#', 'fas fa-truck', 1, 1),
             (9, 9, 3, null, 'Input Pembelian', 'Ramwater Pembelian', '/ramwater/pembelian', '#', 'ri-calendar-todo-line', 1, 1),
-            (10, 10, 3, null, 'Laporan Pembelian', 'Ramwater Pembelian', '/ramwater/pembelian/laporan', '#', 'ri-calendar-todo-line', 2, 1),
+            (10, 10, 3, null, 'Detail Pembelian', 'Ramwater Pembelian', '/ramwater/pembelian/detail', '#', 'ri-calendar-todo-line', 2, 1),
             (11, 11, 3, null, 'Pembayaran', 'Ramwater Pembayaran', '/ramwater/pembelian/pembayaran', '#', 'ri-calendar-todo-line', 3, 1),
 
             (12, 12, 4, null, 'Penjualan', 'Ramwater penjualan', '#', '#', 'fas fa-cart-plus', 2, 1),
             (13, 13, 12, null, 'Input', 'Ramwater Input penjualan', '/ramwater/penjualan', '#', 'fas fa-cart-plus', 1, 1),
-            (14, 14, 12, null, 'Laporan', 'Ramwater Laporan penjualan', '/ramwater/penjualan/laporan', '#', 'ri-calendar-todo-line', 2, 1),
+            (14, 14, 12, null, 'Detail Penjualan', 'Ramwater Laporan penjualan', '/ramwater/penjualan/detail', '#', 'ri-calendar-todo-line', 2, 1),
             (15, 15, 12, null, 'Pembayaran', 'Ramwater Pembayaran penjualan', '/ramwater/penjualan/pembayaran', '#', 'ri-calendar-todo-line', 3, 1),
             (16, 16, 4, null, 'OPS', 'Ramwater OPS', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1),
-            (17, 17, 16, null, 'Input', 'Ramwater Input ops', '/ramwater/ops', '#', 'fa-solid fa-cart-flatbed-suitcase', 1, 1)
+            (17, 17, 16, null, 'Input', 'Ramwater Input ops', '/ramwater/ops', '#', 'fa-solid fa-cart-flatbed-suitcase', 1, 1),
+            (18, 18, 4, null, 'Penyerahan', 'Ramwater Penyerahan', '/ramwater/penjualan/penyerahan', '#', 'fa-solid fa-cart-flatbed-suitcase', 4, 1),
+            (19, 19, 4, null, 'Laporan', 'Ramwater Laporan', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 4, 1),
+            (20, 20, 19, null, 'Laporan Pembelian', 'Ramwater Laporan Pembelian', '/ramwater/laporan/pembelian', '#', 'fa-solid fa-cart-flatbed-suitcase', 1, 1),
+            (21, 21, 19, null, 'Laporan Penjualan', 'Ramwater Laporan penjualan', '/ramwater/laporan/penjualan', '#', 'fa-solid fa-cart-flatbed-suitcase', 2, 1),
+            (22, 22, 19, null, 'Laporan OPS', 'Ramwater Laporan ops', '/ramwater/laporan/ops', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1)
         ");
 
         DB::statement("INSERT IGNORE INTO `users_role_menu`
@@ -52,7 +57,17 @@ class UpdateMenu extends Seeder
             (31, '99', '16', '2024'),
             (32, '1', '16', '2024'),
             (33, '99', '17', '2024'),
-            (34, '1', '17', '2024')
+            (34, '1', '17', '2024'),
+            (35, '99', '18', '2024'),
+            (36, '1', '18', '2024'),
+            (37, '99', '19', '2024'),
+            (38, '1', '19', '2024'),
+            (39, '99', '20', '2024'),
+            (40, '1', '20', '2024'),
+            (41, '99', '21', '2024'),
+            (42, '1', '21', '2024'),
+            (43, '99', '22', '2024'),
+            (44, '1', '22', '2024')
         ");
     }
 }

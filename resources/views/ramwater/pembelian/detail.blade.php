@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fa fa-file" aria-hidden="true"></i> <b>Laporan Pembelian</b>
+    <i class="fa fa-file" aria-hidden="true"></i> <b>Detail Pembelian</b>
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <div class="card card-success">
                         <div class="card-header">
-                            <h3 class="card-title">Laporan Pembelian</h3>
+                            <h3 class="card-title">Detail Pembelian</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
