@@ -51,7 +51,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade modal-transaksi" id="modal-pembelian" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade field" id="modal-pembelian" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">

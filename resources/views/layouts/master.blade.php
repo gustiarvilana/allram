@@ -75,7 +75,7 @@
             border-radius: 5px;
         }
 
-        .modal-transaksi .form-control {
+        .field .form-control {
             width: auto;
         }
 

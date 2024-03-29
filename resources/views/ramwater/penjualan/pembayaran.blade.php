@@ -51,7 +51,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal-penjualan" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade field" id="modal-penjualan" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -71,7 +71,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped modal-transaksi" id="table-penjualan">
+                                            <table class="table table-striped" id="table-penjualan">
                                                 <thead>
                                                     <tr>
                                                         <th>tgl_penjualan</th>
