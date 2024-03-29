@@ -241,32 +241,38 @@ class PembayaranService
         $pembelianModel = new DPembelianModel();
         $penjualanModel = new Penjualan();
 
-        if (isset($data['nota_pembelian'])) $data = $pembelianModel->find($data['id']);
-        if (isset($data['nota_penjualan'])) $data = $penjualanModel->where('nota_penjualan', '=', $data['nota_penjualan'])->first();
+        if (isset($data['nota_pembelian'])) $data_fix = $pembelianModel->find($data['id']);
+        if (isset($data['nota_penjualan'])) $data_fix = $penjualanModel->where('nota_penjualan', '=', $data['nota_penjualan'])->first();
 
-        if ($totalNominalBayar == $harga_total) {
-            $data->sts_angsuran = 4;
-        } elseif ($totalNominalBayar < $harga_total) {
-            $data->sts_angsuran = 1;
-        } elseif ($totalNominalBayar > $harga_total) {
-            throw new \Exception("Pembayaran Terlalu banyak!");
+        if ($data['sts_angsuran'] != '4') {
+            if ($totalNominalBayar == $harga_total) {
+                $data_fix->sts_angsuran = 4;
+            } elseif ($totalNominalBayar < $harga_total) {
+                $data_fix->sts_angsuran = 1;
+            } elseif ($totalNominalBayar > $harga_total) {
+                throw new \Exception("Pembayaran Terlalu banyak!");
+            };
         };
 
-        if (isset($data->total_galon)) {
-            if ($data->total_galon > 0) {
-                if ($data->sisa_galon == 0) {
-                    $data->sts_galon = 4;
-                } elseif ($data->sisa_galon > 0) {
-                    $data->sts_galon = 1;
-                } elseif ($data->sisa_galon < 0) {
+        if (isset($data['total_galon'])) {
+            // dd($data['sisa_galon'], $data['galon_kembali']);
+            $data_fix->galon_kembali = $data_fix->galon_kembali + $data['galon_kembali'];
+            $data_fix->sisa_galon    = $data_fix->sisa_galon - $data['galon_kembali'];
+            if (intVal($data['total_galon']) > 0) {
+                if ($data_fix->sisa_galon == 0) {
+                    $data_fix->sts_galon = 4;
+                } elseif ($data_fix->sisa_galon > 0) {
+                    $data_fix->sts_galon = 1;
+                } elseif ($data_fix->sisa_galon < 0) {
                     throw new \Exception("Pengembalian Galon Terlalu banyak!");
                 };
             }
         }
 
-        $data->nominal_bayar = $totalNominalBayar;
-        $data->sisa_bayar = $harga_total - $totalNominalBayar;
-        return $data->save();
+        $data_fix->nominal_bayar = $totalNominalBayar;
+        $data_fix->sisa_bayar = $harga_total - $totalNominalBayar;
+
+        return $data_fix->save();
     }
 
     public function destroyPembayaran($arrayRow)

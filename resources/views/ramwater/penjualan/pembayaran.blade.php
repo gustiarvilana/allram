@@ -32,6 +32,7 @@
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
+                                                <th>sts_galon</th>
                                                 <th>opr_input</th>
                                                 <th>tgl_input</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
@@ -70,7 +71,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-penjualan">
+                                            <table class="table table-striped modal-transaksi" id="table-penjualan">
                                                 <thead>
                                                     <tr>
                                                         <th>tgl_penjualan</th>
@@ -82,8 +83,8 @@
                                                         <th>sts_angsuran</th>
                                                         <th>total_galon</th>
                                                         <th>galon_kembali</th>
-                                                        {{-- <th>sisa_galon</th> --}}
-                                                        {{-- <th>sts_galon</th> --}}
+                                                        <th>sisa_galon</th>
+                                                        <th>sts_galon</th>
                                                         <th>kd_sales</th>
                                                         {{-- <th>opr_input</th> --}}
                                                         {{-- <th>tgl_input</th> --}}
@@ -251,6 +252,13 @@
                         }
                     },
                     {
+                        data: 'sts_galon',
+                        name: 'a.sts_galon',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
                         data: 'opr_input',
                         name: 'a.opr_input',
                         render: function(data, type, row) {
@@ -279,7 +287,7 @@
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11],
+                        targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
                         searchable: false,
                         orderable: false
                     },
@@ -476,12 +484,11 @@
                     rowData.sts_angsuran + '" readonly></td>' +
                     '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control" value="' +
                     addCommas(rowData.total_galon) + '"></td>' +
-                    '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control" value="' +
-                    addCommas(rowData.galon_kembali) + '"></td>' +
-                    '<input type="hidden" name="sisa_galon" id="ur_sisa_galon" class="form-control"  value="' +
-                    addCommas(rowData.sisa_galon) + '" readonly>' +
-                    '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
-                    rowData.sts_galon + '" readonly>' +
+                    '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control" value=""></td>' +
+                    '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control"  value="' +
+                    addCommas(rowData.sisa_galon) + '" readonly></td>' +
+                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
+                    rowData.sts_galon + '" readonly></td>' +
 
                     '<td>' +
                     '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +
@@ -576,10 +583,16 @@
                                 '</tr>';
 
                             $('#table-detail').append(emptyRow);
-
                             $('#btn-add-penjualan-simpan').show();
                         } else {
                             $('#btn-add-penjualan-simpan').hide();
+                            $('.modal .form-control').prop('readonly', true);
+                        }
+
+                        if (rowData.sts_galon != 4) {
+                            $('.modal #ur_galon_kembali').prop('readonly', false);
+                            $('#btn-add-penjualan-simpan').show();
+                        } else {
                             $('.modal .form-control').prop('disabled', true);
                         }
                     },
@@ -599,6 +612,11 @@
                 });
 
                 $("#modal-penjualan").modal("show");
+            }).on("change", "#ur_galon_kembali", function() { //
+                var total_galon = $('#ur_total_galon').val();
+                var kembali = $('#ur_galon_kembali').val();
+                var sisa = $('#ur_sisa_galon').val();
+                var sts = $('#ur_sts_galon').val()
             }).on("keyup", "#ur_nota_penjualan", function() {
                 var text = $('#ur_nota_penjualan').val()
 

@@ -158,15 +158,35 @@ class PenjualanService
             'nominal_bayar'  => $penjualanData['nominal_bayar'] ? FormatHelper::removeDots($penjualanData['nominal_bayar']) : 0,
             'sisa_bayar'     => $penjualanData['sisa_bayar'] ? FormatHelper::removeDots($penjualanData['sisa_bayar']) : 0,
             'sts_angsuran'   => $penjualanData['sts_angsuran'],
-            'total_galon'    => $penjualanData['total_galon'],
-            'galon_kembali'  => $penjualanData['galon_kembali'],
-            'sisa_galon'     => $penjualanData['sisa_galon'],
-            'sts_galon'      => $penjualanData['sts_galon'],
+
+            'total_galon'   => $penjualanData['total_galon'] ? FormatHelper::removeDots($penjualanData['total_galon']) : 0,
+            'galon_kembali' => $penjualanData['galon_kembali'] ? FormatHelper::removeDots($penjualanData['galon_kembali']) : 0,
+            'sisa_galon'    => $penjualanData['sisa_galon'] ? FormatHelper::removeDots($penjualanData['sisa_galon']) : 0,
+
             'kd_sales'       => $penjualanData['kd_sales'],
             'opr_input'      => Auth::user()->nik,
             'tgl_input'      => date('Ymd'),
         ];
 
+        $total_galon = intVal($penjualanData_fix['total_galon']);
+        if ($total_galon > 0) {
+            $galon_kembali = intVal($penjualanData_fix['galon_kembali']);
+            $sisa_galon = intVal($penjualanData_fix['sisa_galon']);
+
+            $penjualanData_fix['sisa_galon'] = $sisa_galon ? $sisa_galon - $galon_kembali : $total_galon - $galon_kembali;
+
+            $penjualanData_fix['sts_galon'] = $sisa_galon = 0 ? 4 : 1;
+
+            // dd(
+            //     $total_galon,
+            //     $galon_kembali,
+            //     $sisa_galon,
+            //     $penjualanData_fix,
+            // );
+        }
+        // dd(
+        //     $penjualanData_fix,
+        // );
         return $penjualanData_fix;
     }
 
