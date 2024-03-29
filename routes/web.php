@@ -5,18 +5,24 @@ use App\Http\Controllers\pelanggan\LaporanPelangganController;
 use App\Http\Controllers\pelanggan\PelangganController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
-use App\Http\Controllers\Ramwater\Ops\LaporanOpsController;
 use App\Http\Controllers\Ramwater\Ops\OpsController;
 use App\Http\Controllers\Ramwater\Pembelian\DetailPembelianController;
-use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController as PembelianPembayaranController;
 use App\Http\Controllers\Ramwater\Pembelian\PembelianController;
 use App\Http\Controllers\Ramwater\Penjualan\DetailPenjualanController;
-use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
-use App\Http\Controllers\Ramwater\Penjualan\PembayaranController as PenjualanPembayaranController;;
-
+use App\Http\Controllers\Ramwater\Penjualan\PembayaranController as PenjualanPembayaranController;
 use App\Http\Controllers\Ramwater\Penjualan\PenjualanController;
+use App\Http\Controllers\Security\KaryawanController;
+use App\Http\Controllers\Security\SecurityController;
+use App\Http\Controllers\Security\UserController;
+use App\Http\Controllers\Security\UserMenuController;
+use App\Http\Controllers\Security\UserRoleController;
+use App\Http\Controllers\Security\UserRoleMenuController;
 use App\Http\Controllers\Utility\UtilityController;
+
+use App\Http\Controllers\Ramwater\Ops\LaporanOpsController;
+use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
+use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -110,9 +116,14 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         });
 
         Route::prefix('laporan')->group(function () {
-            Route::resource('/pembelian', LaporanPembelianController::class);
-            Route::resource('/penjualan', LaporanPenjualanController::class);
-            Route::resource('/ops', LaporanOpsController::class);
+            Route::get('/pembelian', [LaporanPembelianController::class, 'index'])->name('pembelian.laporan');
+            Route::get('/pembelian/data', [LaporanPembelianController::class, 'data'])->name('pembelian.laporan.data');
+
+            Route::get('/penjualan', [LaporanPenjualanController::class, 'index'])->name('penjualan.laporan');
+            Route::get('/penjualan/data', [LaporanPenjualanController::class, 'data'])->name('penjualan.laporan.data');
+
+            Route::get('/ops', [LaporanOpsController::class, 'index'])->name('ops.laporan');
+            Route::get('/ops/data', [LaporanOpsController::class, 'data'])->name('ops.laporan.data');
         });
     });
 });

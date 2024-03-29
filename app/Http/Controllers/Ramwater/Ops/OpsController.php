@@ -26,7 +26,8 @@ class OpsController extends Controller
 
     public function data(Request $request)
     {
-        $menu = DB::table('d_ops as a');
+        $menu = DB::table('d_ops as a')
+            ->join('t_ops as b', 'a.kd_ops', 'b.kd_ops');
 
         return datatables()
             ->of($menu)

@@ -275,8 +275,6 @@ class CreateTable extends Seeder
                 `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
                 INDEX `idx_nota_pembayaran` (`nota`),
-                CONSTRAINT `fk_nota_pembayaran` FOREIGN KEY (`nota`) REFERENCES `d_pembelian` (`nota_pembelian`) ON DELETE CASCADE,
-                CONSTRAINT `fk_nota_penjualan` FOREIGN KEY (`nota`) REFERENCES `d_penjualan` (`nota_penjualan`) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
     }

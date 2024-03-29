@@ -106,8 +106,9 @@ class PenjualanService
                     FormatHelper::deleteFile($pathToDelete);
                 }
 
-                $this->dPembayaran->where('nota_penjualan', '=', $penjualan->nota_penjualan)->delete();
+                $this->dPembayaran->where('nota', '=', $penjualan->nota_penjualan)->delete();
                 $this->dtransaksiOps->where('nota_pembelian', '=', $penjualan->nota_penjualan)->delete();
+
                 $penjualan->delete();
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);

@@ -222,13 +222,14 @@
 
                             var btn_edit = '<a id="btn-pelanggan-edit" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-primary btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> edit</a>';
+                                '\' class="btn btn-primary btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> Edit Pelanggan</a>';
 
                             var btn_delete = '<a id="btn-pelanggan-delete" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-danger btn-xs mx-1 delete" style="white-space: nowrap;"><i class="fas fa-trash"></i></a>';
+                                '\' class="btn btn-danger btn-xs mx-1 delete" style="white-space: nowrap;"><i class="fas fa-trash"></i> Hapus Pelanggan</a>';
 
-                            return '<div class="text-center">' + btn_edit + ' ' + btn_delete +
+                            return '<div class="text-center" style="white-space: nowrap;">' +
+                                btn_edit + ' ' + btn_delete +
                                 '</div>';
                         },
 

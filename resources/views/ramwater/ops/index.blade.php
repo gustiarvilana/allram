@@ -79,7 +79,7 @@
                 }, {
                     data: 'nik'
                 }, {
-                    data: 'kd_ops'
+                    data: 'nama_ops'
                 }, {
                     data: 'jumlah',
                     render: function(data, type, row) {

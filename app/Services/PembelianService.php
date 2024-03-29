@@ -53,10 +53,8 @@ class PembelianService
             $pembelianData = $this->preparePembelianData($pembelianData);
 
             return DB::transaction(function () use ($pembelianData, $dataArrayDetail, $file) { //rollback if error
-
                 // save: d_penjualan
                 $pembelian = $this->upsertPembelian($pembelianData);
-
                 //save: file
                 if ($file) {
                     $filename = FormatHelper::uploadFile($file, 'pembelian/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
@@ -113,6 +111,7 @@ class PembelianService
 
                 FormatHelper::deleteFile($pathToDelete);
 
+                $this->dPembayaran->where('nota', '=', $pembelian->nota_pembelian)->delete();
                 $pembelian->delete();
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);

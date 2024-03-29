@@ -82,7 +82,7 @@
                                     <div class="form-group">
                                         <label for="total">Total</label>
                                         <input type="text" class="form-control money" name="total" id="total"
-                                            value="{{ old('total') }}" readonly>
+                                            readonly>
                                         @error('total')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -113,10 +113,10 @@
 
 <script>
     $('body').on('change', '#jumlah,#harga', function() {
-        var jumlah = $('#jumlah').val();
-        var harga = $('#harga').val();
+        var jumlah = getFloatValue($('#jumlah'));
+        var harga = getFloatValue($('#harga'));
         var total = harga * jumlah;
 
-        $('#total').val(addCommas(total))
+        total > 0 ? $('#total').val(addCommas(total)) : $('#total').val('0')
     })
 </script>

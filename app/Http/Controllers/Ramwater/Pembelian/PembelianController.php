@@ -43,7 +43,6 @@ class PembelianController extends Controller
 
     public function store(Request $request)
     {
-
         $pembelianData = json_decode($request->input('pembelianData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
         $file = $request->file('path_file');
