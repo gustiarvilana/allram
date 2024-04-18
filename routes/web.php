@@ -24,6 +24,7 @@ use App\Http\Controllers\Ramwater\Ops\LaporanOpsController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
 
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -32,7 +33,11 @@ Route::post('/add', [UtilityController::class, 'add']);
 
 Route::post('/utility/setsession', [UtilityController::class, 'setSession'])->name('utility.setSession');
 
-Auth::routes();
+Auth::routes([
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+]);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
