@@ -5,7 +5,7 @@ on:
       - pengembangan
 
 jobs:
-  FTP-Deploy-Action-Branch2:
+  FTP-Deploy-Action-pengembangan:
     name: 🚀 Deploy Website to Server 2
     if: github.ref == 'refs/heads/pengembangan'
     runs-on: ubuntu-latest
@@ -17,4 +17,18 @@ jobs:
         with:
           server: ftp.ramarmalia.com
           username: test.water@ramarmalia.com
+          password: Water09120912
+
+  FTP-Deploy-Action-main:
+    name: 🚀 Deploy Website to Server 1
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get Latest Code
+        uses: actions/checkout@v4
+      - name: 📂 Sync Files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftp.ramarmalia.com
+          username: water@ramarmalia.com
           password: Water09120912
