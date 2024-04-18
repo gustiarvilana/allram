@@ -309,8 +309,7 @@
 
                             // You can customize the buttons as needed
 
-                            return '<div style="white-space: nowrap;">' + btn_show + ' ' +
-                                btn_edit + ' ' + btn_delete + '</div>';
+                            return '<div style="white-space: nowrap;">' + btn_show + '</div>';
                             // return '<div style="white-space: nowrap;">' + btn_show + ' ' + '</div>';
                         },
                     },
