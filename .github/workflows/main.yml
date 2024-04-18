@@ -19,9 +19,6 @@ jobs:
           server: ftp.ramarmalia.com
           username: test.water@ramarmalia.com
           password: Water09120912
-      - name: 🌱 Optimize
-        run: |
-          php artisan optimize:clear
 
   FTP-Deploy-Action-main:
     name: 🚀 Deploy Website to Server 1
@@ -36,6 +33,3 @@ jobs:
           server: ftp.ramarmalia.com
           username: water@ramarmalia.com
           password: Water09120912
-      - name: 🌱 Optimize
-        run: |
-          php artisan optimize:clear
