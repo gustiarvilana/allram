@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - pengembangan
+      - main
 
 jobs:
   FTP-Deploy-Action-pengembangan:
