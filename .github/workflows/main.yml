@@ -21,8 +21,6 @@ jobs:
           password: Water09120912
       - name: 🌱 Optimize
         run: |
-          php artisan view:cache
-          php artisan config:cache
           php artisan optimize:clear
 
   FTP-Deploy-Action-main:
@@ -40,6 +38,4 @@ jobs:
           password: Water09120912
       - name: 🌱 Optimize
         run: |
-          php artisan view:cache
-          php artisan config:cache
           php artisan optimize:clear
