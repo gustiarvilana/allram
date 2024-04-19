@@ -1,7 +1,5 @@
 name: Publish Website to Cpanel
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   push:
     branches:
       - pengembangan
