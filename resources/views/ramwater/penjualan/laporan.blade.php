@@ -63,8 +63,8 @@
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <input type="text" name="nota_pembelian" class="form-control float-right"
-                                    id="nota_pembelian">
+                                <input type="text" name="nota_penjualan" class="form-control float-right"
+                                    id="nota_penjualan">
                             </div>
                         </div>
                     </form>
