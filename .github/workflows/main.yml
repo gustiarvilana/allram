@@ -6,20 +6,6 @@ on:
       - main
 
 jobs:
-  FTP-Deploy-Action-pengembangan:
-    name: 🚀 Deploy Website to Server 2
-    if: github.ref == 'refs/heads/pengembangan'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🚚 Get Latest Code
-        uses: actions/checkout@v4
-      - name: 📂 Sync Files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ftp.ramarmalia.com
-          username: test.water@ramarmalia.com
-          password: Water09120912
-
   FTP-Deploy-Action-main:
     name: 🚀 Deploy Website to Server 1
     if: github.ref == 'refs/heads/main'
@@ -33,3 +19,39 @@ jobs:
           server: ftp.ramarmalia.com
           username: water@ramarmalia.com
           password: Water09120912
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+      - name: Run composer install
+        run: composer install -n --prefer-dist
+      - name: optimize
+        run: |
+          php artisan optimize:clear
+
+  FTP-Deploy-Action-pengembangan:
+    name: 🚀 Deploy Website to Server 2
+    if: github.ref == 'refs/heads/pengembangan'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get Latest Code
+        uses: actions/checkout@v4
+      - name: 📂 Sync Files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftp.ramarmalia.com
+          username: test.water@ramarmalia.com
+          password: Water09120912
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+      - name: Run composer install
+        run: composer install -n --prefer-dist
+      - name: optimize
+        run: |
+          php artisan optimize:clear
