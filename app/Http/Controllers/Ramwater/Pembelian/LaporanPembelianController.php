@@ -8,6 +8,7 @@ use App\Models\DPembayaran;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
+use App\Models\SupplierModel;
 use App\Models\TChannelModel;
 use Illuminate\Http\Request;
 
@@ -61,7 +62,10 @@ class LaporanPembelianController extends Controller
 
     public function index()
     {
-        return view('ramwater.pembelian.laporan');
+        $data = [
+            'suppliers' => SupplierModel::all()
+        ];
+        return view('ramwater.pembelian.laporan', $data);
     }
 
     public function laporan()

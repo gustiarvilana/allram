@@ -31,7 +31,12 @@
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <input type="text" name="supplier" class="form-control float-right" id="supplier">
+                                <select name="kd_supplier" id="kd_supplier" class="form-control">
+                                    <option value="">Supplier</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->kd_supplier }}">{{ $supplier->nama }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -42,7 +47,8 @@
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <input type="text" name="supplier" class="form-control float-right" id="supplier">
+                                <input type="text" name="nota_pembelian" class="form-control float-right"
+                                    id="nota_pembelian">
                             </div>
                         </div>
                     </form>

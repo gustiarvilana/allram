@@ -33,7 +33,7 @@ class DPembelianModel extends Model
         $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
         $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
 
-        // dd($tanggal_awal, $tanggal_akhir);
+        // dd($input);
 
         $query = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
