@@ -6,10 +6,69 @@
 
 @section('content')
     <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-hearder"></div>
+                <div class="card-body">
+                    <form id="form-cari">
+                        <div class="form-group">
+                            <label>Date range:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="rTanggal" class="form-control float-right dateRange"
+                                    id="rTanggal">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pilih Pegawai:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select name="nik" class="form-control select2" style="width: 80%;">
+                                    <option value="">Pilih Pegawai</option>
+                                    @foreach ($pegawais as $pegawai)
+                                        <option value="{{ $pegawai->nik }}">{{ $pegawai->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Ops:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-truck-loading    "></i>
+                                    </span>
+                                </div>
+                                <select class="form-control select2" name="kd_ops" style="width: 80%;">
+                                    <option value="">Pilih Ops</option>
+                                    @foreach ($opss as $ops)
+                                        <option value="{{ $ops->kd_ops }}">{{ $ops->nama_ops }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <a class="btn btn-success btn-s float-right" id="btn-cari"><i class="fa fa-search"
+                                aria-hidden="true"></i>
+                            Cari</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="tbl-ops" style="display: none">
         <div class="col-md-12">
             <div class="card card-warning">
                 <div class="card-header">
-                    <a class="btn btn-success text-white" id="add_menu">Tambah OPS</a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -20,13 +79,12 @@
                                         <th width="5%">No</th>
                                         <th>tanggal</th>
                                         <th>satker</th>
-                                        <th>nik</th>
-                                        <th>kd_ops</th>
+                                        <th>Karyawan</th>
+                                        <th>nama OPS</th>
                                         <th>jumlah</th>
                                         <th>harga</th>
                                         <th>total</th>
                                         <th>keterangan</th>
-                                        <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -42,86 +100,11 @@
 
 @push('js')
     <script>
-        let table;
         var url_add = '{{ route('ops.store') }}';
         var url_delete = '{{ route('ops.destroy', ['op' => ':id']) }}';
         var url_edit = '{{ route('ops.update', ['op' => ':id']) }}';
 
         $(document).ready(function() {
-            table = $("#table").DataTable({
-                "dom": 'Bfrtip',
-                "info": true,
-                "processing": true,
-                "responsive": false,
-                "lengthChange": true,
-                "autoWidth": true,
-                "searching": true,
-                "ordering": true,
-                "buttons": [
-                    // "copy",
-                    // "csv",
-                    // "excel",
-                    // "pdf",
-                    // "print",
-                    // "colvis"
-                ],
-                "ajax": {
-                    url: '{{ route('ops.data') }}',
-                },
-                "columns": [{
-                    data: 'DT_RowIndex',
-                    searchable: false,
-                    shrotable: false
-                }, {
-                    data: 'tanggal'
-                }, {
-                    data: 'satker'
-                }, {
-                    data: 'nik'
-                }, {
-                    data: 'kd_ops'
-                }, {
-                    data: 'jumlah',
-                    render: function(data, type, row) {
-                        return addCommas(data);
-                    }
-                }, {
-                    data: 'harga',
-                    render: function(data, type, row) {
-                        return addCommas(data);
-                    }
-                }, {
-                    data: 'total',
-                    render: function(data, type, row) {
-                        return addCommas(data);
-                    }
-                }, {
-                    data: 'keterangan',
-                    render: function(data, type, row) {
-                        return data;
-                        if (data.length > 20) {
-                            return data.substr(0, 20) + '...';
-                        } else {
-                            return data;
-                        }
-                    }
-                }, {
-                    data: 'id',
-                    render: function(data, type, row) {
-                        var data = JSON.stringify(row);
-                        // return `
-                    //     <div class="btn-group">
-                    //         <button class="btn btn-sm btn-primary" id="user_menu-edit"  data-row='${data}' data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Edit</button>
-                    //         <button class="btn btn-sm btn-danger" id="user_menu-delete"  data-row='${data}' data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Delete</button>
-                    //     </div>
-                    // `;
-
-                        return '<div style="white-space: nowrap;">' +
-                            '<i class="fa fa-cog" aria-hidden="true"></i>' + '</div>';
-                    }
-                }]
-            });
-
             $('.modal').on('hidden.bs.modal', function() {
                 $('#modal-form form')[0].reset();
                 $('.select2').val('').trigger('change');
@@ -229,59 +212,82 @@
                     });
                 }
 
+            }).on('click', '#btn-cari', function() {
+                cariLaporan()
             });
         });
 
-        // function validate() {
-        //     $('#modal-form').on('submit', function(e) {
-        //         if (!e.preventDefault()) {
-        //             $.ajax({
-        //                 type: "POST",
-        //                 url: $('#modal-form form').attr('action'),
-        //                 data: $('#modal-form form').serialize(),
-        //                 success: function(result) {
-        //                     if (result.errors) {
-        //                         $('.alert-danger').html('');
+        function cariLaporan() {
+            $('#tbl-ops').show();
+            var formData = $('#form-cari').serializeArray();
+            var cari = {};
+            $.each(formData, function(index, field) {
+                cari[field.name] = field.value;
 
-        //                         $.each(result.errors, function(key, value) {
-        //                             $('.alert-danger').show();
-        //                             $('.alert-danger').append('<li>' + value +
-        //                                 '</li>');
-        //                         });
-        //                     } else {
-        //                         $('#modal-form').modal('hide');
-        //                         $('#table').DataTable().ajax.reload()
-        //                     }
-        //                 },
-        //                 error: function(jqXHR, exception, request, status, error) {
-        //                     var msg = ''
-        //                     if (jqXHR.status === 0) {
-        //                         msg = 'Not connect.\n Verify Network.';
-        //                     } else if (jqXHR.status == 404) {
-        //                         msg = 'Requested page not found. [404]';
-        //                     } else if (jqXHR.status == 422666) {
-        //                         msg = 'The given data was invalid.. [422]';
-        //                     } else if (jqXHR.status == 500) {
-        //                         msg = 'Internal Server Error [500].';
-        //                     } else if (exception === 'parsererror') {
-        //                         msg = 'Requested JSON parse failed.';
-        //                     } else if (exception === 'timeout') {
-        //                         msg = 'Time out error.';
-        //                     } else if (exception === 'abort') {
-        //                         msg = 'Ajax request aborted.';
-        //                     } else {
-        //                         msg = 'Uncaught Error.\n' + jqXHR.responseText;
-        //                     }
-        //                     $('.alert-danger').show();
-        //                     $('.alert-danger').html(msg);
-        //                     setTimeout(() => {
-        //                         $('.alert-danger').hide();
-        //                         $('.alert-danger').html('');
-        //                     }, 5000);
-        //                 },
-        //             })
-        //         }
-        //     })
-        // };
+                var table = $("#table").DataTable({
+                    "dom": 'Bfrtip',
+                    "paging": false,
+                    "info": true,
+                    "processing": true,
+                    "responsive": false,
+                    "lengthChange": true,
+                    "autoWidth": true,
+                    "searching": true,
+                    "ordering": true,
+                    "bDestroy": true,
+                    "buttons": [
+                        // "copy",
+                        // "csv",
+                        "excel",
+                        "pdf",
+                        // "print",
+                        // "colvis"
+                    ],
+                    ajax: {
+                        url: '{{ route('ops.data') }}',
+                        type: 'GET',
+                        data: cari
+                    },
+                    "columns": [{
+                        data: 'DT_RowIndex',
+                        searchable: false,
+                        shrotable: false
+                    }, {
+                        data: 'tanggal'
+                    }, {
+                        data: 'satker'
+                    }, {
+                        data: 'nama'
+                    }, {
+                        data: 'nama_ops'
+                    }, {
+                        data: 'jumlah',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    }, {
+                        data: 'harga',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    }, {
+                        data: 'total',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    }, {
+                        data: 'keterangan',
+                        render: function(data, type, row) {
+                            return data;
+                            if (data.length > 20) {
+                                return data.substr(0, 20) + '...';
+                            } else {
+                                return data;
+                            }
+                        }
+                    }]
+                });
+            });
+        }
     </script>
 @endpush

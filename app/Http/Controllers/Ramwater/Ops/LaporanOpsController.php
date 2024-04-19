@@ -24,15 +24,15 @@ class LaporanOpsController extends Controller
         $this->dKaryawan = new Karyawan();
     }
 
-    public function data(Request $request)
-    {
-        $menu = DB::table('d_ops as a');
+    // public function data(Request $request)
+    // {
+    //     $menu = DB::table('d_ops as a');
 
-        return datatables()
-            ->of($menu)
-            ->addIndexColumn()
-            ->make(true);
-    }
+    //     return datatables()
+    //         ->of($menu)
+    //         ->addIndexColumn()
+    //         ->make(true);
+    // }
 
     public function index()
     {

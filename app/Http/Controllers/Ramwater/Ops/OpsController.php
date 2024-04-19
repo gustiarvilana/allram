@@ -16,18 +16,24 @@ class OpsController extends Controller
 {
     private $opsService;
     private $tOps;
+    private $dOps;
     private $dKaryawan;
     public function __construct()
     {
         $this->opsService = new OpsService();
+        $this->dOps = new DOpsModel();
         $this->tOps = new TOps();
         $this->dKaryawan = new Karyawan();
     }
 
     public function data(Request $request)
     {
-        $menu = DB::table('d_ops as a')
-            ->join('t_ops as b', 'a.kd_ops', 'b.kd_ops');
+        $requestData = $request->input();
+        if (isset($requestData['rTanggal'])) {
+            $menu = $this->dOps->getLaporanDataOps($requestData);
+        } else {
+            $menu = $this->dOps->getDataOps();
+        }
 
         return datatables()
             ->of($menu)
