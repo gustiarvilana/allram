@@ -25,8 +25,6 @@ jobs:
           php-version: '8.0'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
-      - name: Run composer install
-        run: composer install -n --prefer-dist
       - name: optimize
         run: |
           php artisan optimize:clear
@@ -52,9 +50,6 @@ jobs:
           coverage: none
       - name: Run composer install
         run: composer install -n --prefer-dist
-      - name: optimize
-        run: |
-          php artisan optimize:clear
 
   Optimize:
     name: 🚀 Optimize
@@ -66,8 +61,6 @@ jobs:
           php-version: '8.0'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
-      - name: Run composer install
-        run: composer install -n --prefer-dist
       - name: optimize
         run: |
           php artisan optimize:clear
