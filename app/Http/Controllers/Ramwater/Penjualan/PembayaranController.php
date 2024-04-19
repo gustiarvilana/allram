@@ -71,7 +71,7 @@ class PembayaranController extends Controller
             $pembayaran = $this->dPembayaranModel->where('id', '=', $id)->first();
             if (!$pembayaran) return response()->json(['success' => false, 'message' => 'pembayaran tidak ditemukan']);
 
-            $penjualan = $this->dPenjualanModel->where('nota_penjualan', '=', $pembayaran->nota_penjualan)->first();
+            $penjualan = $this->dPenjualanModel->where('nota_penjualan', '=', $pembayaran->nota)->first();
 
             if ($pembayaran->path_file) {
                 // hapus d_penjualan & child
@@ -92,7 +92,7 @@ class PembayaranController extends Controller
             $penjualan = $penjualanModel->find($penjualan->id);
 
             $totalNominalBayar = new DPembayaranModel();
-            $totalNominalBayar = $totalNominalBayar->where('nota_penjualan', '=', $penjualan->nota_penjualan)->get();
+            $totalNominalBayar = $totalNominalBayar->where('nota', '=', $penjualan->nota_penjualan)->get();
             $totalNominalBayar = $totalNominalBayar->sum('nominal_bayar');
             $this->pembayaranService->updateStatus($penjualan, $totalNominalBayar, $penjualan->harga_total);
 

@@ -35,9 +35,12 @@ class DetailPenjualanController extends Controller
 
     public function data(Request $request)
     {
-        $jns = $request->input();
-
-        $penjualan = $this->penjualanModel->getPenjualan();
+        $requestData = $request->input();
+        if (isset($requestData['rTanggal'])) {
+            $penjualan = $this->penjualanModel->getLaporanPenjualan($requestData);
+        } else {
+            $penjualan = $this->penjualanModel->getPenjualan();
+        }
 
         if (isset($jns['jns'])) if ($jns['jns'] == 'penyerahan') $penjualan = $this->penjualanModel->getPenjualanPenyerahan();
 

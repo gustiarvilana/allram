@@ -296,7 +296,6 @@
                         className: 'text-right'
                     }
                 ],
-
                 initComplete: function() {
                     initializeColumnSearch(this);
                     // setupHoverShapes(this, 11);
@@ -307,39 +306,43 @@
                 // Simpan referensi ke tombol yang diklik
                 var tombolHapus = $(this);
                 var id = tombolHapus.closest('tr').find('#bayar_id').val();
+                console.log(id);
 
                 if (id) {
                     // Tampilkan SweetAlert untuk konfirmasi
-                    Swal.fire({
-                        title: 'Konfirmasi Admin',
-                        text: 'Masukkan password admin untuk melanjutkan:',
-                        input: 'password',
-                        inputAttributes: {
-                            autocapitalize: 'off',
-                            placeholder: 'Password admin'
-                        },
-                        showCancelButton: true,
-                        confirmButtonText: 'Konfirmasi',
-                        cancelButtonText: 'Batal',
-                        showLoaderOnConfirm: true,
-                        preConfirm: (password) => {
-                            // Disini Anda bisa melakukan validasi password admin
-                            // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
+                    // Swal.fire({
+                    //     title: 'Konfirmasi Admin',
+                    //     text: 'Masukkan password admin untuk melanjutkan:',
+                    //     input: 'password',
+                    //     inputAttributes: {
+                    //         autocapitalize: 'off',
+                    //         placeholder: 'Password admin'
+                    //     },
+                    //     showCancelButton: true,
+                    //     confirmButtonText: 'Konfirmasi',
+                    //     cancelButtonText: 'Batal',
+                    //     showLoaderOnConfirm: true,
+                    //     preConfirm: (password) => {
+                    //         // Disini Anda bisa melakukan validasi password admin
+                    //         // Misalnya, dengan mengirimkan request ke server untuk memeriksa kecocokan password admin
 
-                            // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
-                            if (password !== 'passwordadmin') {
-                                Swal.showValidationMessage('Password admin salah');
-                            }
-                        }
-                    }).then((result) => {
-                        // Jika pengguna mengonfirmasi, hapus baris
-                        if (result.isConfirmed) {
-                            if (id) {
-                                pembayaranDestroy(id)
-                            }
-                            tombolHapus.closest('tr').remove();
-                        }
-                    });
+                    //         // Contoh validasi sederhana, ganti dengan validasi sesuai kebutuhan Anda
+                    //         if (password !== 'passwordadmin') {
+                    //             Swal.showValidationMessage('Password admin salah');
+                    //         }
+                    //     }
+                    // }).then((result) => {
+                    //     // Jika pengguna mengonfirmasi, hapus baris
+                    //     if (result.isConfirmed) {
+                    //         if (id) {
+                    //             pembayaranDestroy(id)
+                    //         }
+                    //         tombolHapus.closest('tr').remove();
+                    //     }
+                    // });
+
+                    pembayaranDestroy(id)
+
                 } else {
                     tombolHapus.closest('tr').remove();
                 }
@@ -352,6 +355,8 @@
 
                 data.closest('tr').find('#bayar_tgl_pembayaran').removeAttr('readonly');
                 data.closest('tr').find('#bayar_nominal_bayar').removeAttr('readonly');
+                $('#btn-add-penjualan-simpan').show();
+
             });
 
             $('#modal-penjualan').on('hidden.bs.modal', function() {
@@ -552,7 +557,6 @@
                                 '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
                                 '</a></td>' +
                                 '<td style="white-space: nowrap;">' +
-                                // Menggunakan white-space: nowrap; untuk menghindari wrap
                                 '<a class="btn btn-success btn-xs btn-edit" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></a>' +
                                 '<a class="btn btn-danger btn-xs btn-hapus" style="margin-right: 5px;" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                                 '</td>' +
@@ -587,13 +591,17 @@
                         } else {
                             $('#btn-add-penjualan-simpan').hide();
                             $('.modal .form-control').prop('readonly', true);
+                            $('.modal #ur_kd_sales').prop('disabled', true);
+                            $('.modal #ur_kd_channel').prop('disabled', true);
+                            $('.modal #path_file').prop('disabled', true);
                         }
 
                         if (rowData.sts_galon != 4) {
                             $('.modal #ur_galon_kembali').prop('readonly', false);
                             $('#btn-add-penjualan-simpan').show();
                         } else {
-                            $('.modal .form-control').prop('disabled', true);
+                            $('.modal #ur_galon_kembali').prop('disabled', true);
+                            $('.modal #ur_total_galon').prop('disabled', true);
                         }
                     },
                     error: function(error) {

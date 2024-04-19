@@ -475,8 +475,8 @@
                                 '<input type="hidden" name="id" id="bayar_id" class="form-control money" value="' +
                                 item.id + '" readonly>' +
                                 '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
-                                '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control money" value="' +
-                                item.nota_pembelian + '" readonly></td>' +
+                                '<td><input type="text" name="nota" id="bayar_nota" class="form-control money" value="' +
+                                item.nota + '" readonly></td>' +
                                 '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
                                 item.tgl + '" readonly></td>' +
                                 '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +

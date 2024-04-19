@@ -74,6 +74,7 @@ class LaporanPenjualanController extends Controller
             'gudang' => TGudang::get(),
             'channels' => TChannelModel::get(),
         ];
+
         return view('ramwater.penjualan.laporan', $data);
     }
 

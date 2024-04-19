@@ -6,6 +6,78 @@
 
 @section('content')
     <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-hearder"></div>
+                <div class="card-body">
+                    <form id="form-cari">
+                        <div class="form-group">
+                            <label>Date range:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="rTanggal" class="form-control float-right dateRange"
+                                    id="rTanggal">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pilih Sales:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select name="nik" id="nik" class="form-control">
+                                    <option value="">Pilih Sales</option>
+                                    @foreach ($saless as $sales)
+                                        <option value="{{ $sales->nik }}">{{ $sales->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pilih Pelanggan:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select name="kd_pelanggan" id="kd_pelanggan" class="form-control">
+                                    <option value="">Pilih Pelanggan</option>
+                                    @foreach ($pelanggans as $pelanggan)
+                                        <option value="{{ $pelanggan->kd_pelanggan }}">{{ $pelanggan->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nota:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="nota_pembelian" class="form-control float-right"
+                                    id="nota_pembelian">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <a class="btn btn-success btn-s float-right" id="btn-cari"><i class="fa fa-search"
+                                aria-hidden="true"></i>
+                            Cari</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="tbl-penjualan" style="display: none">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -39,6 +111,17 @@
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="5">Total:</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -146,142 +229,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            var tableDetailpenjualan = $("#table-penjualan-detail").DataTable({
-                info: false,
-                bPaginate: false,
-                bLengthChange: false,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: '{{ route('penjualan.detail.data') }}',
-                dom: 'Brtip',
-                buttons: [
-                    'copy', 'excel', 'pdf'
-                ],
-                columns: [{
-                        data: 'DT_RowIndex'
-                    },
-
-                    {
-                        data: 'nota_penjualan',
-                        name: 'a.nota_penjualan',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'nama',
-                        name: 'b.nama',
-                        render: function(data, type, row) {
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-                        }
-                    },
-                    {
-                        data: 'tgl_penjualan',
-                        name: 'a.tgl_penjualan',
-                        render: function(data, type, row) {
-                            var dataString = data.toString();
-
-                            var year = dataString.substring(0, 4);
-                            var month = dataString.substring(4, 6);
-                            var day = dataString.substring(6, 8);
-                            var formattedDate = year + '-' + month + '-' + day;
-
-                            return formattedDate;
-                        }
-                    },
-                    {
-                        data: 'nama_sales',
-                        name: 'nama_sales',
-                        render: function(data, type, row) {
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-                        }
-                    },
-                    {
-                        data: 'harga_total',
-                        name: 'a.harga_total',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'nominal_bayar',
-                        name: 'a.nominal_bayar',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'sisa_bayar',
-                        name: 'a.sisa_bayar',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'sts_angsuran',
-                        name: 'a.sts_angsuran',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'id',
-                        name: 'a.id',
-                        render: function(data, type, row) {
-                            var row_data = JSON.stringify(row);
-
-                            var btn_show = '<a id="btn-penjualan-show" data-id="' + row.id +
-                                '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" show"><i class="fa fa-eye" aria-hidden="true"></i> Lihat</a>';
-
-                            var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row.id +
-                                '" data-row=\'' + row_data +
-                                '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Edit</a>';
-
-                            var btn_delete = '<a id="btn-penjualan-delete" data-id="' + row.id +
-                                '" data-row=\'' + row_data +
-                                '\' class="btn btn-danger btn-xs" style="white-space: nowrap;" delete"><i class="fas fa-trash-alt"> Hapus</a>';
-
-                            // You can customize the buttons as needed
-
-                            return '<div style="white-space: nowrap;">' + btn_show + '</div>';
-                        },
-                    },
-                ],
-                columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11],
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        targets: [5, 6, 7],
-                        className: 'text-right'
-                    }
-                ],
-
-                initComplete: function() {
-                    initializeColumnSearch(this);
-                    // setupHoverShapes(this, 11);
-                }
-            });
-
             $('#modal-penjualan').on('hidden.bs.modal', function() {
                 console.log('Modal penjualan telah disembunyikan');
                 $("#modal-penjualan").modal("hide");
@@ -768,6 +715,8 @@
 
                 $('#ur_sisa_bayar').val(addCommas(total))
                 $('#ur_sts_angsuran').val(sts_angsuran)
+            }).on("click", "#btn-cari", function() {
+                cariLaporan()
             }).on("keyup change",
                 ".detail_qty_pesan, .detail_qty_retur, .detail_qty_bersih, .detail_harga_satuan,.detail_harga_total,.ur_harga_total",
                 function() {
@@ -792,5 +741,180 @@
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
         });
+
+        function cariLaporan() {
+            $('#tbl-penjualan').show();
+            var formData = $('#form-cari').serializeArray();
+            var cari = {};
+            $.each(formData, function(index, field) {
+                cari[field.name] = field.value;
+            });
+
+            var tableDetailpenjualan = $("#table-penjualan-detail").DataTable({
+                info: false,
+                paging: false,
+                bPaginate: false,
+                bLengthChange: false,
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                bDestroy: true,
+                ajax: {
+                    url: '{{ route('penjualan.detail.data') }}',
+                    type: 'GET',
+                    data: cari
+                },
+                dom: 'Brtip',
+                buttons: [
+                    'copy', 'excel', 'pdf'
+                ],
+                columns: [{
+                        data: 'DT_RowIndex'
+                    },
+
+                    {
+                        data: 'nota_penjualan',
+                        name: 'a.nota_penjualan',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'nama',
+                        name: 'b.nama',
+                        render: function(data, type, row) {
+                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                data + '</span></div>';
+                        }
+                    },
+                    {
+                        data: 'tgl_penjualan',
+                        name: 'a.tgl_penjualan',
+                        render: function(data, type, row) {
+                            var dataString = data.toString();
+
+                            var year = dataString.substring(0, 4);
+                            var month = dataString.substring(4, 6);
+                            var day = dataString.substring(6, 8);
+                            var formattedDate = year + '-' + month + '-' + day;
+
+                            return formattedDate;
+                        }
+                    },
+                    {
+                        data: 'nama_sales',
+                        name: 'nama_sales',
+                        render: function(data, type, row) {
+                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                data + '</span></div>';
+                        }
+                    },
+                    {
+                        data: 'harga_total',
+                        name: 'a.harga_total',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    },
+                    {
+                        data: 'nominal_bayar',
+                        name: 'a.nominal_bayar',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    },
+                    {
+                        data: 'sisa_bayar',
+                        name: 'a.sisa_bayar',
+                        render: function(data, type, row) {
+                            return addCommas(data);
+                        }
+                    },
+                    {
+                        data: 'sts_angsuran',
+                        name: 'a.sts_angsuran',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'opr_input',
+                        name: 'a.opr_input',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'tgl_input',
+                        name: 'a.tgl_input',
+                        render: function(data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id',
+                        name: 'a.id',
+                        render: function(data, type, row) {
+                            var row_data = JSON.stringify(row);
+
+                            var btn_show = '<a id="btn-penjualan-show" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" show"><i class="fa fa-eye" aria-hidden="true"></i> Lihat</a>';
+
+                            var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Edit</a>';
+
+                            var btn_delete = '<a id="btn-penjualan-delete" data-id="' + row.id +
+                                '" data-row=\'' + row_data +
+                                '\' class="btn btn-danger btn-xs" style="white-space: nowrap;" delete"><i class="fas fa-trash-alt"> Hapus</a>';
+
+                            // You can customize the buttons as needed
+
+                            return '<div style="white-space: nowrap;">' + btn_show + '</div>';
+                        },
+                    },
+                ],
+                columnDefs: [{
+                        targets: [0, 5, 6, 7, 8, 9, 10, 11],
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
+                        targets: [5, 6, 7],
+                        className: 'text-right'
+                    }
+                ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api();
+
+                    // Menghitung total sum kolom harga_total
+                    var hargaTotalTotal = api.column(5, {
+                        page: 'current'
+                    }).data().reduce(function(acc, curr) {
+                        return acc + parseFloat(curr);
+                    }, 0);
+
+                    // Menghitung total sum kolom nominal_bayar
+                    var nominalBayarTotal = api.column(6, {
+                        page: 'current'
+                    }).data().reduce(function(acc, curr) {
+                        return acc + parseFloat(curr);
+                    }, 0);
+
+                    // Menghitung total sum kolom sisa_bayar
+                    var sisaBayarTotal = api.column(7, {
+                        page: 'current'
+                    }).data().reduce(function(acc, curr) {
+                        return acc + parseFloat(curr);
+                    }, 0);
+
+                    // Menampilkan total sum di footer
+                    $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
+                    $(api.column(6).footer()).html(addCommas(nominalBayarTotal));
+                    $(api.column(7).footer()).html(addCommas(sisaBayarTotal));
+                }
+            });
+        }
     </script>
 @endpush

@@ -33,8 +33,6 @@ class DPembelianModel extends Model
         $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
         $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
 
-        // dd($input);
-
         $query = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
             ->orderBy('a.created_at', 'desc')
@@ -44,7 +42,7 @@ class DPembelianModel extends Model
             $query->where('a.kd_supplier', '=', $input['kd_supplier']);
         }
         if (isset($input['nota_pembelian'])) {
-            $query->where('a.nota_pembelian', '=', $input['nota_pembelian']);
+            $query->where('a.nota_pembelian', 'like', '%' . $input['nota_pembelian'] . '%');
         }
         if (isset($input['rTanggal'])) {
             $query->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);

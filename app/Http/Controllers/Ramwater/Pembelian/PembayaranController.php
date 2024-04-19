@@ -12,6 +12,7 @@ use App\Models\DPembelianModel;
 use App\Models\TChannelModel;
 use App\Services\PembayaranService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -65,47 +66,43 @@ class PembayaranController extends Controller
 
     public function destroy($id)
     {
-        $pembayaran = $this->dPembayaranModel->where('id', '=', $id)->first();
-        $pembelian = $this->dPembelianModel->where('nota_pembelian', '=', $pembayaran->nota)->first();
+        return DB::transaction(function () use ($id) {
+            $pembayaran = $this->dPembayaranModel->where('id', '=', $id)->first();
+            $pembelian = $this->dPembelianModel->where('nota_pembelian', '=', $pembayaran->nota)->first();
 
-        if ($pembayaran->path_file) {
-            // hapus d_pembelian & child
-            $pathToDelete = $pembayaran->path_file;
-            $publicPath = storage_path('app/public/');
+            if ($pembayaran->path_file) {
+                $pathToDelete = $pembayaran->path_file;
+                $publicPath = storage_path('app/public/');
 
-            // Pastikan path_file dimulai dengan "storage/"
-            if (Str::startsWith($pathToDelete, 'storage/')) {
-                // Ubah "storage/" menjadi direktori penyimpanan
-                $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
+                if (Str::startsWith($pathToDelete, 'storage/')) {
+                    $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
+                }
+
+                FormatHelper::deleteFile($pathToDelete);
             }
 
-            FormatHelper::deleteFile($pathToDelete);
-        }
+            $pembelianModel = new DPembelianModel();
+            $pembelian = $pembelianModel->find($pembelian->id);
 
-        $pembelianModel = new DPembelianModel();
-        $pembelian = $pembelianModel->find($pembelian->id);
+            $new_nominal_bayar = $pembelian->nominal_bayar - $pembayaran->nominal_bayar;
 
-        $totalNominalBayar = new DPembayaranModel();
+            if ($new_nominal_bayar == $pembelian->harga_total) {
+                $pembelian->sts_angsuran = 4;
+                $pembelian->nominal_bayar = $new_nominal_bayar;
+                $pembelian->sisa_bayar = $pembelian->harga_total - $new_nominal_bayar;
+                $pembelian->save();
+            } elseif ($new_nominal_bayar < $pembelian->harga_total) {
+                $pembelian->sts_angsuran = 1;
+                $pembelian->nominal_bayar = $new_nominal_bayar;
+                $pembelian->sisa_bayar = $pembelian->harga_total - $new_nominal_bayar;
+                $pembelian->save();
+            } elseif ($new_nominal_bayar > $pembelian->harga_total) {
+                throw new \Exception("Pembayaran Terlalu banyak!");
+            };
 
-        $totalNominalBayar = $totalNominalBayar->where('nota', '=', $pembelian->nota_pembelian)->get();
-        $totalNominalBayar = $totalNominalBayar->sum('nominal_bayar');
-
-        $pembayaran->delete();
-        if ($totalNominalBayar == $pembelian->harga_total) {
-            $pembelian->sts_angsuran = 4;
-            $pembelian->nominal_bayar = $totalNominalBayar;
-            $pembelian->sisa_bayar = $pembelian->harga_total - $totalNominalBayar;
-            $pembelian->save();
-        } elseif ($totalNominalBayar < $pembelian->harga_total) {
-            $pembelian->sts_angsuran = 1;
-            $pembelian->nominal_bayar = $totalNominalBayar;
-            $pembelian->sisa_bayar = $pembelian->harga_total - $totalNominalBayar;
-            $pembelian->save();
-        } elseif ($totalNominalBayar > $pembelian->harga_total) {
-            throw new \Exception("Pembayaran Terlalu banyak!");
-        };
-
-        return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
+            $pembayaran->delete();
+            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
+        });
     }
 
     public function laporan()
