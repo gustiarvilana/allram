@@ -89,6 +89,17 @@
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="5">Total:</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -734,6 +745,7 @@
                 });
                 var tableDetailPembelian = $("#table-pembelian-detail").DataTable({
                     info: false,
+                    paging: false,
                     bPaginate: false,
                     bLengthChange: false,
                     processing: true,
@@ -873,7 +885,36 @@
                         targets: [3, 4, 5, 6, 7, 9, 10],
                         searchable: false,
                         orderable: false
-                    }]
+                    }],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api();
+
+                        // Menghitung total sum kolom harga_total
+                        var hargaTotalTotal = api.column(5, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menghitung total sum kolom nominal_bayar
+                        var nominalBayarTotal = api.column(6, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menghitung total sum kolom sisa_bayar
+                        var sisaBayarTotal = api.column(7, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menampilkan total sum di footer
+                        $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
+                        $(api.column(6).footer()).html(addCommas(nominalBayarTotal));
+                        $(api.column(7).footer()).html(addCommas(sisaBayarTotal));
+                    }
                 });
             }
         </script>
