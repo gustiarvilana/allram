@@ -19,6 +19,17 @@ jobs:
           server: ftp.ramarmalia.com
           username: water@ramarmalia.com
           password: Water09120912
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+      - name: Run composer install
+        run: composer install -n --prefer-dist
+      - name: optimize
+        run: |
+          php artisan optimize:clear
 
   FTP-Deploy-Action-pengembangan:
     name: 🚀 Deploy Website to Server 2
@@ -33,27 +44,14 @@ jobs:
           server: ftp.ramarmalia.com
           username: test.water@ramarmalia.com
           password: Water09120912
-
-  optimize:
-    name: Optomize
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            composer-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
-      - name: Install composer dependencies
-        run: |
-          composer install --no-scripts
+      - name: Run composer install
+        run: composer install -n --prefer-dist
       - name: optimize
         run: |
           php artisan optimize:clear
