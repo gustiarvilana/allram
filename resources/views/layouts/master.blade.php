@@ -292,6 +292,17 @@
                 theme: 'bootstrap4'
             })
 
+            //Date range picker
+            $('.dateRange').daterangepicker()
+            //Date range picker with time picker
+            $('.dateRangetime').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                locale: {
+                    format: 'MM/DD/YYYY hh:mm A'
+                }
+            })
+
             $('body').on('keyup', '.money', function() {
                 var nilai1 = this.value.replace(/[^a-z0-9\s]/gi, '');
                 var nilai = addCommas(nilai1);

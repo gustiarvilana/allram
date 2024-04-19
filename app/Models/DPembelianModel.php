@@ -25,6 +25,34 @@ class DPembelianModel extends Model
         return $pembelian;
     }
 
+    public function getLaporanPembelian($input)
+    {
+        $rTanggal = $input['rTanggal'];
+        list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+
+        $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+        $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+
+        // dd($tanggal_awal, $tanggal_akhir);
+
+        $query = DB::table('d_pembelian as a')
+            ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
+            ->orderBy('a.created_at', 'desc')
+            ->select('a.*', 'b.nama');
+
+        if (isset($input['kd_supplier'])) {
+            $query->where('a.kd_supplier', '=', $input['kd_supplier']);
+        }
+        if (isset($input['nota_pembelian'])) {
+            $query->where('a.nota_pembelian', '=', $input['nota_pembelian']);
+        }
+        if (isset($input['rTanggal'])) {
+            $query->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);
+        }
+
+        return $query;
+    }
+
     public function getpembelianByNota()
     {
         $pembelian = DB::table('d_pembelian as a')

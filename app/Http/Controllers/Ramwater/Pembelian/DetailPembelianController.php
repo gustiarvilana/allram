@@ -28,9 +28,14 @@ class DetailPembelianController extends Controller
         $this->dPembayaranModel = $dPembayaranModel;
     }
 
-    public function data()
+    public function data(Request $request)
     {
-        $supplier = $this->dPembelianModel->getpembelian();
+        $requestData = $request->input();
+        if (isset($requestData['rTanggal'])) {
+            $supplier = $this->dPembelianModel->getLaporanPembelian($requestData);
+        } else {
+            $supplier = $this->dPembelianModel->getpembelian();
+        }
 
         return datatables()
             ->of($supplier)
