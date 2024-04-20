@@ -31,7 +31,6 @@ jobs:
         run: composer install -n --prefer-dist
       - name: Prepare Laravel Application
         run: |
-          echo "yes" | php artisan db:seed AlterTable
           php artisan optimize:clear
           composer dump-auto
 
@@ -59,10 +58,6 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install -n --prefer-dist
-
-      - name: Database migration and seeding
-        run: |
-          echo "yes" | php artisan db:seed AlterTable
 
       - name: Clear Laravel cache
         run: php artisan optimize:clear
