@@ -1,5 +1,5 @@
-<div class="modal fade" id="modal-form" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel"
-    aria-hidden="true">
+<div class="modal fade field" id="modal-form" data-backdrop="static" data-keyboard="false"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="alert alert-danger" style="display:none"></div>
 
@@ -10,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="" method="post" class="form-horizontal">
+            <form method="post" class="form-horizontal">
                 @csrf
                 @method('')
                 <div class="modal-body">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ramwater\Ops;
 
+use App\Helpers\FormatHelper;
 use App\Http\Controllers\Controller;
 use App\Models\DOpsModel;
 use App\Models\Karyawan;
@@ -10,6 +11,7 @@ use App\Models\UserMenu;
 use App\Models\UserRole;
 use App\Services\OpsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class OpsController extends Controller
@@ -53,13 +55,27 @@ class OpsController extends Controller
     public function store(Request $request)
     {
         $data = json_decode($request->input('data'), true);
+        $file = $request->file('path_file');
 
-        return $this->opsService->store($data);
+        return $this->opsService->store($data, $file);
     }
 
 
     public function destroy($id)
     {
+        $ops = DOpsModel::where('id', $id)->first();
+        if ($ops->path_file) {
+            $pathToDelete = $ops->path_file;
+            $publicPath = storage_path('app/public/');
+
+            // Pastikan path_file dimulai dengan "storage/"
+            if (Str::startsWith($pathToDelete, 'storage/')) {
+                $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
+            }
+
+            // delete
+            FormatHelper::deleteFile($pathToDelete);
+        }
         try {
             DOpsModel::where('id', $id)->delete();
         } catch (\Throwable $th) {

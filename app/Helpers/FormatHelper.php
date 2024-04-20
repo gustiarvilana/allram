@@ -48,7 +48,15 @@ class FormatHelper
     {
         try {
             if (file_exists($filePath)) {
+                // Menghapus file
                 unlink($filePath);
+
+                // Menghapus folder jika kosong setelah menghapus file
+                $folderPath = dirname($filePath);
+                if (is_dir($folderPath) && count(glob("$folderPath/*")) === 0) {
+                    rmdir($folderPath);
+                }
+
                 return true;
             } else {
                 return false;
@@ -58,6 +66,7 @@ class FormatHelper
             return false;
         }
     }
+
 
     public static function generateCode($table, $prefix = false, $length = 5)
     {

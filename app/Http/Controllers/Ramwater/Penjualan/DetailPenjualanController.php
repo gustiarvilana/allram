@@ -42,7 +42,7 @@ class DetailPenjualanController extends Controller
             $penjualan = $this->penjualanModel->getPenjualan();
         }
 
-        if (isset($jns['jns'])) if ($jns['jns'] == 'penyerahan') $penjualan = $this->penjualanModel->getPenjualanPenyerahan();
+        if (isset($requestData['jns'])) if ($requestData['jns'] == 'penyerahan') $penjualan = $this->penjualanModel->getPenjualanPenyerahan();
 
         return datatables()
             ->of($penjualan)

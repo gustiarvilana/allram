@@ -51,6 +51,10 @@
             z-index: 1999
         }
 
+        body {
+            font-size: 12px;
+        }
+
         .main-sidebar {
             background-color: #333 !important
         }

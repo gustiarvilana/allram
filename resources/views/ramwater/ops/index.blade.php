@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col table-responsive">
-                            <table class="table table-striped table-inverse text-center" id="table">
+                            <table class="table table-striped table-inverse text-center field" id="table">
                                 <thead class="thead-inverse">
                                     <tr>
                                         <th width="5%">No</th>
@@ -26,6 +26,7 @@
                                         <th>harga</th>
                                         <th>total</th>
                                         <th>keterangan</th>
+                                        <th>File</th>
                                         <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
@@ -106,6 +107,15 @@
                         }
                     }
                 }, {
+                    data: 'path_file',
+                    render: function(data, type, row) {
+                        return '<a href="{{ asset('') }}' + row.path_file +
+                            '" target="_blank" class="a">' +
+                            '<img src="{{ asset('') }}' + row.path_file +
+                            '" alt="File OPS" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                            '</a>';
+                    }
+                }, {
                     data: 'id',
                     render: function(data, type, row) {
                         var data = JSON.stringify(row);
@@ -116,7 +126,16 @@
                             </div>
                         `;
                     }
-                }]
+                }],
+                columnDefs: [{
+                    targets: [2, 5, 6, 7, 8, 9, 10],
+                    searchable: false,
+                    orderable: false
+                }],
+                initComplete: function() {
+                    initializeColumnSearch(this);
+                    setupHoverShapes(this, 9);
+                }
             });
 
             $('.modal').on('hidden.bs.modal', function() {
@@ -128,6 +147,7 @@
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Tambah Ops');
             }).on('click', '#ops-add', function() {
+                var imageFile = $('#path_file')[0].files[0];
                 var data = {
                     id: $('form #id').val(),
                     tanggal: $('form #tanggal').val(),
@@ -142,6 +162,7 @@
 
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
+                formData.append('path_file', imageFile);
                 formData.append('data', JSON.stringify(data));
 
                 $.ajax({

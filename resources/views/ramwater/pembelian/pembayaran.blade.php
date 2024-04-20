@@ -18,7 +18,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12 table-responsive">
+                                <div class="col-md-12 table-responsive field">
                                     <table class="table table-striped table-inverse text-center"
                                         id="table-pembelian-laporan">
                                         <thead>

@@ -65,7 +65,6 @@ class LaporanPenjualanController extends Controller
             ->make(true);
     }
 
-
     public function index()
     {
         $data = [

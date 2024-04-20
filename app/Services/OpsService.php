@@ -14,14 +14,20 @@ class OpsService
         $this->opsModel = new DOpsModel();
     }
 
-    public function store($input)
+    public function store($input, $file)
     {
         try {
             $this->validateData($input);
-            return DB::transaction(function () use ($input) {
-
+            return DB::transaction(function () use ($input, $file) {
                 $data_fix = $this->prepareData($input);
-                $this->opsModel->upsertData($data_fix);
+
+                $ops = $this->opsModel->upsertData($data_fix);
+
+                if ($file) {
+                    $filename = FormatHelper::uploadFile($file, 'ops/' . $ops['tanggal'] . '/' . $ops['nik'] . '/' . $ops['kd_ops'], $ops['id']);
+                    $ops->path_file = $filename;
+                    $ops->save();
+                }
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
