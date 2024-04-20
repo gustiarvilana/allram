@@ -56,10 +56,16 @@ jobs:
           php-version: '8.0'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
-      - name: Run composer install
+
+      - name: Install Composer dependencies
         run: composer install -n --prefer-dist
-      - name: Prepare Laravel Application
+
+      - name: Database migration and seeding
         run: |
-          echo "yes" | php artisan db:seed AlterTable
-          php artisan optimize:clear
-          composer dump-auto
+          echo "yes" | php artisan migrate:fresh --seed
+
+      - name: Clear Laravel cache
+        run: php artisan optimize:clear
+
+      - name: Autoload
+        run: composer dump-auto
