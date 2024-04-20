@@ -62,7 +62,7 @@ jobs:
 
       - name: Database migration and seeding
         run: |
-          echo "yes" | php artisan migrate:fresh --seed
+          echo "yes" | php artisan db:seed AlterTable
 
       - name: Clear Laravel cache
         run: php artisan optimize:clear
