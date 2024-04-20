@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class TOps extends Model
 {
@@ -12,11 +13,12 @@ class TOps extends Model
     protected $table = 't_ops';
     protected $guarded = [];
 
-    public function getPenjualanOps($kd_produk = null)
+    public function findOpsByProduct($kd_produk)
     {
-        if ($kd_produk) {
-            $produk = Produk::where('kd_produk', '=', $kd_produk)->first();
-            return $produk;
-        }
+        $produk = DB::table('t_master_produk as a')
+            ->join('d_supplier as b', 'a.kd_supplier', 'b.kd_supplier')
+            ->where('a.kd_produk', '=', $kd_produk);
+
+        return $produk;
     }
 }

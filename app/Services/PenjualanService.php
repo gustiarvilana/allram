@@ -5,6 +5,7 @@
 namespace App\Services;
 
 use App\Helpers\FormatHelper;
+use App\Models\DOpsModel;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DStokProduk;
@@ -34,7 +35,7 @@ class PenjualanService
         SupplierModel $supplierModel,
         Penjualan $penjualanModel,
         PenjualanDetail $penjualanDetailModel,
-        DTransaksiOps $dtransaksiOps,
+        DOpsModel $dtransaksiOps,
         TOps $tOps
     ) {
         $this->dStokProduk           = $dStokProduk;
@@ -107,7 +108,7 @@ class PenjualanService
                 }
 
                 $this->dPembayaran->where('nota', '=', $penjualan->nota_penjualan)->delete();
-                $this->dtransaksiOps->where('nota_pembelian', '=', $penjualan->nota_penjualan)->delete();
+                $this->dtransaksiOps->where('nota', '=', $penjualan->nota_penjualan)->delete();
 
                 $penjualan->delete();
 
@@ -226,16 +227,19 @@ class PenjualanService
 
     public function prepareOpsnData($penjualanData)
     {
-        $namaOps = $this->tOps->getPenjualanOps($penjualanData['kd_produk'])->first();
+        $namaOps = $this->tOps->findOpsByProduct($penjualanData['kd_produk'])->first();
 
         if (!$namaOps->kd_ops) throw new \Exception("kd_ops Belum diatur!");
 
-        $ops['nota_pembelian'] = $penjualanData['nota_penjualan'];
-        $ops['tgl_transaksi']  = $penjualanData['tgl_penjualan'];
-        $ops['kd_ops']         = $namaOps->kd_ops;
-        $ops['jns_trs']        = config('constants.ramwater.KD_TRANSAKSI_Pendapatan');
-        $ops['nominal']        = $penjualanData['harga_total'];
-        $ops['ket_transaksi']  = '';
+        $ops['nota']       = $penjualanData['nota_penjualan'];
+        $ops['tanggal']    = $penjualanData['tgl_penjualan'];
+        $ops['satker']     = 'ramwater';
+        $ops['nik']        = $penjualanData['nik'];
+        $ops['kd_ops']     = $namaOps->kd_ops;
+        $ops['jumlah']     = '000';
+        $ops['harga']      = '000';
+        $ops['total']      = $penjualanData['harga_total'];
+        $ops['keterangan'] = '000';
 
         return $ops;
     }
@@ -278,6 +282,7 @@ class PenjualanService
             // unset($dataDetail_fix['kd_gudang']);
             $dataDetail_fix = $this->penjualanDetailModel->create($dataDetail_fix);
             $dataDetail_fix['tgl_penjualan'] = $penjualan->tgl_penjualan;
+            $dataDetail_fix['nik'] = $penjualan->kd_sales;
             // save: ops
             $this->upsertOps($dataDetail_fix);
         }
@@ -298,10 +303,11 @@ class PenjualanService
     public function upsertOps($penjualanData)
     {
         $data = $this->prepareOpsnData($penjualanData);
+
         try {
             return $this->dtransaksiOps->updateOrCreate([
-                'nota_pembelian' => $data['nota_pembelian'],
-                'kd_ops'         => $data['kd_ops']
+                'nik'    => $data['nik'],
+                'kd_ops' => $data['kd_ops']
             ], $data);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
