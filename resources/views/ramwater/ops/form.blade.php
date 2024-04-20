@@ -88,6 +88,14 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
+                                        <label for="path_file">path_file</label>
+                                        <input type="file" class="form-control money" name="path_file" id="path_file"
+                                            readonly>
+                                        @error('path_file')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
                                         <label for="keterangan">Keterangan</label>
                                         <input type="text" class="form-control" name="keterangan" id="keterangan"
                                             value="{{ old('keterangan') }}">

@@ -22,6 +22,13 @@ class AlterTable extends Seeder
             ADD IF NOT EXISTS `tgl_input` int(11) DEFAULT NULL AFTER `opr_input`;"
         );
 
+        // d_ops
+        DB::statement(
+            "ALTER TABLE `d_ops`
+            ADD IF NOT EXISTS `nota` varchar(50) DEFAULT NULL AFTER `id`,
+            ADD IF NOT EXISTS `path_file` TEXT DEFAULT NULL AFTER `total`;"
+        );
+
         // t_karyawan
         DB::statement(
             "ALTER TABLE `d_karyawan`

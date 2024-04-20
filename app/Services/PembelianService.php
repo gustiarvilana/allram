@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Helpers\FormatHelper;
 use App\Models\DOps;
+use App\Models\DOpsModel;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
@@ -33,7 +34,7 @@ class PembelianService
         DPembayaranModel $dPembayaran,
         DPembelianDetailModel $dPembelianDetailModel,
         SupplierModel $supplierModel,
-        DTransaksiOps $dtransaksiOps
+        DOpsModel $dtransaksiOps
     ) {
         $this->dStokProduk = $dStokProduk;
         $this->dPembelianModel = $dPembelianModel;
@@ -111,6 +112,7 @@ class PembelianService
 
                 FormatHelper::deleteFile($pathToDelete);
 
+                $this->dtransaksiOps->where('nota', '=', $pembelian->nota_pembelian)->delete();
                 $this->dPembayaran->where('nota', '=', $pembelian->nota_pembelian)->delete();
                 $pembelian->delete();
 
@@ -202,12 +204,15 @@ class PembelianService
     {
         $supplier = $this->supplierModel->where('kd_supplier', '=', $pembelian['kd_supplier'])->first();
 
-        $ops['nota_pembelian'] = $pembelian['nota_pembelian'];
-        $ops['tgl_transaksi']  = $pembelian['tgl_pembelian'];
-        $ops['kd_ops']         = $supplier->kd_ops;
-        $ops['jns_trs']        = config('constants.ramwater.KD_TRANSAKSI_BIAYA');
-        $ops['nominal']        = $pembelian['harga_total'];
-        $ops['ket_transaksi']  = '';
+        $ops['nota']    = $pembelian['nota_pembelian'];
+        $ops['tanggal']    = $pembelian['tgl_pembelian'];
+        $ops['satker']     = 'ramwater';
+        $ops['nik']        = '000';
+        $ops['kd_ops']     = $supplier->kd_ops;
+        $ops['jumlah']     = '000';
+        $ops['harga']      = '000';
+        $ops['total']      = $pembelian['harga_total'];
+        $ops['keterangan'] = '000';
 
         return $ops;
     }
@@ -235,7 +240,7 @@ class PembelianService
         $data = $this->prepareOpsnData($pembelianData);
 
         try {
-            return $this->dtransaksiOps->updateOrCreate(['nota_pembelian' => $data['nota_pembelian']], $data);
+            return $this->dtransaksiOps->updateOrCreate(['nota' => $data['nota']], $data);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

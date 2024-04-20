@@ -30,6 +30,7 @@ jobs:
         run: composer install -n --prefer-dist
       - name: Prepare Laravel Application
         run: |
+          php artisan db:seed AlterTable
           php artisan optimize:clear
           composer dump-auto
 
