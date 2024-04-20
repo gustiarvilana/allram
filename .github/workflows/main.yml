@@ -19,6 +19,7 @@ jobs:
           server: ftp.ramarmalia.com
           username: water@ramarmalia.com
           password: Water09120912
+
           # optimize
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -47,6 +48,7 @@ jobs:
           server: ftp.ramarmalia.com
           username: test.water@ramarmalia.com
           password: Water09120912
+
           # optimize
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
