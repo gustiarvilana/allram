@@ -73,7 +73,7 @@ jobs:
         run: composer install -n --prefer-dist
 
       - name: Seeder Update
-        run: php artisan db:seed AlterTable
+        run: php artisan db:seed AlterTable --force
 
       - name: Clear Laravel cache
         run: php artisan optimize:clear
