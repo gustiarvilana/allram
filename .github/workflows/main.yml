@@ -16,7 +16,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: "@ramarmalia"
           MYSQL_DATABASE: u1358340_test_water
@@ -52,6 +52,20 @@ jobs:
     name: 🚀 Deploy Website to Server 2
     if: github.ref == 'refs/heads/pengembangan'
     runs-on: ubuntu-latest
+
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:8.1
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: "@ramarmalia"
+          MYSQL_DATABASE: u1358340_test_water
+        ports:
+          - 33306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: 🚚 Get Latest Code
         uses: actions/checkout@v4
