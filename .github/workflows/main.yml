@@ -90,9 +90,10 @@ jobs:
       - name: Seeder MySQL DB
         env:
           DB_CONNECTION: mysql
-          DB_DATABASE: u1358340_test_water
+          DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_USER: u1358340_ram99armalia
+          DB_DATABASE: u1358340_test_water
+          DB_USERNAME: u1358340_ram99armalia
           DB_PASSWORD: "@ramarmalia"
         run: php artisan db:seed AlterTable --force
 
