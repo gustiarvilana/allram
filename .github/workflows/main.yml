@@ -10,6 +10,19 @@ jobs:
     name: 🚀 Deploy Website to Server 1
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:latest
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: u1358340_ram99armalia
+          MYSQL_PASSWORD: '@ramarmalia'
+          MYSQL_ROOT_PASSWORD: '@ramarmalia'
+          MYSQL_DATABASE: u1358340_test_water
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: 🚚 Get Latest Code
         uses: actions/checkout@v4
@@ -58,6 +71,9 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install -n --prefer-dist
+
+      - name: Seeder Update
+        run: php artisan db:seed AlterTable
 
       - name: Clear Laravel cache
         run: php artisan optimize:clear
