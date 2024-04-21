@@ -94,7 +94,7 @@ jobs:
           DB_PORT: 3306
           DB_USER: u1358340_ram99armalia
           DB_PASSWORD: "@ramarmalia"
-        run: php artisan db:seed AlterTable
+        run: php artisan db:seed AlterTable --force
 
       - name: Clear Laravel cache
         run: php artisan optimize:clear
