@@ -18,7 +18,7 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: @ramarmalia
+          MYSQL_ROOT_PASSWORD: "@ramarmalia"
           MYSQL_DATABASE: u1358340_test_water
         ports:
           - 33306:3306
