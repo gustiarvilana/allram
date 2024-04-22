@@ -17,7 +17,8 @@ class TOps extends Model
     {
         $produk = DB::table('t_master_produk as a')
             ->join('d_supplier as b', 'a.kd_supplier', 'b.kd_supplier')
-            ->where('a.kd_produk', '=', $kd_produk);
+            ->where('a.kd_produk', '=', $kd_produk)
+            ->select('a.*', 'b.*', 'a.kd_ops as kd_ops');
 
         return $produk;
     }

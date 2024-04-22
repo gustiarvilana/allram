@@ -112,6 +112,27 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header">
+                                    <span>Upload Bukti Pembayaran</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Bukti Pembayaran</label>
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
                                     <span>Detail</span>
                                 </div>
                                 <div class="card-body">
