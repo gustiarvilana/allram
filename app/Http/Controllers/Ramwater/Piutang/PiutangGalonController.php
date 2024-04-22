@@ -7,7 +7,7 @@ use App\Models\DOpsModel;
 use App\Models\Karyawan;
 use App\Models\TOps;
 
-class HutangGalonController extends Controller
+class PiutangGalonController extends Controller
 {
     private $dKaryawan;
     public function __construct()
@@ -22,7 +22,7 @@ class HutangGalonController extends Controller
             'opss' => $this->tOps->get(),
             'pegawais' => $this->dKaryawan->get(),
         ];
-        return view('ramwater.hutang.galon', $data);
+        return view('ramwater.piutang.galon', $data);
     }
 
     public function destroy($id)

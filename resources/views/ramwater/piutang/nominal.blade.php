@@ -95,6 +95,50 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-primary">
+                                <div class="card-header">
+                                    <span>Upload Bukti Pembayaran</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Bukti Pembayaran</label>
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
+                                            </div>
+                                        </div>
+
+                                        {{-- <div class="col d-flex flex-column align-items-center">
+                                            <div class="row">
+                                                <div class="col text-center" id="image-container">
+                                                    <a href="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
+                                                        target="_blank" class="a">
+                                                        <img src="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
+                                                            alt="Faktur pembelian" class="img">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col text-center">
+                                                    <a class="btn btn-success"
+                                                        href="{{ asset('storage/path_file/ramwater-pembelian.jpg') }}"
+                                                        id="download-btn" download>
+                                                        <i class="fa fa-download" aria-hidden="true"></i> Download
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div> --}}
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
                                 <div class="card-header card-success">
                                     <span>Detail</span>
                                 </div>
@@ -112,6 +156,7 @@
                                                         <th>channel_bayar</th>
                                                         <th>ket_bayar</th>
                                                         <th>File</th>
+                                                        <th><i class="fa fa-cog" aria-hidden="true"></i></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table-detail-edit"> </tbody>
@@ -125,6 +170,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-success btn-pembayaran-simpan" id="btn-pembayaran-simpan"><i
+                            class="fas fa-save"></i>
+                        Simpan</button>
                     <button class="btn btn-secondary" id="btn-add-pembayaran-close">Close</button>
                 </div>
             </div>
@@ -270,120 +318,52 @@
                     setupHoverShapes(this, 11);
                 }
             });
-
-            $('#modal-pembelian').on('hidden.bs.modal', function() {
-                console.log('Modal Pembelian telah disembunyikan');
-                $("#modal-pembelian").modal("hide");
-                $('#pembelian-uraian').empty();
-                $('#table-detail-edit').empty();
-                $('.path_file').val('');
-            });
-
-            $('body').on("click", "#btn-pembayaran-edit", function() {
-                var rowData = $(this).data('row');
-
-                var row =
-                    '<tr>' +
-                    '<td>' +
-                    '<input type="hidden" name="id" id="ur_id" value="' + rowData.id +
-                    '" class="form-control" readonly>' +
-                    '<input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
-                    .tgl_pembelian + '" class="form-control" readonly>' +
-                    '</td>' +
-                    '<td>' +
-                    '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                    rowData.nama + '</span></div>' +
-                    '</td>' +
-                    '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control" value="' +
-                    rowData.nota_pembelian + '" readonly></td>' +
-                    '<input type="hidden" name="kd_supplier" id="ur_kd_supplier" value="' +
-                    rowData
-                    .kd_supplier + '" class="form-control">' +
-                    '<td>' +
-                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control" disabled="true">' +
-                    '<option value="" ></option>' +
-                    '<option value="tunai" ' + (rowData.jns_pembelian === 'tunai' ? 'selected' :
-                        '') +
-                    '>Tunai</option>' +
-                    '<option value="tempo" ' + (rowData.jns_pembelian === 'tempo' ? 'selected' :
-                        '') +
-                    '>Tempo</option>' +
-                    '</select>' +
-                    '</td>' +
-                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
-                    addCommas(rowData.harga_total) + '" readonly></td>' +
-                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
-                    addCommas(rowData.nominal_bayar) + '" readonly></td>' +
-                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" value="' +
-                    addCommas(rowData.sisa_bayar) + '" readonly></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" value="' +
-                    addCommas(rowData.sts_angsuran) + '" readonly></td>' +
-                    '</tr>';
-                $('#pembelian-uraian').append(row);
-
-                $.ajax({
-                    url: '{{ route('pembayaran.data') }}?nota_pembelian=' + rowData.nota_pembelian,
-                    method: 'GET',
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        // Loop through each object in the response array
-                        response.forEach(function(item, index) {
-                            // Create a new row with input fields filled with data from the response
-                            var row =
-                                '<tr>' +
-                                '<td>' + (index + 1) + '</td>' + // No column
-                                '<input type="hidden" name="id" id="bayar_id" class="form-control money" value="' +
-                                item.id + '" readonly>' +
-                                '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
-                                '<td><input type="text" name="nota" id="bayar_nota" class="form-control money" value="' +
-                                item.nota + '" readonly></td>' +
-                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
-                                item.tgl + '" readonly></td>' +
-                                '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +
-                                item.angs_ke + '" readonly></td>' +
-                                '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control money" value="' +
-                                addCommas(item.nominal_bayar) + '" readonly></td>' +
-                                '<td><input type="text" name="channel_bayar" id="bayar_channel_bayar" class="form-control money" value="' +
-                                item.channel_bayar + '" readonly></td>' +
-                                '<td><input type="text" name="ket_bayar" id="bayar_ket_bayar" class="form-control money" value="' +
-                                item.ket_bayar + '" readonly></td>' +
-                                '<input type="hidden" name="path_file" id="bayar_path_file" class="form-control" value="' +
-                                item.path_file + '" readonly>' +
-                                '<td><a href="{{ asset('') }}' + item.path_file +
-                                '" target="_blank" class="a">' +
-                                '<img src="{{ asset('') }}' + item.path_file +
-                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
-                                '</a></td>';
-
-                            $('#table-detail-edit').append(row);
-                        });
-
-                        if (rowData.sts_angsuran != 4) { // if lunas
-
-                        } else {
-                            $('.modal .form-control').prop('disabled', true);
-                        }
-                    },
-                    error: function(error) {
-                        var errorMessage = "Terjadi kesalahan dalam operasi.";
-                        if (error.responseJSON && error.responseJSON.message) {
-                            errorMessage = error.responseJSON.message;
-                        } else if (error.statusText) {
-                            errorMessage = error.statusText;
-                        }
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Kesalahan!',
-                            text: errorMessage,
-                        });
-                    }
-                });
-                $("#modal-pembelian").modal("show");
-            }).on("click", "#btn-add-pembayaran-close", function() {
-                $("#modal-pembelian").modal("hide");
-                $('#pembelian-uraian').empty();
-            })
         });
+
+        function pembayaranDestroy(id) {
+            var url = '{{ route('pembelian.pembayaran.destroy', ['id' => ':pembayaran']) }}';
+            url = url.replace(':pembayaran', id);
+
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                processData: false,
+                contentType: false,
+                data: {
+                    'id': id,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $("#table-pembelian-laporan").DataTable().ajax.reload();
+                        $('#btn-add-pembayaran-close').click()
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses!',
+                            text: response.message,
+                        });
+                        return;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response.message,
+                    });
+                },
+                error: function(error) {
+                    var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                    if (error.responseJSON && error.responseJSON.message) {
+                        errorMessage = error.responseJSON.message;
+                    } else if (error.statusText) {
+                        errorMessage = error.statusText;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan!',
+                        text: errorMessage,
+                    });
+                }
+            });
+        }
     </script>
 @endpush

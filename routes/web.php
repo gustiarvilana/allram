@@ -7,6 +7,8 @@ use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Ramwater\Hutang\HutangGalonController;
 use App\Http\Controllers\Ramwater\Hutang\HutangNominalController;
+use App\Http\Controllers\Ramwater\Hutang\PiutangGalonController;
+use App\Http\Controllers\Ramwater\Hutang\PiutangNominalController;
 use App\Http\Controllers\Ramwater\Ops\OpsController;
 use App\Http\Controllers\Ramwater\Pembelian\DetailPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController as PembelianPembayaranController;
@@ -135,8 +137,11 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
 
         Route::prefix('hutang')->group(function () {
             Route::get('/nominal', [HutangNominalController::class, 'index'])->name('hutang.nominal');
+        });
 
-            Route::get('/galon', [HutangGalonController::class, 'index'])->name('hutang.galon');
+        Route::prefix('piutang')->group(function () {
+            Route::get('/nominal', [PiutangNominalController::class, 'index'])->name('piutang.nominal');
+            Route::get('/galon', [PiutangGalonController::class, 'index'])->name('piutang.galon');
         });
     });
 });

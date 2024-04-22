@@ -35,7 +35,9 @@ class UpdateMenu extends Seeder
             (22, 22, 19, null, 'Laporan OPS', 'Ramwater Laporan ops', '/ramwater/laporan/ops', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1),
             (23, 23, 4, null, 'Hutang', 'Hutang Laporan', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 5, 1),
             (24, 24, 23, null, 'Hutang Nominal', 'Ramwater Hutang Nominal', '/ramwater/hutang/nominal', '#', 'fa-solid fa-cart-flatbed-suitcase',1, 1),
-            (25, 25, 23, null, 'Hutang Galon', 'Ramwater Hutang Galon', '/ramwater/hutang/galon', '#', 'fa-solid fa-cart-flatbed-suitcase',2, 1)
+            (25, 25, 4, null, 'Piutang', 'Piutang Laporan', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 6, 1),
+            (26, 26, 25, null, 'Piutang Nominal', 'Ramwater Piutang Nominal', '/ramwater/piutang/nominal', '#', 'fa-solid fa-cart-flatbed-suitcase',1, 1),
+            (27, 27, 25, null, 'Piutang Galon', 'Ramwater Piutang Galon', '/ramwater/piutang/galon', '#', 'fa-solid fa-cart-flatbed-suitcase',2, 1)
         ");
 
         DB::statement("INSERT IGNORE INTO `users_role_menu`
@@ -76,7 +78,11 @@ class UpdateMenu extends Seeder
             (47, '99', '24', '2024'),
             (48, '1', '24', '2024'),
             (49, '99', '25', '2024'),
-            (50, '1', '25', '2024')
+            (50, '1', '25', '2024'),
+            (51, '99', '26', '2024'),
+            (52, '1', '26', '2024'),
+            (53, '99', '27', '2024'),
+            (54, '1', '27', '2024')
         ");
     }
 }

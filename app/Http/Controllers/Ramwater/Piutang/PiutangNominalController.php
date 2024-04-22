@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Ramwater\Hutang;
 use App\Http\Controllers\Controller;
 use App\Models\DOpsModel;
 use App\Models\Karyawan;
-use App\Models\TChannelModel;
 use App\Models\TOps;
 use App\Services\OpsService;
 
-class HutangNominalController extends Controller
+class PiutangNominalController extends Controller
 {
     private $tOps;
     private $dKaryawan;
@@ -24,9 +23,8 @@ class HutangNominalController extends Controller
         $data = [
             'opss' => $this->tOps->get(),
             'pegawais' => $this->dKaryawan->get(),
-            'channels' => TChannelModel::all(),
         ];
-        return view('ramwater.hutang.nominal', $data);
+        return view('ramwater.piutang.nominal', $data);
     }
 
     public function destroy($id)
