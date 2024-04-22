@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Ramwater\Hutang;
+namespace App\Http\Controllers\Ramwater\Piutang;
 
 use App\Http\Controllers\Controller;
 use App\Models\DOpsModel;
+use App\Models\DPelangganModel;
 use App\Models\Karyawan;
+use App\Models\TChannelModel;
+use App\Models\TGudang;
 use App\Models\TOps;
-use App\Services\OpsService;
 
 class PiutangNominalController extends Controller
 {
@@ -21,8 +23,10 @@ class PiutangNominalController extends Controller
     public function index()
     {
         $data = [
-            'opss' => $this->tOps->get(),
-            'pegawais' => $this->dKaryawan->get(),
+            'pelanggans' => DPelangganModel::get(),
+            'saless' => Karyawan::where('jabatan', '=', 'sales')->get(),
+            'gudang' => TGudang::get(),
+            'channels' => TChannelModel::get(),
         ];
         return view('ramwater.piutang.nominal', $data);
     }

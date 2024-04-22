@@ -5,10 +5,7 @@ use App\Http\Controllers\pelanggan\LaporanPelangganController;
 use App\Http\Controllers\pelanggan\PelangganController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
-use App\Http\Controllers\Ramwater\Hutang\HutangGalonController;
 use App\Http\Controllers\Ramwater\Hutang\HutangNominalController;
-use App\Http\Controllers\Ramwater\Hutang\PiutangGalonController;
-use App\Http\Controllers\Ramwater\Hutang\PiutangNominalController;
 use App\Http\Controllers\Ramwater\Ops\OpsController;
 use App\Http\Controllers\Ramwater\Pembelian\DetailPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController as PembelianPembayaranController;
@@ -27,7 +24,8 @@ use App\Http\Controllers\Utility\UtilityController;
 use App\Http\Controllers\Ramwater\Ops\LaporanOpsController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
-
+use App\Http\Controllers\Ramwater\Piutang\PiutangGalonController;
+use App\Http\Controllers\Ramwater\Piutang\PiutangNominalController;
 
 Route::get('/', function () {
     return redirect()->route('login');
