@@ -82,7 +82,7 @@
                                                         <th>sts_angsuran</th>
                                                         <th>total_galon</th>
                                                         <th>galon_kembali</th>
-                                                        {{-- <th>sisa_galon</th> --}}
+                                                        <th>sisa_galon</th>
                                                         {{-- <th>sts_galon</th> --}}
                                                         <th>kd_sales</th>
                                                         {{-- <th>opr_input</th> --}}
@@ -469,8 +469,8 @@
                     addCommas(rowData.total_galon) + '"></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control" value="' +
                     addCommas(rowData.galon_kembali) + '"></td>' +
-                    '<input type="hidden" name="sisa_galon" id="ur_sisa_galon" class="form-control"  value="' +
-                    addCommas(rowData.sisa_galon) + '" readonly>' +
+                    '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control"  value="' +
+                    addCommas(rowData.sisa_galon) + '" readonly></td>' +
                     '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
                     rowData.sts_galon + '" readonly>' +
 

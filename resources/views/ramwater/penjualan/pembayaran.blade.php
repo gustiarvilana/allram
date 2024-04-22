@@ -625,6 +625,8 @@
                 var kembali = $('#ur_galon_kembali').val();
                 var sisa = $('#ur_sisa_galon').val();
                 var sts = $('#ur_sts_galon').val()
+
+                $('#ur_sts_galon').val('89')
             }).on("keyup", "#ur_nota_penjualan", function() {
                 var text = $('#ur_nota_penjualan').val()
 

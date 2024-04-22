@@ -114,13 +114,16 @@ class PembayaranService
             }
         }
 
-        foreach ($dataArrayDetail as $dataDetail) {
-            if (
-                empty($dataDetail['tgl_pembayaran']) ||
-                empty($dataDetail['nominal_bayar']) ||
-                empty($dataDetail['channel_bayar'])
-            ) {
-                throw new \Exception('Semua kolom pada Tabel Pembelian Detail harus terisi.');
+        if (!isset($pembelianData['jns'])) {
+
+            foreach ($dataArrayDetail as $dataDetail) {
+                if (
+                    empty($dataDetail['tgl_pembayaran']) ||
+                    empty($dataDetail['nominal_bayar']) ||
+                    empty($dataDetail['channel_bayar'])
+                ) {
+                    throw new \Exception('Semua kolom pada Tabel Pembelian Detail harus terisi.');
+                }
             }
         }
     }
@@ -255,17 +258,18 @@ class PembayaranService
         };
         // };
 
-        // dd($data['sts_galon']);
-        if (isset($data['total_galon']) && false) {
-            // dd($data['sisa_galon'], $data['galon_kembali']);
-            $data_fix->galon_kembali = $data_fix->galon_kembali + $data['galon_kembali'];
-            $data_fix->sisa_galon    = $data_fix->sisa_galon - $data['galon_kembali'];
-            if (intVal($data['total_galon']) > 0) {
-                if ($data_fix->sisa_galon == 0) {
+        if (isset($data['total_galon'])) {
+
+            $total = $data['total_galon'] - $data['sisa_galon'];
+            $kembali = $data['galon_kembali'];
+            $sisa = $total - $kembali;
+
+            if (intVal($total) > 0) {
+                if ($sisa == 0) {
                     $data_fix->sts_galon = 4;
-                } elseif ($data_fix->sisa_galon > 0) {
+                } elseif ($sisa > 0) {
                     $data_fix->sts_galon = 1;
-                } elseif ($data_fix->sisa_galon < 0) {
+                } elseif ($sisa < 0) {
                     throw new \Exception("Pengembalian Galon Terlalu banyak!");
                 };
             }

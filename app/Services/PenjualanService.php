@@ -169,25 +169,22 @@ class PenjualanService
             'tgl_input'      => date('Ymd'),
         ];
 
-        $total_galon = intVal($penjualanData_fix['total_galon']);
+
+
+        $total_galon = intVal($penjualanData_fix['total_galon']) - intVal($penjualanData_fix['sisa_galon']);
+        $galon_kembali = intVal($penjualanData_fix['galon_kembali']);
+        $penjualanData_fix['sisa_galon'] = $total_galon - $galon_kembali;
+
         if ($total_galon > 0) {
-            $galon_kembali = intVal($penjualanData_fix['galon_kembali']);
-            $sisa_galon = intVal($penjualanData_fix['sisa_galon']);
-
-            $penjualanData_fix['sisa_galon'] = $sisa_galon ? $sisa_galon - $galon_kembali : $total_galon - $galon_kembali;
-
-            $penjualanData_fix['sts_galon'] = $sisa_galon = 0 ? 4 : 1;
-
-            // dd(
-            //     $total_galon,
-            //     $galon_kembali,
-            //     $sisa_galon,
-            //     $penjualanData_fix,
-            // );
+            if ($penjualanData_fix['sisa_galon'] == 0) {
+                $penjualanData_fix['sts_galon'] = 4;
+            } elseif ($penjualanData_fix['sisa_galon'] > 0) {
+                $penjualanData_fix['sts_galon'] = 1;
+            } elseif ($penjualanData_fix['sisa_galon'] < 0) {
+                throw new \Exception("Pengembalian Galon Terlalu banyak!");
+            };
         }
-        // dd(
-        //     $penjualanData_fix,
-        // );
+
         return $penjualanData_fix;
     }
 
