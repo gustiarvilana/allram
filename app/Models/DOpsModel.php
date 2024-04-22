@@ -47,6 +47,9 @@ class DOpsModel extends Model
         if (isset($input['rTanggal'])) {
             $query->whereBetween('a.tanggal', [$tanggal_awal, $tanggal_akhir]);
         }
+        if (isset($input['kd_jns_ops'])) {
+            $query->where('c.tipe', '=', $input['kd_jns_ops']);
+        }
 
         return $query;
     }

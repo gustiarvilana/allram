@@ -24,17 +24,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Pilih Pegawai:</label>
+                            <label>Pilih Kategori:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <select name="nik" class="form-control select2" style="width: 80%;">
-                                    <option value="">Pilih Pegawai</option>
-                                    @foreach ($pegawais as $pegawai)
-                                        <option value="{{ $pegawai->nik }}">{{ $pegawai->nama }}</option>
+                                <select name="kd_jns_ops" class="form-control select2" style="width: 80%;">
+                                    <option value="">Pilih Kategori</option>
+                                    @foreach ($jnsOpss as $jnsOps)
+                                        <option value="{{ $jnsOps->kd_jns_ops }}">{{ $jnsOps->ur_jns_ops }}</option>
                                     @endforeach
                                 </select>
                             </div>
