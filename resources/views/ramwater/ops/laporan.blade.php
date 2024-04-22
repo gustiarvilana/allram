@@ -88,7 +88,7 @@
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
-                                <tfoot>
+                                <tfoot id="tfoot">
                                     <tr>
                                         <th colspan="4">Total:</th>
                                         <th></th>
@@ -323,6 +323,15 @@
                         $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
                         $(api.column(6).footer()).html(addCommas(nominalBayarTotal));
                         $(api.column(7).footer()).html(addCommas(sisaBayarTotal));
+
+                        // Menyembunyikan footer jika filter kd_jenis tidak ada
+                        console.log(cari['kd_jns_ops']);
+                        if (cari['kd_jns_ops'] === undefined || cari['kd_jns_ops'] === null || cari[
+                                'kd_jns_ops'] === '') {
+                            $('#tfoot').hide();
+                        } else {
+                            $('#tfoot').show();
+                        }
                     }
                 });
             });
