@@ -144,7 +144,13 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('pembelian.detail.data') }}',
+                ajax: {
+                    url: '{{ route('pembelian.detail.data') }}',
+                    method: 'GET',
+                    data: {
+                        jns: 'hutang'
+                    }
+                },
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'

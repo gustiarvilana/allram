@@ -25,6 +25,17 @@ class DPembelianModel extends Model
         return $pembelian;
     }
 
+    public function getHutang()
+    {
+        $pembelian = DB::table('d_pembelian as a')
+            ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
+            ->where('a.sts_angsuran', '=', '1')
+            ->orderBy('a.created_at', 'desc')
+            ->select('a.*', 'b.nama');
+
+        return $pembelian;
+    }
+
     public function getLaporanPembelian($input)
     {
         $rTanggal = $input['rTanggal'];

@@ -25,6 +25,32 @@ class Penjualan extends Model
         return $penjualan;
     }
 
+    function getHutangPenjualanNominal()
+    {
+        $penjualan = DB::table('d_penjualan as a')
+            ->join('d_pelanggan as b', 'a.kd_pelanggan', '=', 'b.kd_pelanggan')
+            ->leftJoin('t_channel_bayar as c', 'a.kd_channel', '=', 'c.kd_channel')
+            ->leftJoin('d_karyawan as d', 'a.kd_sales', '=', 'd.nik')
+            ->where('a.sts_angsuran', '=', '1')
+            ->orderBy('a.created_at', 'desc')
+            ->select('a.*', 'b.nama', 'c.ur_channel', 'd.nama as nama_sales');
+
+        return $penjualan;
+    }
+
+    function getHutangPenjualanGalon()
+    {
+        $penjualan = DB::table('d_penjualan as a')
+            ->join('d_pelanggan as b', 'a.kd_pelanggan', '=', 'b.kd_pelanggan')
+            ->leftJoin('t_channel_bayar as c', 'a.kd_channel', '=', 'c.kd_channel')
+            ->leftJoin('d_karyawan as d', 'a.kd_sales', '=', 'd.nik')
+            ->where('a.sts_galon', '=', '1')
+            ->orderBy('a.created_at', 'desc')
+            ->select('a.*', 'b.nama', 'c.ur_channel', 'd.nama as nama_sales');
+
+        return $penjualan;
+    }
+
     function getLaporanPenjualan($input)
     {
         $rTanggal = $input['rTanggal'];
@@ -42,6 +68,9 @@ class Penjualan extends Model
 
         if (isset($input['kd_pelanggan'])) {
             $query->where('a.kd_pelanggan', '=', $input['kd_pelanggan']);
+        }
+        if (isset($input['nama'])) {
+            $query->where('b.nama', 'like', '%' . $input['nama'] . '%');
         }
         if (isset($input['nik'])) {
             $query->where('a.kd_sales', '=', $input['nik']);

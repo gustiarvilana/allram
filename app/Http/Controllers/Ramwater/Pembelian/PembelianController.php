@@ -23,7 +23,7 @@ class PembelianController extends Controller
         $this->integrationHelper = new IntegrationHelper;
     }
 
-    public function data()
+    public function data(Request $request)
     {
         $supplier = $this->supplier->getSupplier();
 

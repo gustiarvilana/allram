@@ -155,7 +155,13 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('penjualan.detail.data') }}',
+                ajax: {
+                    url: '{{ route('penjualan.detail.data') }}',
+                    method: 'GET',
+                    data: {
+                        jns: 'hutangNominal'
+                    }
+                },
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'

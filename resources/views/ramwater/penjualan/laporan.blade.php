@@ -47,12 +47,13 @@
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <select name="kd_pelanggan" id="kd_pelanggan" class="form-control">
+                                <input type="text" name="nama" class="form-control float-right" id="nama">
+                                {{-- <select name="kd_pelanggan" id="kd_pelanggan" class="form-control">
                                     <option value="">Pilih Pelanggan</option>
                                     @foreach ($pelanggans as $pelanggan)
                                         <option value="{{ $pelanggan->kd_pelanggan }}">{{ $pelanggan->nama }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
                         <div class="form-group">
