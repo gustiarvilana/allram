@@ -92,8 +92,8 @@
                                                         {{-- <th>sts_angsuran</th> --}}
                                                         <th>total_galon</th>
                                                         <th>galon_kembali</th>
-                                                        {{-- <th>sisa_galon</th> --}}
-                                                        {{-- <th>sts_galon</th> --}}
+                                                        <th>sisa_galon</th>
+                                                        <th>sts_galon</th>
                                                         <th>kd_sales</th>
                                                         {{-- <th>opr_input</th> --}}
                                                         {{-- <th>tgl_input</th> --}}
@@ -409,6 +409,7 @@
                     $('#ur_galon_kembali').val('0');
                     alert("Galon terlalu banyak");
                 }
+                console.log(sisa);
                 $('#ur_sisa_galon').val(sisa);
                 if (sisa > 0) $('#ur_sts_galon').val('1');
                 if (sisa = 0) $('#ur_sts_galon').val('0');
@@ -593,8 +594,8 @@
                     '<input type="hidden" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" readonly>' +
                     '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
-                    '<input type="hidden" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly>' +
-                    '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control" readonly>' +
+                    '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly></td>' +
+                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control" readonly></td>' +
 
                     '<td>' +
                     '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +

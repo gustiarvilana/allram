@@ -263,13 +263,17 @@ class PembayaranService
             $total = $data['total_galon'] - $data['sisa_galon'];
             $kembali = $data['galon_kembali'];
             $sisa = $total - $kembali;
+            $data_fix['sisa_galon'] = $sisa;
+            $data_fix['galon_kembali'] = $kembali;
+
+            $new_sisa = $data_fix['sisa_galon'] - $data_fix['galon_kembali'];
 
             if (intVal($total) > 0) {
-                if ($sisa == 0) {
+                if ($new_sisa == 0) {
                     $data_fix->sts_galon = 4;
-                } elseif ($sisa > 0) {
+                } elseif ($new_sisa > 0) {
                     $data_fix->sts_galon = 1;
-                } elseif ($sisa < 0) {
+                } elseif ($new_sisa < 0) {
                     throw new \Exception("Pengembalian Galon Terlalu banyak!");
                 };
             }

@@ -169,11 +169,11 @@ class PenjualanService
             'tgl_input'      => date('Ymd'),
         ];
 
-
-
-        $total_galon = intVal($penjualanData_fix['total_galon']) - intVal($penjualanData_fix['sisa_galon']);
+        // $total_galon = intVal($penjualanData_fix['total_galon']) - intVal($penjualanData_fix['sisa_galon']);
+        $total_galon = intVal($penjualanData_fix['total_galon']);
         $galon_kembali = intVal($penjualanData_fix['galon_kembali']);
-        $penjualanData_fix['sisa_galon'] = $total_galon - $galon_kembali;
+
+        $penjualanData_fix['sisa_galon'] = intVal($total_galon) - intVal($galon_kembali);
 
         if ($total_galon > 0) {
             if ($penjualanData_fix['sisa_galon'] == 0) {
