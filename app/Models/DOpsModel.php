@@ -19,7 +19,7 @@ class DOpsModel extends Model
             ->join('d_karyawan as b', 'a.nik', '=', 'b.nik')
             ->join('t_ops as c', 'a.kd_ops', '=', 'c.kd_ops')
             ->orderBy('a.created_at', 'desc')
-            ->select('a.*', 'b.nama', 'c.nama_ops');
+            ->select('a.*', 'b.nama', 'c.nama_ops', 'c.tipe');
 
         return $ops;
     }
@@ -36,7 +36,7 @@ class DOpsModel extends Model
             ->join('d_karyawan as b', 'a.nik', '=', 'b.nik')
             ->join('t_ops as c', 'a.kd_ops', '=', 'c.kd_ops')
             ->orderBy('a.created_at', 'desc')
-            ->select('a.*', 'b.nama', 'c.nama_ops');
+            ->select('a.*', 'b.nama', 'c.nama_ops', 'c.tipe');
 
         if (isset($input['nik'])) {
             $query->where('a.nik', '=', $input['nik']);

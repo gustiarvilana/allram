@@ -78,20 +78,17 @@
                                     <tr>
                                         <th width="5%">No</th>
                                         <th>tanggal</th>
-                                        <th>satker</th>
                                         <th>Karyawan</th>
                                         <th>nama OPS</th>
-                                        <th>jumlah</th>
-                                        <th>harga</th>
                                         <th>total</th>
+                                        <th>Tipe</th>
                                         <th>keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
                                 <tfoot id="tfoot">
                                     <tr>
-                                        <th colspan="4">Total:</th>
-                                        <th></th>
+                                        <th colspan="3">Total:</th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -146,7 +143,6 @@
                     contentType: false,
                     data: formData,
                     success: function(response) {
-                        console.log(response);
                         if (response.success) {
                             Swal.fire({
                                 icon: 'success',
@@ -264,25 +260,18 @@
                     }, {
                         data: 'tanggal'
                     }, {
-                        data: 'satker'
-                    }, {
                         data: 'nama'
                     }, {
                         data: 'nama_ops'
                     }, {
-                        data: 'jumlah',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    }, {
-                        data: 'harga',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    }, {
                         data: 'total',
                         render: function(data, type, row) {
                             return addCommas(data);
+                        }
+                    }, {
+                        data: 'tipe',
+                        render: function(data, type, row) {
+                            return data;
                         }
                     }, {
                         data: 'keterangan',
@@ -299,33 +288,17 @@
                         var api = this.api();
 
                         // Menghitung total sum kolom harga_total
-                        var hargaTotalTotal = api.column(5, {
+                        var hargaTotalTotal = api.column(4, {
                             page: 'current'
                         }).data().reduce(function(acc, curr) {
                             return acc + parseFloat(curr);
                         }, 0);
 
-                        // Menghitung total sum kolom nominal_bayar
-                        var nominalBayarTotal = api.column(6, {
-                            page: 'current'
-                        }).data().reduce(function(acc, curr) {
-                            return acc + parseFloat(curr);
-                        }, 0);
-
-                        // Menghitung total sum kolom sisa_bayar
-                        var sisaBayarTotal = api.column(7, {
-                            page: 'current'
-                        }).data().reduce(function(acc, curr) {
-                            return acc + parseFloat(curr);
-                        }, 0);
 
                         // Menampilkan total sum di footer
-                        $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
-                        $(api.column(6).footer()).html(addCommas(nominalBayarTotal));
-                        $(api.column(7).footer()).html(addCommas(sisaBayarTotal));
+                        $(api.column(4).footer()).html(addCommas(hargaTotalTotal));
 
                         // Menyembunyikan footer jika filter kd_jenis tidak ada
-                        console.log(cari['kd_jns_ops']);
                         if (cari['kd_jns_ops'] === undefined || cari['kd_jns_ops'] === null || cari[
                                 'kd_jns_ops'] === '') {
                             $('#tfoot').hide();
