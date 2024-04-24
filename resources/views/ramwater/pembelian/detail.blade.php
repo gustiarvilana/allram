@@ -66,25 +66,26 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Uraian Pembelian</span>
+                                    <span>Detail</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-pembelian">
+                                            <table class="table table-striped" id="table-detail">
                                                 <thead>
                                                     <tr>
-                                                        <th>tgl_pembelian</th>
-                                                        <th>Supplier</th>
-                                                        <th>nota_pembelian</th>
-                                                        <th>jns_pembelian</th>
+                                                        <th>nama</th>
+                                                        <th>kd_produk</th>
+                                                        <th>type</th>
+                                                        <th>qty_pesan</th>
+                                                        <th>qty_retur</th>
+                                                        <th>qty_bersih</th>
+                                                        <th>kd_gudang</th>
+                                                        <th>harga_satuan</th>
                                                         <th>harga_total</th>
-                                                        <th>nominal_bayar</th>
-                                                        <th>sisa_bayar</th>
-                                                        <th>sts_angsuran</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="pembelian-uraian"></tbody>
+                                                <tbody> </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -138,26 +139,25 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Detail</span>
+                                    <span>Uraian Pembelian</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-detail">
+                                            <table class="table table-striped" id="table-pembelian">
                                                 <thead>
                                                     <tr>
-                                                        <th>nama</th>
-                                                        <th>kd_produk</th>
-                                                        <th>type</th>
-                                                        <th>qty_pesan</th>
-                                                        <th>qty_retur</th>
-                                                        <th>qty_bersih</th>
-                                                        <th>kd_gudang</th>
-                                                        <th>harga_satuan</th>
+                                                        <th>tgl_pembelian</th>
+                                                        <th>Supplier</th>
+                                                        <th>nota_pembelian</th>
+                                                        <th>jns_pembelian</th>
                                                         <th>harga_total</th>
+                                                        <th>nominal_bayar</th>
+                                                        <th>sisa_bayar</th>
+                                                        <th>sts_angsuran</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody> </tbody>
+                                                <tbody id="pembelian-uraian"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -165,6 +165,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success btn-add-pembelian-simpan" id="btn-add-pembelian-simpan"><i

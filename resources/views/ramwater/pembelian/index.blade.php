@@ -57,27 +57,27 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-primary">
-                                <div class="card-header card-success">
-                                    <span>Uraian Pembelian</span>
+                                <div class="card-header">
+                                    <span>Detail</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-12 table-responsive field">
-                                            <table class="table table-striped" id="table-pembelian">
+                                        <div class="col-md-12 table-responsive">
+                                            <table class="table table-striped" id="table-detail">
                                                 <thead>
                                                     <tr>
-                                                        <th>Supplier</th>
-                                                        <th>nota_pembelian</th>
-                                                        <th>tgl_pembelian</th>
-                                                        <th>kd_supplier</th>
-                                                        <th>jns_pembelian</th>
+                                                        <th>nama</th>
+                                                        {{-- <th>kd_produk</th> --}}
+                                                        <th>type</th>
+                                                        <th>qty_pesan</th>
+                                                        <th>qty_retur</th>
+                                                        <th>qty_bersih</th>
+                                                        <th>kd_gudang</th>
+                                                        <th>harga_satuan</th>
                                                         <th>harga_total</th>
-                                                        <th>nominal_bayar</th>
-                                                        <th>sisa_bayar</th>
-                                                        <th>sts_angsuran</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="pembelian-uraian"></tbody>
+                                                <tbody> </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -111,27 +111,27 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-primary">
-                                <div class="card-header">
-                                    <span>Detail</span>
+                                <div class="card-header card-success">
+                                    <span>Uraian Pembelian</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-detail">
+                                        <div class="col-md-12 table-responsive field">
+                                            <table class="table table-striped" id="table-pembelian">
                                                 <thead>
                                                     <tr>
-                                                        <th>nama</th>
-                                                        <th>kd_produk</th>
-                                                        <th>type</th>
-                                                        <th>qty_pesan</th>
-                                                        <th>qty_retur</th>
-                                                        <th>qty_bersih</th>
-                                                        <th>kd_gudang</th>
-                                                        <th>harga_satuan</th>
+                                                        <th>Supplier</th>
+                                                        <th>nota_pembelian</th>
+                                                        <th>tgl_pembelian</th>
+                                                        <th>kd_supplier</th>
+                                                        <th>jns_pembelian</th>
                                                         <th>harga_total</th>
+                                                        <th>nominal_bayar</th>
+                                                        <th>sisa_bayar</th>
+                                                        <th>sts_angsuran</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody> </tbody>
+                                                <tbody id="pembelian-uraian"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -229,7 +229,7 @@
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
 
-                            var btn_input = '<a id="btn-penjualan-input" data-id="' + row.id +
+                            var btn_input = '<a id="btn-pembelian-input" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
                                 '\' class="btn btn-success btn-xs edit"><i class="fas fa-pencil-alt"></i> Input Beli</a>';
 
@@ -397,15 +397,14 @@
                         });
                     }
                 });
-            }).on("click", "#btn-penjualan-input", function() { //btn_input_click
+            }).on("click", "#btn-pembelian-input", function() { //btn_input_click
                 var rowData = $(this).data('row');
                 var kd_supplier = rowData.kd_supplier;
                 var row =
                     '<tr>' +
                     '<td>' +
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                    rowData.nama + '</span></div>' +
-                    '</td>' +
+                    rowData.nama + '</span></div>' + '</td>' +
                     '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
                     '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
                     '<td><input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
@@ -470,24 +469,21 @@
                             data: 'nama',
                             render: function(data, type, row) {
                                 var row_data = JSON.stringify(row);
-                                return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
+                                var nama =
+                                    '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
                                     data + '</span></div>';
-
-                            }
-                        },
-                        {
-                            data: 'kd_produk',
-                            name: 'a.kd_produk',
-                            render: function(data, type, row) {
-                                return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                var kd_produk =
+                                    '<input readonly type="hidden" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
                                     row.kd_produk + '">';
+                                return nama + kd_produk;
+
                             }
                         },
                         {
                             data: 'type',
                             name: 'type',
                             render: function(data, type, row) {
-                                return data;
+                                return '<span><b>' + data + '</b></span>';
                             }
                         },
                         {
@@ -545,7 +541,7 @@
                         }
                     ],
                     columnDefs: [{
-                            targets: [4, 5, 6, 7, 8],
+                            targets: [4, 5, 6, 7],
                             searchable: false,
                             orderable: false
                         },

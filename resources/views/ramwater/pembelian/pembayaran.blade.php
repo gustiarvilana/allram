@@ -302,7 +302,7 @@
 
                             var btn_edit = '<a id="btn-pembayaran-edit" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i></a>';
+                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Pembayaran</a>';
 
                             return '<div style="white-space: nowrap;">' + btn_edit + '</div>';
                         },

@@ -56,6 +56,7 @@ class PembelianService
             return DB::transaction(function () use ($pembelianData, $dataArrayDetail, $file) { //rollback if error
                 // save: d_penjualan
                 $pembelian = $this->upsertPembelian($pembelianData);
+
                 //save: file
                 if ($file) {
                     $filename = FormatHelper::uploadFile($file, 'pembelian/' . $pembelian['nota_pembelian'] . '/' . $pembelian['tgl_pembelian'] . '/' . $pembelian['kd_supplier'], $pembelian['nota_pembelian']);
