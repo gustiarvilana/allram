@@ -277,5 +277,65 @@ class CreateTable extends Seeder
                 INDEX `idx_nota_pembayaran` (`nota`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
+
+        // d_kasbon
+        DB::statement("
+            CREATE TABLE IF NOT EXISTS `d_kasbon` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nik` VARCHAR(11) DEFAULT NULL,
+                `tgl_kasbon` INT(11) DEFAULT NULL,
+                `kd_jns_kasbon` INT(11) DEFAULT NULL,
+                `nota_penjualan` VARCHAR(50) DEFAULT NULL,
+                `nominal` INT(11) DEFAULT NULL,
+                `ket_kasbon` TEXT DEFAULT NULL,
+                `opr_input` VARCHAR(50) DEFAULT NULL,
+                `tgl_input` INT DEFAULT NULL,
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_nota_penjualan` (`nota_penjualan`),
+                INDEX `idx_nik` (`nik`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+        ");
+
+
+        // t_jns_kasbon
+        DB::unprepared("
+            CREATE TABLE IF NOT EXISTS `t_jns_kasbon` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `kd_jns_kasbon` INT DEFAULT NULL,
+                `nama` VARCHAR(50) DEFAULT NULL,
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_kd_jns_kasbon` (`kd_jns_kasbon`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+            INSERT IGNORE INTO `t_jns_kasbon`
+            (`kd_jns_kasbon`, `nama`, `created_at`, `updated_at`)
+            VALUES
+            (1, 'kasbon Rutin', NOW(), NOW()),
+            (2, 'Kasbon Kurang Harga', NOW(), NOW());
+        ");
+
+        // t_sts
+        DB::unprepared("
+            CREATE TABLE IF NOT EXISTS `t_sts` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `kd_sts` INT DEFAULT NULL,
+                `nama` VARCHAR(50) DEFAULT NULL,
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_kd_sts` (`kd_sts`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+            INSERT IGNORE INTO `t_sts`
+            (`kd_sts`, `nama`, `created_at`, `updated_at`)
+            VALUES
+            (1, 'Aktif Rutin', NOW(), NOW()),
+            (3, 'Kasbon Kurang Harga', NOW(), NOW()),
+            (4, 'Lunas', NOW(), NOW());
+        ");
     }
 }

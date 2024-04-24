@@ -9,6 +9,7 @@ use App\Models\Karyawan;
 use App\Models\Produk;
 use App\Models\TChannelModel;
 use App\Models\TGudang;
+use App\Models\THargaJualModel;
 use App\Services\PenjualanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +29,7 @@ class PenjualanController extends Controller
         $this->produkMOdel = new Produk;
         $this->tChannelModel = new TChannelModel();
         $this->karyawan = new Karyawan();
+        $this->harga = new THargaJualModel();
         $this->penjualanService = $penjualanService;
     }
 
@@ -47,6 +49,7 @@ class PenjualanController extends Controller
             'gudang' => $this->tGudang->get(),
             'channels' => $this->tChannelModel->get(),
             'saless' => $this->karyawan->where('jabatan', '=', 'sales')->get(),
+            'hargas' => $this->harga->get(),
         ];
         return view('ramwater.penjualan.index', $data);
     }
@@ -55,12 +58,13 @@ class PenjualanController extends Controller
     {
         $penjualanData = json_decode($request->input('penjualanData'), true);
         $dataArrayDetail = json_decode($request->input('dataArrayDetail'), true);
+        $file = $request->file('path_file');
 
         if ($request->input('jns')) {
             $penjualanData['jns'] = $request->input('jns');
         }
-
-        return $this->penjualanService->storepenjualan($penjualanData, $dataArrayDetail);
+        // dd($penjualanData, $dataArrayDetail, $file);
+        return $this->penjualanService->storepenjualan($penjualanData, $dataArrayDetail, $file);
     }
 
     public function destroy($id)

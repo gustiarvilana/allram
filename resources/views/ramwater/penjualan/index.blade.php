@@ -44,7 +44,7 @@
                                                 <th>alamat</th>
                                                 <th>no_tlp</th>
                                                 <th><i class="fa fa-cart-plus" aria-hidden="true"></i> Penjualan</th>
-                                                <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
+                                                <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i> Pelanggan
                                                 </th>
                                             </tr>
                                         </thead>
@@ -71,63 +71,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-primary">
-                                <div class="card-header card-success">
-                                    <span>Uraian Penjualan</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive field">
-                                            <table class="table table-striped" id="table-penjualan">
-                                                <thead>
-                                                    <tr>
-                                                        <th>tgl_penjualan</th>
-                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
-                                                        <th>kd_channel</th>
-                                                        <th>harga_total</th>
-                                                        <th>nominal_bayar</th>
-                                                        {{-- <th>sisa_bayar</th> --}}
-                                                        {{-- <th>sts_angsuran</th> --}}
-                                                        <th>total_galon</th>
-                                                        <th>galon_kembali</th>
-                                                        <th>sisa_galon</th>
-                                                        <th>sts_galon</th>
-                                                        <th>kd_sales</th>
-                                                        {{-- <th>opr_input</th> --}}
-                                                        {{-- <th>tgl_input</th> --}}
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="penjualan-uraian"></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <span>Upload Bukti Pembayaran</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="form-group">
-                                                <label for="path_file">Upload Bukti Pembayaran</label>
-                                                <input class="form-control path_file" type="file" name="path_file"
-                                                    id="path_file">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -160,6 +103,66 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <span>Upload Bukti Pembayaran</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Bukti Pembayaran</label>
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header card-success">
+                                    <span>Uraian Penjualan</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 table-responsive field">
+                                            <table class="table table-striped" id="table-penjualan">
+                                                <thead>
+                                                    <tr>
+                                                        <th>tgl_penjualan</th>
+                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
+                                                        <th>kd_channel</th>
+                                                        <th>harga_total</th>
+                                                        <th>nominal_bayar</th>
+                                                        {{-- <th>sisa_bayar</th> --}}
+                                                        {{-- <th>sts_angsuran</th> --}}
+                                                        <th>total_galon</th>
+                                                        <th>galon_kembali</th>
+                                                        <th>sisa_galon</th>
+                                                        <th>sts_galon</th>
+                                                        <th>Kasbon ?</th>
+                                                        <th>kd_sales</th>
+                                                        {{-- <th>opr_input</th> --}}
+                                                        {{-- <th>tgl_input</th> --}}
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="penjualan-uraian"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success btn-add-pembelian-simpan" id="btn-add-pembelian-simpan"><i
@@ -230,7 +233,7 @@
 
                             var btn_input = '<a id="btn-pelanggan-input" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> Input</a>';
+                                '\' class="btn btn-success btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> Input Penjualan</a>';
 
                             return '<div class="text-center">' + btn_input + '</div>';
                         },
@@ -243,15 +246,16 @@
 
                             var btn_edit = '<a id="btn-pelanggan-edit" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-primary btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> Edit Pelanggan</a>';
+                                '\' class="btn btn-primary btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> Edit</a>';
 
                             var btn_delete = '<a id="btn-pelanggan-delete" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-danger btn-xs mx-1 delete" style="white-space: nowrap;"><i class="fas fa-trash"></i> Hapus Pelanggan</a>';
+                                '\' class="btn btn-danger btn-xs mx-1 delete" style="white-space: nowrap;"><i class="fas fa-trash"></i> Hapus</a>';
 
-                            return '<div class="text-center" style="white-space: nowrap;">' +
-                                btn_edit + ' ' + btn_delete +
-                                '</div>';
+                            // return '<div class="text-center" style="white-space: nowrap;">' +
+                            //     btn_edit + ' ' + btn_delete +
+                            //     '</div>';
+                            return '<div>' + btn_edit + '<br><br>' + btn_delete + '</div>'
                         },
 
                     },
@@ -278,8 +282,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: '{{ route('produk.data') }}',
-                // dom: 'Brtip',
-                dom: 'Brtip',
+                dom: 'tip',
                 buttons: [{
                     extend: "excel",
                     text: "Export Data",
@@ -359,13 +362,25 @@
                                 '</select>';
                         }
                     },
-
                     {
                         data: 'harga_satuan',
                         render: function(data, type, row) {
-                            return '<span id="harga" style="display: none;">' + row.harga +
-                                '</span> <input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan" value="' +
-                                addCommas(row.harga) + '">';
+                            var selectOptions = '<option value="">== Pilih Harga ==</option>';
+                            var kd_produk = row.kd_produk; // Ambil nilai kd_produk dari row
+
+                            @foreach ($hargas as $harga)
+                                if ('{{ $harga->kd_produk }}' == kd_produk) {
+                                    var formattedPrice = addCommas('{{ $harga->harga }}');
+                                    selectOptions +=
+                                        '<option value="{{ $harga->harga }}">' + formattedPrice +
+                                        '</option>';
+                                }
+                            @endforeach
+
+                            return '<select name="harga_satuan" id="detail_harga_satuan" class="form-control detail_harga_satuan">' +
+                                selectOptions +
+                                '</select>';
+
                         }
                     },
                     {
@@ -422,6 +437,7 @@
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
             }).on("click", "#btn-add-pembelian-simpan", function() {
+                var imageFile = $('#path_file')[0].files[0];
 
                 var dataArrayDetail = [];
                 $('#table-detail tbody tr').each(function() {
@@ -457,10 +473,13 @@
                     kd_sales: $('#penjualan-uraian #ur_kd_sales').val(),
                     opr_input: $('#penjualan-uraian #ur_opr_input').val(),
                     tgl_input: $('#penjualan-uraian #ur_tgl_input').val(),
+                    isKasbon: $('#penjualan-uraian #ur_is_kasbon').prop('checked') ? 1 : 0
                 };
+
 
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
+                formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('penjualanData', JSON.stringify(penjualanData));
 
@@ -596,6 +615,7 @@
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
                     '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly></td>' +
                     '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control" readonly></td>' +
+                    '<td><input type="checkbox" name="is_kasbon" id="ur_is_kasbon" class="form-control" style="width: 30px; height: 30px;"></td>' +
 
                     '<td>' +
                     '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +
@@ -675,7 +695,7 @@
                 var text = $('#ur_nota_pembelian').val()
 
                 $('.detail_nota_pembelian').val(text)
-            }).on("keyup", "#ur_nominal_bayar,.detail_harga_satuan", function() {
+            }).on("keyup change", "#ur_nominal_bayar,.detail_harga_satuan", function() {
                 var nominal_bayar = getFloatValue($('#ur_nominal_bayar'))
                 var harga_total = getFloatValue($('#ur_harga_total'))
                 var sts_angsuran = '0';

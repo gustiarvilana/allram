@@ -34,6 +34,7 @@
                                                 <th>sts_angsuran</th>
                                                 <th>opr_input</th>
                                                 <th>tgl_input</th>
+                                                <th>Bukti</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -61,42 +62,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-primary">
-                                <div class="card-header card-success">
-                                    <span>Uraian penjualan</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-penjualan">
-                                                <thead>
-                                                    <tr>
-                                                        <th>tgl_penjualan</th>
-                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
-                                                        <th>kd_channel</th>
-                                                        <th>harga_total</th>
-                                                        <th>nominal_bayar</th>
-                                                        <th>sisa_bayar</th>
-                                                        <th>sts_angsuran</th>
-                                                        <th>total_galon</th>
-                                                        <th>galon_kembali</th>
-                                                        <th>sisa_galon</th>
-                                                        {{-- <th>sts_galon</th> --}}
-                                                        <th>kd_sales</th>
-                                                        {{-- <th>opr_input</th> --}}
-                                                        {{-- <th>tgl_input</th> --}}
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="penjualan-uraian"></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -129,6 +94,66 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <span>Upload Bukti Pembayaran</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Bukti Pembayaran</label>
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header card-success">
+                                    <span>Uraian penjualan</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 table-responsive">
+                                            <table class="table table-striped" id="table-penjualan">
+                                                <thead>
+                                                    <tr>
+                                                        <th>tgl_penjualan</th>
+                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
+                                                        <th>kd_channel</th>
+                                                        <th>harga_total</th>
+                                                        <th>nominal_bayar</th>
+                                                        <th>sisa_bayar</th>
+                                                        <th>sts_angsuran</th>
+                                                        <th>total_galon</th>
+                                                        <th>galon_kembali</th>
+                                                        <th>sisa_galon</th>
+                                                        {{-- <th>sts_galon</th> --}}
+                                                        <th>Kasbon?</th>
+                                                        <th>kd_sales</th>
+                                                        {{-- <th>opr_input</th> --}}
+                                                        {{-- <th>tgl_input</th> --}}
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="penjualan-uraian"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success btn-add-penjualan-simpan" id="btn-add-penjualan-simpan"><i
@@ -242,6 +267,17 @@
                         }
                     },
                     {
+                        data: 'path_file',
+                        name: 'a.path_file',
+                        render: function(data, type, row) {
+                            return '<a href="{{ asset('') }}' + row.path_file +
+                                '" target="_blank" class="a">' +
+                                '<img src="{{ asset('') }}' + row.path_file +
+                                '" alt="Bukti Pembayaran" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                '</a>';
+                        }
+                    },
+                    {
                         data: 'id',
                         name: 'a.id',
                         render: function(data, type, row) {
@@ -296,6 +332,8 @@
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
             }).on("click", "#btn-add-penjualan-simpan", function() {
+                var imageFile = $('#path_file')[0].files[0];
+
                 var dataArrayDetail = [];
                 $('#table-detail tbody tr').each(function() {
                     var hargaTotal = $(this).find('#detail_harga_total').val();
@@ -332,10 +370,12 @@
                     kd_sales: $('#penjualan-uraian #ur_kd_sales').val(),
                     opr_input: $('#penjualan-uraian #ur_opr_input').val(),
                     tgl_input: $('#penjualan-uraian #ur_tgl_input').val(),
+                    isKasbon: $('#penjualan-uraian #ur_is_kasbon').prop('checked') ? 1 : 0
                 };
 
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
+                formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('penjualanData', JSON.stringify(penjualanData));
                 formData.append('jns', 'update');
@@ -473,6 +513,8 @@
                     addCommas(rowData.sisa_galon) + '" readonly></td>' +
                     '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
                     rowData.sts_galon + '" readonly>' +
+                    '<td><input type="checkbox" name="is_kasbon" id="ur_is_kasbon" class="form-control" style="width: 30px; height: 30px;"></td>' +
+
 
                     '<td>' +
                     '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +

@@ -75,7 +75,8 @@ class AlterTable extends Seeder
 
         DB::statement(
             "ALTER TABLE `d_penjualan`
-            ADD IF NOT EXISTS `sts_penyerahan` INT DEFAULT 0 AFTER `sts_angsuran`
+            ADD IF NOT EXISTS `sts_penyerahan` INT DEFAULT 0 AFTER `sts_angsuran`,
+            ADD IF NOT EXISTS `path_file` INT DEFAULT 0 AFTER `tgl_input`
             ;"
         );
     }

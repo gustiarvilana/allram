@@ -5,11 +5,11 @@
 namespace App\Services;
 
 use App\Helpers\FormatHelper;
+use App\Models\DKasbonModel;
 use App\Models\DOpsModel;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DStokProduk;
-use App\Models\DTransaksiOps;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\SupplierModel;
@@ -29,6 +29,7 @@ class PenjualanService
     protected $penjualanDetailModel;
     protected $tOps;
     protected $jns;
+    protected $dKasbon;
     public function __construct(
         DStokProduk $dStokProduk,
         DPembelianDetailModel $dPembelianDetailModel,
@@ -46,9 +47,10 @@ class PenjualanService
         $this->penjualanDetailModel  = $penjualanDetailModel;
         $this->tOps                  = $tOps;
         $this->dPembayaran           = new DPembayaranModel();
+        $this->dKasbon               = new DKasbonModel();
     }
 
-    public function storePenjualan($penjualanData, $dataArrayDetail)
+    public function storePenjualan($penjualanData, $dataArrayDetail, $file)
     {
         if (isset($penjualanData['jns'])) {
             $this->setJns($penjualanData['jns']);
@@ -58,9 +60,16 @@ class PenjualanService
 
             $penjualanData_fix = $this->preparepenjualanData($penjualanData);
 
-            return DB::transaction(function () use ($penjualanData_fix, $dataArrayDetail) { //rollback if error
+            return DB::transaction(function () use ($penjualanData, $penjualanData_fix, $dataArrayDetail, $file) { //rollback if error
                 // save: d_penjualan
                 $penjualan = $this->upsertpenjualan($penjualanData_fix);
+
+                //save: file
+                if ($file) {
+                    $filename = FormatHelper::uploadFile($file, 'penjualan/' . $penjualan['nota_penjualan'] . '/' . $penjualan['tgl_penjualan'] . '/' . $penjualan['kd_supplier'], $penjualan['nota_penjualan']);
+                    $penjualan->path_file = $filename;
+                    $penjualan->save();
+                }
 
                 // save: d_penjualan_detail + stok
                 $this->upsertpenjualanDetail($penjualan, $dataArrayDetail);
@@ -69,8 +78,16 @@ class PenjualanService
                 if ($penjualanData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
-                }
 
+                    if ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar']) {
+                        $dataKasbon = $this->prepareKasbon($penjualan);
+                        if ($penjualanData['isKasbon'] == 1) {
+                            $this->dKasbon->upsert($dataKasbon);
+                        } else {
+                            $this->dKasbon->hapus($dataKasbon);
+                        }
+                    }
+                }
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
         } catch (\Exception $e) {
@@ -158,7 +175,8 @@ class PenjualanService
             'harga_total'    => $penjualanData['harga_total'] ? FormatHelper::removeDots($penjualanData['harga_total']) : 0,
             'nominal_bayar'  => $penjualanData['nominal_bayar'] ? FormatHelper::removeDots($penjualanData['nominal_bayar']) : 0,
             'sisa_bayar'     => $penjualanData['sisa_bayar'] ? FormatHelper::removeDots($penjualanData['sisa_bayar']) : 0,
-            'sts_angsuran'   => $penjualanData['sts_angsuran'],
+
+            'sts_angsuran'   => $penjualanData['isKasbon'] == 1 ? 3 : $penjualanData['sts_angsuran'],
 
             'total_galon'   => $penjualanData['total_galon'] ? FormatHelper::removeDots($penjualanData['total_galon']) : 0,
             'galon_kembali' => $penjualanData['galon_kembali'] ? FormatHelper::removeDots($penjualanData['galon_kembali']) : 0,
@@ -239,6 +257,20 @@ class PenjualanService
         $ops['keterangan'] = '000';
 
         return $ops;
+    }
+
+    public function prepareKasbon($input)
+    {
+        $input_fix['nik']            = $input['kd_sales'];
+        $input_fix['tgl_kasbon']     = $input['tgl_penjualan'];
+        $input_fix['jns_kasbon']     = 3;
+        $input_fix['nota_penjualan'] = $input['nota_penjualan'];
+        $input_fix['nominal']        = $input['sisa_bayar'];
+        $input_fix['ket_kasbon']     = 'Kurang Harga';
+        $input_fix['opr_input']      = $input['opr_input'];
+        $input_fix['tgl_input']      = $input['tgl_input'];
+
+        return $input_fix;
     }
 
     public function upsertpenjualan($penjualanData)
