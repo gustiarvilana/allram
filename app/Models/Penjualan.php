@@ -19,8 +19,9 @@ class Penjualan extends Model
             ->join('d_pelanggan as b', 'a.kd_pelanggan', '=', 'b.kd_pelanggan')
             ->leftJoin('t_channel_bayar as c', 'a.kd_channel', '=', 'c.kd_channel')
             ->leftJoin('d_karyawan as d', 'a.kd_sales', '=', 'd.nik')
+            ->leftJoin('d_kasbon as e', 'a.nota_penjualan', '=', 'e.nota_penjualan')
             ->orderBy('a.created_at', 'desc')
-            ->select('a.*', 'b.nama', 'c.ur_channel', 'd.nama as nama_sales');
+            ->select('a.*', 'b.nama', 'c.ur_channel', 'd.nama as nama_sales', 'e.id as id_kasbon');
 
         return $penjualan;
     }

@@ -513,8 +513,10 @@
                     addCommas(rowData.sisa_galon) + '" readonly></td>' +
                     '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
                     rowData.sts_galon + '" readonly>' +
-                    '<td><input type="checkbox" name="is_kasbon" id="ur_is_kasbon" class="form-control" style="width: 30px; height: 30px;"></td>' +
 
+                    '<td><input type="checkbox" name="is_kasbon" id="ur_is_kasbon" class="form-control" ' +
+                    (rowData.nota_penjualan ? 'checked' : '') +
+                    ' style="width: 30px; height: 30px;"></td>' +
 
                     '<td>' +
                     '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +
