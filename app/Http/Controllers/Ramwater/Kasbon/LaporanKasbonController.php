@@ -36,9 +36,13 @@ class LaporanKasbonController extends Controller
 
     public function data(Request $request)
     {
-        $jns = $request->input();
+        $input = $request->input();
 
-        $kasbon = $this->dKasbonModel->getKasbon();
+        if (isset($input['jns'])) {
+            $kasbon = $this->dKasbonModel->getKasbonByDate($input['data']);
+        } else {
+            $kasbon = $this->dKasbonModel->getKasbonByNik($input);
+        }
 
         return datatables()
             ->of($kasbon)
@@ -53,7 +57,7 @@ class LaporanKasbonController extends Controller
     {
         $data = [
             'pelanggans' => DPelangganModel::get(),
-            'saless' => Karyawan::where('jabatan', '=', 'sales')->get(),
+            'karyawans' => Karyawan::get(),
             'gudang' => TGudang::get(),
             'channels' => TChannelModel::get(),
         ];
