@@ -13,7 +13,7 @@ class DKasbonModel extends Model
     protected $table = 'd_kasbon';
     protected $guarded = [];
 
-    public function getKasbonByDate($input)
+    public function getKasbonByDate($input, $nik)
     {
         $rTanggal = $input['rTanggal'];
         list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
@@ -22,8 +22,10 @@ class DKasbonModel extends Model
         $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
 
         $result = DB::table('d_kasbon as a')
+            ->where('a.nik', $nik)
+            ->join('d_karyawan as b', 'a.nik', 'b.nik')
             ->whereBetween('tgl_kasbon', [$tanggal_awal, $tanggal_akhir])
-            ->select('a.*', DB::raw('SUM(a.nominal) as sum_nominal'))
+            ->select('a.*', 'b.nama as nama_karyawan', DB::raw('SUM(a.nominal) as sum_nominal'))
             ->groupBy('a.id');
 
 
@@ -36,7 +38,6 @@ class DKasbonModel extends Model
 
     public function getKasbonByNik($input)
     {
-        // dd('2');
         $rTanggal = $input['rTanggal'];
         list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
 
@@ -44,10 +45,15 @@ class DKasbonModel extends Model
         $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
 
         $result = DB::table('d_kasbon as a')
+            ->join('d_karyawan as b', 'a.nik', 'b.nik')
             ->whereBetween('tgl_kasbon', [$tanggal_awal, $tanggal_akhir])
-            ->select('a.*', DB::raw('SUM(a.nominal) as sum_nominal'))
-            ->groupBy('a.nik', 'a.jns_kasbon');
+            ->select('a.*', 'b.nama as nama_karyawan', DB::raw('SUM(a.nominal) as sum_nominal'));
 
+        if (isset($input['nik'])) {
+            $result->where('a.nik', $input['nik']);
+        }
+
+        $result->groupBy('a.nik', 'a.jns_kasbon');
         try {
             return $result;
         } catch (\Exception $e) {

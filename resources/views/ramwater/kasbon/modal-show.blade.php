@@ -27,7 +27,6 @@
                                             <th>nota_penjualan</th>
                                             <th>nominal</th>
                                             <th>ket_kasbon</th>
-                                            <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                             </th>
                                         </tr>
                                     </thead>
