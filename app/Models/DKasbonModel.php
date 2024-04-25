@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class DKasbonModel extends Model
 {
@@ -11,6 +12,19 @@ class DKasbonModel extends Model
 
     protected $table = 'd_kasbon';
     protected $guarded = [];
+
+    public function getKasbon()
+    {
+        $result = DB::table('d_kasbon as a')
+            ->select('a.*', DB::raw('SUM(a.nominal) as sum_nominal'))
+            ->groupBy('a.nik', 'a.jns_kasbon');
+
+        try {
+            return $result;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 
     public function upsert($input)
     {

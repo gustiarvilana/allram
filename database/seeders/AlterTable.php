@@ -14,6 +14,8 @@ class AlterTable extends Seeder
      */
     public function run()
     {
+        DB::statement("SET sql_mode = 'ONLY_FULL_GROUP_BY'");
+
         // t_ops
         DB::statement(
             "ALTER TABLE `t_ops`

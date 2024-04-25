@@ -6,6 +6,7 @@ use App\Http\Controllers\pelanggan\PelangganController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Ramwater\Hutang\HutangNominalController;
+use App\Http\Controllers\Ramwater\Kasbon\LaporanKasbonController;
 use App\Http\Controllers\Ramwater\Ops\OpsController;
 use App\Http\Controllers\Ramwater\Pembelian\DetailPembelianController;
 use App\Http\Controllers\Ramwater\Pembelian\PembayaranController as PembelianPembayaranController;
@@ -131,6 +132,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
 
             Route::get('/ops', [LaporanOpsController::class, 'index'])->name('ops.laporan');
             Route::get('/ops/data', [LaporanOpsController::class, 'data'])->name('ops.laporan.data');
+
+            Route::get('/kasbon', [LaporanKasbonController::class, 'index'])->name('kasbon.laporan');
+            Route::get('/kasbon/data', [LaporanKasbonController::class, 'data'])->name('kasbon.laporan.data');
         });
 
         Route::prefix('hutang')->group(function () {

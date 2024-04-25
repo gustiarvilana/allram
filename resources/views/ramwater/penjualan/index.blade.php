@@ -148,7 +148,7 @@
                                                         <th>galon_kembali</th>
                                                         <th>sisa_galon</th>
                                                         <th>sts_galon</th>
-                                                        <th>Kasbon ?</th>
+                                                        <th>Kasbon?</th>
                                                         <th>kd_sales</th>
                                                         {{-- <th>opr_input</th> --}}
                                                         {{-- <th>tgl_input</th> --}}
@@ -372,7 +372,8 @@
                                 if ('{{ $harga->kd_produk }}' == kd_produk) {
                                     var formattedPrice = addCommas('{{ $harga->harga }}');
                                     selectOptions +=
-                                        '<option value="{{ $harga->harga }}">' + formattedPrice +
+                                        '<option value="{{ $harga->harga }}">' +
+                                        '{{ $harga->ket_harga }} / ' + formattedPrice +
                                         '</option>';
                                 }
                             @endforeach
