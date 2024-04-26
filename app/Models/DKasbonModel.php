@@ -13,6 +13,16 @@ class DKasbonModel extends Model
     protected $table = 'd_kasbon';
     protected $guarded = [];
 
+    public function getKasbon()
+    {
+        $kasbon = DB::table('d_kasbon as a')
+            ->leftJoin('d_karyawan as b', 'a.nik', 'b.nik')
+            ->select('a.*', 'b.nama')
+            ->orderBy('a.created_at', 'DESC');
+
+        return $kasbon;
+    }
+
     public function getKasbonByDate($input, $nik)
     {
         $rTanggal = $input['rTanggal'];

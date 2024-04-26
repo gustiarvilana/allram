@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ramwater\Kasbon;
 
 use App\Helpers\FormatHelper;
 use App\Http\Controllers\Controller;
+use App\Models\DKasbonModel;
 use App\Models\DOpsModel;
 use App\Models\Karyawan;
 use App\Models\TOps;
@@ -19,12 +20,14 @@ class KasbonController extends Controller
     private $opsService;
     private $tOps;
     private $dOps;
+    private $kasbon;
     private $dKaryawan;
     public function __construct()
     {
         $this->opsService = new OpsService();
         $this->dOps = new DOpsModel();
         $this->tOps = new TOps();
+        $this->kasbon = new DKasbonModel();
         $this->dKaryawan = new Karyawan();
     }
 
@@ -32,10 +35,10 @@ class KasbonController extends Controller
     {
         $requestData = $request->input();
 
-        $menu = $this->dOps->getLaporanDataOps($requestData);
+        $kasbon =  $this->kasbon->getKasbon();
 
         return datatables()
-            ->of($menu)
+            ->of($kasbon)
             ->addIndexColumn()
             ->make(true);
     }
