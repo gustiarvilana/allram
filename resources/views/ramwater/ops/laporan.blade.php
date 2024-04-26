@@ -260,7 +260,12 @@
                     }, {
                         data: 'tanggal'
                     }, {
-                        data: 'nama'
+                        data: 'nama',
+                        render: function(data, type, row) {
+                            console.log(row);
+                            var nama = data ? data : row.nik;
+                            return addCommas(nama);
+                        }
                     }, {
                         data: 'nama_ops'
                     }, {
