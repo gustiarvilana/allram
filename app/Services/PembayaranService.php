@@ -262,11 +262,11 @@ class PembayaranService
 
             $total = $data['total_galon'] - $data['sisa_galon'];
             $kembali = $data['galon_kembali'];
-            $sisa = $total - $kembali;
+            $sisa = intVal($total) - intVal($kembali);
             $data_fix['sisa_galon'] = $sisa;
             $data_fix['galon_kembali'] = $kembali;
 
-            $new_sisa = $data_fix['sisa_galon'] - $data_fix['galon_kembali'];
+            $new_sisa = intval($data_fix['sisa_galon']) - intVal($data_fix['galon_kembali']);
 
             if (intVal($total) > 0) {
                 if ($new_sisa == 0) {
