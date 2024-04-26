@@ -6,6 +6,7 @@ use App\Http\Controllers\pelanggan\PelangganController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Ramwater\Hutang\HutangNominalController;
+use App\Http\Controllers\Ramwater\Kasbon\KasbonController;
 use App\Http\Controllers\Ramwater\Kasbon\LaporanKasbonController;
 use App\Http\Controllers\Ramwater\Ops\OpsController;
 use App\Http\Controllers\Ramwater\Pembelian\DetailPembelianController;
@@ -121,6 +122,11 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/ops', OpsController::class)->except('show');
         Route::prefix('ops')->group(function () {
             Route::get('/data', [OpsController::class, 'data'])->name('ops.data');
+        });
+
+        Route::resource('/kasbon', KasbonController::class)->except('show');
+        Route::prefix('kasbon')->group(function () {
+            Route::get('/data', [KasbonController::class, 'data'])->name('kasbon.data');
         });
 
         Route::prefix('laporan')->group(function () {

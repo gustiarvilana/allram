@@ -303,7 +303,7 @@ class CreateTable extends Seeder
         DB::unprepared("
             CREATE TABLE IF NOT EXISTS `t_jns_kasbon` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                `kd_jns_kasbon` INT DEFAULT NULL,
+                `jns_kasbon` INT DEFAULT NULL,
                 `nama` VARCHAR(50) DEFAULT NULL,
                 `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

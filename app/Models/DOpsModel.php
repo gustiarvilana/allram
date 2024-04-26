@@ -33,8 +33,8 @@ class DOpsModel extends Model
         $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
 
         $query = DB::table('d_ops as a')
-            ->join('d_karyawan as b', 'a.nik', '=', 'b.nik')
-            ->join('t_ops as c', 'a.kd_ops', '=', 'c.kd_ops')
+            ->leftJoin('d_karyawan as b', 'a.nik', '=', 'b.nik')
+            ->leftJoin('t_ops as c', 'a.kd_ops', '=', 'c.kd_ops')
             ->orderBy('a.created_at', 'desc')
             ->select('a.*', 'b.nama', 'c.nama_ops', 'c.tipe');
 
