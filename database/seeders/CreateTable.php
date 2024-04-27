@@ -334,8 +334,8 @@ class CreateTable extends Seeder
             INSERT IGNORE INTO `t_jns_kasbon`
             (`kd_jns_kasbon`, `nama`, `created_at`, `updated_at`)
             VALUES
-            (1, 'kasbon Rutin', NOW(), NOW()),
-            (2, 'Kasbon Kurang Harga', NOW(), NOW());
+            (1,1, 'kasbon Rutin', NOW(), NOW()),
+            (2,2, 'Kasbon Kurang Harga', NOW(), NOW());
         ");
 
         // t_sts

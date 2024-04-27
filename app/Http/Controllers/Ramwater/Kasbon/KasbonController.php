@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 class KasbonController extends Controller
 {
-    private $opsService;
     private $tOps;
-    private $dOps;
     private $kasbon;
     private $dKaryawan;
     public function __construct()
@@ -54,10 +52,10 @@ class KasbonController extends Controller
 
     public function store(Request $request)
     {
-        $data = json_decode($request->input('data'), true);
-        $file = $request->file('path_file');
+        $input = $request->input('data');
+        $this->kasbon->upsert($input);
 
-        return $this->opsService->store($data, $file);
+        return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
     }
 
 

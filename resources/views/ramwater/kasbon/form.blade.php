@@ -1,5 +1,5 @@
-<div class="modal fade field" id="modal-form" data-backdrop="static" data-keyboard="false"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modal-form" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="alert alert-danger" style="display:none"></div>
 
@@ -10,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" class="form-horizontal">
+            <form method="post" id="form-kasbon" class="form-horizontal">
                 @csrf
                 @method('')
                 <div class="modal-body">
@@ -19,19 +19,12 @@
                             <div class="card">
                                 <div class="card-body">
                                     <input type="hidden" name="id" id="id">
+
                                     <div class="form-group">
-                                        <label for="tanggal">tanggal</label>
-                                        <input type="text" class="form-control" name="tanggal" id="tanggal"
+                                        <label for="tgl_kasbon">Tanggal</label>
+                                        <input type="text" class="form-control" name="tgl_kasbon" id="tgl_kasbon"
                                             value="{{ date('Ymd') }}">
-                                        @error('tanggal')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group" style="display: none">
-                                        <label for="satker">satker</label>
-                                        <input type="text" class="form-control" name="satker" id="satker"
-                                            value="ramwater">
-                                        @error('satker')
+                                        @error('tgl_kasbon')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -49,57 +42,25 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="form-group">
-                                        <label for="kd_ops">OPS</label>
-                                        <div class="col-md-8">
-                                            <select name="kd_ops" id="kd_ops" class="form-control select2">
-                                                <option value="">== Pilih Ops ==</option>
-                                                @foreach ($opss as $ops)
-                                                    <option value="{{ $ops->kd_ops }}">{{ $ops->nama_ops }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('kd_ops')
+                                    <div class="form-group" style="display: none">
+                                        <label for="jns_kasbon">jns_kasbon</label>
+                                        <input type="text" class="form-control" name="jns_kasbon" id="jns_kasbon"
+                                            value="1">
+                                        @error('jns_kasbon')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="jumlah">Jumlah</label>
-                                        <input type="text" class="form-control money" name="jumlah" id="jumlah"
-                                            value="{{ old('jumlah') }}">
-                                        @error('jumlah')
+                                        <label for="nominal">Nominal</label>
+                                        <input type="text" class="form-control" name="nominal" id="nominal">
+                                        @error('nominal')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="harga">Harga</label>
-                                        <input type="text" class="form-control money" name="harga" id="harga"
-                                            value="{{ old('harga') }}">
-                                        @error('harga')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="total">Total</label>
-                                        <input type="text" class="form-control money" name="total" id="total"
-                                            readonly>
-                                        @error('total')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="path_file">path_file</label>
-                                        <input type="file" class="form-control money" name="path_file" id="path_file"
-                                            readonly>
-                                        @error('path_file')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="keterangan">Keterangan</label>
-                                        <input type="text" class="form-control" name="keterangan" id="keterangan"
-                                            value="{{ old('keterangan') }}">
-                                        @error('keterangan')
+                                        <label for="ket_kasbon">Keterangan</label>
+                                        <input type="text" class="form-control" name="ket_kasbon" id="ket_kasbon">
+                                        @error('ket_kasbon')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -112,19 +73,9 @@
             </form>
             <div class="modal-footer">
                 {{-- <button class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                <button class="btn btn-primary" id="ops-add">Simpan</button>
+                <button class="btn btn-primary" id="kasbon-add">Simpan</button>
             </div>
         </div>
 
     </div>
 </div>
-
-<script>
-    $('body').on('change', '#jumlah,#harga', function() {
-        var jumlah = getFloatValue($('#jumlah'));
-        var harga = getFloatValue($('#harga'));
-        var total = harga * jumlah;
-
-        total > 0 ? $('#total').val(addCommas(total)) : $('#total').val('0')
-    })
-</script>

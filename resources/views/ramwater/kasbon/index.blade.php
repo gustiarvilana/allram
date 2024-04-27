@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    @include('ramwater.ops.form')
+    @include('ramwater.kasbon.form')
 @endsection
 
 @push('js')
@@ -110,116 +110,166 @@
                 }
             });
 
-            // $('.modal').on('hidden.bs.modal', function() {
-            //     $('#modal-form form')[0].reset();
-            //     $('.select2').val('').trigger('change');
-            // });
+            $('.modal').on('hidden.bs.modal', function() {
+                $('#modal-form form')[0].reset();
+                $('.select2').val('').trigger('change');
+            });
 
-            // $('body').on('click', '#add_menu', function() {
-            //     $('#modal-form').modal('show');
-            //     $('#modal-form .modal-title').text('Tambah Ops');
-            // }).on('click', '#ops-add', function() {
-            //     var imageFile = $('#path_file')[0].files[0];
-            //     var data = {
-            //         id: $('form #id').val(),
-            //         tanggal: $('form #tanggal').val(),
-            //         satker: $('form #satker').val(),
-            //         nik: $('form #nik').val(),
-            //         kd_ops: $('form #kd_ops').val(),
-            //         jumlah: $('form #jumlah').val(),
-            //         harga: $('form #harga').val(),
-            //         total: $('form #total').val(),
-            //         keterangan: $('form #keterangan').val(),
-            //     };
+            $('body').on('click', '#add_menu', function() {
+                $('#modal-form').modal('show');
+                $('#modal-form .modal-title').text('Tambah Kasbon');
+            }).on('click', '#ops-add', function() {
+                var imageFile = $('#path_file')[0].files[0];
+                var data = {
+                    id: $('form #id').val(),
+                    tanggal: $('form #tanggal').val(),
+                    satker: $('form #satker').val(),
+                    nik: $('form #nik').val(),
+                    kd_ops: $('form #kd_ops').val(),
+                    jumlah: $('form #jumlah').val(),
+                    harga: $('form #harga').val(),
+                    total: $('form #total').val(),
+                    keterangan: $('form #keterangan').val(),
+                };
 
-            //     var formData = new FormData();
-            //     formData.append('_token', getCSRFToken());
-            //     formData.append('path_file', imageFile);
-            //     formData.append('data', JSON.stringify(data));
+                var formData = new FormData();
+                formData.append('_token', getCSRFToken());
+                formData.append('path_file', imageFile);
+                formData.append('data', JSON.stringify(data));
 
-            //     $.ajax({
-            //         url: url_add,
-            //         method: 'POST',
-            //         processData: false,
-            //         contentType: false,
-            //         data: formData,
-            //         success: function(response) {
-            //             console.log(response);
-            //             if (response.success) {
-            //                 Swal.fire({
-            //                     icon: 'success',
-            //                     title: 'Sukses!',
-            //                     text: response.message,
-            //                 });
-            //                 $('.close').click();
-            //                 table.ajax.reload();
-            //                 return;
-            //             }
-            //             Swal.fire({
-            //                 icon: 'error',
-            //                 title: 'Gagal!',
-            //                 text: response.message,
-            //             });
+                $.ajax({
+                    url: url_add,
+                    method: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(response) {
+                        console.log(response);
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses!',
+                                text: response.message,
+                            });
+                            $('.close').click();
+                            table.ajax.reload();
+                            return;
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message,
+                        });
 
-            //         },
-            //         error: function(error) {
-            //             var errorMessage = "Terjadi kesalahan dalam operasi.";
+                    },
+                    error: function(error) {
+                        var errorMessage = "Terjadi kesalahan dalam operasi.";
 
-            //             if (error.responseJSON && error.responseJSON.message) {
-            //                 errorMessage = error.responseJSON.message;
-            //             } else if (error.statusText) {
-            //                 errorMessage = error.statusText;
-            //             }
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        } else if (error.statusText) {
+                            errorMessage = error.statusText;
+                        }
 
-            //             Swal.fire({
-            //                 icon: 'error',
-            //                 title: 'Kesalahan!',
-            //                 text: errorMessage,
-            //             });
-            //         }
-            //     });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: errorMessage,
+                        });
+                    }
+                });
 
-            // }).on('click', '#user_menu-edit', function() {
-            //     var data_json = $(this).attr('data-row');
-            //     var data = JSON.parse(data_json);
+            }).on('click', '#user_menu-edit', function() {
+                var data_json = $(this).attr('data-row');
+                var data = JSON.parse(data_json);
 
-            //     $('#modal-form form')[0].reset();
+                $('#modal-form form')[0].reset();
 
-            //     $('#modal-form [name=id]').val(data.id);
-            //     $('#modal-form [name=tanggal]').val(data.tanggal);
-            //     $('#modal-form [name=satker]').val(data.satker);
-            //     $('#modal-form [name=nik]').val(data.nik).trigger("change");
-            //     $('#modal-form [name=kd_ops]').val(data.kd_ops).trigger("change");
-            //     $('#modal-form [name=jumlah]').val(addCommas(data.jumlah));
-            //     $('#modal-form [name=harga]').val(addCommas(data.harga));
-            //     $('#modal-form [name=total]').val(addCommas(data.total));
-            //     $('#modal-form [name=keterangan]').val(data.keterangan);
+                $('#modal-form [name=id]').val(data.id);
+                $('#modal-form [name=tanggal]').val(data.tanggal);
+                $('#modal-form [name=satker]').val(data.satker);
+                $('#modal-form [name=nik]').val(data.nik).trigger("change");
+                $('#modal-form [name=kd_ops]').val(data.kd_ops).trigger("change");
+                $('#modal-form [name=jumlah]').val(addCommas(data.jumlah));
+                $('#modal-form [name=harga]').val(addCommas(data.harga));
+                $('#modal-form [name=total]').val(addCommas(data.total));
+                $('#modal-form [name=keterangan]').val(data.keterangan);
 
-            //     $('#modal-form .modal-title').text('Edit Ops');
-            //     $('#modal-form').modal('show');
-            // }).on('click', '#user_menu-delete', function() {
-            //     var id = $(this).data('id');
-            //     url_delete = url_delete.replace(':id', id);
+                $('#modal-form .modal-title').text('Edit Ops');
+                $('#modal-form').modal('show');
+            }).on('click', '#user_menu-delete', function() {
+                var id = $(this).data('id');
+                url_delete = url_delete.replace(':id', id);
 
-            //     if (confirm('Yakin akan menghapus data terpilih?')) {
-            //         $.ajax({
-            //             url: url_delete,
-            //             type: 'DELETE',
-            //             data: {
-            //                 _token: $('[name=csrf-token]').attr('content')
-            //             },
-            //             success: function(response) {
-            //                 $('.close').click();
-            //                 table.ajax.reload();
-            //             },
-            //             error: function(errors) {
-            //                 alert('Gagal Hapus data!');
-            //                 return;
-            //             }
-            //         });
-            //     }
+                if (confirm('Yakin akan menghapus data terpilih?')) {
+                    $.ajax({
+                        url: url_delete,
+                        type: 'DELETE',
+                        data: {
+                            _token: $('[name=csrf-token]').attr('content')
+                        },
+                        success: function(response) {
+                            $('.close').click();
+                            table.ajax.reload();
+                        },
+                        error: function(errors) {
+                            alert('Gagal Hapus data!');
+                            return;
+                        }
+                    });
+                }
 
-            // });
+            }).on('click', '#kasbon-add', function() {
+                var url_store = '{{ route('kasbon.store') }}'
+                var formData = $('#form-kasbon').serialize();
+
+                var cleanedData = {};
+                formData.split('&').forEach(pair => {
+                    var [key, value] = pair.split('=').map(decodeURIComponent);
+                    cleanedData[key] = value.trim();
+                });
+
+                $.ajax({
+                    url: url_store,
+                    type: 'POST',
+                    data: {
+                        data: cleanedData,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses!',
+                                text: response.message,
+                            });
+                            $('.close').click()
+                            return;
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message,
+                        });
+
+                    },
+                    error: function(error) {
+                        var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        } else if (error.statusText) {
+                            errorMessage = error.statusText;
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Kesalahan!',
+                            text: errorMessage,
+                        });
+                    }
+                });
+
+            });
         });
     </script>
 @endpush

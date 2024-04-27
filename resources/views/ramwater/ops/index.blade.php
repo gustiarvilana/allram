@@ -249,57 +249,5 @@
 
             });
         });
-
-        // function validate() {
-        //     $('#modal-form').on('submit', function(e) {
-        //         if (!e.preventDefault()) {
-        //             $.ajax({
-        //                 type: "POST",
-        //                 url: $('#modal-form form').attr('action'),
-        //                 data: $('#modal-form form').serialize(),
-        //                 success: function(result) {
-        //                     if (result.errors) {
-        //                         $('.alert-danger').html('');
-
-        //                         $.each(result.errors, function(key, value) {
-        //                             $('.alert-danger').show();
-        //                             $('.alert-danger').append('<li>' + value +
-        //                                 '</li>');
-        //                         });
-        //                     } else {
-        //                         $('#modal-form').modal('hide');
-        //                         $('#table').DataTable().ajax.reload()
-        //                     }
-        //                 },
-        //                 error: function(jqXHR, exception, request, status, error) {
-        //                     var msg = ''
-        //                     if (jqXHR.status === 0) {
-        //                         msg = 'Not connect.\n Verify Network.';
-        //                     } else if (jqXHR.status == 404) {
-        //                         msg = 'Requested page not found. [404]';
-        //                     } else if (jqXHR.status == 422666) {
-        //                         msg = 'The given data was invalid.. [422]';
-        //                     } else if (jqXHR.status == 500) {
-        //                         msg = 'Internal Server Error [500].';
-        //                     } else if (exception === 'parsererror') {
-        //                         msg = 'Requested JSON parse failed.';
-        //                     } else if (exception === 'timeout') {
-        //                         msg = 'Time out error.';
-        //                     } else if (exception === 'abort') {
-        //                         msg = 'Ajax request aborted.';
-        //                     } else {
-        //                         msg = 'Uncaught Error.\n' + jqXHR.responseText;
-        //                     }
-        //                     $('.alert-danger').show();
-        //                     $('.alert-danger').html(msg);
-        //                     setTimeout(() => {
-        //                         $('.alert-danger').hide();
-        //                         $('.alert-danger').html('');
-        //                     }, 5000);
-        //                 },
-        //             })
-        //         }
-        //     })
-        // };
     </script>
 @endpush

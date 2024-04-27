@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DKasbonModel extends Model
@@ -73,13 +74,19 @@ class DKasbonModel extends Model
 
     public function upsert($input)
     {
+        $input['id'] = $input['id'] ?? '';
+        $input['opr_input'] = $input['opr_input'] ?? date('Ymd');
+        $input['tgl_input'] = $input['tgl_input'] ?? Auth::user()->nik;
+
         try {
-            return $this->updateOrCreate(
-                [
-                    'nota_penjualan' => $input['nota_penjualan'],
-                ],
-                $input
-            );
+            return DB::transaction(function () use ($input) {
+
+                $condition = isset($input['nota_penjualan']) ? ['nota_penjualan' => $input['nota_penjualan']] : ['id' => $input['id']];
+                return $this->updateOrCreate(
+                    $condition,
+                    $input
+                );
+            });
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
