@@ -40,8 +40,8 @@ class DetailPenjualanController extends Controller
         if (isset($requestData['rTanggal'])) {
             $penjualan = $this->penjualanModel->getLaporanPenjualan($requestData);
         } elseif (isset($requestData['jns'])) {
-            if ($requestData['jns'] == 'hutangNominal') $penjualan = $this->penjualanModel->getHutangPenjualanNominal();
-            if ($requestData['jns'] == 'hutangGalon') $penjualan = $this->penjualanModel->getHutangPenjualanGalon();
+            if ($requestData['jns'] == 'hutangNominal') $penjualan = $this->penjualanModel->getHutangPenjualanNominal($requestData['data']);
+            if ($requestData['jns'] == 'hutangGalon') $penjualan = $this->penjualanModel->getHutangPenjualanGalon($requestData['data']);
         } else {
             $penjualan = $this->penjualanModel->getPenjualan();
         }

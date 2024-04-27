@@ -6,6 +6,57 @@
 
 @section('content')
     <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-hearder"></div>
+                <div class="card-body">
+                    <form id="form-cari">
+                        <div class="form-group">
+                            <label>Date range:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="rTanggal" class="form-control float-right dateRange"
+                                    id="rTanggal">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nota:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-file" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="nota_penjualan" class="form-control float-right"
+                                    id="nota_penjualan">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pilih Pelanggan:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="nama" class="form-control float-right" id="nama">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <a class="btn btn-success btn-s float-right" id="btn-cari"><i class="fa fa-search"
+                                aria-hidden="true"></i>
+                            Cari</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -155,152 +206,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            var tableLaporanpenjualan = $("#table-penjualan-laporan").DataTable({
-                info: false,
-                bPaginate: false,
-                bLengthChange: false,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: {
-                    url: '{{ route('penjualan.detail.data') }}',
-                    method: 'GET',
-                    data: {
-                        jns: 'hutangGalon'
-                    }
-                },
-                dom: 'Brtip',
-                buttons: [
-                    'copy', 'excel', 'pdf'
-                ],
-                columns: [{
-                        data: 'DT_RowIndex'
-                    },
-
-                    {
-                        data: 'nota_penjualan',
-                        name: 'a.nota_penjualan',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'nama',
-                        name: 'b.nama',
-                        render: function(data, type, row) {
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-                        }
-                    },
-                    {
-                        data: 'tgl_penjualan',
-                        name: 'a.tgl_penjualan',
-                        render: function(data, type, row) {
-                            var dataString = data.toString();
-
-                            var year = dataString.substring(0, 4);
-                            var month = dataString.substring(4, 6);
-                            var day = dataString.substring(6, 8);
-                            var formattedDate = year + '-' + month + '-' + day;
-
-                            return formattedDate;
-                        }
-                    },
-                    {
-                        data: 'nama_sales',
-                        name: 'nama_sales',
-                        render: function(data, type, row) {
-                            return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-                        }
-                    },
-                    {
-                        data: 'total_galon',
-                        name: 'a.total_galon',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'galon_kembali',
-                        name: 'a.galon_kembali',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'sisa_galon',
-                        name: 'a.sisa_galon',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'sts_galon',
-                        name: 'a.sts_galon',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'id',
-                        name: 'a.id',
-                        render: function(data, type, row) {
-                            var row_data = JSON.stringify(row);
-
-                            var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row.id +
-                                '" data-row=\'' + row_data +
-                                '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fa fa-eye" aria-hidden="true"></i> Detail</a>';
-
-                            return '<div style="white-space: nowrap;">' + btn_edit + '</div>';
-                        },
-                    },
-                ],
-                columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9],
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        targets: [5, 6, 7],
-                        className: 'text-right'
-                    }
-                ],
-                initComplete: function() {
-                    initializeColumnSearch(this);
-                    // setupHoverShapes(this, 11);
-                },
-                footerCallback: function(row, data, start, end, display) {
-                    var api = this.api();
-
-                    // Menghitung total sum kolom harga_total
-                    var hargaTotalTotal = api.column(5, {
-                        page: 'current'
-                    }).data().reduce(function(acc, curr) {
-                        return acc + parseFloat(curr);
-                    }, 0);
-
-                    // Menghitung total sum kolom nominal_bayar
-                    var nominalBayarTotal = api.column(6, {
-                        page: 'current'
-                    }).data().reduce(function(acc, curr) {
-                        return acc + parseFloat(curr);
-                    }, 0);
-
-                    // Menghitung total sum kolom sisa_bayar
-                    var sisaBayarTotal = api.column(7, {
-                        page: 'current'
-                    }).data().reduce(function(acc, curr) {
-                        return acc + parseFloat(curr);
-                    }, 0);
-
-                    // Menampilkan total sum di footer
-                    $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
-                    $(api.column(6).footer()).html(addCommas(nominalBayarTotal));
-                    $(api.column(7).footer()).html(addCommas(sisaBayarTotal));
-                }
-            });
-
             $('.modal .form-control').prop('disabled', true);
 
             $('#table-detail-edit').on('click', '.btn-edit', function() {
@@ -459,6 +364,165 @@
                 });
 
                 $("#modal-penjualan").modal("show");
+            }).on("click", "#btn-cari", function() {
+                $('#form-hutang').show();
+                var formData = $('#form-cari').serialize();
+
+                var cari = {};
+                formData.split('&').forEach(pair => {
+                    var [key, value] = pair.split('=').map(decodeURIComponent);
+                    cari[key] = value.trim();
+                });
+
+                var tableLaporanpenjualan = $("#table-penjualan-laporan").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('penjualan.detail.data') }}',
+                        method: 'GET',
+                        data: {
+                            jns: 'hutangGalon',
+                            data: cari
+                        }
+                    },
+                    dom: 'Brtip',
+                    buttons: [
+                        'copy', 'excel', 'pdf'
+                    ],
+                    columns: [{
+                            data: 'DT_RowIndex'
+                        },
+
+                        {
+                            data: 'nota_penjualan',
+                            name: 'a.nota_penjualan',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'nama',
+                            name: 'b.nama',
+                            render: function(data, type, row) {
+                                return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                    data + '</span></div>';
+                            }
+                        },
+                        {
+                            data: 'tgl_penjualan',
+                            name: 'a.tgl_penjualan',
+                            render: function(data, type, row) {
+                                var dataString = data.toString();
+
+                                var year = dataString.substring(0, 4);
+                                var month = dataString.substring(4, 6);
+                                var day = dataString.substring(6, 8);
+                                var formattedDate = year + '-' + month + '-' + day;
+
+                                return formattedDate;
+                            }
+                        },
+                        {
+                            data: 'nama_sales',
+                            name: 'nama_sales',
+                            render: function(data, type, row) {
+                                return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
+                                    data + '</span></div>';
+                            }
+                        },
+                        {
+                            data: 'total_galon',
+                            name: 'a.total_galon',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'galon_kembali',
+                            name: 'a.galon_kembali',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'sisa_galon',
+                            name: 'a.sisa_galon',
+                            render: function(data, type, row) {
+                                return addCommas(data);
+                            }
+                        },
+                        {
+                            data: 'sts_galon',
+                            name: 'a.sts_galon',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'id',
+                            name: 'a.id',
+                            render: function(data, type, row) {
+                                var row_data = JSON.stringify(row);
+
+                                var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row
+                                    .id +
+                                    '" data-row=\'' + row_data +
+                                    '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fa fa-eye" aria-hidden="true"></i> Detail</a>';
+
+                                return '<div style="white-space: nowrap;">' + btn_edit +
+                                    '</div>';
+                            },
+                        },
+                    ],
+                    columnDefs: [{
+                            targets: [0, 5, 6, 7, 8, 9],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [5, 6, 7],
+                            className: 'text-right'
+                        }
+                    ],
+                    initComplete: function() {
+                        initializeColumnSearch(this);
+                        // setupHoverShapes(this, 11);
+                    },
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api();
+
+                        // Menghitung total sum kolom harga_total
+                        var hargaTotalTotal = api.column(5, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menghitung total sum kolom nominal_bayar
+                        var nominalBayarTotal = api.column(6, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menghitung total sum kolom sisa_bayar
+                        var sisaBayarTotal = api.column(7, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menampilkan total sum di footer
+                        $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
+                        $(api.column(6).footer()).html(addCommas(nominalBayarTotal));
+                        $(api.column(7).footer()).html(addCommas(sisaBayarTotal));
+                    }
+                });
             })
         });
     </script>

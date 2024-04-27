@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DOpsModel;
 use App\Models\DPelangganModel;
 use App\Models\Karyawan;
+use App\Models\SupplierModel;
 use App\Models\TChannelModel;
 use App\Models\TGudang;
 use App\Models\TOps;

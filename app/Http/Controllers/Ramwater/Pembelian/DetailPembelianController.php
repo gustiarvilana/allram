@@ -31,11 +31,10 @@ class DetailPembelianController extends Controller
     public function data(Request $request)
     {
         $requestData = $request->input();
-
         if (isset($requestData['rTanggal'])) {
             $supplier = $this->dPembelianModel->getLaporanPembelian($requestData);
         } elseif (isset($requestData['jns'])) {
-            if ($requestData['jns'] == 'hutang') $supplier = $this->dPembelianModel->getHutang();
+            if ($requestData['jns'] == 'hutang') $supplier = $this->dPembelianModel->getHutang($requestData);
         } else {
             $supplier = $this->dPembelianModel->getpembelian();
         }

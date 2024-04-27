@@ -513,7 +513,7 @@
 
                 // Set the popup position above the cursor
                 var leftPosition = mouseX - 600
-                var topPosition = mouseY - popup.height() - 75;
+                var topPosition = mouseY - popup.height();
 
                 // Check if the popup exceeds the right edge of the screen
                 if (leftPosition + popup.width() > $(window).width()) {

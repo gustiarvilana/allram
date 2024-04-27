@@ -26,7 +26,7 @@ class Penjualan extends Model
         return $penjualan;
     }
 
-    function getHutangPenjualanNominal()
+    function getHutangPenjualanNominal($input)
     {
         $penjualan = DB::table('d_penjualan as a')
             ->join('d_pelanggan as b', 'a.kd_pelanggan', '=', 'b.kd_pelanggan')
@@ -36,10 +36,32 @@ class Penjualan extends Model
             ->orderBy('a.created_at', 'desc')
             ->select('a.*', 'b.nama', 'c.ur_channel', 'd.nama as nama_sales');
 
+        if (isset($input['kd_pelanggan'])) {
+            $penjualan->where('a.kd_pelanggan', '=', $input['kd_pelanggan']);
+        }
+        if (isset($input['nama'])) {
+            $penjualan->where('b.nama', 'like', '%' . $input['nama'] . '%');
+        }
+        if (isset($input['nik'])) {
+            $penjualan->where('a.kd_sales', '=', $input['nik']);
+        }
+
+        if (isset($input['nota_penjualan'])) {
+            $penjualan->where('a.nota_penjualan', 'like', '%' . $input['nota_penjualan'] . '%');
+        }
+        if (isset($input['rTanggal'])) {
+            $rTanggal = $input['rTanggal'];
+            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+
+            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+            $penjualan->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir]);
+        }
+
         return $penjualan;
     }
 
-    function getHutangPenjualanGalon()
+    function getHutangPenjualanGalon($input)
     {
         $penjualan = DB::table('d_penjualan as a')
             ->join('d_pelanggan as b', 'a.kd_pelanggan', '=', 'b.kd_pelanggan')
@@ -49,17 +71,32 @@ class Penjualan extends Model
             ->orderBy('a.created_at', 'desc')
             ->select('a.*', 'b.nama', 'c.ur_channel', 'd.nama as nama_sales');
 
+        if (isset($input['kd_pelanggan'])) {
+            $penjualan->where('a.kd_pelanggan', '=', $input['kd_pelanggan']);
+        }
+        if (isset($input['nama'])) {
+            $penjualan->where('b.nama', 'like', '%' . $input['nama'] . '%');
+        }
+        if (isset($input['nik'])) {
+            $penjualan->where('a.kd_sales', '=', $input['nik']);
+        }
+        if (isset($input['nota_penjualan'])) {
+            $penjualan->where('a.nota_penjualan', 'like', '%' . $input['nota_penjualan'] . '%');
+        }
+        if (isset($input['rTanggal'])) {
+            $rTanggal = $input['rTanggal'];
+            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+
+            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+            $penjualan->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir]);
+        }
+
         return $penjualan;
     }
 
     function getLaporanPenjualan($input)
     {
-        $rTanggal = $input['rTanggal'];
-        list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
-
-        $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
-        $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
-
         $query = DB::table('d_penjualan as a')
             ->join('d_pelanggan as b', 'a.kd_pelanggan', '=', 'b.kd_pelanggan')
             ->leftJoin('t_channel_bayar as c', 'a.kd_channel', '=', 'c.kd_channel')
@@ -80,6 +117,11 @@ class Penjualan extends Model
             $query->where('a.nota_penjualan', 'like', '%' . $input['nota_penjualan'] . '%');
         }
         if (isset($input['rTanggal'])) {
+            $rTanggal = $input['rTanggal'];
+            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+
+            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
             $query->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir]);
         }
 

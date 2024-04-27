@@ -25,25 +25,36 @@ class DPembelianModel extends Model
         return $pembelian;
     }
 
-    public function getHutang()
+    public function getHutang($input)
     {
+        $input = $input['data'];
         $pembelian = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
             ->where('a.sts_angsuran', '=', '1')
             ->orderBy('a.created_at', 'desc')
             ->select('a.*', 'b.nama');
 
+        if (isset($input['kd_supplier'])) {
+            $pembelian->where('a.kd_supplier', '=', $input['kd_supplier']);
+        }
+        if (isset($input['nota_pembelian'])) {
+            $pembelian->where('a.nota_pembelian', 'like', '%' . $input['nota_pembelian'] . '%');
+        }
+        if (isset($input['rTanggal'])) {
+            $rTanggal = $input['rTanggal'];
+            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+
+
+            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+            $pembelian->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);
+        }
+
         return $pembelian;
     }
 
     public function getLaporanPembelian($input)
     {
-        $rTanggal = $input['rTanggal'];
-        list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
-
-        $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
-        $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
-
         $query = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
             ->orderBy('a.created_at', 'desc')
@@ -56,6 +67,12 @@ class DPembelianModel extends Model
             $query->where('a.nota_pembelian', 'like', '%' . $input['nota_pembelian'] . '%');
         }
         if (isset($input['rTanggal'])) {
+            $rTanggal = $input['rTanggal'];
+            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+
+            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+
             $query->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);
         }
 

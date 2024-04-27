@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fas fa-money-bill"></i> <b>Laporan Hutang</b>
+    <i class="fas fa-money-bill"></i> <b>Laporan Hutang Nominal</b>
 @endsection
 
 @section('content')
@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="form-hutang" style="display: none">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -304,6 +304,15 @@
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
             }).on("click", "#btn-cari", function() {
+                $('#form-hutang').show();
+                var formData = $('#form-cari').serialize();
+
+                var cari = {};
+                formData.split('&').forEach(pair => {
+                    var [key, value] = pair.split('=').map(decodeURIComponent);
+                    cari[key] = value.trim();
+                });
+
                 var tableLaporanPembelian = $("#table-pembelian-laporan").DataTable({
                     info: false,
                     bPaginate: false,
@@ -316,7 +325,8 @@
                         url: '{{ route('pembelian.detail.data') }}',
                         method: 'GET',
                         data: {
-                            jns: 'hutang'
+                            jns: 'hutang',
+                            data: cari
                         }
                     },
                     dom: 'Brtip',
