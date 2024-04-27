@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card card-warning">
                 <div class="card-header">
-                    <a class="btn btn-success text-white" id="add_menu">Tambah Kasbon</a>
+                    <a class="btn btn-success text-white" id="btn-add">Tambah Kasbon</a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -93,8 +93,8 @@
                             var disabled = row.jns_kasbon == 3 ? 'disabled' : '';
                             return `
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" ${disabled} id="user_menu-edit"  data-row='${data}' data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Edit</button>
-                                <button class="btn btn-sm btn-danger" ${disabled} id="user_menu-delete"  data-row='${data}' data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Delete</button>
+                                <button class="btn btn-sm btn-primary" ${disabled} id="btn-edit"  data-row='${data}' data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Edit</button>
+                                <button class="btn btn-sm btn-danger" ${disabled} id="btn-hapus"  data-row='${data}' data-id='${row.id}' data-kd_menu='${row.kd_menu}' data-kd_parent='${row.kd_parent}' data-type='${row.type}' data-ur_menu_title='${row.ur_menu_title}' data-ur_menu_desc='${row.ur_menu_desc}' data-link_menu='${row.link_menu}' data-bg_color='${row.bg_color}' data-icon='${row.icon}' data-order='${row.order}' data-is_active='${row.is_active}'>Delete</button>
                             </div>
                         `;
                         }
@@ -115,90 +115,28 @@
                 $('.select2').val('').trigger('change');
             });
 
-            $('body').on('click', '#add_menu', function() {
+            $('body').on('click', '#btn-add', function() {
                 $('#modal-form').modal('show');
                 $('#modal-form .modal-title').text('Tambah Kasbon');
-            }).on('click', '#ops-add', function() {
-                var imageFile = $('#path_file')[0].files[0];
-                var data = {
-                    id: $('form #id').val(),
-                    tanggal: $('form #tanggal').val(),
-                    satker: $('form #satker').val(),
-                    nik: $('form #nik').val(),
-                    kd_ops: $('form #kd_ops').val(),
-                    jumlah: $('form #jumlah').val(),
-                    harga: $('form #harga').val(),
-                    total: $('form #total').val(),
-                    keterangan: $('form #keterangan').val(),
-                };
-
-                var formData = new FormData();
-                formData.append('_token', getCSRFToken());
-                formData.append('path_file', imageFile);
-                formData.append('data', JSON.stringify(data));
-
-                $.ajax({
-                    url: url_add,
-                    method: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    success: function(response) {
-                        console.log(response);
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sukses!',
-                                text: response.message,
-                            });
-                            $('.close').click();
-                            table.ajax.reload();
-                            return;
-                        }
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: response.message,
-                        });
-
-                    },
-                    error: function(error) {
-                        var errorMessage = "Terjadi kesalahan dalam operasi.";
-
-                        if (error.responseJSON && error.responseJSON.message) {
-                            errorMessage = error.responseJSON.message;
-                        } else if (error.statusText) {
-                            errorMessage = error.statusText;
-                        }
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Kesalahan!',
-                            text: errorMessage,
-                        });
-                    }
-                });
-
-            }).on('click', '#user_menu-edit', function() {
+            }).on('click', '#btn-edit', function() {
                 var data_json = $(this).attr('data-row');
                 var data = JSON.parse(data_json);
 
                 $('#modal-form form')[0].reset();
 
                 $('#modal-form [name=id]').val(data.id);
-                $('#modal-form [name=tanggal]').val(data.tanggal);
-                $('#modal-form [name=satker]').val(data.satker);
+                $('#modal-form [name=tgl_kasbon]').val(data.tgl_kasbon);
                 $('#modal-form [name=nik]').val(data.nik).trigger("change");
-                $('#modal-form [name=kd_ops]').val(data.kd_ops).trigger("change");
-                $('#modal-form [name=jumlah]').val(addCommas(data.jumlah));
-                $('#modal-form [name=harga]').val(addCommas(data.harga));
-                $('#modal-form [name=total]').val(addCommas(data.total));
-                $('#modal-form [name=keterangan]').val(data.keterangan);
+                $('#modal-form [name=jns_kasbon]').val(data.jns_kasbon);
+                $('#modal-form [name=nominal]').val(data.nominal);
+                $('#modal-form [name=ket_kasbon]').val(data.ket_kasbon);
 
-                $('#modal-form .modal-title').text('Edit Ops');
+                $('#modal-form .modal-title').text('Edit Kasbon');
                 $('#modal-form').modal('show');
-            }).on('click', '#user_menu-delete', function() {
+            }).on('click', '#btn-hapus', function() {
                 var id = $(this).data('id');
+                var url_delete =
+                    '{{ route('kasbon.destroy', ['kasbon' => ':id']) }}'; // Menggunakan 'kasbon' sebagai parameter
                 url_delete = url_delete.replace(':id', id);
 
                 if (confirm('Yakin akan menghapus data terpilih?')) {
@@ -209,17 +147,39 @@
                             _token: $('[name=csrf-token]').attr('content')
                         },
                         success: function(response) {
-                            $('.close').click();
-                            table.ajax.reload();
+                            if (response.success) {
+                                $('.close').click();
+                                table.ajax.reload();
+                                Swal.fire('Terhapus!', 'Data berhasil dihapus.',
+                                    'success');
+                                return;
+                            }
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: response.message,
+                            });
+
                         },
-                        error: function(errors) {
-                            alert('Gagal Hapus data!');
-                            return;
+                        error: function(error) {
+                            var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                            if (error.responseJSON && error.responseJSON.message) {
+                                errorMessage = error.responseJSON.message;
+                            } else if (error.statusText) {
+                                errorMessage = error.statusText;
+                            }
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Kesalahan!',
+                                text: errorMessage,
+                            });
                         }
                     });
                 }
 
-            }).on('click', '#kasbon-add', function() {
+            }).on('click', '#kasbon-simpan', function() {
                 var url_store = '{{ route('kasbon.store') }}'
                 var formData = $('#form-kasbon').serialize();
 
@@ -242,6 +202,7 @@
                                 title: 'Sukses!',
                                 text: response.message,
                             });
+                            table.ajax.reload();
                             $('.close').click()
                             return;
                         }

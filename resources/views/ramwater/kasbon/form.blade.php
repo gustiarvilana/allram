@@ -66,14 +66,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" name="id">
                         </div>
                     </div>
                 </div>
             </form>
             <div class="modal-footer">
                 {{-- <button class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                <button class="btn btn-primary" id="kasbon-add">Simpan</button>
+                <button class="btn btn-primary" id="kasbon-simpan">Simpan</button>
             </div>
         </div>
 

@@ -61,21 +61,10 @@ class KasbonController extends Controller
 
     public function destroy($id)
     {
-        $ops = DOpsModel::where('id', $id)->first();
-        if ($ops->path_file) {
-            $pathToDelete = $ops->path_file;
-            $publicPath = storage_path('app/public/');
-
-            // Pastikan path_file dimulai dengan "storage/"
-            if (Str::startsWith($pathToDelete, 'storage/')) {
-                $pathToDelete = $publicPath . Str::after($pathToDelete, 'storage/');
-            }
-
-            // delete
-            FormatHelper::deleteFile($pathToDelete);
-        }
+        $kasbon = $this->kasbon->where('id', $id)->first();
         try {
-            DOpsModel::where('id', $id)->delete();
+            $kasbon->delete();
+            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
         } catch (\Throwable $th) {
             throw $th;
         }
