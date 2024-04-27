@@ -116,6 +116,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
                 Route::get('/data', [PenjualanPembayaranController::class, 'data'])->name('penjualan.pembayaran.data');
                 Route::post('/store', [PenjualanPembayaranController::class, 'store'])->name('penjualan.pembayaran.store');
                 Route::delete('/destroy/{id}', [PenjualanPembayaranController::class, 'destroy'])->name('penjualan.pembayaran.destroy');
+
+                Route::get('/galon/data', [PenjualanPembayaranController::class, 'dataGalon'])->name('galon.detail.data');
+                Route::delete('/galon/destroy/{id}', [PenjualanPembayaranController::class, 'destroyGalon'])->name('galon.detail.destroy');
             });
         });
 

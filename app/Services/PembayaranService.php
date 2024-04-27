@@ -283,8 +283,10 @@ class PembayaranService
         $data_fix->nominal_bayar = $totalNominalBayar;
         $data_fix->sisa_bayar = $harga_total - $totalNominalBayar;
 
-        $pembayaranGalon = $this->preparePembayaranGalonData($data);
-        $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
+        if ($data['galon_kembali'] > 0) {
+            $pembayaranGalon = $this->preparePembayaranGalonData($data);
+            $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
+        }
 
         return $data_fix->save();
     }

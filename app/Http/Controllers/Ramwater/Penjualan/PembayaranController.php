@@ -6,6 +6,7 @@ use App\Helpers\FormatHelper;
 use App\Helpers\IntegrationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\DPelangganModel;
+use App\Models\DPembayaranGalonModel;
 use App\Models\DPembayaranModel;
 use App\Models\DPenjualanModel;
 use App\Models\Karyawan;
@@ -21,14 +22,16 @@ class PembayaranController extends Controller
 {
     protected $integrationHelper;
     protected $dPembayaranModel;
+    protected $dPembayaranGalonModel;
     protected $pembayaranService;
 
     public function __construct(PembayaranService $pembayaranService)
     {
-        $this->integrationHelper = new IntegrationHelper();
-        $this->dPembayaranModel = new DPembayaranModel();
-        $this->dPenjualanModel = new Penjualan();
-        $this->pembayaranService = $pembayaranService;
+        $this->integrationHelper     = new IntegrationHelper();
+        $this->dPembayaranModel      = new DPembayaranModel();
+        $this->dPembayaranGalonModel = new DPembayaranGalonModel();
+        $this->dPenjualanModel       = new Penjualan();
+        $this->pembayaranService     = $pembayaranService;
     }
 
     public function data(Request $request)
@@ -39,6 +42,18 @@ class PembayaranController extends Controller
         $bayar = $this->dPembayaranModel->getPembayaran();
 
         return response()->json($bayar);
+    }
+
+    public function dataGalon(Request $request)
+    {
+        $req = $request->input();
+        $bayarGalon = $this->dPembayaranGalonModel->setNota($req['nota_penjualan']);
+        $bayarGalon = $this->dPembayaranGalonModel->getPembayaran();
+
+        return datatables()
+            ->of($bayarGalon)
+            ->addIndexColumn()
+            ->make(true);
     }
 
     public function index()
@@ -95,6 +110,32 @@ class PembayaranController extends Controller
             $totalNominalBayar = $totalNominalBayar->where('nota', '=', $penjualan->nota_penjualan)->get();
             $totalNominalBayar = $totalNominalBayar->sum('nominal_bayar');
             $this->pembayaranService->updateStatus($penjualan, $totalNominalBayar, $penjualan->harga_total);
+
+            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
+        });
+    }
+
+    public function destroyGalon($id)
+    {
+        return DB::transaction(function () use ($id) {
+
+            $galon = $this->dPembayaranGalonModel->where('id', '=', $id)->first();
+            $penjualan = Penjualan::where('nota_penjualan', '=', $galon->nota)->first();
+
+            $new_sisa_galon = intVal($penjualan->sisa_galon) + $galon->galon_bayar;
+
+            if ($new_sisa_galon == 0) {
+                $new_sts_galon = 4;
+            } else {
+                $new_sts_galon = 1;
+            }
+
+            $penjualan->galon_kembali = $penjualan->total_galon - $new_sisa_galon;
+            $penjualan->sisa_galon = $new_sisa_galon;
+            $penjualan->sts_galon = $new_sts_galon;
+
+            $penjualan->save();
+            $galon->delete();
 
             return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
         });

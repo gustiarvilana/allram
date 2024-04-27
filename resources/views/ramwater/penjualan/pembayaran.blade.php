@@ -151,6 +151,43 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary">
+                                <div class="card-header card-success">
+                                    <span>History Galon</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 table-responsive">
+                                            <table class="table table-striped" id="table-detail-galon">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>nota</th>
+                                                        <th>jns_nota</th>
+                                                        <th>tgl</th>
+                                                        <th>angs_ke</th>
+                                                        <th>galon_bayar</th>
+                                                        <th><i class="fa fa-cog" aria-hidden="true"></i></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="4">Total:</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success btn-add-penjualan-simpan" id="btn-add-penjualan-simpan"><i
@@ -306,7 +343,6 @@
                 // Simpan referensi ke tombol yang diklik
                 var tombolHapus = $(this);
                 var id = tombolHapus.closest('tr').find('#bayar_id').val();
-                console.log(id);
 
                 if (id) {
                     // Tampilkan SweetAlert untuk konfirmasi
@@ -460,6 +496,9 @@
                     }
                 });
 
+            }).on("click", "#btn-hapus-galon", function() {
+                var rowData = $(this).data('row');
+                pembayaranGalonDestroy(rowData.id);
             }).on("click", "#btn-penjualan-edit", function() {
                 var rowData = $(this).data('row');
 
@@ -619,6 +658,84 @@
                     }
                 });
 
+                var tableHistoryGalon = $("#table-detail-galon").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: "{{ route('galon.detail.data') }}?nota_penjualan=" + rowData
+                        .nota_penjualan,
+                    dom: 'Brtip',
+                    buttons: [
+                        'copy', 'excel', 'pdf'
+                    ],
+                    columns: [{
+                            data: 'DT_RowIndex'
+                        },
+
+                        {
+                            data: 'nota',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'jns_nota',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'tgl',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'angs_ke',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'galon_bayar',
+                            render: function(data, type, row) {
+                                return data;
+                            }
+                        },
+                        {
+                            data: 'id',
+                            render: function(data, type, row) {
+                                var row_data = JSON.stringify(row);
+
+                                var btn_hapus = '<a id="btn-hapus-galon" data-id="' + row
+                                    .id +
+                                    '" data-row=\'' + row_data +
+                                    '\' class="btn btn-danger btn-xs" style="white-space: nowrap" hapus"><i class="fa fa-trash" aria-hidden="true"></i> Hapus</a>';
+
+                                return '<div style="white-space: nowrap;">' + btn_hapus +
+                                    '</div>';
+                            },
+                        },
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api();
+
+                        // Menghitung total sum kolom harga_total
+                        var hargaTotalTotal = api.column(5, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menampilkan total sum di footer
+                        $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
+                    }
+                });
+
                 $("#modal-penjualan").modal("show");
             }).on("change", "#ur_galon_kembali", function() { //
                 var total_galon = $('#ur_total_galon').val();
@@ -668,6 +785,52 @@
 
         function pembayaranDestroy(id) {
             var url = '{{ route('penjualan.pembayaran.destroy', ['id' => ':pembayaran']) }}';
+            url = url.replace(':pembayaran', id);
+
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                processData: false,
+                contentType: false,
+                data: {
+                    'id': id,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $("#table-penjualan-laporan").DataTable().ajax.reload();
+                        $('#btn-add-penjualan-close').click()
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses!',
+                            text: response.message,
+                        });
+                        return;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response.message,
+                    });
+                },
+                error: function(error) {
+                    var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                    if (error.responseJSON && error.responseJSON.message) {
+                        errorMessage = error.responseJSON.message;
+                    } else if (error.statusText) {
+                        errorMessage = error.statusText;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan!',
+                        text: errorMessage,
+                    });
+                }
+            });
+        }
+
+        function pembayaranGalonDestroy(id) {
+            var url = '{{ route('galon.detail.destroy', ['id' => ':pembayaran']) }}';
             url = url.replace(':pembayaran', id);
 
             $.ajax({
