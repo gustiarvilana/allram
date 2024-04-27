@@ -388,7 +388,7 @@
                                 item.id + '" readonly>' +
                                 '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
                                 '<td><input type="text" name="nota_penjualan" id="bayar_nota_penjualan" class="form-control money" value="' +
-                                item.nota_penjualan + '" readonly></td>' +
+                                item.nota + '" readonly></td>' +
                                 '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
                                 item.tgl + '" readonly></td>' +
                                 '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +

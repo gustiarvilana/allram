@@ -222,12 +222,14 @@ class PembayaranService
                     $dataDetail_fix['path_file']      = $dataDetail_fix['path_file'] ?? '';
                     unset($dataDetail_fix["update"]);
 
-                    $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
+                    if ($dataDetail_fix['nominal_bayar']) {
+                        $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
 
-                    $dataDetail = $this->dPembayaran->updateOrCreate([
-                        'id'             => $dataDetail_fix['id'],
-                        'nota' => $dataDetail_fix['nota'],                        'nota' => $dataDetail_fix['nota'],
-                    ], $dataDetail_fix);
+                        $dataDetail = $this->dPembayaran->updateOrCreate([
+                            'id'             => $dataDetail_fix['id'],
+                            'nota' => $dataDetail_fix['nota'],
+                        ], $dataDetail_fix);
+                    }
                 }
 
                 $this->updateStatus($data, $totalNominalBayar, $data['harga_total']);

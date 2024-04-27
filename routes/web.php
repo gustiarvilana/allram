@@ -144,15 +144,9 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
 
             Route::get('/kasbon', [LaporanKasbonController::class, 'index'])->name('kasbon.laporan');
             Route::get('/kasbon/data', [LaporanKasbonController::class, 'data'])->name('kasbon.laporan.data');
-        });
-
-        Route::prefix('hutang')->group(function () {
-            Route::get('/nominal', [HutangNominalController::class, 'index'])->name('hutang.nominal');
-        });
-
-        Route::prefix('piutang')->group(function () {
-            Route::get('/nominal', [PiutangNominalController::class, 'index'])->name('piutang.nominal');
-            Route::get('/galon', [PiutangGalonController::class, 'index'])->name('piutang.galon');
+            Route::get('/hutang/nominal', [HutangNominalController::class, 'index'])->name('hutang.nominal');
+            Route::get('/piutang/nominal', [PiutangNominalController::class, 'index'])->name('piutang.nominal');
+            Route::get('/piutang/galon', [PiutangGalonController::class, 'index'])->name('piutang.galon');
         });
     });
 });

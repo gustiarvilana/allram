@@ -65,6 +65,8 @@ class MenuHelper
             }
             // open
             // print_r($child->link_menu);
+            // print_r('<br>=> /' . $parentUrl);
+
             if (dirname($child->link_menu) == '/' . $parentUrl || $child->link_menu == '/' . $parentUrl) {
                 echo "<script src='https://code.jquery.com/jquery-3.6.4.min.js'></script>";
                 echo "<script>";

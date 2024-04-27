@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fa fa-file" aria-hidden="true"></i> <b>Laporan Piutang Nominal</b>
+    <i class="fa fa-file" aria-hidden="true"></i> <b>Laporan Piutang Galon</b>
 @endsection
 
 @section('content')
@@ -28,18 +28,25 @@
                                                 <th>Nama Pelanggan</th>
                                                 <th>tgl_penjualan</th>
                                                 <th>Sales</th>
-                                                <th>harga_total</th>
-                                                <th>nominal_bayar</th>
-                                                <th>sisa_bayar</th>
-                                                <th>sts_angsuran</th>
+                                                <th>total_galon</th>
+                                                <th>galon_kembali</th>
+                                                <th>sisa_galon</th>
                                                 <th>sts_galon</th>
-                                                <th>opr_input</th>
-                                                <th>tgl_input</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="4">Total:</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -208,50 +215,29 @@
                         }
                     },
                     {
-                        data: 'harga_total',
-                        name: 'a.harga_total',
+                        data: 'total_galon',
+                        name: 'a.total_galon',
                         render: function(data, type, row) {
                             return addCommas(data);
                         }
                     },
                     {
-                        data: 'nominal_bayar',
-                        name: 'a.nominal_bayar',
+                        data: 'galon_kembali',
+                        name: 'a.galon_kembali',
                         render: function(data, type, row) {
                             return addCommas(data);
                         }
                     },
                     {
-                        data: 'sisa_bayar',
-                        name: 'a.sisa_bayar',
+                        data: 'sisa_galon',
+                        name: 'a.sisa_galon',
                         render: function(data, type, row) {
                             return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'sts_angsuran',
-                        name: 'a.sts_angsuran',
-                        render: function(data, type, row) {
-                            return data;
                         }
                     },
                     {
                         data: 'sts_galon',
                         name: 'a.sts_galon',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
                         render: function(data, type, row) {
                             return data;
                         }
@@ -271,7 +257,7 @@
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
+                        targets: [0, 5, 6, 7, 8, 9],
                         searchable: false,
                         orderable: false
                     },
@@ -283,6 +269,35 @@
                 initComplete: function() {
                     initializeColumnSearch(this);
                     // setupHoverShapes(this, 11);
+                },
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api();
+
+                    // Menghitung total sum kolom harga_total
+                    var hargaTotalTotal = api.column(5, {
+                        page: 'current'
+                    }).data().reduce(function(acc, curr) {
+                        return acc + parseFloat(curr);
+                    }, 0);
+
+                    // Menghitung total sum kolom nominal_bayar
+                    var nominalBayarTotal = api.column(6, {
+                        page: 'current'
+                    }).data().reduce(function(acc, curr) {
+                        return acc + parseFloat(curr);
+                    }, 0);
+
+                    // Menghitung total sum kolom sisa_bayar
+                    var sisaBayarTotal = api.column(7, {
+                        page: 'current'
+                    }).data().reduce(function(acc, curr) {
+                        return acc + parseFloat(curr);
+                    }, 0);
+
+                    // Menampilkan total sum di footer
+                    $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
+                    $(api.column(6).footer()).html(addCommas(nominalBayarTotal));
+                    $(api.column(7).footer()).html(addCommas(sisaBayarTotal));
                 }
             });
 
@@ -388,7 +403,7 @@
                                 item.id + '" readonly>' +
                                 '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
                                 '<td><input type="text" name="nota_penjualan" id="bayar_nota_penjualan" class="form-control money" value="' +
-                                item.nota_penjualan + '" readonly></td>' +
+                                item.nota + '" readonly></td>' +
                                 '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
                                 item.tgl + '" readonly></td>' +
                                 '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +
