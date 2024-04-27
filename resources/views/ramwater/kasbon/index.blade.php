@@ -20,7 +20,6 @@
                                         <th width="5%">No</th>
                                         <th>Karyawan</th>
                                         <th>tgl_kasbon</th>
-                                        <th>jns_kasbon</th>
                                         <th>nota_penjualan</th>
                                         <th>nominal</th>
                                         <th>ket_kasbon</th>
@@ -75,9 +74,6 @@
                         data: 'tgl_kasbon'
                     },
                     {
-                        data: 'jns_kasbon'
-                    },
-                    {
                         data: 'nota_penjualan'
                     },
                     {
@@ -101,7 +97,7 @@
                     }
                 ],
                 columnDefs: [{
-                    targets: [1, 2, 3, 4, 5, 6, 7],
+                    targets: [1, 2, 3, 4, 5, 6, ],
                     searchable: false,
                     orderable: false
                 }],

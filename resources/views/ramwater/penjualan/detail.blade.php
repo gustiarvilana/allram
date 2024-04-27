@@ -303,7 +303,7 @@
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11],
+                        targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
                         searchable: false,
                         orderable: false
                     },
@@ -315,7 +315,7 @@
 
                 initComplete: function() {
                     initializeColumnSearch(this);
-                    // setupHoverShapes(this, 11);
+                    setupHoverShapes(this, 11);
                 }
             });
 

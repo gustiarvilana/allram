@@ -323,7 +323,7 @@
                 }],
                 initComplete: function() {
                     initializeColumnSearch(this);
-                    setupHoverShapes(this, 11);
+                    setupHoverShapes(this, 9);
                 }
             });
 

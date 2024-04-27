@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ramwater\Hutang;
 use App\Http\Controllers\Controller;
 use App\Models\DOpsModel;
 use App\Models\Karyawan;
+use App\Models\SupplierModel;
 use App\Models\TChannelModel;
 use App\Models\TOps;
 use App\Services\OpsService;
@@ -25,6 +26,7 @@ class HutangNominalController extends Controller
             'opss' => $this->tOps->get(),
             'pegawais' => $this->dKaryawan->get(),
             'channels' => TChannelModel::all(),
+            'suppliers' => SupplierModel::all()
         ];
         return view('ramwater.hutang.nominal', $data);
     }
