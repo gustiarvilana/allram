@@ -278,6 +278,26 @@ class CreateTable extends Seeder
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         );
 
+        // d_pembayaran_galon
+        DB::statement(
+            "CREATE TABLE IF NOT EXISTS `d_pembayaran_galon` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nota` VARCHAR(50) DEFAULT NULL,
+                `jns_nota` VARCHAR(50) DEFAULT NULL,
+                `tgl` INT DEFAULT NULL,
+                `angs_ke` INT DEFAULT NULL,
+                `galon_bayar` INT DEFAULT NULL,
+                `ket_bayar` TEXT DEFAULT NULL,
+                `jns_pembayaran` INT DEFAULT NULL,
+                `opr_input` VARCHAR(50) DEFAULT NULL,
+                `tgl_input` INT DEFAULT NULL,
+                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                INDEX `idx_nota_pembayaran` (`nota`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
+        );
+
         // d_kasbon
         DB::statement("
             CREATE TABLE IF NOT EXISTS `d_kasbon` (

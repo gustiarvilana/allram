@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Helpers\FormatHelper;
 use App\Models\DKasbonModel;
 use App\Models\DOpsModel;
+use App\Models\DPembayaranGalonModel;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DStokProduk;
@@ -23,6 +24,7 @@ class PenjualanService
     protected $dPembelianModel;
     protected $dPembelianDetailModel;
     protected $dPembayaran;
+    protected $dPembayaranGalon;
     protected $supplierModel;
     protected $dtransaksiOps;
     protected $penjualanModel;
@@ -47,6 +49,7 @@ class PenjualanService
         $this->penjualanDetailModel  = $penjualanDetailModel;
         $this->tOps                  = $tOps;
         $this->dPembayaran           = new DPembayaranModel();
+        $this->dPembayaranGalon      = new DPembayaranGalonModel();
         $this->dKasbon               = new DKasbonModel();
     }
 
@@ -78,6 +81,11 @@ class PenjualanService
                 if ($penjualanData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
+
+                    if ($penjualanData_fix['total_galon']) {
+                        $pembayaranGalon = $this->preparePembayaranGalonData($penjualanData_fix);
+                        $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
+                    }
 
                     if ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar']) {
                         $dataKasbon = $this->prepareKasbon($penjualan);
@@ -240,6 +248,25 @@ class PenjualanService
         return $pembayaran;
     }
 
+    public function preparePembayaranGalonData($penjualan)
+    {
+        $angs_ke = $this->dPembayaranGalon->where('nota', $penjualan['nota_penjualan'])->get()->max('angs_ke') + 1;
+
+        $pembayaran['nota']          = $penjualan['nota_penjualan'];
+        $pembayaran['jns_nota']      = 'penjualan';
+        $pembayaran['tgl']           = $penjualan['tgl_penjualan'];
+        $pembayaran['angs_ke']        = $angs_ke;
+        $pembayaran['galon_bayar'] = $penjualan['galon_kembali'];
+        $pembayaran['opr_input']     = Auth::user()->nik;
+        $pembayaran['tgl_input']     = date('Ymd');
+
+        $pembayaran['jns_pembayaran'] = 2;
+
+        $pembayaran['ket_bayar']      = '';
+
+        return $pembayaran;
+    }
+
     public function prepareOpsnData($penjualanData)
     {
         $namaOps = $this->tOps->findOpsByProduct($penjualanData['kd_produk'])->first();
@@ -347,6 +374,20 @@ class PenjualanService
     {
         try {
             return $this->dPembayaran->updateOrCreate(
+                [
+                    'nota' => $pembayaran['nota'],
+                ],
+                $pembayaran
+            );
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function upsertPembayaranGalon($pembayaran)
+    {
+        try {
+            return $this->dPembayaranGalon->updateOrCreate(
                 [
                     'nota' => $pembayaran['nota'],
                 ],

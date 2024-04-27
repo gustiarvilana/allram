@@ -439,7 +439,7 @@
                             kd_supplier: kd_supplier
                         }
                     },
-                    dom: 'Brtip',
+                    dom: 'rtip',
                     buttons: [{
                         extend: "excel",
                         text: "Export Data",

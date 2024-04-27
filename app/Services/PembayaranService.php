@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Helpers\FormatHelper;
 use App\Helpers\IntegrationHelper;
 use App\Models\DOps;
+use App\Models\DPembayaranGalonModel;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
@@ -24,6 +25,7 @@ class PembayaranService
     protected $dPembelianModel;
     protected $dPembelianDetailModel;
     protected $dPembayaran;
+    protected $dPembayaranGalon;
     protected $dOps;
     protected $jns;
     public function __construct(
@@ -36,6 +38,7 @@ class PembayaranService
         $this->dStokProduk = $dStokProduk;
         $this->dPembelianModel = $dPembelianModel;
         $this->dPembayaran = $dPembayaran;
+        $this->dPembayaranGalon = new DPembayaranGalonModel();
         $this->dPembelianDetailModel = $dPembelianDetailModel;
     }
 
@@ -223,7 +226,7 @@ class PembayaranService
 
                     $dataDetail = $this->dPembayaran->updateOrCreate([
                         'id'             => $dataDetail_fix['id'],
-                        'nota' => $dataDetail_fix['nota'],
+                        'nota' => $dataDetail_fix['nota'],                        'nota' => $dataDetail_fix['nota'],
                     ], $dataDetail_fix);
                 }
 
@@ -247,7 +250,6 @@ class PembayaranService
         if (isset($data['nota_pembelian'])) $data_fix = $pembelianModel->find($data['id']);
         if (isset($data['nota_penjualan'])) $data_fix = $penjualanModel->where('nota_penjualan', '=', $data['nota_penjualan'])->first();
 
-        // dd($totalNominalBayar, $harga_total);
         // if ($data['sts_angsuran'] != '4') {
         if ($totalNominalBayar == $harga_total) {
             $data_fix->sts_angsuran = 4;
@@ -260,20 +262,19 @@ class PembayaranService
 
         if (isset($data['total_galon'])) {
 
-            $total = $data['total_galon'] - $data['sisa_galon'];
+            $total = $data['sisa_galon'];
+
             $kembali = $data['galon_kembali'];
             $sisa = intVal($total) - intVal($kembali);
             $data_fix['sisa_galon'] = $sisa;
             $data_fix['galon_kembali'] = $kembali;
 
-            $new_sisa = intval($data_fix['sisa_galon']) - intVal($data_fix['galon_kembali']);
-
             if (intVal($total) > 0) {
-                if ($new_sisa == 0) {
+                if ($sisa == 0) {
                     $data_fix->sts_galon = 4;
-                } elseif ($new_sisa > 0) {
+                } elseif ($sisa > 0) {
                     $data_fix->sts_galon = 1;
-                } elseif ($new_sisa < 0) {
+                } elseif ($sisa < 0) {
                     throw new \Exception("Pengembalian Galon Terlalu banyak!");
                 };
             }
@@ -282,7 +283,45 @@ class PembayaranService
         $data_fix->nominal_bayar = $totalNominalBayar;
         $data_fix->sisa_bayar = $harga_total - $totalNominalBayar;
 
+        $pembayaranGalon = $this->preparePembayaranGalonData($data);
+        $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
+
         return $data_fix->save();
+    }
+
+    public function preparePembayaranGalonData($penjualan)
+    {
+        $angs_ke = $this->dPembayaranGalon->where('nota', $penjualan['nota_penjualan'])->get()->max('angs_ke') + 1;
+
+        $pembayaran['nota']        = $penjualan['nota_penjualan'];
+        $pembayaran['jns_nota']    = 'penjualan';
+        $pembayaran['tgl']         = $penjualan['tgl_penjualan'];
+        $pembayaran['angs_ke']     = $angs_ke;
+        $pembayaran['galon_bayar'] = $penjualan['galon_kembali'];
+        $pembayaran['opr_input']   = Auth::user()->nik;
+        $pembayaran['tgl_input']   = date('Ymd');
+
+        $pembayaran['jns_pembayaran'] = 2;
+
+        $pembayaran['ket_bayar']      = '';
+
+        return $pembayaran;
+    }
+
+    public function upsertPembayaranGalon($pembayaran)
+    {
+        $pembayaran['id'] = $pembayaran['id'] ?? '';
+        try {
+            return $this->dPembayaranGalon->updateOrCreate(
+                [
+                    'id'   => $pembayaran['id'],
+                    'nota' => $pembayaran['nota'],
+                ],
+                $pembayaran
+            );
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function destroyPembayaran($arrayRow)
