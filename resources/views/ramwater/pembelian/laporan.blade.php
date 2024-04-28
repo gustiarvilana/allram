@@ -32,7 +32,7 @@
                                     </span>
                                 </div>
                                 <select name="kd_supplier" id="kd_supplier" class="form-control">
-                                    <option value="">Supplier</option>
+                                    <option value="">Semua Supplier</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->kd_supplier }}">{{ $supplier->nama }}</option>
                                     @endforeach

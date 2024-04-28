@@ -32,7 +32,7 @@
                                     </span>
                                 </div>
                                 <select name="kd_jns_ops" class="form-control select2" style="width: 80%;">
-                                    <option value="">Pilih Kategori</option>
+                                    <option value="">Semua Kategori</option>
                                     @foreach ($jnsOpss as $jnsOps)
                                         <option value="{{ $jnsOps->kd_jns_ops }}">{{ $jnsOps->ur_jns_ops }}</option>
                                     @endforeach
@@ -48,7 +48,7 @@
                                     </span>
                                 </div>
                                 <select class="form-control select2" name="kd_ops" style="width: 80%;">
-                                    <option value="">Pilih Ops</option>
+                                    <option value="">Semua Ops</option>
                                     @foreach ($opss as $ops)
                                         <option value="{{ $ops->kd_ops }}">{{ $ops->nama_ops }}</option>
                                     @endforeach

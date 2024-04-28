@@ -280,15 +280,15 @@ class PembayaranService
                     throw new \Exception("Pengembalian Galon Terlalu banyak!");
                 };
             }
+            if ($data['galon_kembali'] > 0) {
+                $pembayaranGalon = $this->preparePembayaranGalonData($data);
+                $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
+            }
         }
 
         $data_fix->nominal_bayar = $totalNominalBayar;
         $data_fix->sisa_bayar = $harga_total - $totalNominalBayar;
 
-        if ($data['galon_kembali'] > 0) {
-            $pembayaranGalon = $this->preparePembayaranGalonData($data);
-            $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
-        }
 
         return $data_fix->save();
     }
