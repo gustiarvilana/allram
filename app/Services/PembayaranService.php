@@ -175,10 +175,10 @@ class PembayaranService
     public function preparePembayaranData($pembayaran)
     {
         if (isset($pembayaran['nota_pembelian'])) {
-            $pembayaran_fix['jns_nota']      = 'pembelian';
+            $pembayaran_fix['jns_nota']      = 'bayar_pembelian';
             $pembayaran_fix['nota']          = $pembayaran['nota_pembelian'];
         } else {
-            $pembayaran_fix['jns_nota']      = 'penjualan';
+            $pembayaran_fix['jns_nota']      = 'bayar_penjualan';
             $pembayaran_fix['nota']          = $pembayaran['nota_penjualan'];
         }
 
@@ -299,7 +299,7 @@ class PembayaranService
         $angs_ke = $this->dPembayaranGalon->where('nota', $penjualan['nota_penjualan'])->get()->max('angs_ke') + 1;
 
         $pembayaran['nota']        = $penjualan['nota_penjualan'];
-        $pembayaran['jns_nota']    = 'penjualan';
+        $pembayaran['jns_nota']    = 'bayar_penjualan';
         $pembayaran['tgl']         = $penjualan['tgl_penjualan'];
         $pembayaran['angs_ke']     = $angs_ke;
         $pembayaran['galon_bayar'] = $penjualan['galon_kembali'];

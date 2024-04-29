@@ -214,7 +214,12 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('penjualan.detail.data') }}',
+                ajax: {
+                    url: '{{ route('penjualan.detail.data') }}',
+                    data: {
+                        jns: 'pembayaranNominal',
+                    },
+                },
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'
