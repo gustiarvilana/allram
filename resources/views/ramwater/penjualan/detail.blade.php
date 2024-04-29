@@ -515,7 +515,7 @@
                     rowData.sts_galon + '" readonly>' +
 
                     '<td><input type="checkbox" name="is_kasbon" id="ur_is_kasbon" class="form-control" ' +
-                    (rowData.nota_penjualan ? 'checked' : '') +
+                    (rowData.id_kasbon ? 'checked' : '') +
                     ' style="width: 30px; height: 30px;"></td>' +
 
                     '<td>' +

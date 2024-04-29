@@ -88,13 +88,24 @@ class PenjualanService
                         $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
                     }
 
-                    if ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar']) {
+                    // dd($penjualanData['isKasbon']);
+                    if ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar'] || $penjualanData['isKasbon'] == '0') {
                         $dataKasbon = $this->prepareKasbon($penjualan);
+
+                        $set_penjualan = $this->penjualanModel->where('nota_penjualan', '=', $dataKasbon['nota_penjualan'])->first();
+                        $set_kasbon = $this->dKasbon->where('nota_penjualan', '=', $dataKasbon['nota_penjualan'])->first();
+
                         if ($penjualanData['isKasbon'] == 1) {
                             $this->dKasbon->upsert($dataKasbon);
-                        } else {
+                            $set_penjualan->sisa_bayar = 0;
+                            $set_penjualan->nominal_bayar =  $set_penjualan->harga_total;
+                        } else if ($set_kasbon) {
+                            $set_penjualan->sisa_bayar = $set_kasbon->nominal;
+                            $set_penjualan->nominal_bayar = intVal($set_penjualan->harga_total) - $set_kasbon->nominal;
+                            $set_penjualan->sts_angsuran = 1;
                             $this->dKasbon->hapus($dataKasbon);
                         }
+                        $set_penjualan->save();
                     }
                 }
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
