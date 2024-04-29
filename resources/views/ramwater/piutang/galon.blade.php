@@ -363,6 +363,7 @@
                     }
                 });
 
+                $('.modal .form-control').prop('disabled', true);
                 $("#modal-penjualan").modal("show");
             }).on("click", "#btn-cari", function() {
                 $('#form-hutang').show();

@@ -181,9 +181,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success btn-add-penjualan-simpan" id="btn-add-penjualan-simpan"><i
-                            class="fas fa-save"></i>
-                        Simpan</button>
                     <button class="btn btn-secondary" class="close btn btn-secondary btn-add-penjualan-close"
                         id="btn-add-penjualan-close">Close</button>
 
@@ -355,6 +352,7 @@
                     }
                 });
 
+                $('.modal .form-control').prop('disabled', true);
                 $("#modal-penjualan").modal("show");
             }).on('click', '#btn-cari', function() {
                 $('#form-hutang').show();
