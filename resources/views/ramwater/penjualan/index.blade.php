@@ -85,7 +85,6 @@
                                                 <thead>
                                                     <tr>
                                                         <th>nama</th>
-                                                        <th>kd_produk</th>
                                                         <th>type</th>
                                                         <th>qty_pesan</th>
                                                         <th>qty_retur</th>
@@ -95,7 +94,7 @@
                                                         <th>harga_total</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody> </tbody>
+                                                <tbody id="table-body-detail"> </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -312,15 +311,10 @@
                         render: function(data, type, row) {
                             var row_data = JSON.stringify(row);
                             return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>';
-
-                        }
-                    },
-                    {
-                        data: 'kd_produk',
-                        render: function(data, type, row) {
-                            return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                data + '</span></div>' +
+                                '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
                                 row.kd_produk + '">';
+
                         }
                     },
                     {
@@ -392,7 +386,7 @@
                     }
                 ],
                 columnDefs: [{
-                        targets: [4, 5, 6, 7, 8],
+                        targets: [4, 5, 6, 7],
                         searchable: false,
                         orderable: false
                     },
@@ -416,6 +410,9 @@
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
                 $('#penjualan-uraian').empty();
+                $('#penjualan-uraian').empty();
+                $("input").val('');
+                $("select").val('');
                 $('.path_file').val('');
             });
 
@@ -437,6 +434,8 @@
             }).on("click", "#btn-add-pembelian-close", function() { //close-pembelian
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
+                $("input").val('');
+                $("select").val('');
             }).on("click", "#btn-add-pembelian-simpan", function() {
                 var imageFile = $('#path_file')[0].files[0];
 
@@ -750,13 +749,13 @@
                     // text: response.message,
                 });
             };
-            if (val > harga) {
-                return Swal.fire({
-                    icon: "info",
-                    title: 'Lebih Harga',
-                    // text: response.message,
-                });
-            };
+            // if (val > harga) {
+            //     return Swal.fire({
+            //         icon: "info",
+            //         title: 'Lebih Harga',
+            //         // text: response.message,
+            //     });
+            // };
         }
     </script>
 @endpush

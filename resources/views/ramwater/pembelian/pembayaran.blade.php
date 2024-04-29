@@ -477,7 +477,7 @@
                                 '<input type="hidden" name="update" id="bayar_update" class="form-control money" value="" readonly>' +
                                 '<td><input type="text" name="nota" id="bayar_nota" class="form-control money" value="' +
                                 item.nota + '" readonly></td>' +
-                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control money" value="' +
+                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control" value="' +
                                 item.tgl + '" readonly></td>' +
                                 '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control money" value="' +
                                 item.angs_ke + '" readonly></td>' +
@@ -509,7 +509,7 @@
                                 '<tr>' +
                                 '<td></td>' + // No column
                                 '<td><input type="text" name="nota_pembelian" id="bayar_nota_pembelian" class="form-control bayar_nota_pembelian money" value="" disabled></td>' +
-                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control bayar_tgl_pembayaran money" value="' +
+                                '<td><input type="text" name="tgl_pembayaran" id="bayar_tgl_pembayaran" class="form-control bayar_tgl_pembayaran" value="' +
                                 '{{ date('Ymd') }}' + '"></td>' +
                                 '<td><input type="text" name="angs_ke" id="bayar_angs_ke" class="form-control bayar_angs_ke money" value="" disabled></td>' +
                                 '<td><input type="text" name="nominal_bayar" id="bayar_nominal_bayar" class="form-control bayar_nominal_bayar money" value=""></td>' +

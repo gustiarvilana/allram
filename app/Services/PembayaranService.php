@@ -176,11 +176,12 @@ class PembayaranService
     {
         if (isset($pembayaran['nota_pembelian'])) {
             $pembayaran_fix['jns_nota']      = 'pembelian';
+            $pembayaran_fix['nota']          = $pembayaran['nota_pembelian'];
         } else {
             $pembayaran_fix['jns_nota']      = 'penjualan';
+            $pembayaran_fix['nota']          = $pembayaran['nota_penjualan'];
         }
 
-        $pembayaran_fix['nota']          = $pembayaran['nota'];
         $pembayaran_fix['tgl']           = $pembayaran['tgl_pembayaran'];
         $pembayaran_fix['nominal_bayar'] = $pembayaran['nominal_bayar'] ? FormatHelper::removeDots($pembayaran['nominal_bayar']) : 0;
         $pembayaran_fix['opr_input']     = Auth::user()->nik;
@@ -205,8 +206,8 @@ class PembayaranService
 
                 foreach ($dataArrayDetail as $key => $dataDetail) {
                     $dataDetail['angs_ke'] = $key + 1;
-                    if (isset($data['nota_pembelian'])) $dataDetail['nota'] = $data['nota_pembelian'];
-                    if (isset($data['nota_penjualan'])) $dataDetail['nota'] = $data['nota_penjualan'];
+                    if (isset($data['nota_pembelian'])) $dataDetail['nota_pembelian'] = $data['nota_pembelian'];
+                    if (isset($data['nota_penjualan'])) $dataDetail['nota_penjualan'] = $data['nota_penjualan'];
 
                     $dataDetail_fix = $this->preparePembayaranData($dataDetail);
 
