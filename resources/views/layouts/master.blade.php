@@ -51,7 +51,7 @@
             z-index: 1999
         }
 
-        body {
+        card {
             font-size: 12px;
         }
 

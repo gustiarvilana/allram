@@ -56,7 +56,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="form-hutang" style="display: none">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">

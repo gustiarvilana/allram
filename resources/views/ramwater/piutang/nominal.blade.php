@@ -83,7 +83,6 @@
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
-                                                <th>sts_galon</th>
                                                 <th>opr_input</th>
                                                 <th>tgl_input</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
@@ -453,13 +452,6 @@
                         {
                             data: 'sts_angsuran',
                             name: 'a.sts_angsuran',
-                            render: function(data, type, row) {
-                                return data;
-                            }
-                        },
-                        {
-                            data: 'sts_galon',
-                            name: 'a.sts_galon',
                             render: function(data, type, row) {
                                 return data;
                             }

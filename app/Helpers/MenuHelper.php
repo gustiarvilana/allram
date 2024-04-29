@@ -41,9 +41,6 @@ class MenuHelper
             foreach ($children as $child) {
                 echo "<ul class='nav nav-treeview ml-3'>";
                 echo "<li class='nav-item ";
-                if ($child->link_menu == '/' . $currentUrl) {
-                    echo "menu-open";
-                }
                 echo "'>";
                 echo "<a href='" . url('/') . $child->link_menu . "' class='nav-link ";
                 if ($child->link_menu == '/' . $currentUrl) {
@@ -64,10 +61,10 @@ class MenuHelper
                 echo "</ul>";
             }
             // open
-            // print_r($child->link_menu);
+            // print_r(dirname($child->link_menu));
             // print_r('<br>=> /' . $parentUrl);
 
-            if (dirname($child->link_menu) == '/' . $parentUrl || $child->link_menu == '/' . $parentUrl) {
+            if (dirname($child->link_menu) == '/' . $parentUrl || $child->link_menu == '/' . $parentUrl || dirname(dirname($child->link_menu)) == '/' . $parentUrl) {
                 echo "<script src='https://code.jquery.com/jquery-3.6.4.min.js'></script>";
                 echo "<script>";
                 echo "$(document).ready(function() {";
