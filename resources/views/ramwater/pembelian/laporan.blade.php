@@ -764,9 +764,19 @@
                     data: cari
                 },
                 dom: 'Brtip',
-                buttons: [
-                    'copy', 'excel', 'pdf'
-                ],
+                buttons: [{
+                    extend: 'excel',
+                    customizeData: function(data) {
+                        // Menghapus titik atau koma dari kolom nilai_rk, nilai_rpd, dan nilai_realisasi
+                        for (var i = 0; i < data.body.length; i++) {
+                            for (var j = 0; j < data.body[i].length; j++) {
+                                if (j === 5 || j === 6 || j === 7) {
+                                    data.body[i][j] = data.body[i][j].toString().replace(/[.,]/g, '');
+                                }
+                            }
+                        }
+                    }
+                }],
                 columns: [
                     // {
                     //     data: 'DT_RowIndex'

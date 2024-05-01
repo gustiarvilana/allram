@@ -240,14 +240,20 @@
                     "searching": true,
                     "ordering": true,
                     "bDestroy": true,
-                    "buttons": [
-                        // "copy",
-                        // "csv",
-                        "excel",
-                        "pdf",
-                        // "print",
-                        // "colvis"
-                    ],
+                    buttons: [{
+                        extend: 'excel',
+                        customizeData: function(data) {
+                            // Menghapus titik atau koma dari kolom nilai_rk, nilai_rpd, dan nilai_realisasi
+                            for (var i = 0; i < data.body.length; i++) {
+                                for (var j = 0; j < data.body[i].length; j++) {
+                                    if (j === 4) {
+                                        data.body[i][j] = data.body[i][j].toString().replace(
+                                            /[.,]/g, '');
+                                    }
+                                }
+                            }
+                        }
+                    }],
                     ajax: {
                         url: '{{ route('ops.data') }}',
                         type: 'GET',

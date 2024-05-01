@@ -35,6 +35,7 @@ class Penjualan extends Model
             ->leftJoin('d_kasbon as e', 'a.nota_penjualan', '=', 'e.nota_penjualan')
             ->orderBy('a.created_at', 'desc')
             ->where('a.sts_angsuran', '=', '1')
+            ->orWhere('a.sts_galon', '=', '1')
             ->select('a.*', 'b.nama', 'c.ur_channel', 'd.nama as nama_sales', 'e.id as id_kasbon');
 
         return $penjualan;

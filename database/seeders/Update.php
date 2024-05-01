@@ -16,5 +16,6 @@ class Update extends Seeder
         $this->call(AlterTable::class);
 
         $this->call(TSeeder::class);
+        $this->call(CreateView::class);
     }
 }

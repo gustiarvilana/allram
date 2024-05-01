@@ -224,7 +224,50 @@
         </div>
     </div>
 
-    @include('ramwater.penjualan.modal-show')
+    <div class="modal fade field" id="penjualan-show" tabindex="-1" role="dialog"
+        aria-labelledby="penjualan-showTitle" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <span id="modal-header"></span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 table-responsive field">
+                                    <table class="table table-bordered" id="modal-show-detail">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th>No</th>
+                                                <th>nota_penjualan</th>
+                                                <th>kd_produk</th>
+                                                <th>qty_pesan</th>
+                                                <th>qty_retur</th>
+                                                <th>qty_bersih</th>
+                                                <th>harga_satuan</th>
+                                                <th>harga_total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
@@ -580,10 +623,29 @@
                             nota_penjualan: rowData.nota_penjualan
                         },
                     },
-                    // dom: 'Brtip',
-                    dom: 'tip',
+                    dom: 'Brtip',
+                    buttons: [{
+                        extend: 'excel',
+                        customizeData: function(data) {
+                            // Menghapus titik atau koma dari kolom nilai_rk, nilai_rpd, dan nilai_realisasi
+                            for (var i = 0; i < data.body.length; i++) {
+                                for (var j = 0; j < data.body[i].length; j++) {
+                                    if (j === 5 || j === 6) {
+                                        data.body[i][j] = data.body[i][j].toString()
+                                            .replace(/[.,]/g, '');
+                                    }
+                                }
+                            }
+                        }
+                    }],
                     columns: [{
                             data: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'nota_penjualan',
+                            render: function(data, type, row) {
+                                return row.nama;
+                            }
                         },
                         {
                             data: 'kd_produk',
@@ -635,10 +697,7 @@
                             // targets: [1, 2],
                             visible: false
                         }
-                    ],
-                    initComplete: function() {
-                        initializeColumnSearch(this);
-                    }
+                    ]
                 });
 
                 $('#penjualan-show #modal-title').text('penjualan Detail')
@@ -766,9 +825,19 @@
                     data: cari
                 },
                 dom: 'Brtip',
-                buttons: [
-                    'copy', 'excel', 'pdf'
-                ],
+                buttons: [{
+                    extend: 'excel',
+                    customizeData: function(data) {
+                        // Menghapus titik atau koma dari kolom nilai_rk, nilai_rpd, dan nilai_realisasi
+                        for (var i = 0; i < data.body.length; i++) {
+                            for (var j = 0; j < data.body[i].length; j++) {
+                                if (j === 5 || j === 6) {
+                                    data.body[i][j] = data.body[i][j].toString().replace(/[.,]/g, '');
+                                }
+                            }
+                        }
+                    }
+                }],
                 columns: [{
                         data: 'DT_RowIndex'
                     },

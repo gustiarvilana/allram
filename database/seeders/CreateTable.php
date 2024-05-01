@@ -332,7 +332,7 @@ class CreateTable extends Seeder
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
             INSERT IGNORE INTO `t_jns_kasbon`
-            (`kd_jns_kasbon`, `nama`, `created_at`, `updated_at`)
+            (`id`,`kd_jns_kasbon`, `nama`, `created_at`, `updated_at`)
             VALUES
             (1,1, 'kasbon Rutin', NOW(), NOW()),
             (2,2, 'Kasbon Kurang Harga', NOW(), NOW());
@@ -356,21 +356,6 @@ class CreateTable extends Seeder
             (1, 'Aktif Rutin', NOW(), NOW()),
             (3, 'Kasbon Kurang Harga', NOW(), NOW()),
             (4, 'Lunas', NOW(), NOW());
-        ");
-
-        // d_laporan_pemasukan
-        DB::unprepared("
-            CREATE TABLE IF NOT EXISTS `d_laporan_pemasukan` (
-                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-
-                `tgl` INT DEFAULT NULL,
-                `nik` VARCHAR(50) DEFAULT NULL,
-
-                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`),
-                INDEX `idx_kd_sts` (`kd_sts`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
         ");
     }
 }

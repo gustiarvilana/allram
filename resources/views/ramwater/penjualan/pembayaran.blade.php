@@ -66,31 +66,26 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Uraian penjualan</span>
+                                    <span>Detail</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-penjualan">
+                                            <table class="table table-striped" id="table-detail">
                                                 <thead>
                                                     <tr>
-                                                        <th>tgl_penjualan</th>
-                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
-                                                        <th>kd_channel</th>
-                                                        <th>harga_total</th>
+                                                        <th>No</th>
+                                                        <th>nota_penjualan</th>
+                                                        <th>tgl_pembayaran</th>
+                                                        <th>angs_ke</th>
                                                         <th>nominal_bayar</th>
-                                                        <th>sisa_bayar</th>
-                                                        <th>sts_angsuran</th>
-                                                        <th>total_galon</th>
-                                                        <th>galon_kembali</th>
-                                                        <th>sisa_galon</th>
-                                                        <th>sts_galon</th>
-                                                        <th>kd_sales</th>
-                                                        {{-- <th>opr_input</th> --}}
-                                                        {{-- <th>tgl_input</th> --}}
+                                                        <th>channel_bayar</th>
+                                                        <th>ket_bayar</th>
+                                                        <th>File</th>
+                                                        <th><i class="fa fa-cog" aria-hidden="true"></i></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="penjualan-uraian"></tbody>
+                                                <tbody id="table-detail-edit"> </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -124,26 +119,31 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Detail</span>
+                                    <span>Uraian penjualan</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-detail">
+                                            <table class="table table-striped" id="table-penjualan">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>nota_penjualan</th>
-                                                        <th>tgl_pembayaran</th>
-                                                        <th>angs_ke</th>
+                                                        <th>tgl_penjualan</th>
+                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
+                                                        <th>kd_channel</th>
+                                                        <th>harga_total</th>
                                                         <th>nominal_bayar</th>
-                                                        <th>channel_bayar</th>
-                                                        <th>ket_bayar</th>
-                                                        <th>File</th>
-                                                        <th><i class="fa fa-cog" aria-hidden="true"></i></th>
+                                                        <th>sisa_bayar</th>
+                                                        <th>sts_angsuran</th>
+                                                        <th>total_galon</th>
+                                                        <th>galon_kembali</th>
+                                                        <th>sisa_galon</th>
+                                                        <th>sts_galon</th>
+                                                        <th>kd_sales</th>
+                                                        {{-- <th>opr_input</th> --}}
+                                                        {{-- <th>tgl_input</th> --}}
                                                     </tr>
                                                 </thead>
-                                                <tbody id="table-detail-edit"> </tbody>
+                                                <tbody id="penjualan-uraian"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -634,19 +634,21 @@
                             $('#btn-add-penjualan-simpan').show();
                         } else {
                             $('#btn-add-penjualan-simpan').hide();
-                            $('.modal .form-control').prop('readonly', true);
+                            $('.modal .form-control').prop('disabled', true);
                             $('.modal #ur_kd_sales').prop('disabled', true);
                             $('.modal #ur_kd_channel').prop('disabled', true);
                             $('.modal #path_file').prop('disabled', true);
                         }
 
+                        $("#penjualan-uraian .form-control").prop("disabled", true);
                         if (rowData.sts_galon != 4) {
-                            $('.modal #ur_galon_kembali').prop('readonly', false);
+                            $('.modal #ur_galon_kembali').prop('disabled', false);
                             $('#btn-add-penjualan-simpan').show();
                         } else {
                             $('.modal #ur_galon_kembali').prop('disabled', true);
                             $('.modal #ur_total_galon').prop('disabled', true);
                         }
+
                     },
                     error: function(error) {
                         var errorMessage = "Terjadi kesalahan dalam operasi.";
