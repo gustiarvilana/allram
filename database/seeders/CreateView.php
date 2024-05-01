@@ -22,6 +22,7 @@ class CreateView extends Seeder
             SELECT
                 b.tgl_penjualan,
                 b.kd_pelanggan,
+                b.kd_sales,
                 a.kd_produk,
                 a.qty_bersih,
                 a.harga_satuan,
@@ -31,7 +32,7 @@ class CreateView extends Seeder
             JOIN
                 `d_penjualan` b ON a.`nota_penjualan` = b.`nota_penjualan`
             GROUP BY
-                b.tgl_penjualan, b.`kd_pelanggan`, a.kd_produk,a.qty_bersih,a.harga_satuan,a.harga_total;
+                b.tgl_penjualan, b.`kd_pelanggan`, a.kd_produk,a.qty_bersih,a.harga_satuan,a.harga_total,b.kd_sales;
         ");
 
         DB::statement("CREATE VIEW view_pembayaran_penjualan AS
