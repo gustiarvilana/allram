@@ -280,7 +280,12 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('produk.data') }}',
+                ajax: {
+                    url: '{{ route('produk.data') }}',
+                    data: function(d) {
+                        d.jns = 'penjualan';
+                    },
+                },
                 dom: 'tip',
                 buttons: [{
                     extend: "excel",

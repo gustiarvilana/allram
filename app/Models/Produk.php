@@ -30,6 +30,10 @@ class Produk extends Model
                 $where = [
                     'kd_supplier' => $input['kd_supplier'],
                 ];
+            } elseif (!empty($input['jns'])) {
+                $where = [
+                    'a.stok_all', '>', 0,
+                ];
             }
 
             if (isset($field) && isset($table)) {
@@ -44,7 +48,6 @@ class Produk extends Model
         if (!empty($this->satker)) {
             $produk->where('a.satker', '=', $this->satker);
         }
-        // $produk->where('a.stok_all', '>', 0);
 
         return $produk;
     }
