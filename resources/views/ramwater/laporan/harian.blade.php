@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fas fa-money-bill"></i> <b>Laporan Hutang Nominal</b>
+    <i class="fas fa-money-bill"></i> <b>Laporan Harian</b>
 @endsection
 
 @section('content')
@@ -34,229 +34,224 @@
             </div>
         </div>
     </div>
-    <div class="row container" id="form-hutang" style="display: block">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <h2 class="page-header">
-                                <i class="fas fa-globe"></i> RAM Water
-                                <small class="float-right" id="tanggal"></small>
-                            </h2>
-                        </div>
-                    </div>
-
-                    <div class="row invoice-info">
-                        <div class="col-sm-4 invoice-col">
-                            <address>
-                                <br>
-                                795 Folsom Ave, Suite 600<br>
-                                San Francisco, CA 94107<br>
-                                Phone: (804) 123-5432<br>
-                                Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                                    data-cfemail="cda4a3aba28daca1a0acbeaca8a8a9beb9b8a9a4a2e3aea2a0">[email&#160;protected]</a>
-                            </address>
+    <div class="row" id="form-laporan-harian" style="display: none">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="page-header">
+                                    <i class="fas fa-globe"></i> RAM Water
+                                    <small class="float-right" id="tanggal"></small>
+                                </h2>
+                            </div>
                         </div>
 
-                    </div>
-                    <hr>
+                        <div class="row invoice-info">
+                            {{-- <div class="col-sm-4 invoice-col">
+                                    <address>
+                                        <br>
+                                        795 Folsom Ave, Suite 600<br>
+                                        San Francisco, CA 94107<br>
+                                        Phone: (804) 123-5432<br>
+                                        Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                                            data-cfemail="cda4a3aba28daca1a0acbeaca8a8a9beb9b8a9a4a2e3aea2a0">[email&#160;protected]</a>
+                                    </address>
+                                </div> --}}
 
-                    <h4>
-                        <p>
-                            <i class="nav-icon fas fa-th mt-2"></i>
-                            Pemasukan Penjualan
-                        </p>
-                    </h4>
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-produk">
-                                <thead>
-                                    <tr>
-                                        <th>Nama Pelanggan</th>
-                                        <th>Product</th>
-                                        <th>Qty</th>
-                                        <th>Harga Satuan</th>
-                                        <th>nama_sales</th>
-                                        <th>Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
                         </div>
-                    </div>
+                        <hr>
 
-                    <h4>
-                        <p>
-                            <i class="nav-icon fas fa-th mt-2"></i>
-                            Pemasukan Tunai
-                        </p>
-                    </h4>
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-pemasukan-tunai">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Nota Penjualan</th>
-                                        <th>Angs-Ke</th>
-                                        <th>Nominal</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                    <h4>
-                        <p>
-                            <i class="nav-icon fas fa-th mt-2"></i>
-                            Pemasukan Non Tunai
-                        </p>
-                    </h4>
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-pemasukan-nontunai">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Nota Penjualan</th>
-                                        <th>Channel</th>
-                                        <th>Angs-Ke</th>
-                                        <th>Nominal</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
-                    <h4>
-                        <p>
-                            <i class="nav-icon fas fa-th mt-2"></i>
-                            Pemasukan Piutang Tunai
-                        </p>
-                    </h4>
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-piutang-tunai">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Nota Penjualan</th>
-                                        <th>Angs-Ke</th>
-                                        <th>Nominal</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                    <h4>
-                        <p>
-                            <i class="nav-icon fas fa-th mt-2"></i>
-                            Pemasukan Piutang Non Tunai
-                        </p>
-                    </h4>
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-piutang-nontunai">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Nota Penjualan</th>
-                                        <th>Channel</th>
-                                        <th>Angs-Ke</th>
-                                        <th>Nominal</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
-                    <hr>
-                    <h4>
-                        <p>
-                            <i class="nav-icon fas fa-th mt-2"></i>
-                            Pengeluaran
-                        </p>
-                    </h4>
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-pengeluaran">
-                                <thead>
-                                    <tr>
-                                        <th>Nama OPS</th>
-                                        <th>Nota</th>
-                                        <th>Nama</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
-
-                    <div class="row mt-4">
-
-                        <div class="col-6">
-                            <p class="lead">Payment Methods:</p>
-                            <img src="{{ asset('assets') }}/dist/img/credit/visa.png" alt="Visa">
-                            <img src="{{ asset('assets') }}/dist/img/credit/mastercard.png" alt="Mastercard">
-                            <img src="{{ asset('assets') }}/dist/img/credit/american-express.png" alt="American Express">
-                            <img src="{{ asset('assets') }}/dist/img/credit/paypal2.png" alt="Paypal">
-                            <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                                Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango
-                                imeem plugg dopplr
-                                jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                        <h4>
+                            <p>
+                                <i class="nav-icon fas fa-th mt-2"></i>
+                                Pemasukan Penjualan
                             </p>
-                        </div>
-
-                        <div class="col-6">
-                            <p class="lead">Amount Due 2/22/2014</p>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tr>
-                                        <th style="width:50%">Subtotal:</th>
-                                        <td>$250.30</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tax (9.3%)</th>
-                                        <td>$10.34</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Shipping:</th>
-                                        <td>$5.80</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total:</th>
-                                        <td>$265.24</td>
-                                    </tr>
+                        </h4>
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-striped" id="tbl-produk">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Pelanggan</th>
+                                            <th>Product</th>
+                                            <th>Qty</th>
+                                            <th>Harga Satuan</th>
+                                            <th>nama_sales</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
 
-                    </div>
-                </div>
+                        <h4>
+                            <p>
+                                <i class="nav-icon fas fa-th mt-2"></i>
+                                Pemasukan Tunai
+                            </p>
+                        </h4>
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-striped" id="tbl-pemasukan-tunai">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Nota Penjualan</th>
+                                            <th>Angs-Ke</th>
+                                            <th>Nominal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
 
-                <div class="row no-print">
-                    <div class="col-12">
-                        <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
-                                class="fas fa-print"></i>
-                            Print</a>
-                        <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i>
-                            Submit
-                            Payment
-                        </button>
-                        <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                            <i class="fas fa-download"></i> Generate PDF
-                        </button>
+                        </div>
+                        <h4>
+                            <p>
+                                <i class="nav-icon fas fa-th mt-2"></i>
+                                Pemasukan Non Tunai
+                            </p>
+                        </h4>
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-striped" id="tbl-pemasukan-nontunai">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Nota Penjualan</th>
+                                            <th>Channel</th>
+                                            <th>Angs-Ke</th>
+                                            <th>Nominal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <h4>
+                            <p>
+                                <i class="nav-icon fas fa-th mt-2"></i>
+                                Pemasukan Piutang Tunai
+                            </p>
+                        </h4>
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-striped" id="tbl-piutang-tunai">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Nota Penjualan</th>
+                                            <th>Angs-Ke</th>
+                                            <th>Nominal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <h4>
+                            <p>
+                                <i class="nav-icon fas fa-th mt-2"></i>
+                                Pemasukan Piutang Non Tunai
+                            </p>
+                        </h4>
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-striped" id="tbl-piutang-nontunai">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Nota Penjualan</th>
+                                            <th>Channel</th>
+                                            <th>Angs-Ke</th>
+                                            <th>Nominal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <hr>
+                        <h4>
+                            <p>
+                                <i class="nav-icon fas fa-th mt-2"></i>
+                                Pengeluaran
+                            </p>
+                        </h4>
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-striped" id="tbl-pengeluaran">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama OPS</th>
+                                            <th>Nota</th>
+                                            <th>Nama</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mt-4">
+
+                            <div class="col-6">
+                                {{-- <p class="lead">Payment Methods:</p>
+                                    <img src="{{ asset('assets') }}/dist/img/credit/visa.png" alt="Visa">
+                                    <img src="{{ asset('assets') }}/dist/img/credit/mastercard.png" alt="Mastercard">
+                                    <img src="{{ asset('assets') }}/dist/img/credit/american-express.png" alt="American Express">
+                                    <img src="{{ asset('assets') }}/dist/img/credit/paypal2.png" alt="Paypal">
+                                    <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango
+                                        imeem plugg dopplr
+                                        jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                                    </p> --}}
+                            </div>
+
+                            <div class="col-6">
+                                {{-- <p class="lead">Amount Due 2/22/2014</p> --}}
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th style="width:50%">Total Penjualan:</th>
+                                            <td id="totalPenjualan">$250.30</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Pemasukan</th>
+                                            <td id="totalPemasukan">$10.34</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Pengeluaran</th>
+                                            <td id="totalPengeluaran">$5.80</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row no-print">
+                        <div class="col-12">
+                            <a href="#" rel="noopener" target="_blank" class="btn btn-default btn_print"><i
+                                    class="fas fa-print"></i>
+                                Print</a>
+
+                            {{-- <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
+                                <i class="fas fa-download"></i> Generate PDF
+                            </button> --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -280,13 +275,34 @@
                     data: cari,
                     success: function(response) {
                         if (response.success) {
-
                             $('#tanggal').text('Tanggal: ' + formatRangeTgl(cari['rTanggal']));
 
-                            laporanPenjualan(response.data);
-                            laporanPemasukan(response.data);
-                            laporanPengeluaran(response.data);
+                            var totalpenjualan = laporanPenjualan(response.data);
+                            var totalbayarTunai = laporanPTunai(response.data.bayarTunai);
+                            var totalbayarOnline = laporanPNTunai(response.data.bayarOnline);
+                            var totalBayarPiutangTunai = laporanPiutangTunai(response.data
+                                .BayarPiutangTunai);
+                            var totalBayarPiutangNTunai = laporanPiutangNTunai(response.data
+                                .BayarPiutangNTunai);
+                            var totalPengeluaranAll = laporanPengeluaran(response.data);
 
+                            var totalPemasukan = totalbayarTunai + totalbayarOnline +
+                                totalBayarPiutangTunai + totalBayarPiutangNTunai;
+
+                            $('#totalPenjualan').css({
+                                'font-weight': 'bold',
+                                'font-size': '20px'
+                            }).text('Rp. ' + addCommas(totalpenjualan));
+                            $('#totalPemasukan').css({
+                                'font-weight': 'bold',
+                                'font-size': '20px'
+                            }).text('Rp. ' + addCommas(totalPemasukan));
+                            $('#totalPengeluaran').css({
+                                'font-weight': 'bold',
+                                'font-size': '20px'
+                            }).text('Rp. ' + addCommas(totalPengeluaranAll));
+
+                            $('#form-laporan-harian').show();
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -311,7 +327,21 @@
                     }
                 });
             })
+
+            $('body').on('click', '.btn_print', function() {
+                printElement('form-laporan-harian');
+            });
         });
+
+        function printElement(elemId) {
+            var printContents = document.getElementById(elemId).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
+
 
         function formatRangeTgl(rTanggal) {
             var tanggalSplit = rTanggal.split(' - ');
@@ -335,7 +365,6 @@
         }
 
         function laporanPenjualan(data) {
-            console.log(data);
             var tableBody = $('#tbl-produk tbody');
             var totalJualProduk = 0;
 
@@ -369,14 +398,10 @@
                 );
 
                 tableBody.append(totalRow);
+            } else {
+                $('#tbl-produk').hide()
             }
-        }
-
-        function laporanPemasukan(data) {
-            laporanPTunai(data.bayarTunai)
-            laporanPNTunai(data.bayarOnline)
-            laporanPiutangTunai(data.BayarPiutangTunai)
-            laporanPiutangNTunai(data.BayarPiutangNTunai)
+            return totalJualProduk;
         }
 
         function laporanPTunai(data) {
@@ -407,7 +432,10 @@
                         '2px solid black')
                 );
                 tableBodyTunai.append(totalRow);
+            } else {
+                $('#tbl-pemasukan-tunai').hide()
             }
+            return totalPemasukanTunai;
         }
 
         function laporanPNTunai(data) {
@@ -439,7 +467,10 @@
                         '2px solid black')
                 );
                 tableBodyNonTunai.append(totalRow);
+            } else {
+                $('#tbl-pemasukan-nontunai').hide()
             }
+            return totalPemasukanNonTunai;
         }
 
         function laporanPiutangTunai(data) {
@@ -470,7 +501,10 @@
                         '2px solid black')
                 );
                 tableBodyTunai.append(totalRow);
+            } else {
+                $('#tbl-piutang-tunai').hide()
             }
+            return totalPiutangTunai;
         }
 
         function laporanPiutangNTunai(data) {
@@ -502,11 +536,13 @@
                         '2px solid black')
                 );
                 tableBodyNonTunai.append(totalRow);
+            } else {
+                $('#tbl-piutang-nontunai').hide()
             }
+            return totalPiutangNonTunai;
         }
 
         function laporanPengeluaran(data) {
-            console.log(data);
             var tableBody = $('#tbl-pengeluaran tbody');
             var totalPengeluaran = 0;
 
@@ -533,9 +569,11 @@
                     $('<td class="text-center" colspan="3">').text('Total Pengeluaran'),
                     $('<td class="text-right">').text(addCommas(totalPengeluaran)).css('border-top', '2px solid black')
                 );
-
                 tableBody.append(totalRow);
+            } else {
+                $('#tbl-pengeluaran').hide()
             }
+            return totalPengeluaran;
         }
     </script>
 @endpush

@@ -63,11 +63,10 @@ class PembelianService
                     $pembelian->path_file = $filename;
                     $pembelian->save();
                 }
-
                 // pembayaran
                 if ($pembelianData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($pembelianData_fix);
-                    if ($pembelianData['jns']) unset($pembayaran['angs_ke']);
+                    if (isset($pembelianData['jns'])) unset($pembayaran['angs_ke']);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
                 }
 

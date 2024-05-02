@@ -81,7 +81,7 @@ class PenjualanService
                 // pembayaran
                 if ($penjualanData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
-                    if ($penjualanData['jns'] == 'update') unset($pembayaran['angs_ke']);
+                    if (isset($penjualanData['jns'])) unset($pembayaran['angs_ke']);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
 
                     if ($penjualanData_fix['total_galon']) {

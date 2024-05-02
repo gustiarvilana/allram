@@ -44,7 +44,7 @@ class Produk extends Model
         if (!empty($this->satker)) {
             $produk->where('a.satker', '=', $this->satker);
         }
-        $produk->where('a.stok_all', '>', 0);
+        // $produk->where('a.stok_all', '>', 0);
 
         return $produk;
     }
