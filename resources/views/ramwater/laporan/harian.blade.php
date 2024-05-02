@@ -398,8 +398,6 @@
                 );
 
                 tableBody.append(totalRow);
-            } else {
-                $('#tbl-produk').hide()
             }
             return totalJualProduk;
         }
@@ -432,8 +430,6 @@
                         '2px solid black')
                 );
                 tableBodyTunai.append(totalRow);
-            } else {
-                $('#tbl-pemasukan-tunai').hide()
             }
             return totalPemasukanTunai;
         }
@@ -467,8 +463,6 @@
                         '2px solid black')
                 );
                 tableBodyNonTunai.append(totalRow);
-            } else {
-                $('#tbl-pemasukan-nontunai').hide()
             }
             return totalPemasukanNonTunai;
         }
@@ -501,8 +495,6 @@
                         '2px solid black')
                 );
                 tableBodyTunai.append(totalRow);
-            } else {
-                $('#tbl-piutang-tunai').hide()
             }
             return totalPiutangTunai;
         }
@@ -536,8 +528,6 @@
                         '2px solid black')
                 );
                 tableBodyNonTunai.append(totalRow);
-            } else {
-                $('#tbl-piutang-nontunai').hide()
             }
             return totalPiutangNonTunai;
         }
@@ -570,8 +560,6 @@
                     $('<td class="text-right">').text(addCommas(totalPengeluaran)).css('border-top', '2px solid black')
                 );
                 tableBody.append(totalRow);
-            } else {
-                $('#tbl-pengeluaran').hide()
             }
             return totalPengeluaran;
         }
