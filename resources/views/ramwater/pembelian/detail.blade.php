@@ -483,7 +483,8 @@
                 var rowData = $(this).data('row');
                 var row =
                     '<tr>' +
-                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
+                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
+                    .tgl_pembelian + '" class="form-control"></td>' +
                     '<td>' +
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                     rowData.nama + '</span></div>' +

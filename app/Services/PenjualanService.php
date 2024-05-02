@@ -81,6 +81,7 @@ class PenjualanService
                 // pembayaran
                 if ($penjualanData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
+                    if ($penjualanData['jns'] == 'update') unset($pembayaran['angs_ke']);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
 
                     if ($penjualanData_fix['total_galon']) {
@@ -88,7 +89,6 @@ class PenjualanService
                         $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
                     }
 
-                    // dd($penjualanData['isKasbon']);
                     if ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar'] || $penjualanData['isKasbon'] == '0') {
                         $dataKasbon = $this->prepareKasbon($penjualan);
 
@@ -196,7 +196,7 @@ class PenjualanService
             'nominal_bayar'  => $penjualanData['nominal_bayar'] ? FormatHelper::removeDots($penjualanData['nominal_bayar']) : 0,
             'sisa_bayar'     => $penjualanData['sisa_bayar'] ? FormatHelper::removeDots($penjualanData['sisa_bayar']) : 0,
 
-            'sts_angsuran'   => $penjualanData['isKasbon'] == 1 ? 3 : $penjualanData['sts_angsuran'],
+            'sts_angsuran'   => $penjualanData['isKasbon'] == 1 && $penjualanData['sisa_bayar'] != '0' ? 3 : $penjualanData['sts_angsuran'],
 
             'total_galon'   => $penjualanData['total_galon'] ? FormatHelper::removeDots($penjualanData['total_galon']) : 0,
             'galon_kembali' => $penjualanData['galon_kembali'] ? FormatHelper::removeDots($penjualanData['galon_kembali']) : 0,
@@ -253,7 +253,7 @@ class PenjualanService
         $pembayaran['jns_pembayaran'] = 2;
 
         $pembayaran['ket_bayar']      = '';
-        $pembayaran['angs_ke']        = $angs_ke;
+        $pembayaran['angs_ke']        = $pembayaran['angs_ke'] ?? $angs_ke;
         $pembayaran['channel_bayar']  = $pembelian['kd_channel'];
         $pembayaran['path_file']      = '';
 
@@ -374,7 +374,7 @@ class PenjualanService
 
         try {
             return $this->dtransaksiOps->updateOrCreate([
-                'nik'    => $data['nik'],
+                'nota'    => $data['nota'],
                 'kd_ops' => $data['kd_ops']
             ], $data);
         } catch (\Exception $e) {

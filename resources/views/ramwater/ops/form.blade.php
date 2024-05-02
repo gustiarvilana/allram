@@ -64,25 +64,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="jumlah">Jumlah</label>
-                                        <input type="text" class="form-control money" name="jumlah" id="jumlah"
-                                            value="{{ old('jumlah') }}">
-                                        @error('jumlah')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga">Harga</label>
-                                        <input type="text" class="form-control money" name="harga" id="harga"
-                                            value="{{ old('harga') }}">
-                                        @error('harga')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
                                         <label for="total">Total</label>
-                                        <input type="text" class="form-control money" name="total" id="total"
-                                            readonly>
+                                        <input type="text" class="form-control money" name="total" id="total">
                                         @error('total')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror

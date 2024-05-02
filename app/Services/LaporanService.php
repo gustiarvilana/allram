@@ -22,6 +22,7 @@ class LaporanService
 
             'bayarTunai' => DB::table('view_pembayaran_penjualan as a')
                 ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+                ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
                 ->whereBetween('a.tgl', [$tanggal_awal, $tanggal_akhir])
                 ->whereIn('a.channel_bayar', [1])
                 ->get(),
@@ -30,12 +31,26 @@ class LaporanService
                 ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
                 ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
                 ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
-                ->whereIn('channel_bayar', [1, 2])
+                ->whereIn('channel_bayar', [2, 3])
+                ->get(),
+
+            'BayarPiutangTunai' => DB::table('view_pembayaran_piutang_nominal as a')
+                ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+                ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
+                ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
+                ->whereIn('channel_bayar', [1])
+                ->get(),
+
+            'BayarPiutangNTunai' => DB::table('view_pembayaran_piutang_nominal as a')
+                ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+                ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
+                ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
+                ->whereIn('channel_bayar', [2, 3])
                 ->get(),
 
             'pengeluaran' => DB::table('d_ops as a')
                 ->join('t_ops as b', 'a.kd_ops', 'b.kd_ops')
-                ->join('d_karyawan as c', 'a.nik', 'c.nik')
+                ->leftJoin('d_karyawan as c', 'a.nik', 'c.nik')
                 ->whereBetween('a.tanggal', [$tanggal_awal, $tanggal_akhir])
                 ->where('a.satker', '=', 'ramwater')
                 ->where('b.tipe', '=', 'B')

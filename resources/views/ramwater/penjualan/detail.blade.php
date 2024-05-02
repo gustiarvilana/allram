@@ -484,7 +484,7 @@
                 var row =
                     '<tr>' +
                     '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
-                    {{ date('Ymd') }} + '"></td>' +
+                    rowData.tgl_penjualan + '"></td>' +
                     '<input type="hidden" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
                     rowData.kd_pelanggan + '">' +
                     '<td>' +

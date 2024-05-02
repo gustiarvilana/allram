@@ -42,10 +42,9 @@
                         <div class="col-12">
                             <h2 class="page-header">
                                 <i class="fas fa-globe"></i> RAM Water
-                                <small class="float-right" id="tanggal">Date: 2/10/2014</small>
+                                <small class="float-right" id="tanggal"></small>
                             </h2>
                         </div>
-
                     </div>
 
                     <div class="row invoice-info">
@@ -90,19 +89,41 @@
                     <h4>
                         <p>
                             <i class="nav-icon fas fa-th mt-2"></i>
-                            Detail Pembayaran
+                            Pemasukan Tunai
                         </p>
                     </h4>
                     <div class="row">
                         <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-produk">
+                            <table class="table table-striped" id="tbl-pemasukan-tunai">
                                 <thead>
                                     <tr>
-                                        <th>Qty</th>
-                                        <th>Product</th>
-                                        <th>Serial #</th>
-                                        <th>Description</th>
-                                        <th>Subtotal</th>
+                                        <th>Nama</th>
+                                        <th>Nota Penjualan</th>
+                                        <th>Angs-Ke</th>
+                                        <th>Nominal</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <h4>
+                        <p>
+                            <i class="nav-icon fas fa-th mt-2"></i>
+                            Pemasukan Non Tunai
+                        </p>
+                    </h4>
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-striped" id="tbl-pemasukan-nontunai">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Nota Penjualan</th>
+                                        <th>Channel</th>
+                                        <th>Angs-Ke</th>
+                                        <th>Nominal</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -114,19 +135,41 @@
                     <h4>
                         <p>
                             <i class="nav-icon fas fa-th mt-2"></i>
-                            Pemasukan Piutang
+                            Pemasukan Piutang Tunai
                         </p>
                     </h4>
                     <div class="row">
                         <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-produk">
+                            <table class="table table-striped" id="tbl-piutang-tunai">
                                 <thead>
                                     <tr>
-                                        <th>Qty</th>
-                                        <th>Product</th>
-                                        <th>Serial #</th>
-                                        <th>Description</th>
-                                        <th>Subtotal</th>
+                                        <th>Nama</th>
+                                        <th>Nota Penjualan</th>
+                                        <th>Angs-Ke</th>
+                                        <th>Nominal</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <h4>
+                        <p>
+                            <i class="nav-icon fas fa-th mt-2"></i>
+                            Pemasukan Piutang Non Tunai
+                        </p>
+                    </h4>
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-striped" id="tbl-piutang-nontunai">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Nota Penjualan</th>
+                                        <th>Channel</th>
+                                        <th>Angs-Ke</th>
+                                        <th>Nominal</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -144,14 +187,13 @@
                     </h4>
                     <div class="row">
                         <div class="col-12 table-responsive">
-                            <table class="table table-striped" id="tbl-produk">
+                            <table class="table table-striped" id="tbl-pengeluaran">
                                 <thead>
                                     <tr>
-                                        <th>Qty</th>
-                                        <th>Product</th>
-                                        <th>Serial #</th>
-                                        <th>Description</th>
-                                        <th>Subtotal</th>
+                                        <th>Nama OPS</th>
+                                        <th>Nota</th>
+                                        <th>Nama</th>
+                                        <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -208,7 +250,8 @@
                         <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
                                 class="fas fa-print"></i>
                             Print</a>
-                        <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                        <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i>
+                            Submit
                             Payment
                         </button>
                         <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -237,7 +280,13 @@
                     data: cari,
                     success: function(response) {
                         if (response.success) {
-                            proccessView(response.data);
+
+                            $('#tanggal').text('Tanggal: ' + formatRangeTgl(cari['rTanggal']));
+
+                            laporanPenjualan(response.data);
+                            laporanPemasukan(response.data);
+                            laporanPengeluaran(response.data);
+
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -264,9 +313,31 @@
             })
         });
 
-        function proccessView(data) {
-            console.log(data.penjualan);
+        function formatRangeTgl(rTanggal) {
+            var tanggalSplit = rTanggal.split(' - ');
+
+            var tanggalAwal = new Date(tanggalSplit[0]);
+            var tanggalAkhir = new Date(tanggalSplit[1]);
+
+            var tanggalAwalFormatted = tanggalAwal.toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            var tanggalAkhirFormatted = tanggalAkhir.toLocaleDateString(
+                'id-ID', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+            return tanggalAwalFormatted + ' - ' + tanggalAkhirFormatted;
+        }
+
+        function laporanPenjualan(data) {
+            console.log(data);
             var tableBody = $('#tbl-produk tbody');
+            var totalJualProduk = 0;
 
             // Kosongkan isi tabel sebelum menambahkan data baru
             tableBody.empty();
@@ -279,13 +350,192 @@
                 row.append($('<td>').text(item.nama_pelanggan));
                 row.append($('<td>').text(item.nama));
                 row.append($('<td>').text(item.qty_bersih));
-                row.append($('<td>').text(item.harga_satuan));
+                row.append($('<td>').text(addCommas(item.harga_satuan)));
                 row.append($('<td>').text(item.nama_sales));
-                row.append($('<td>').text(addCommas(item.harga_total)));
+                row.append($('<td class="text-right">').text(addCommas(item.harga_total)));
 
-                // Tambahkan baris ke dalam tabel
+                totalJualProduk += parseInt(item.harga_total);
                 tableBody.append(row);
             });
+
+            if (totalJualProduk) {
+                var totalRow = $('<tr>').css({
+                    'font-weight': 'bold',
+                    'font-size': '20px'
+                });
+                totalRow.append(
+                    $('<td class="text-center" colspan="5">').text('Total Penjualan'),
+                    $('<td class="text-right">').text(addCommas(totalJualProduk)).css('border-top', '2px solid black')
+                );
+
+                tableBody.append(totalRow);
+            }
+        }
+
+        function laporanPemasukan(data) {
+            laporanPTunai(data.bayarTunai)
+            laporanPNTunai(data.bayarOnline)
+            laporanPiutangTunai(data.BayarPiutangTunai)
+            laporanPiutangNTunai(data.BayarPiutangNTunai)
+        }
+
+        function laporanPTunai(data) {
+            var tableBodyTunai = $('#tbl-pemasukan-tunai tbody');
+            var totalPemasukanTunai = 0;
+
+            tableBodyTunai.empty();
+            data.forEach(function(item) {
+                var row = $('<tr>');
+
+                row.append($('<td>').text(item.nama));
+                row.append($('<td>').text(item.nota_penjualan));
+                row.append($('<td>').text(item.angs_ke));
+                row.append($('<td class="text-right">').text(addCommas(item.nominal_bayar)));
+
+                totalPemasukanTunai += parseInt(item.nominal_bayar);
+                tableBodyTunai.append(row);
+            });
+
+            if (totalPemasukanTunai) {
+                var totalRow = $('<tr>').css({
+                    'font-weight': 'bold',
+                    'font-size': '20px'
+                });
+                totalRow.append(
+                    $('<td class="text-center" colspan="3">').text('Total Tunai'),
+                    $('<td class="text-right">').text(addCommas(totalPemasukanTunai)).css('border-top',
+                        '2px solid black')
+                );
+                tableBodyTunai.append(totalRow);
+            }
+        }
+
+        function laporanPNTunai(data) {
+            var tableBodyNonTunai = $('#tbl-pemasukan-nontunai tbody');
+            var totalPemasukanNonTunai = 0;
+
+            tableBodyNonTunai.empty();
+            data.forEach(function(item) {
+                var row = $('<tr>');
+
+                row.append($('<td>').text(item.nama));
+                row.append($('<td>').text(item.nota_penjualan));
+                row.append($('<td>').text(item.ur_channel));
+                row.append($('<td>').text(item.angs_ke));
+                row.append($('<td class="text-right">').text(addCommas(item.nominal_bayar)));
+
+                totalPemasukanNonTunai += parseInt(item.nominal_bayar);
+                tableBodyNonTunai.append(row);
+            });
+
+            if (totalPemasukanNonTunai) {
+                var totalRow = $('<tr>').css({
+                    'font-weight': 'bold',
+                    'font-size': '20px'
+                });
+                totalRow.append(
+                    $('<td class="text-center" colspan="4">').text('Total Non Tunai'),
+                    $('<td class="text-right">').text(addCommas(totalPemasukanNonTunai)).css('border-top',
+                        '2px solid black')
+                );
+                tableBodyNonTunai.append(totalRow);
+            }
+        }
+
+        function laporanPiutangTunai(data) {
+            var tableBodyTunai = $('#tbl-piutang-tunai tbody');
+            var totalPiutangTunai = 0;
+
+            tableBodyTunai.empty();
+            data.forEach(function(item) {
+                var row = $('<tr>');
+
+                row.append($('<td>').text(item.nama));
+                row.append($('<td>').text(item.nota_penjualan));
+                row.append($('<td>').text(item.angs_ke));
+                row.append($('<td class="text-right">').text(addCommas(item.total_bayar)));
+
+                totalPiutangTunai += parseInt(item.total_bayar);
+                tableBodyTunai.append(row);
+            });
+
+            if (totalPiutangTunai) {
+                var totalRow = $('<tr>').css({
+                    'font-weight': 'bold',
+                    'font-size': '20px'
+                });
+                totalRow.append(
+                    $('<td class="text-center" colspan="3">').text('Total Tunai'),
+                    $('<td class="text-right">').text(addCommas(totalPiutangTunai)).css('border-top',
+                        '2px solid black')
+                );
+                tableBodyTunai.append(totalRow);
+            }
+        }
+
+        function laporanPiutangNTunai(data) {
+            var tableBodyNonTunai = $('#tbl-piutang-nontunai tbody');
+            var totalPiutangNonTunai = 0;
+
+            tableBodyNonTunai.empty();
+            data.forEach(function(item) {
+                var row = $('<tr>');
+
+                row.append($('<td>').text(item.nama));
+                row.append($('<td>').text(item.nota_penjualan));
+                row.append($('<td>').text(item.ur_channel));
+                row.append($('<td>').text(item.angs_ke));
+                row.append($('<td class="text-right">').text(addCommas(item.total_bayar)));
+
+                totalPiutangNonTunai += parseInt(item.total_bayar);
+                tableBodyNonTunai.append(row);
+            });
+
+            if (totalPiutangNonTunai) {
+                var totalRow = $('<tr>').css({
+                    'font-weight': 'bold',
+                    'font-size': '20px'
+                });
+                totalRow.append(
+                    $('<td class="text-center" colspan="4">').text('Total Non Tunai'),
+                    $('<td class="text-right">').text(addCommas(totalPiutangNonTunai)).css('border-top',
+                        '2px solid black')
+                );
+                tableBodyNonTunai.append(totalRow);
+            }
+        }
+
+        function laporanPengeluaran(data) {
+            console.log(data);
+            var tableBody = $('#tbl-pengeluaran tbody');
+            var totalPengeluaran = 0;
+
+            tableBody.empty();
+            data.pengeluaran.forEach(function(item) {
+
+                var row = $('<tr>');
+
+                row.append($('<td>').text(item.nama_ops));
+                row.append($('<td>').text(item.nota));
+                row.append($('<td>').text(item.nama));
+                row.append($('<td class="text-right">').text(addCommas(item.total)));
+
+                totalPengeluaran += parseInt(item.total);
+                tableBody.append(row);
+            });
+
+            if (totalPengeluaran) {
+                var totalRow = $('<tr>').css({
+                    'font-weight': 'bold',
+                    'font-size': '20px'
+                });
+                totalRow.append(
+                    $('<td class="text-center" colspan="3">').text('Total Pengeluaran'),
+                    $('<td class="text-right">').text(addCommas(totalPengeluaran)).css('border-top', '2px solid black')
+                );
+
+                tableBody.append(totalRow);
+            }
         }
     </script>
 @endpush
