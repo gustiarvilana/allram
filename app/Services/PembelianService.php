@@ -51,11 +51,11 @@ class PembelianService
         }
         try {
             $this->validateData($pembelianData, $dataArrayDetail);
-            $pembelianData = $this->preparePembelianData($pembelianData);
+            $pembelianData_fix = $this->preparePembelianData($pembelianData);
 
-            return DB::transaction(function () use ($pembelianData, $dataArrayDetail, $file) { //rollback if error
+            return DB::transaction(function () use ($pembelianData, $pembelianData_fix, $dataArrayDetail, $file) { //rollback if error
                 // save: d_penjualan
-                $pembelian = $this->upsertPembelian($pembelianData);
+                $pembelian = $this->upsertPembelian($pembelianData_fix);
 
                 //save: file
                 if ($file) {
@@ -65,12 +65,13 @@ class PembelianService
                 }
 
                 // pembayaran
-                if ($pembelianData['nominal_bayar']) {
-                    $pembayaran = $this->preparePembayaranData($pembelianData);
+                if ($pembelianData_fix['nominal_bayar']) {
+                    $pembayaran = $this->preparePembayaranData($pembelianData_fix);
+                    if ($pembelianData['jns']) unset($pembayaran['angs_ke']);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
                 }
 
-                $pembelian['nota_pembelian'] = $pembelianData['nota_pembelian'];
+                $pembelian['nota_pembelian'] = $pembelianData_fix['nota_pembelian'];
 
                 // save: d_penjualan_detail + stok
                 $this->upsertPembelianDetail($pembelian, $dataArrayDetail);
