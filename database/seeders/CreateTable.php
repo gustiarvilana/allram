@@ -332,7 +332,7 @@ class CreateTable extends Seeder
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
             INSERT IGNORE INTO `t_jns_kasbon`
-            (`id`,`kd_jns_kasbon`, `nama`, `created_at`, `updated_at`)
+            (id,`kd_jns_kasbon`, `nama`, `created_at`, `updated_at`)
             VALUES
             (1,1, 'kasbon Rutin', NOW(), NOW()),
             (2,2, 'Kasbon Kurang Harga', NOW(), NOW());
