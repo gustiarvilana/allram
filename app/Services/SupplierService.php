@@ -5,27 +5,17 @@
 namespace App\Services;
 
 use App\Helpers\FormatHelper;
-use App\Models\DKasbonModel;
-use App\Models\DOpsModel;
-use App\Models\DPembayaranGalonModel;
-use App\Models\DPembayaranModel;
-use App\Models\DPembelianDetailModel;
-use App\Models\DStokProduk;
-use App\Models\Penjualan;
-use App\Models\PenjualanDetail;
-use App\Models\Produk;
 use App\Models\SupplierModel;
-use App\Models\TOps;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class ProductService
+class SupplierService
 {
     private $model;
     public function __construct()
     {
-        $this->model = new Produk();
+        $this->model = new SupplierModel();
     }
 
     public function storeData($input)
@@ -77,17 +67,18 @@ class ProductService
     public function prepareData($input)
     {
         $input_fix['id']          = isset($input['id']) ? $input['id'] : '';
-        $input_fix['kd_produk']   = $input['kd_produk'];
-        $input_fix['satker']      = 'ramwater';
-        $input_fix['nama']        = $input['nama'];
-        $input_fix['merek']       = $input['merek'];
-        $input_fix['type']        = $input['type'];
-        $input_fix['kd_supplier'] = $input['kd_supplier'];
-        $input_fix['stok_all']    = isset($input['stok_all']) ? $input['stok_all'] : 0;
-        $input_fix['kd_ops']      = $input['kd_ops'];
+
+        $input_fix['kd_supplier']   = $input['kd_supplier'];
+        $input_fix['nama']          = $input['nama'];
+        $input_fix['merek']         = $input['merek'];
+        $input_fix['alamat']        = $input['alamat'];
+        $input_fix['norek']         = $input['norek'];
+        $input_fix['nama_bank']     = $input['nama_bank'];
+        $input_fix['nama_pemilik']  = $input['nama_pemilik'];
+        $input_fix['nama_personal'] = $input['nama_personal'];
+
         $input_fix['opr_input']   = Auth::user()->nik;
         $input_fix['tgl_input']   = date('Ymd');
-        $input_fix['harga_beli']  = FormatHelper::removeDots($input['harga_beli']);
 
         return $input_fix;
     }
@@ -96,13 +87,16 @@ class ProductService
     {
         $errors = [];
 
-        if (empty($input['kd_produk'])) $errors[]   = 'Kode Produk';
-        if (empty($input['nama'])) $errors[]        = 'Nama';
-        if (empty($input['merek'])) $errors[]       = 'Merek';
-        if (empty($input['type'])) $errors[]        = 'Type';
-        if (empty($input['kd_supplier'])) $errors[] = 'Kode Supplier';
-        if (empty($input['kd_ops'])) $errors[]      = 'Kode OPS';
-        if (empty($input['harga_beli'])) $errors[]  = 'Harga Beli';
+        if (empty($input['kd_supplier'])) $errors[]   = 'Kd Supplier';
+        if (empty($input['nama'])) $errors[]          = 'Nama';
+        if (empty($input['merek'])) $errors[]         = 'Merek';
+        if (empty($input['alamat'])) $errors[]        = 'Alamat';
+        if (empty($input['norek'])) $errors[]         = 'No Rekening';
+        if (empty($input['nama_bank'])) $errors[]     = 'Nama Bank';
+        if (empty($input['nama_pemilik'])) $errors[]  = 'Nama Pemilik';
+        if (empty($input['nama_personal'])) $errors[] = 'Nama Personal';
+        if (empty($input['no_tlp'])) $errors[]        = 'No Hp';
+        if (empty($input['kd_ops'])) $errors[]        = 'Kd Ops';
 
         if (!empty($errors)) {
             throw new \Exception('Field berikut harus terisi: ' . implode(', ', $errors));

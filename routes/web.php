@@ -29,6 +29,7 @@ use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
 use App\Http\Controllers\Ramwater\Piutang\PiutangGalonController;
 use App\Http\Controllers\Ramwater\Piutang\PiutangNominalController;
+use App\Http\Controllers\Supplier\SupplierController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -73,8 +74,11 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/produk', ProdukController::class)->except('show');
         Route::prefix('produk')->group(function () {
             Route::get('/data', [ProdukController::class, 'data'])->name('produk.data');
-            Route::get('/laporan', [LaporanProdukController::class, 'laporan'])->name('produk.laporan');
-            Route::get('laporan/data', [LaporanProdukController::class, 'data'])->name('produk.laporan.data');
+        });
+
+        Route::resource('/supplier', SupplierController::class)->except('show');
+        Route::prefix('supplier')->group(function () {
+            Route::get('/data', [SupplierController::class, 'data'])->name('supplier.data');
         });
 
         Route::resource('/pembelian', PembelianController::class)->except('show');

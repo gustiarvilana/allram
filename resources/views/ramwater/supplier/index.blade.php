@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Data Produk
+    Data Supplier
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card card-warning">
                 <div class="card-header">
-                    <a class="btn btn-success text-white" id="add_menu">Tambah Produk</a>
+                    <a class="btn btn-success text-white" id="add_menu">Tambah Supplier</a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -18,13 +18,16 @@
                                 <thead class="thead-inverse">
                                     <tr>
                                         <th width="5%">No</th>
+                                        <th>kd_supplier</th>
                                         <th>nama</th>
                                         <th>merek</th>
-                                        <th>type</th>
-                                        <th>kd_supplier</th>
-                                        <th>stok_all</th>
-                                        <th>OPS</th>
-                                        <th>harga_beli</th>
+                                        <th>alamat</th>
+                                        <th>norek</th>
+                                        <th>nama_bank</th>
+                                        <th>nama_pemilik</th>
+                                        <th>nama_personal</th>
+                                        <th>no_tlp</th>
+                                        <th>kd_ops</th>
                                         <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
                                     </tr>
                                 </thead>
@@ -36,7 +39,7 @@
             </div>
         </div>
     </div>
-    @include('ramwater.produk.form')
+    @include('ramwater.supplier.form')
 @endsection
 
 @push('js')
@@ -54,7 +57,7 @@
                 "searching": true,
                 "ordering": true,
                 "ajax": {
-                    url: '{{ route('produk.data') }}',
+                    url: '{{ route('supplier.data') }}',
                     data: function(d) {
                         d.satker = 'ramwater'
                     }
@@ -65,28 +68,34 @@
                         shrotable: false
                     },
                     {
+                        data: 'kd_supplier'
+                    },
+                    {
                         data: 'nama'
                     },
                     {
                         data: 'merek'
                     },
                     {
-                        data: 'type'
+                        data: 'alamat'
                     },
                     {
-                        data: 'kd_supplier'
+                        data: 'norek'
                     },
                     {
-                        data: 'stok_all'
+                        data: 'nama_bank'
+                    },
+                    {
+                        data: 'nama_pemilik'
+                    },
+                    {
+                        data: 'nama_personal'
+                    },
+                    {
+                        data: 'no_tlp'
                     },
                     {
                         data: 'kd_ops'
-                    },
-                    {
-                        data: 'harga_beli',
-                        render: function(data, type, row) {
-                            return addCommas(data);
-                        }
                     },
                     {
                         data: 'id',
@@ -127,19 +136,22 @@
                 $('#modal-form form')[0].reset();
 
                 $('#modal-form [name=id]').val(data.id);
-                $('#modal-form [name=kd_produk]').val(data.kd_produk);
+                $('#modal-form [name=kd_supplier]').val(data.kd_supplier);
                 $('#modal-form [name=nama]').val(data.nama);
                 $('#modal-form [name=merek]').val(data.merek);
-                $('#modal-form [name=type]').val(data.type);
-                $('#modal-form [name=kd_supplier]').val(data.kd_supplier);
-                $('#modal-form [name=kd_ops]').val(data.kd_ops);
-                $('#modal-form [name=harga_beli]').val(data.harga_beli);
+                $('#modal-form [name=alamat]').val(data.alamat);
+                $('#modal-form [name=norek]').val(data.norek);
+                $('#modal-form [name=nama_bank]').val(data.nama_bank);
+                $('#modal-form [name=nama_pemilik]').val(data.nama_pemilik);
+                $('#modal-form [name=nama_personal]').val(data.nama_personal);
+                $('#modal-form [name=no_tlp]').val(data.no_tlp);
+                $('#modal-form [name=kd_ops]').val(data.kd_ops).trigger('change');
 
                 $('#modal-form .modal-title').text('Edit Produk');
                 $('#modal-form').modal('show');
             }).on('click', '#user_menu-delete', function() {
                 var id = $(this).data('id');
-                var url_delete = "{{ route('produk.destroy', ['produk' => ':id']) }}".replace(':id',
+                var url_delete = "{{ route('supplier.destroy', ['supplier' => ':id']) }}".replace(':id',
                     id);
 
                 if (confirm('Yakin akan menghapus data terpilih?')) {
@@ -162,11 +174,10 @@
 
             }).on('click', '#simpan', function() {
                 var formData = new FormData($('#form-produk')[0]);
-                var input = Object.fromEntries(formData);
                 $.ajax({
                     processData: false,
                     contentType: false,
-                    url: '{{ route('produk.store') }}',
+                    url: '{{ route('supplier.store') }}',
                     type: 'POST',
                     data: formData,
                     success: function(response) {

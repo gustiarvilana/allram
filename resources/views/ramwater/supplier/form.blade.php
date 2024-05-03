@@ -20,9 +20,9 @@
                                 <div class="card-body">
                                     <input type="hidden" name="id" id="id">
                                     <div class="form-group">
-                                        <label for="kd_produk">kd_produk</label>
-                                        <input type="text" class="form-control" name="kd_produk" id="kd_produk">
-                                        @error('kd_produk')
+                                        <label for="kd_supplier">kd_supplier</label>
+                                        <input type="text" class="form-control" name="kd_supplier" id="kd_supplier">
+                                        @error('kd_supplier')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -41,21 +41,48 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="type">type</label>
-                                        <input type="text" class="form-control" name="type" id="type">
-                                        @error('type')
+                                        <label for="alamat">alamat</label>
+                                        <input type="text" class="form-control" name="alamat" id="alamat">
+                                        @error('alamat')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="kd_supplier">kd_supplier</label>
-                                        <select name="kd_supplier" id="kd_supplier" class="form-control select2">
-                                            <option value="">Pilih Supplier</option>
-                                            @foreach ($suppliers as $supplier)
-                                                <option value="{{ $supplier->kd_supplier }}">{{ $supplier->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <label for="norek">norek</label>
+                                        <input type="text" class="form-control" name="norek" id="norek">
+                                        @error('norek')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nama_bank">nama_bank</label>
+                                        <input type="text" class="form-control" name="nama_bank" id="nama_bank">
+                                        @error('nama_bank')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nama_pemilik">nama_pemilik</label>
+                                        <input type="text" class="form-control" name="nama_pemilik"
+                                            id="nama_pemilik">
+                                        @error('nama_pemilik')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nama_personal">nama_personal</label>
+                                        <input type="text" class="form-control" name="nama_personal"
+                                            id="nama_personal">
+                                        @error('nama_personal')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="no_tlp">no_tlp</label>
+                                        <input type="text" class="form-control" name="no_tlp" id="no_tlp">
+                                        @error('no_tlp')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="kd_ops">kd_ops</label>
@@ -66,17 +93,8 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="harga_beli">harga_beli</label>
-                                        <input type="text" class="form-control money" name="harga_beli"
-                                            id="harga_beli">
-                                        @error('harga_beli')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
                                 </div>
                             </div>
-                            <input type="hidden" name="id">
                         </div>
                     </div>
                 </div>
