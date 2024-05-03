@@ -67,6 +67,11 @@ class FormatHelper
         }
     }
 
+    public static function add($a, $b)
+    {
+        return $a + $b;
+    }
+
 
     public static function generateCode($table, $prefix = false, $length = 5)
     {
@@ -89,16 +94,10 @@ class FormatHelper
             $kode = date('ym') . '-' . $formattedNumber;
         }
 
-
         if (DB::table($table)->where('nota_penjualan', $kode)->exists()) {
             return self::generateCode($table, $prefix);
         }
 
         return $kode;
-    }
-
-    public static function add($a, $b)
-    {
-        return $a + $b;
     }
 }

@@ -70,22 +70,11 @@ Route::middleware(['auth', 'roles:99,1'])->group(function () {
 
 Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
     Route::prefix('ramwater')->group(function () {
-        // Route::get('/', [RamwaterController::class, 'dashboard'])->name('ramwater.dashboard.dashboard');
-        // Route::get('/monitoring/data', [RamwaterController::class, 'monitoring_data'])->name('ramwater.dashboard.monitoring.monitoring_data');
-        // Route::get('/monitoring', [RamwaterController::class, 'monitoring'])->name('ramwater.dashboard.monitoring');
-
         Route::resource('/produk', ProdukController::class)->except('show');
         Route::prefix('produk')->group(function () {
             Route::get('/data', [ProdukController::class, 'data'])->name('produk.data');
             Route::get('/laporan', [LaporanProdukController::class, 'laporan'])->name('produk.laporan');
             Route::get('laporan/data', [LaporanProdukController::class, 'data'])->name('produk.laporan.data');
-        });
-
-        Route::resource('/pelanggan', PelangganController::class)->except('show');
-        Route::prefix('pelanggan')->group(function () {
-            Route::get('/data', [PelangganController::class, 'data'])->name('pelanggan.data');
-            Route::get('/laporan', [LaporanPelangganController::class, 'laporan'])->name('pelanggan.laporan');
-            Route::get('laporan/data', [LaporanPelangganController::class, 'data'])->name('pelanggan.laporan.data');
         });
 
         Route::resource('/pembelian', PembelianController::class)->except('show');
