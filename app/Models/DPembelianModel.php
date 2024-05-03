@@ -27,7 +27,7 @@ class DPembelianModel extends Model
 
     public function getHutang($input)
     {
-        $input = $input['data'];
+        $input = isset($input['data']) ? $input['data'] : '';
         $pembelian = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
             ->where('a.sts_angsuran', '=', '1')

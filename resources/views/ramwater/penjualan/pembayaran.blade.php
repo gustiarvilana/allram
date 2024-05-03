@@ -634,19 +634,19 @@
                             $('#btn-add-penjualan-simpan').show();
                         } else {
                             $('#btn-add-penjualan-simpan').hide();
-                            $('.modal .form-control').prop('disabled', true);
-                            $('.modal #ur_kd_sales').prop('disabled', true);
-                            $('.modal #ur_kd_channel').prop('disabled', true);
-                            $('.modal #path_file').prop('disabled', true);
+                            // $('.modal .form-control').prop('disabled', true);
+                            // $('.modal #ur_kd_sales').prop('disabled', true);
+                            // $('.modal #ur_kd_channel').prop('disabled', true);
+                            // $('.modal #path_file').prop('disabled', true);
                         }
 
-                        $("#penjualan-uraian .form-control").prop("disabled", true);
+                        // $("#penjualan-uraian .form-control").prop("disabled", true);
                         if (rowData.sts_galon != 4) {
-                            $('.modal #ur_galon_kembali').prop('disabled', false);
+                            // $('.modal #ur_galon_kembali').prop('disabled', false);
                             $('#btn-add-penjualan-simpan').show();
                         } else {
-                            $('.modal #ur_galon_kembali').prop('disabled', true);
-                            $('.modal #ur_total_galon').prop('disabled', true);
+                            // $('.modal #ur_galon_kembali').prop('disabled', true);
+                            // $('.modal #ur_total_galon').prop('disabled', true);
                         }
 
                     },

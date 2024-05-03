@@ -33,15 +33,15 @@ class UpdateMenu extends Seeder
             (20, 20, 19, null, 'Laporan Pembelian', 'Ramwater Laporan Pembelian', '/ramwater/laporan/pembelian', '#', 'fa-solid fa-cart-flatbed-suitcase', 1, 1),
             (21, 21, 19, null, 'Laporan Penjualan', 'Ramwater Laporan penjualan', '/ramwater/laporan/penjualan', '#', 'fa-solid fa-cart-flatbed-suitcase', 2, 1),
             (22, 22, 19, null, 'Laporan OPS', 'Ramwater Laporan ops', '/ramwater/laporan/ops', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1),
-            (23, 23, 19, null, 'Hutang Nominal', 'Ramwater Hutang Nominal', '/ramwater/hutang/nominal', '#', 'fa-solid fa-cart-flatbed-suitcase',1, 1),
-            (24, 24, 19, null, 'Piutang Nominal', 'Ramwater Piutang Nominal', '/ramwater/piutang/nominal', '#', 'fa-solid fa-cart-flatbed-suitcase',1, 1),
-            (25, 25, 19, null, 'Piutang Galon', 'Ramwater Piutang Galon', '/ramwater/piutang/galon', '#', 'fa-solid fa-cart-flatbed-suitcase',2, 1),
+            (23, 23, 19, null, 'Hutang Nominal', 'Ramwater Hutang Nominal', '/ramwater/laporan/hutang/nominal', '#', 'fa-solid fa-cart-flatbed-suitcase',1, 1),
+            (24, 24, 19, null, 'Piutang Nominal', 'Ramwater Piutang Nominal', '/ramwater/laporan/piutang/nominal', '#', 'fa-solid fa-cart-flatbed-suitcase',1, 1),
+            (25, 25, 19, null, 'Piutang Galon', 'Ramwater Piutang Galon', '/ramwater/laporan/piutang/galon', '#', 'fa-solid fa-cart-flatbed-suitcase',2, 1),
             (26, 26, 19, null, 'Laporan Kasbon', 'Ramwater Laporan Kasbon', '/ramwater/laporan/kasbon', '#', 'fa-solid fa-cart-flatbed-suitcase', 4, 1),
             (27, 27, 16, null, 'Input Kasbon', 'Ramwater Input Kasbon', '/ramwater/kasbon', '#', 'fa-solid fa-cart-flatbed-suitcase', 2, 1),
 
             (28, 28, 4, null, 'Laporan Harian', 'Ramwater Laporan Harian', '/ramwater/laporan/harian', '#', 'fa-solid fa-cart-flatbed-suitcase', 5, 1),
 
-            (29, 29, 4, null, 'Master', 'Mastering Data ', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 0, 1),
+            (29, 29, 4, null, 'Master', 'Mastering Data ', '#', '#', 'fas fa-wrench', 0, 1),
             (30, 30, 29, null, 'Supplier', 'Supplier Ramwater', '/ramwater/supplier', '#', 'fa-solid fa-cart-flatbed-suitcase', 2, 1),
             (31, 31, 29, null, 'Produk', 'Produk Ramwater', '/ramwater/produk', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1)
         ");

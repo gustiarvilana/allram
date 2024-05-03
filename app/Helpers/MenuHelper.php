@@ -32,7 +32,7 @@ class MenuHelper
         $children = DB::table('users_menu as a')
             ->join('users_role_menu as b', 'a.kd_menu', 'b.kd_menu')
             ->where('a.kd_parent', $kd_parent)
-            ->where('b.tahun', date('Y'))
+            // ->where('b.tahun', date('Y'))
             ->where('b.kd_role', Auth::user()->kd_role)
             ->orderBy('a.order', 'asc')
             ->get();
@@ -61,7 +61,7 @@ class MenuHelper
                 echo "</ul>";
             }
             // open
-            // print_r(dirname($child->link_menu));
+            // print_r($child->link_menu);
             // print_r('<br>=> /' . $parentUrl);
 
             if (dirname($child->link_menu) == '/' . $parentUrl || $child->link_menu == '/' . $parentUrl || dirname(dirname($child->link_menu)) == '/' . $parentUrl) {

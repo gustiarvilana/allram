@@ -192,7 +192,12 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: '{{ route('pembelian.detail.data') }}',
+                ajax: {
+                    url: '{{ route('pembelian.detail.data') }}',
+                    data: {
+                        jns: 'hutang',
+                    },
+                },
                 dom: 'Brtip',
                 buttons: [
                     'copy', 'excel', 'pdf'
@@ -279,6 +284,9 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
+                            if (data == 1) data = 'Aktif'
+                            if (data == 4) data = 'Lunas'
+
                             return data;
                         }
                     },
@@ -309,7 +317,7 @@
                     },
                 ],
                 columnDefs: [{
-                    targets: [3, 4, 5, 6, 7, 9, 10],
+                    targets: [3, 4, 5, 6, 7, 8, 9, 10],
                     searchable: false,
                     orderable: false
                 }],
@@ -531,7 +539,7 @@
                             // $('.modal .form-control').prop('disabled', false);
                         } else {
                             $('#btn-pembayaran-simpan').hide();
-                            $('.modal .form-control').prop('disabled', true);
+                            // $('.modal .form-control').prop('disabled', true);
                         }
                     },
                     error: function(error) {

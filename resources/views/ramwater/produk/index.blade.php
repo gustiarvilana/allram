@@ -65,7 +65,10 @@
                         shrotable: false
                     },
                     {
-                        data: 'nama'
+                        data: 'nama',
+                        render: function(data, type, row) {
+                            return '<div style="white-space: nowrap;">' + data + '</div>';
+                        }
                     },
                     {
                         data: 'merek'
