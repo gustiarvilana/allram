@@ -50,11 +50,13 @@ class LaporanService
 
             'pengeluaran' => DB::table('d_kasbon as a')
                 ->join('t_jns_kasbon as b', 'a.jns_kasbon', '=', 'b.kd_jns_kasbon')
+                ->whereBetween('tgl_kasbon', [$tanggal_awal, $tanggal_akhir])
                 ->select('b.nama', 'a.nota_penjualan', 'a.nik', 'a.nominal')
                 ->union(
                     DB::table('d_ops as a')
                         ->join('t_ops as b', 'a.kd_ops', '=', 'b.kd_ops')
                         ->where('b.tipe', 'B')
+                        ->whereBetween('tanggal', [$tanggal_awal, $tanggal_akhir])
                         ->select('b.nama_ops', 'a.nota', 'a.nik', 'a.total')
                 )
                 ->get(),
