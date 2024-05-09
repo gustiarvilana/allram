@@ -26,7 +26,12 @@ class ProdukController extends Controller
 
     public function data(Request $request)
     {
+        $input = $request->input();
+
         $produk = $this->model->where('satker', '=', 'ramwater')->orderBy('created_at', 'DESC');
+
+        if (isset($input['kd_supplier'])) $produk->where('kd_supplier', $input['kd_supplier']);
+
         return datatables()
             ->of($produk)
             ->addIndexColumn()

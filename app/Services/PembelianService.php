@@ -128,29 +128,43 @@ class PembelianService
 
     public function validateData($pembelianData, $dataArrayDetail)
     {
-        if (
-            empty($pembelianData['nota_pembelian']) ||
-            empty($pembelianData['tgl_pembelian']) ||
-            empty($pembelianData['kd_supplier']) ||
-            empty($pembelianData['jns_pembelian']) ||
-            empty($pembelianData['harga_total'])
-        ) {
-            throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
+        $requiredColumns = [
+            'nota_pembelian' => 'Nota Pembelian',
+            'tgl_pembelian'  => 'Tanggal Pembelian',
+            'kd_supplier'    => 'Kode Supplier',
+            'harga_total'    => 'Harga Total'
+        ];
+        $errorColumns = [];
+
+        foreach ($requiredColumns as $column => $columnName) {
+            if (empty($pembelianData[$column])) {
+                $errorColumns[] = $columnName;
+            }
         }
 
-        foreach ($dataArrayDetail as $dataDetail) {
-            if (
-                empty($dataDetail['kd_produk']) ||
-                empty($dataDetail['qty_pesan']) ||
-                empty($dataDetail['qty_bersih']) ||
-                empty($dataDetail['harga_satuan']) ||
-                empty($dataDetail['kd_gudang']) ||
-                empty($dataDetail['harga_total'])
-            ) {
-                throw new \Exception('Semua kolom pada Tabel Pembelian Detail harus terisi.');
+        if (!empty($errorColumns)) {
+            throw new \Exception('Kolom-kolom berikut pada Tabel Pembelian harus terisi: ' . implode(', ', $errorColumns) . '.');
+        }
+
+        foreach ($dataArrayDetail as $index => $dataDetail) {
+            $requiredColumnsDetail = [
+                'kd_produk',
+                'qty_pesan',
+                'qty_bersih',
+                'harga_satuan',
+                'kd_gudang',
+                'harga_total'
+            ];
+
+            foreach ($requiredColumnsDetail as $column) {
+                if (empty($dataDetail[$column])) {
+                    throw new \Exception("Semua kolom pada Tabel Pembelian Detail pada baris " . ($index + 1) . " harus terisi.");
+                }
             }
         }
     }
+
+
 
     public function preparePembelianData($pembelianData)
     {

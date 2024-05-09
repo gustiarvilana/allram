@@ -154,8 +154,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // $("#modal-pembelian").modal("show");
-            // $("#modal-pembelian-title").text("Tambah Data");
 
             var tableSupplier = $("#table-supplier").DataTable({
                 info: false,
@@ -571,15 +569,17 @@
 
                 $('.detail_nota_pembelian').val(text)
             }).on("keyup", "#ur_nominal_bayar,.detail_harga_satuan", function() {
-                var nominal_bayar = getFloatValue($('#ur_nominal_bayar'))
-                var harga_total = getFloatValue($('#ur_harga_total'))
-                var sts_angsuran = '0';
+                var nominal_bayar = getFloatValue($('#ur_nominal_bayar'));
+                var harga_total = getFloatValue($('#ur_harga_total'));
+                var sts_angsuran = '1';
 
                 var total = harga_total - nominal_bayar;
                 if (total > 0) {
                     sts_angsuran = '1';
+                }else if (total == 0){
+                    sts_angsuran = '4';
                 }
-
+                console.log(harga_total , nominal_bayar,total,sts_angsuran);
                 $('#ur_sisa_bayar').val(addCommas(total))
                 $('#ur_sts_angsuran').val(sts_angsuran)
             }).on("keyup change",

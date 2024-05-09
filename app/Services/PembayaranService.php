@@ -98,38 +98,67 @@ class PembayaranService
 
     public function validateData($pembelianData, $dataArrayDetail)
     {
-        if (isset(($pembelianData['nota_pembelian']))) {
-            if (
-                empty($pembelianData['nota_pembelian']) ||
-                empty($pembelianData['tgl_pembelian']) ||
-                empty($pembelianData['kd_supplier']) ||
-                empty($pembelianData['jns_pembelian'])
-            ) {
-                throw new \Exception('Semua kolom pada Tabel Pembelian harus terisi.');
+        if (isset($pembelianData['nota_pembelian'])) {
+            $requiredColumns = [
+                'nota_pembelian' => 'Nota Pembelian',
+                'tgl_pembelian' => 'Tanggal Pembelian',
+                'kd_supplier' => 'Kode Supplier',
+            ];
+
+            $errorColumns = [];
+
+            foreach ($requiredColumns as $column => $columnName) {
+                if (empty($pembelianData[$column])) {
+                    $errorColumns[] = $columnName;
+                }
+            }
+
+            if (!empty($errorColumns)) {
+                throw new \Exception('Kolom-kolom berikut pada Tabel Pembelian harus terisi: ' . implode(', ', $errorColumns) . '.');
             }
         } else {
-            if (
-                empty($pembelianData['nota_penjualan']) ||
-                empty($pembelianData['tgl_penjualan']) ||
-                empty($pembelianData['kd_pelanggan'])
-            ) {
-                throw new \Exception('Semua kolom pada Tabel Penjualan harus terisi.');
+            $requiredColumns = [
+                'nota_penjualan' => 'Nota Penjualan',
+                'tgl_penjualan' => 'Tanggal Penjualan',
+                'kd_pelanggan' => 'Kode Pelanggan'
+            ];
+
+            $errorColumns = [];
+
+            foreach ($requiredColumns as $column => $columnName) {
+                if (empty($pembelianData[$column])) {
+                    $errorColumns[] = $columnName;
+                }
+            }
+
+            if (!empty($errorColumns)) {
+                throw new \Exception('Kolom-kolom berikut pada Tabel Penjualan harus terisi: ' . implode(', ', $errorColumns) . '.');
             }
         }
 
         if (!isset($pembelianData['jns'])) {
+            $requiredColumnsDetail = [
+                'tgl_pembayaran' => 'Tanggal Pembayaran',
+                'nominal_bayar' => 'Nominal Bayar',
+                'channel_bayar' => 'Channel Bayar'
+            ];
 
-            foreach ($dataArrayDetail as $dataDetail) {
-                if (
-                    empty($dataDetail['tgl_pembayaran']) ||
-                    empty($dataDetail['nominal_bayar']) ||
-                    empty($dataDetail['channel_bayar'])
-                ) {
-                    throw new \Exception('Semua kolom pada Tabel Pembelian Detail harus terisi.');
+            foreach ($dataArrayDetail as $index => $dataDetail) {
+                $errorColumnsDetail = [];
+
+                foreach ($requiredColumnsDetail as $column => $columnName) {
+                    if (empty($dataDetail[$column])) {
+                        $errorColumnsDetail[] = $columnName;
+                    }
+                }
+
+                if (!empty($errorColumnsDetail)) {
+                    throw new \Exception("Kolom-kolom berikut pada Tabel Pembelian Detail pada baris " . ($index + 1) . " harus terisi: " . implode(', ', $errorColumnsDetail) . ".");
                 }
             }
         }
     }
+
 
     public function preparePembelianData($pembelianData)
     {
