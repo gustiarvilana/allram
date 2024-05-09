@@ -22,7 +22,6 @@ class OpsService
                 $data_fix = $this->prepareData($input);
 
                 $ops = $this->opsModel->upsertData($data_fix);
-
                 if ($file) {
                     $filename = FormatHelper::uploadFile($file, 'ops/' . $ops['tanggal'] . '/' . $ops['nik'] . '/' . $ops['kd_ops'], $ops['id']);
                     $ops->path_file = $filename;
@@ -40,11 +39,11 @@ class OpsService
     {
         $input_fix = [
             'tanggal'    => $input['tanggal'],
-            'satker'     => $input['satker'],
+            'satker'     => 'ramwater',
             'nik'        => $input['nik'],
             'kd_ops'     => $input['kd_ops'],
-            'jumlah'     => $input['jumlah'] ? FormatHelper::removeDots($input['jumlah']) : 0,
-            'harga'      => $input['harga'] ? FormatHelper::removeDots($input['harga']) : 0,
+            'jumlah'     => isset($input['jumlah']) ? FormatHelper::removeDots($input['jumlah']) : 0,
+            'harga'      => isset($input['harga']) ? FormatHelper::removeDots($input['harga']) : 0,
             'total'      => $input['total'] ? FormatHelper::removeDots($input['total']) : 0,
             'keterangan' => $input['keterangan'] ?? '',
             // 'id'             => $this->integrationHelper->decrypt(base64_decode($pembelianData['id']), $this->integrationHelper->getKey()),
@@ -58,11 +57,8 @@ class OpsService
     {
         if (
             empty($input['tanggal']) ||
-            empty($input['satker']) ||
             empty($input['nik']) ||
             empty($input['kd_ops']) ||
-            empty($input['jumlah']) ||
-            empty($input['harga']) ||
             empty($input['total'])
         ) {
             throw new \Exception('Semua kolom pada Tabel OPS harus terisi.');

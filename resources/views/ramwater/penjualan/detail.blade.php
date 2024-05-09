@@ -77,7 +77,7 @@
                                                     <tr>
                                                         <th>nama</th>
                                                         <th>kd_produk</th>
-                                                        <th>type</th>
+                                                        {{-- <th>type</th> --}}
                                                         <th>qty_pesan</th>
                                                         <th>qty_retur</th>
                                                         <th>qty_bersih</th>
@@ -554,7 +554,8 @@
                     autoWidth: false,
                     bDestroy: true,
                     ajax: {
-                        url: '{{ route('produk.data') }}?nota_penjualan=' + rowData.nota_penjualan,
+                        url: '{{ route('penjualan.detail.detailData') }}?nota_penjualan=' + rowData
+                            .nota_penjualan,
                         data: {
                             nota_penjualan: rowData.nota_penjualan
                         },
@@ -578,14 +579,9 @@
                             }
                         },
                         {
-                            data: 'type',
-                            render: function(data, type, row) {
-                                return data;
-                            }
-                        },
-                        {
                             data: 'qty_pesan',
                             render: function(data, type, row) {
+                                console.log(row);
                                 var value = (data !== null) ? data : 0;
 
                                 return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan" value="' +
@@ -638,7 +634,7 @@
                         }
                     ],
                     columnDefs: [{
-                            targets: [1, 2, 3, 4, 5, 6, 7, 8],
+                            targets: [1, 2, 3, 4, 5, 6, 7],
                             searchable: false,
                             orderable: false
                         },

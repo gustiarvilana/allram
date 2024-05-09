@@ -61,8 +61,8 @@ class PenjualanService
         }
         try {
             $this->validateData($penjualanData, $dataArrayDetail);
-
             $penjualanData_fix = $this->preparepenjualanData($penjualanData);
+            dd('fdf');
 
             return DB::transaction(function () use ($penjualanData, $penjualanData_fix, $dataArrayDetail, $file) { //rollback if error
                 // save: d_penjualan
@@ -187,6 +187,7 @@ class PenjualanService
 
     public function preparepenjualanData($penjualanData)
     {
+        dd($penjualanData);
         $penjualanData_fix = [
             'nota_penjualan' => $penjualanData['nota_penjualan'] ?? FormatHelper::generateCode('d_penjualan', 'RJ', 5),
             'tgl_penjualan'  => $penjualanData['tgl_penjualan'],

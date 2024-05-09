@@ -32,7 +32,6 @@ class PelangganController extends Controller
     public function store(Request $request)
     {
         $req = $request->input();
-
         return DB::transaction(function () use ($req) {
             $this->model->simpan($req);
 

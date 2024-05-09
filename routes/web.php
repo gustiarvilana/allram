@@ -76,6 +76,13 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
             Route::get('/data', [ProdukController::class, 'data'])->name('produk.data');
         });
 
+        Route::resource('/pelanggan', PelangganController::class)->except('show');
+        Route::prefix('pelanggan')->group(function () {
+            Route::get('/data', [PelangganController::class, 'data'])->name('pelanggan.data');
+            Route::get('/laporan', [LaporanPelangganController::class, 'laporan'])->name('pelanggan.laporan');
+            Route::get('laporan/data', [LaporanPelangganController::class, 'data'])->name('pelanggan.laporan.data');
+        });
+
         Route::resource('/supplier', SupplierController::class)->except('show');
         Route::prefix('supplier')->group(function () {
             Route::get('/data', [SupplierController::class, 'data'])->name('supplier.data');
