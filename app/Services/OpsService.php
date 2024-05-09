@@ -40,7 +40,7 @@ class OpsService
     {
         $input_fix = [
             'tanggal'    => $input['tanggal'],
-            'satker'     => $input['satker'],
+            'satker'     => 'ramwater',
             'nik'        => $input['nik'],
             'kd_ops'     => $input['kd_ops'],
             'jumlah'     => $input['jumlah'] ? FormatHelper::removeDots($input['jumlah']) : 0,
