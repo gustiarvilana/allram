@@ -58,7 +58,6 @@ class OpsService
     {
         if (
             empty($input['tanggal']) ||
-            empty($input['satker']) ||
             empty($input['nik']) ||
             empty($input['kd_ops']) ||
             empty($input['jumlah']) ||
