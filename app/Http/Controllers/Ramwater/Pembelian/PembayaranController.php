@@ -41,6 +41,14 @@ class PembayaranController extends Controller
         $bayar = $this->dPembayaranModel->setNota($req['nota_pembelian']);
         $bayar = $this->dPembayaranModel->getPembayaran();
 
+        if (isset($req['grid'])) return datatables()
+            ->of($bayar)
+            ->addIndexColumn()
+            ->addColumn('id', function ($row) {
+                return base64_encode($this->integrationHelper->encrypt($row->id, $this->integrationHelper->getKey()));
+            })
+            ->make(true);
+
         return response()->json($bayar);
     }
 

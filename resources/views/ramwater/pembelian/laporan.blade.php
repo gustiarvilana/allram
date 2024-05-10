@@ -255,304 +255,9 @@
                 $('#pembelian-uraian').empty();
             });
 
-            $("body").on("click", "#btn-add-pembelian", function() {
-                $("#modal-pembelian-title").text("Tambah Data");
-                $("#modal-pembelian").modal("show");
-            }).on("click", "#btn-add-pembelian-close", function() {
+            $("body").on("click", "#btn-add-pembelian-close", function() {
                 $("#modal-pembelian").modal("hide");
                 $('#pembelian-uraian').empty();
-            }).on("click", "#btn-add-pembelian-simpan", function() {
-                var imageFile = $('#path_file')[0].files[0];
-
-                var dataArrayDetail = [];
-                $('#table-detail tbody tr').each(function() {
-                    var hargaTotal = $(this).find('#detail_harga_total').val();
-
-                    if (hargaTotal && parseFloat(hargaTotal) !== 0) {
-                        var rowData = {
-                            nama: $(this).find('#detail_nama').text(),
-                            nota_pembelian: $(this).find('#detail_nota_pembelian').val(),
-                            kd_produk: $(this).find('#detail_kd_produk').val(),
-                            kd_produk: $(this).find('#detail_kd_produk').val(),
-                            qty_pesan: $(this).find('#detail_qty_pesan').val(),
-                            qty_retur: $(this).find('#detail_qty_retur').val(),
-                            qty_bersih: $(this).find('#detail_qty_bersih').val(),
-                            harga_satuan: $(this).find('#detail_harga_satuan').val(),
-                            kd_gudang: $(this).find('#detail_kd_gudang').val(),
-                            harga_total: hargaTotal,
-                        };
-                        dataArrayDetail.push(rowData);
-                    }
-                });
-
-                var pembelianData = {
-                    nota_pembelian: $('#table-pembelian #ur_nota_pembelian').val(),
-                    tgl_pembelian: $('#table-pembelian #ur_tgl_pembelian').val(),
-                    kd_supplier: $('#table-pembelian #ur_kd_supplier').val(),
-                    jns_pembelian: $('#table-pembelian #ur_jns_pembelian').val(),
-                    harga_total: $('#table-pembelian #ur_harga_total').val(),
-                    nominal_bayar: $('#table-pembelian #ur_nominal_bayar').val(),
-                    sisa_bayar: $('#table-pembelian #ur_sisa_bayar').val(),
-                    sts_angsuran: $('#table-pembelian #ur_sts_angsuran').val(),
-                };
-
-                var formData = new FormData();
-                formData.append('_token', getCSRFToken());
-                formData.append('path_file', imageFile);
-                formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
-                formData.append('pembelianData', JSON.stringify(pembelianData));
-                formData.append('jns', 'update');
-
-                //
-                var detailPembelianHTML = '<div>';
-
-                var detailPembelianHTML = `
-                    <table class="table table-striped" id="table-detail">
-                        <thead style="background-color: #4CAF50; color: white; padding: 10px;">
-                            <tr>
-                                <th>nama</th>
-                                <th>pesan</th>
-                                <th>retur</th>
-                                <th>bersih</th>
-                                <th>kd_gudang</th>
-                                <th>harga_satuan</th>
-                                <th>harga_total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                    `;
-
-                dataArrayDetail.forEach(function(rowData) {
-                    detailPembelianHTML += `
-                            <tr>
-                                <td>${rowData.nama}</td>
-                                <td>${rowData.qty_pesan}</td>
-                                <td>${rowData.qty_retur}</td>
-                                <td>${rowData.qty_bersih}</td>
-                                <td>${rowData.kd_gudang}</td>
-                                <td>${rowData.harga_satuan}</td>
-                                <td>${rowData.harga_total}</td>
-                            </tr>
-                        `;
-                });
-
-                detailPembelianHTML += `
-                            </tbody>
-                        </table>
-                    `;
-
-                // Menambahkan total keseluruhan
-                detailPembelianHTML +=
-                    `<p><strong>Total Keseluruhan:</strong> <b>${pembelianData.harga_total}</b></p>`;
-
-                detailPembelianHTML += '</div>';
-
-                Swal.fire({
-                    title: 'Konfirmasi Pembelian',
-                    html: detailPembelianHTML, // Menggunakan variabel detailPembelianHTML
-                    showCancelButton: true,
-                    confirmButtonText: 'Simpan',
-                    cancelButtonText: 'Batal',
-                    icon: 'question',
-                    width: '80%', // Sesuaikan lebar sesuai kebutuhan
-
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '{{ route('pembelian.store') }}',
-                            method: 'POST',
-                            processData: false,
-                            contentType: false,
-                            data: formData,
-                            success: function(response) {
-                                if (response.success) {
-                                    tableDetailPembelian.ajax.reload();
-                                    $('#btn-add-pembelian-close').click()
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Sukses!',
-                                        text: response.message,
-                                    });
-                                    return;
-                                }
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal!',
-                                    text: response.message,
-                                });
-
-                            },
-                            error: function(error) {
-                                var errorMessage = "Terjadi kesalahan dalam operasi.";
-
-                                if (error.responseJSON && error.responseJSON.message) {
-                                    errorMessage = error.responseJSON.message;
-                                } else if (error.statusText) {
-                                    errorMessage = error.statusText;
-                                }
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Kesalahan!',
-                                    text: errorMessage,
-                                });
-                            }
-                        });
-                    }
-                });
-
-            }).on("click", "#btn-penjualan-edit", function() {
-                var rowData = $(this).data('row');
-                var row =
-                    '<tr>' +
-                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
-                    '<td>' +
-                    '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
-                    rowData.nama + '</span></div>' +
-                    '</td>' +
-                    '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control" value="' +
-                    rowData.nota_pembelian + '"></td>' +
-                    '<input type="hidden" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
-                    .kd_supplier + '" class="form-control">' +
-                    '<td>' +
-                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control">' +
-                    '<option value=""></option>' +
-                    '<option value="tunai" ' + (rowData.jns_pembelian === 'tunai' ? 'selected' : '') +
-                    '>Tunai</option>' +
-                    '<option value="tempo" ' + (rowData.jns_pembelian === 'tempo' ? 'selected' : '') +
-                    '>Tempo</option>' +
-                    '</select>' +
-                    '</td>' +
-                    '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
-                    addCommas(rowData.harga_total) + '" readonly></td>' +
-                    '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
-                    addCommas(rowData.nominal_bayar) + '"></td>' +
-                    '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" value="' +
-                    addCommas(rowData.sisa_bayar) + '" readonly></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" value="' +
-                    addCommas(rowData.sts_angsuran) + '" readonly></td>' +
-                    '</tr>';
-                $('#pembelian-uraian').append(row);
-
-                var pathFile = "{{ asset('/') }}" + rowData.path_file;
-                $('#image-container a').attr('href', pathFile);
-                $('#image-container img').attr('src', pathFile);
-                $('#download-btn').attr('href', pathFile);
-                $("#modal-pembelian-title").text("Update Data");
-
-                var tableDetail = $("#table-detail  ").DataTable({
-                    info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
-                    processing: true,
-                    serverSide: true,
-                    autoWidth: false,
-                    bDestroy: true,
-                    ajax: {
-                        url: '{{ route('produk.data') }}?nota_pembelian=' + rowData.nota_pembelian +
-                            '',
-                        data: {
-                            nota_pembelian: rowData.nota_pembelian
-                        },
-                    },
-                    // dom: 'Brtip',
-                    dom: 'Brtip',
-                    columns: [{
-                            data: 'nama',
-                            render: function(data, type, row) {
-                                var row_data = JSON.stringify(row);
-                                return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
-                                    data + '</span></div>';
-
-                            }
-                        },
-                        {
-                            data: 'kd_produk',
-                            render: function(data, type, row) {
-                                return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
-                                    data + '">';
-                            }
-                        },
-                        {
-                            data: 'type',
-                            render: function(data, type, row) {
-                                return data;
-                            }
-                        },
-                        {
-                            data: 'qty_pesan',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan" value="' +
-                                    value + '">';
-                            }
-                        },
-                        {
-                            data: 'qty_retur',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur" value="' +
-                                    value + '">';
-                            }
-                        },
-                        {
-                            data: 'qty_bersih',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" value="' +
-                                    addCommas(value) + '" readonly>';
-                            }
-                        },
-                        {
-                            data: 'kd_gudang',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_kd_gudang" name="kd_gudang" id="detail_kd_gudang" value="' +
-                                    addCommas(value) + '" readonly>';
-                            }
-                        },
-                        {
-                            data: 'harga_satuan',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-
-                                return '<input type="text" class="form-control money detail_harga_satuan" name="harga_satuan" id="detail_harga_satuan" value="' +
-                                    addCommas(value) + '">';
-                            }
-                        },
-                        {
-                            data: 'harga_total',
-                            render: function(data, type, row) {
-                                var value = (data !== null) ? data : 0;
-                                return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" value="' +
-                                    addCommas(value) + '" readonly>';
-                            }
-                        }
-                    ],
-                    columnDefs: [{
-                            targets: [1, 2, 3, 4, 5, 6, 7],
-                            searchable: false,
-                            orderable: false
-                        },
-                        {
-                            targets: [0, 1],
-                            orderable: false
-                        },
-                        {
-                            // targets: [1, 2],
-                            visible: false
-                        }
-                    ],
-                    initComplete: function() {
-                        initializeColumnSearch(this);
-                    }
-                });
-
-                $("#modal-pembelian").modal("show");
             }).on("click", "#btn-penjualan-show", function() {
                 var rowData = $(this).data('row');
 
@@ -640,106 +345,93 @@
                     }
                 });
 
+                var tableRiwayat = $("#modal-show-pembayaran").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('pembayaran.data') }}?nota_pembelian=' +
+                            rowData
+                            .nota_pembelian +
+                            '',
+                        data: {
+                            nota_pembelian: rowData.nota_pembelian,
+                            grid: 'data'
+                        },
+                    },
+                    // dom: 'Brtip',
+                    dom: 'tip',
+                    columns: [{
+                            data: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'nota',
+                            render: function(data, type, row) {
+                                console.log(data);
+                                return row.nota;
+                            }
+                        },
+                        {
+                            data: 'tgl',
+                            render: function(data, type, row) {
+                                return row.tgl;
+                            }
+                        },
+                        {
+                            data: 'angs_ke',
+                            render: function(data, type, row) {
+                                return row.angs_ke;
+                            }
+                        },
+                        {
+                            data: 'nominal_bayar',
+                            render: function(data, type, row) {
+                                return addCommas(row.nominal_bayar);
+                            }
+                        },
+                        {
+                            data: 'path_file',
+                            name: 'a.path_file',
+                            render: function(data, type, row) {
+                                return '<a href="{{ asset('') }}' + row.path_file +
+                                    '" target="_blank" class="a">' +
+                                    '<img src="{{ asset('') }}' + row.path_file +
+                                    '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                    '</a>';
+                            }
+                        }],
+                    // columnDefs: [{
+                    //         targets: [0, 1, 2, 3, 4],
+                    //         searchable: false,
+                    //         orderable: false
+                    //     },
+                    //     {
+                    //         targets: [0, 1],
+                    //         orderable: false
+                    //     },
+                    //     {
+                    //         // targets: [1, 2],
+                    //         visible: false
+                    //     }
+                    // ],
+                    // initComplete: function() {
+                    //     initializeColumnSearch(this);
+                    // }
+                });
+
                 $('#penjualan-show #modal-title').text('Pembelian Detail')
                 $('#penjualan-show #modal-header').text('No Nota: ' + rowData.nota_pembelian)
+                
+                $('#section-riwayat-bayar #card-header').text('Riwayat Pembayaran')
                 $('#penjualan-show').modal('show')
-            }).on("click", "#btn-penjualan-delete", function() {
-                var deleteButton = $(this);
-                var id = deleteButton.data('id');
-                var url_delete = '{{ route('pembelian.destroy', ['pembelian' => ':id']) }}';
-                url_delete = url_delete.replace(':id', id);
 
-                // Use SweetAlert for confirmation
-                Swal.fire({
-                    title: 'Anda Yakin?',
-                    text: 'Pastikan Produk masih di Gudang Utama!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    cancelButtonText: 'Tidak',
-                    confirmButtonText: 'Ya, Produk masih di Gudang Utama!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: url_delete,
-                            type: 'DELETE',
-                            data: {
-                                _token: getCSRFToken(),
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    tableDetailPembelian.ajax.reload();
-                                    Swal.fire('Terhapus!', 'Data berhasil dihapus.',
-                                        'success');
-                                    return;
-                                }
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal!',
-                                    text: response.message,
-                                });
-
-                            },
-                            error: function(error) {
-                                var errorMessage = "Terjadi kesalahan dalam operasi.";
-
-                                if (error.responseJSON && error.responseJSON.message) {
-                                    errorMessage = error.responseJSON.message;
-                                } else if (error.statusText) {
-                                    errorMessage = error.statusText;
-                                }
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Kesalahan!',
-                                    text: errorMessage,
-                                });
-                            }
-                        });
-                    }
-                });
-            }).on("keyup", "#ur_nota_pembelian", function() {
-                var text = $('#ur_nota_pembelian').val()
-
-                $('.detail_nota_pembelian').val(text)
-            }).on("keyup", "#ur_nominal_bayar,.detail_harga_satuan", function() {
-                var nominal_bayar = getFloatValue($('#ur_nominal_bayar'))
-                var harga_total = getFloatValue($('#ur_harga_total'))
-                var sts_angsuran = '0';
-
-                var total = harga_total - nominal_bayar;
-                if (total > 0) {
-                    sts_angsuran = '1';
-                }
-
-                $('#ur_sisa_bayar').val(addCommas(total))
-                $('#ur_sts_angsuran').val(sts_angsuran)
             }).on("click", "#btn-cari", function() {
                 cariLaporan()
-            }).on("keyup change",
-                ".detail_qty_pesan, .detail_qty_retur, .detail_qty_bersih, .detail_harga_satuan,.detail_harga_total,.ur_harga_total",
-                function() {
-                    // Mendapatkan baris terdekat
-                    var currentRow = $(this).closest('tr');
-
-                    // Update detail_qty_bersih berdasarkan detail_qty_pesan dan detail_qty_retur
-                    updateField(currentRow, 'detail_qty_bersih', ['#detail_qty_pesan', '#detail_qty_retur'],
-                        function(qtyPesan, qtyRetur) {
-                            return qtyPesan - (isNaN(qtyRetur) ? 0 : qtyRetur);
-                        });
-
-                    // Update detail_harga_total berdasarkan detail_qty_bersih dan detail_harga_satuan
-                    updateField(currentRow, 'detail_harga_total', ['#detail_qty_bersih',
-                            '#detail_harga_satuan'
-                        ],
-                        function(qtyBersih, hargaSatuan) {
-                            return qtyBersih * hargaSatuan;
-                        });
-
-                    // Update total pada ur_harga_total berdasarkan detail_harga_total
-                    updateTotal('#ur_harga_total', '.detail_harga_total');
-                });
+            });
         });
 
         function cariLaporan() {
@@ -857,7 +549,8 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
-                            return data;
+                            if (data==1) return 'Aktif';
+                            if (data==4) return 'Aktif';
                         }
                     },
                     {
@@ -880,20 +573,9 @@
 
                             var btn_show = '<a id="btn-penjualan-show" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-success btn-xs" style="white-space: nowrap" show"><i class="fa fa-eye" aria-hidden="true"></i> Lihat Beli</a>';
-
-                            var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row.id +
-                                '" data-row=\'' + row_data +
-                                '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Edit Beli</a>';
-
-                            var btn_delete = '<a id="btn-penjualan-delete" data-id="' + row.id +
-                                '" data-row=\'' + row_data +
-                                '\' class="btn btn-danger btn-xs" style="white-space: nowrap;" delete"><i class="fas fa-trash-alt"> Delete</a>';
-
-                            // You can customize the buttons as needed
+                                '\' class="btn btn-success btn-m" style="white-space: nowrap" show"><i class="fa fa-eye" aria-hidden="true"></i> Detail</a>';
 
                             return '<div style="white-space: nowrap;">' + btn_show + '</div>';
-                            // return '<div style="white-space: nowrap;">' + btn_show + ' ' + '</div>';
                         },
                     },
                 ],

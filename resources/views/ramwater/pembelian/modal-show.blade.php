@@ -36,6 +36,32 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- rincian pembayaran --}}
+                <div class="card card-success" id="section-riwayat-bayar">
+                    <div class="card-header">
+                        <span id="card-header"></span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 table-responsive field">
+                                <table class="table table-bordered" id="modal-show-pembayaran">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>nota</th>
+                                            <th>tgl</th>
+                                            <th>angs_ke</th>
+                                            <th>nominal_bayar</th>
+                                            <th>path_file</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
