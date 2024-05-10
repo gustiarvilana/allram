@@ -261,6 +261,32 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- rincian pembayaran --}}
+                    <div class="card card-success" id="section-riwayat-bayar">
+                        <div class="card-header">
+                            <span id="card-header"></span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 table-responsive field">
+                                    <table class="table table-bordered" id="modal-show-pembayaran">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>nota</th>
+                                                <th>tgl</th>
+                                                <th>angs_ke</th>
+                                                <th>nominal_bayar</th>
+                                                <th>path_file</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -700,8 +726,89 @@
                     ]
                 });
 
+                var tableRiwayat = $("#modal-show-pembayaran").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('pembayaran.data') }}?nota_penjualan=' +
+                            rowData
+                            .nota_penjualan +
+                            '',
+                        data: {
+                            nota_penjualan: rowData.nota_penjualan,
+                            grid: 'data'
+                        },
+                    },
+                    // dom: 'Brtip',
+                    dom: 'tip',
+                    columns: [{
+                            data: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'nota',
+                            render: function(data, type, row) {
+                                console.log(data);
+                                return row.nota;
+                            }
+                        },
+                        {
+                            data: 'tgl',
+                            render: function(data, type, row) {
+                                return row.tgl;
+                            }
+                        },
+                        {
+                            data: 'angs_ke',
+                            render: function(data, type, row) {
+                                return row.angs_ke;
+                            }
+                        },
+                        {
+                            data: 'nominal_bayar',
+                            render: function(data, type, row) {
+                                return addCommas(row.nominal_bayar);
+                            }
+                        },
+                        {
+                            data: 'path_file',
+                            name: 'a.path_file',
+                            render: function(data, type, row) {
+                                return '<a href="{{ asset('') }}' + row.path_file +
+                                    '" target="_blank" class="a">' +
+                                    '<img src="{{ asset('') }}' + row.path_file +
+                                    '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                    '</a>';
+                            }
+                        }
+                    ],
+                    // columnDefs: [{
+                    //         targets: [0, 1, 2, 3, 4],
+                    //         searchable: false,
+                    //         orderable: false
+                    //     },
+                    //     {
+                    //         targets: [0, 1],
+                    //         orderable: false
+                    //     },
+                    //     {
+                    //         // targets: [1, 2],
+                    //         visible: false
+                    //     }
+                    // ],
+                    // initComplete: function() {
+                    //     initializeColumnSearch(this);
+                    // }
+                });
+
                 $('#penjualan-show #modal-title').text('penjualan Detail')
                 $('#penjualan-show #modal-header').text('No Nota: ' + rowData.nota_penjualan)
+
+                $('#section-riwayat-bayar #card-header').text('Riwayat Pembayaran')
                 $('#penjualan-show').modal('show')
             }).on("click", "#btn-penjualan-delete", function() {
                 var deleteButton = $(this);

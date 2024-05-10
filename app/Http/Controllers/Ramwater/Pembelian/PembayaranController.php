@@ -38,7 +38,10 @@ class PembayaranController extends Controller
     {
         $req = $request->input();
 
-        $bayar = $this->dPembayaranModel->setNota($req['nota_pembelian']);
+        if (isset($req['nota_pembelian'])) $nota = $req['nota_pembelian'];
+        if (isset($req['nota_penjualan'])) $nota = $req['nota_penjualan'];
+
+        $bayar = $this->dPembayaranModel->setNota($nota);
         $bayar = $this->dPembayaranModel->getPembayaran();
 
         if (isset($req['grid'])) return datatables()
@@ -49,7 +52,7 @@ class PembayaranController extends Controller
             })
             ->make(true);
 
-        return response()->json($bayar);
+        // return response()->json($bayar);
     }
 
     public function index()
