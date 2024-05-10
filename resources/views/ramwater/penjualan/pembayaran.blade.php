@@ -33,8 +33,6 @@
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
                                                 <th>sts_galon</th>
-                                                <th>opr_input</th>
-                                                <th>tgl_input</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -66,7 +64,65 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Detail</span>
+                                    <span>Uraian penjualan</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 table-responsive">
+                                            <table class="table table-striped" id="table-penjualan">
+                                                <thead>
+                                                    <tr>
+                                                        <th>tgl_penjualan</th>
+                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
+                                                        <th>kd_channel</th>
+                                                        <th>harga_total</th>
+                                                        <th>nominal_bayar</th>
+                                                        <th>sisa_bayar</th>
+                                                        <th>sts_angsuran</th>
+                                                        <th>total_galon</th>
+                                                        <th>galon_kembali</th>
+                                                        <th>sisa_galon</th>
+                                                        {{-- <th>sts_galon</th> --}}
+                                                        <th>kd_sales</th>
+                                                        {{-- <th>opr_input</th> --}}
+                                                        {{-- <th>tgl_input</th> --}}
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="penjualan-uraian"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-success">
+                                <div class="card-header">
+                                    <span>Upload Bukti Pembayaran</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <div class="form-group">
+                                                <label for="path_file">Upload Bukti Pembayaran</label>
+                                                <input class="form-control path_file" type="file" name="path_file"
+                                                    id="path_file">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-success">
+                                <div class="card-header card-success">
+                                    <span>Input Pembayaran</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -97,66 +153,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-primary">
-                                <div class="card-header">
-                                    <span>Upload Bukti Pembayaran</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="form-group">
-                                                <label for="path_file">Upload Bukti Pembayaran</label>
-                                                <input class="form-control path_file" type="file" name="path_file"
-                                                    id="path_file">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Uraian penjualan</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-penjualan">
-                                                <thead>
-                                                    <tr>
-                                                        <th>tgl_penjualan</th>
-                                                        {{-- <th style="display: none">kd_pelanggan</th> --}}
-                                                        <th>kd_channel</th>
-                                                        <th>harga_total</th>
-                                                        <th>nominal_bayar</th>
-                                                        <th>sisa_bayar</th>
-                                                        <th>sts_angsuran</th>
-                                                        <th>total_galon</th>
-                                                        <th>galon_kembali</th>
-                                                        <th>sisa_galon</th>
-                                                        <th>sts_galon</th>
-                                                        <th>kd_sales</th>
-                                                        {{-- <th>opr_input</th> --}}
-                                                        {{-- <th>tgl_input</th> --}}
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="penjualan-uraian"></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-primary">
-                                <div class="card-header card-success">
-                                    <span>History Galon</span>
+                                    <span>Riwayat Pembayaran Galon</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -290,28 +288,17 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
-                            return data;
+                            if (data == '1') return 'Aktif';
+                            if (data == '4') return 'Lunas';
                         }
                     },
                     {
                         data: 'sts_galon',
                         name: 'a.sts_galon',
                         render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
-                        render: function(data, type, row) {
-                            return data;
+                            if (data == '1') return 'Aktif';
+                            if (data == '4') return 'Lunas';
+                            return '-';
                         }
                     },
                     {
@@ -322,14 +309,14 @@
 
                             var btn_edit = '<a id="btn-penjualan-edit" data-id="' + row.id +
                                 '" data-row=\'' + row_data +
-                                '\' class="btn btn-primary btn-xs" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Edit</a>';
+                                '\' class="btn btn-primary btn-m" style="white-space: nowrap" edit"><i class="fas fa-pencil-alt"></i> Input</a>';
 
                             return '<div style="white-space: nowrap;">' + btn_edit + '</div>';
                         },
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
+                        targets: [0, 5, 6, 7, 8, 9, 10],
                         searchable: false,
                         orderable: false
                     },
@@ -510,14 +497,14 @@
                 var row =
                     '<tr>' +
                     '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
-                    {{ date('Ymd') }} + '"></td>' +
+                    rowData.tgl_penjualan + '" readonly></td>' +
                     '<input type="hidden" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
                     rowData.kd_pelanggan + '">' +
                     '<td>' +
-                    '<select name="kd_channel" id="ur_kd_channel" class="form-control">' +
+                    '<select name="kd_channel" id="ur_kd_channel" class="form-control" disabled>' +
                     '<option value="">== Pilih Channel ==</option>' +
                     '@foreach ($channels as $channel)' +
-                    '<option value="{{ $channel->kd_channel }}" ' + (rowData.kd_pelanggan ==
+                    '<option value="{{ $channel->kd_channel }}" ' + (rowData.kd_channel ==
                         '{{ $channel->kd_channel }}' ? 'selected' : '') +
                     '>{{ $channel->ur_channel }}</option>' +
                     '@endforeach' +
@@ -526,21 +513,21 @@
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control" value="' +
                     addCommas(rowData.harga_total) + '" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
-                    addCommas(rowData.nominal_bayar) + '"></td>' +
+                    addCommas(rowData.nominal_bayar) + '" readonly></td>' +
                     '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" value="' +
                     addCommas(rowData.sisa_bayar) + '" readonly></td>' +
                     '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control" value="' +
                     rowData.sts_angsuran + '" readonly></td>' +
                     '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control" value="' +
-                    addCommas(rowData.total_galon) + '"></td>' +
-                    '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control" value=""></td>' +
+                    addCommas(rowData.total_galon) + '" readonly></td>' +
+                    '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
                     '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control"  value="' +
                     addCommas(rowData.sisa_galon) + '" readonly></td>' +
-                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
-                    rowData.sts_galon + '" readonly></td>' +
+                    '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control"  value="' +
+                    rowData.sts_galon + '" readonly>' +
 
                     '<td>' +
-                    '<select name="kd_sales" id="ur_kd_sales" class="form-control">' +
+                    '<select name="kd_sales" id="ur_kd_sales" class="form-control" disabled>' +
                     '<option value="">== Pilih Sales ==</option>' +
                     '@foreach ($saless as $sales)' +
                     '<option value="{{ $sales->nik }}" ' + (rowData.kd_sales == '{{ $sales->nik }}' ?
@@ -563,7 +550,7 @@
                 $('#image-container a').attr('href', pathFile);
                 $('#image-container img').attr('src', pathFile);
                 $('#download-btn').attr('href', pathFile);
-                $("#modal-penjualan-title").text("Update Data");
+                $("#modal-penjualan-title").text("Input Pembayaran");
 
                 $.ajax({
                     url: '{{ route('penjualan.pembayaran.data') }}?nota_penjualan=' + rowData
@@ -742,6 +729,9 @@
                         $(api.column(5).footer()).html(addCommas(hargaTotalTotal));
                     }
                 });
+
+                var sisa = $('#penjualan-uraian #ur_sisa_galon').val();
+                if (sisa == 0) $('#penjualan-uraian #ur_galon_kembali').prop('readonly', true);
 
                 $("#modal-penjualan").modal("show");
             }).on("change", "#ur_galon_kembali", function() { //

@@ -32,8 +32,6 @@
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
-                                                <th>opr_input</th>
-                                                <th>tgl_input</th>
                                                 <th>Bukti</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
@@ -249,21 +247,8 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
-                        render: function(data, type, row) {
-                            return data;
+                            if (data == '1') return 'Aktif';
+                            if (data == '4') return 'Lunas';
                         }
                     },
                     {
@@ -303,7 +288,7 @@
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
+                        targets: [0, 5, 6, 7, 8, 9, 10],
                         searchable: false,
                         orderable: false
                     },
@@ -323,6 +308,18 @@
                 console.log('Modal penjualan telah disembunyikan');
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
+            });
+
+            $('body').on('keyup', '#ur_total_galon,#ur_galon_kembali', function() {
+                var sisa = $('#ur_total_galon').val() - $('#ur_galon_kembali').val();
+                if (sisa < 0) {
+                    $('#ur_galon_kembali').val('0');
+                    alert("Galon terlalu banyak");
+                }
+                $('#ur_sisa_galon').val(sisa);
+
+                if (sisa > 0) $('#ur_sts_galon').val('1');
+                if (sisa == 0) $('#ur_sts_galon').val('4');
             });
 
             $("body").on("click", "#btn-add-penjualan", function() {
@@ -480,7 +477,7 @@
 
             }).on("click", "#btn-penjualan-edit", function() {
                 var rowData = $(this).data('row');
-
+                console.log(rowData.galon_kembali);
                 var row =
                     '<tr>' +
                     '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
@@ -803,9 +800,8 @@
                 var sts_angsuran = '0';
 
                 var total = harga_total - nominal_bayar;
-                if (total > 0) {
-                    sts_angsuran = '1';
-                }
+                if (total > 0) sts_angsuran = '1';
+                if (total == 0) sts_angsuran = '4';
 
                 $('#ur_sisa_bayar').val(addCommas(total))
                 $('#ur_sts_angsuran').val(sts_angsuran)

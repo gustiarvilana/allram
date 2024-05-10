@@ -78,7 +78,7 @@ class FormatHelper
         $lastRecord = DB::table($table)->orderBy('created_at', 'desc')->first();
 
         if ($lastRecord) {
-            if ($lastRecord->kd_pelanggan) {
+            if (isset($lastRecord->kd_pelanggan)) {
                 $lastCode = $lastRecord->kd_pelanggan;
             } else {
                 $lastCode = $lastRecord->nota_penjualan;
@@ -98,7 +98,7 @@ class FormatHelper
             $kode = date('ym') . '-' . $formattedNumber;
         }
 
-        if ($lastRecord->kd_pelanggan) {
+        if ($table == 'd_pelanggan') {
             if (DB::table($table)->where('kd_pelanggan', $kode)->exists()) {
                 return self::generateCode($table, $prefix);
             }

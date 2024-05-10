@@ -404,7 +404,8 @@
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                     rowData.nama + '</span></div>' + '</td>' +
                     '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
-                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="{{ date('Ymd') }}" class="form-control"></td>' +
+                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
+                    .tgl_pembelian + '" class="form-control" readonly></td>' +
                     '<td><input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
                     .kd_supplier + '" class="form-control" readonly></td>' +
                     '<td>' +
@@ -576,10 +577,10 @@
                 var total = harga_total - nominal_bayar;
                 if (total > 0) {
                     sts_angsuran = '1';
-                }else if (total == 0){
+                } else if (total == 0) {
                     sts_angsuran = '4';
                 }
-                console.log(harga_total , nominal_bayar,total,sts_angsuran);
+                console.log(harga_total, nominal_bayar, total, sts_angsuran);
                 $('#ur_sisa_bayar').val(addCommas(total))
                 $('#ur_sts_angsuran').val(sts_angsuran)
             }).on("keyup change",

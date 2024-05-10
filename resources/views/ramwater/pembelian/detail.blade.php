@@ -66,26 +66,25 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Detail</span>
+                                    <span>Uraian Pembelian</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-detail">
+                                            <table class="table table-striped" id="table-pembelian">
                                                 <thead>
                                                     <tr>
-                                                        <th>nama</th>
-                                                        <th>kd_produk</th>
-                                                        <th>type</th>
-                                                        <th>qty_pesan</th>
-                                                        <th>qty_retur</th>
-                                                        <th>qty_bersih</th>
-                                                        <th>kd_gudang</th>
-                                                        <th>harga_satuan</th>
+                                                        <th>tgl_pembelian</th>
+                                                        <th>Supplier</th>
+                                                        <th>nota_pembelian</th>
+                                                        <th>jns_pembelian</th>
                                                         <th>harga_total</th>
+                                                        <th>nominal_bayar</th>
+                                                        <th>sisa_bayar</th>
+                                                        {{-- <th>sts_angsuran</th> --}}
                                                     </tr>
                                                 </thead>
-                                                <tbody> </tbody>
+                                                <tbody id="pembelian-uraian"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -139,25 +138,24 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
-                                    <span>Uraian Pembelian</span>
+                                    <span>Detail</span>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-pembelian">
+                                            <table class="table table-striped" id="table-detail">
                                                 <thead>
                                                     <tr>
-                                                        <th>tgl_pembelian</th>
-                                                        <th>Supplier</th>
-                                                        <th>nota_pembelian</th>
-                                                        <th>jns_pembelian</th>
+                                                        <th>nama</th>
+                                                        <th>qty_pesan</th>
+                                                        <th>qty_retur</th>
+                                                        <th>qty_bersih</th>
+                                                        <th>kd_gudang</th>
+                                                        <th>harga_satuan</th>
                                                         <th>harga_total</th>
-                                                        <th>nominal_bayar</th>
-                                                        <th>sisa_bayar</th>
-                                                        <th>sts_angsuran</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="pembelian-uraian"></tbody>
+                                                <tbody> </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -484,17 +482,17 @@
                 var row =
                     '<tr>' +
                     '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
-                    .tgl_pembelian + '" class="form-control"></td>' +
+                    .tgl_pembelian + '" class="form-control" readonly></td>' +
                     '<td>' +
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                     rowData.nama + '</span></div>' +
                     '</td>' +
                     '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control" value="' +
-                    rowData.nota_pembelian + '"></td>' +
+                    rowData.nota_pembelian + '" readonly></td>' +
                     '<input type="hidden" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
                     .kd_supplier + '" class="form-control">' +
                     '<td>' +
-                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control">' +
+                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control" disabled>' +
                     '<option value=""></option>' +
                     '<option value="tunai" ' + (rowData.jns_pembelian === 'tunai' ? 'selected' : '') +
                     '>Tunai</option>' +
@@ -505,11 +503,11 @@
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
                     addCommas(rowData.harga_total) + '" readonly></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
-                    addCommas(rowData.nominal_bayar) + '"></td>' +
+                    addCommas(rowData.nominal_bayar) + '" readonly></td>' +
                     '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" value="' +
                     addCommas(rowData.sisa_bayar) + '" readonly></td>' +
-                    '<td><input type="text" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" value="' +
-                    addCommas(rowData.sts_angsuran) + '" readonly></td>' +
+                    '<input type="hidden" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" value="' +
+                    addCommas(rowData.sts_angsuran) + '" readonly>' +
                     '</tr>';
                 $('#pembelian-uraian').append(row);
 
@@ -528,7 +526,8 @@
                     autoWidth: false,
                     bDestroy: true,
                     ajax: {
-                        url: '{{ route('produk.data') }}?nota_pembelian=' + rowData.nota_pembelian +
+                        url: '{{ route('pembelian.detail.detailData') }}?nota_pembelian=' + rowData
+                            .nota_pembelian +
                             '',
                         data: {
                             nota_pembelian: rowData.nota_pembelian
@@ -541,21 +540,10 @@
                             render: function(data, type, row) {
                                 var row_data = JSON.stringify(row);
                                 return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
-                                    data + '</span></div>';
-
-                            }
-                        },
-                        {
-                            data: 'kd_produk',
-                            render: function(data, type, row) {
-                                return '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                    data + '</span></div>' +
+                                    '<input readonly type="hidden" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
                                     data + '">';
-                            }
-                        },
-                        {
-                            data: 'type',
-                            render: function(data, type, row) {
-                                return data;
+
                             }
                         },
                         {
@@ -613,7 +601,7 @@
                         }
                     ],
                     columnDefs: [{
-                            targets: [1, 2, 3, 4, 5, 6, 7],
+                            targets: [1, 2, 3, 4, 5],
                             searchable: false,
                             orderable: false
                         },

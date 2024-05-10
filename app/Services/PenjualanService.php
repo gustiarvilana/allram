@@ -62,7 +62,6 @@ class PenjualanService
         try {
             $this->validateData($penjualanData, $dataArrayDetail);
             $penjualanData_fix = $this->preparepenjualanData($penjualanData);
-            dd('fdf');
 
             return DB::transaction(function () use ($penjualanData, $penjualanData_fix, $dataArrayDetail, $file) { //rollback if error
                 // save: d_penjualan
@@ -160,34 +159,59 @@ class PenjualanService
 
     public function validateData($penjualanData, $dataArrayDetail)
     {
-        if (
-            empty($penjualanData['tgl_penjualan']) ||
-            empty($penjualanData['kd_pelanggan']) ||
-            empty($penjualanData['kd_channel']) ||
-            empty($penjualanData['harga_total']) ||
-            empty($penjualanData['opr_input']) ||
-            empty($penjualanData['tgl_input'])
-        ) {
-            throw new \Exception('Semua kolom pada Tabel Penjualan harus terisi.');
+        $errors = [];
+
+        if (empty($penjualanData['tgl_penjualan'])) {
+            $errors[] = 'tgl_penjualan';
+        }
+        if (empty($penjualanData['kd_pelanggan'])) {
+            $errors[] = 'kd_pelanggan';
+        }
+        if (empty($penjualanData['harga_total'])) {
+            $errors[] = 'harga_total';
+        }
+        if (empty($penjualanData['opr_input'])) {
+            $errors[] = 'opr_input';
+        }
+        if (empty($penjualanData['tgl_input'])) {
+            $errors[] = 'tgl_input';
         }
 
-        foreach ($dataArrayDetail as $dataDetail) {
-            if (
-                empty($dataDetail['kd_produk']) ||
-                empty($dataDetail['qty_pesan']) ||
-                empty($dataDetail['qty_bersih']) ||
-                empty($dataDetail['harga_satuan']) ||
-                empty($dataDetail['kd_gudang']) ||
-                empty($dataDetail['harga_total'])
-            ) {
-                throw new \Exception('Semua kolom pada Tabel Penjualan Detail harus terisi.');
+        foreach ($dataArrayDetail as $key => $dataDetail) {
+            $detailErrors = [];
+            if (empty($dataDetail['kd_produk'])) {
+                $detailErrors[] = 'kd_produk';
             }
+            if (empty($dataDetail['qty_pesan'])) {
+                $detailErrors[] = 'qty_pesan';
+            }
+            if (empty($dataDetail['qty_bersih'])) {
+                $detailErrors[] = 'qty_bersih';
+            }
+            if (empty($dataDetail['harga_satuan'])) {
+                $detailErrors[] = 'harga_satuan';
+            }
+            if (empty($dataDetail['kd_gudang'])) {
+                $detailErrors[] = 'kd_gudang';
+            }
+            if (empty($dataDetail['harga_total'])) {
+                $detailErrors[] = 'harga_total';
+            }
+
+            if (!empty($detailErrors)) {
+                $errors["detail_$key"] = $detailErrors;
+            }
+        }
+
+        if (!empty($errors)) {
+            throw new \Exception("Terjadi kesalahan: " . json_encode($errors));
         }
     }
 
+
+
     public function preparepenjualanData($penjualanData)
     {
-        dd($penjualanData);
         $penjualanData_fix = [
             'nota_penjualan' => $penjualanData['nota_penjualan'] ?? FormatHelper::generateCode('d_penjualan', 'RJ', 5),
             'tgl_penjualan'  => $penjualanData['tgl_penjualan'],

@@ -85,7 +85,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>nama</th>
-                                                        <th>type</th>
+                                                        {{-- <th>type</th> --}}
                                                         <th>qty_pesan</th>
                                                         <th>qty_retur</th>
                                                         <th>qty_bersih</th>
@@ -146,7 +146,7 @@
                                                         <th>total_galon</th>
                                                         <th>galon_kembali</th>
                                                         <th>sisa_galon</th>
-                                                        <th>sts_galon</th>
+                                                        {{-- <th>sts_galon</th> --}}
                                                         <th>Kasbon?</th>
                                                         <th>kd_sales</th>
                                                         {{-- <th>opr_input</th> --}}
@@ -234,7 +234,7 @@
                                 '" data-row=\'' + row_data +
                                 '\' class="btn btn-success btn-xs mx-1 edit" style="white-space: nowrap;"><i class="fas fa-pencil-alt"></i> Input Penjualan</a>';
 
-                            return '<div class="text-center">' + btn_input + '</div>';
+                            return '<div style="white-space: nowrap;">' + btn_input + '</div>';
                         },
 
                     },
@@ -251,10 +251,10 @@
                                 '" data-row=\'' + row_data +
                                 '\' class="btn btn-danger btn-xs mx-1 delete" style="white-space: nowrap;"><i class="fas fa-trash"></i> Hapus</a>';
 
-                            // return '<div class="text-center" style="white-space: nowrap;">' +
-                            //     btn_edit + ' ' + btn_delete +
-                            //     '</div>';
-                            return '<div>' + btn_edit + '<br><br>' + btn_delete + '</div>'
+                            return '<div class="text-center" style="white-space: nowrap;">' +
+                                btn_edit + ' ' + btn_delete +
+                                '</div>';
+                            // return '<div>' + btn_edit + '<br><br>' + btn_delete + '</div>'
                         },
 
                     },
@@ -267,143 +267,6 @@
                     targets: [3, 4, 5],
                     className: 'text-center'
                 }],
-                initComplete: function() {
-                    initializeColumnSearch(this);
-                }
-
-            });
-
-            var tableDetail = $("#table-detail").DataTable({
-                info: false,
-                bPaginate: false,
-                bLengthChange: false,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: {
-                    url: '{{ route('produk.data') }}',
-                    data: function(d) {
-                        d.jns = 'penjualan';
-                    },
-                },
-                dom: 'tip',
-                buttons: [{
-                    extend: "excel",
-                    text: "Export Data",
-                    className: "btn-excel",
-                    action: function(e, dt, node, config) {
-                        $.getJSON('#', function(
-                            data) {
-                            var result = data.map(function(row) {
-                                return {
-                                    fullname: row.fullname,
-                                    group_name: row.group_name,
-                                    satker: row.satker,
-                                    active: (row.active == '0') ? 'Not Active' :
-                                        (row.active == '1') ? 'Active' :
-                                        'Unknown',
-                                    username: row.username,
-                                    email: row.email,
-                                    phone: row.phone
-                                };
-                            });
-                            downloadXLSX(result);
-                        });
-                    }
-                }],
-                columns: [{
-                        data: 'nama',
-                        render: function(data, type, row) {
-                            var row_data = JSON.stringify(row);
-                            return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
-                                data + '</span></div>' +
-                                '<input readonly type="text" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
-                                row.kd_produk + '">';
-
-                        }
-                    },
-                    {
-                        data: 'type',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'qty_pesan',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan">';
-                        }
-                    },
-                    {
-                        data: 'qty_retur',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur">';
-                        }
-                    },
-                    {
-                        data: 'qty_bersih',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" readonly>';
-                        }
-                    },
-                    {
-                        data: 'kd_gudang',
-                        render: function(data, type, row) {
-                            var selectOptions = '<option value="">== Pilih Gudang ==</option>';
-
-                            @foreach ($gudang as $item)
-                                selectOptions +=
-                                    '<option value="{{ $item->kd_gudang }}">{{ $item->nama }}</option>';
-                            @endforeach
-
-                            return '<select name="kd_gudang" id="detail_kd_gudang" class="form-control">' +
-                                selectOptions +
-                                '</select>';
-                        }
-                    },
-                    {
-                        data: 'harga_satuan',
-                        render: function(data, type, row) {
-                            var selectOptions = '<option value="">== Pilih Harga ==</option>';
-                            var kd_produk = row.kd_produk; // Ambil nilai kd_produk dari row
-
-                            @foreach ($hargas as $harga)
-                                if ('{{ $harga->kd_produk }}' == kd_produk) {
-                                    var formattedPrice = addCommas('{{ $harga->harga }}');
-                                    selectOptions +=
-                                        '<option value="{{ $harga->harga }}">' +
-                                        '{{ $harga->ket_harga }} / ' + formattedPrice +
-                                        '</option>';
-                                }
-                            @endforeach
-
-                            return '<select name="harga_satuan" id="detail_harga_satuan" class="form-control detail_harga_satuan">' +
-                                selectOptions +
-                                '</select>';
-
-                        }
-                    },
-                    {
-                        data: 'harga_total',
-                        render: function(data, type, row) {
-                            return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" readonly>';
-                        }
-                    }
-                ],
-                columnDefs: [{
-                        targets: [4, 5, 6, 7],
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        targets: [0, 1],
-                        orderable: false
-                    },
-                    {
-                        targets: [1, 2], // Indeks kolom yang ingin disembunyikan (dimulai dari 0)
-                        readonly: false
-                    }
-                ],
                 initComplete: function() {
                     initializeColumnSearch(this);
                 }
@@ -427,10 +290,10 @@
                     $('#ur_galon_kembali').val('0');
                     alert("Galon terlalu banyak");
                 }
-                console.log(sisa);
                 $('#ur_sisa_galon').val(sisa);
+
                 if (sisa > 0) $('#ur_sts_galon').val('1');
-                if (sisa = 0) $('#ur_sts_galon').val('0');
+                if (sisa == 0) $('#ur_sts_galon').val('4');
             });
 
             $("body").on("click", "#btn-add-pembelian", function() { //add-pembelian
@@ -619,7 +482,7 @@
                     '<td><input type="text" name="total_galon" id="ur_total_galon" class="form-control"></td>' +
                     '<td><input type="text" name="galon_kembali" id="ur_galon_kembali" class="form-control"></td>' +
                     '<td><input type="text" name="sisa_galon" id="ur_sisa_galon" class="form-control" readonly></td>' +
-                    '<td><input type="text" name="sts_galon" id="ur_sts_galon" class="form-control" readonly></td>' +
+                    '<input type="hidden" name="sts_galon" id="ur_sts_galon" class="form-control" readonly>' +
                     '<td><input type="checkbox" name="is_kasbon" id="ur_is_kasbon" class="form-control" style="width: 30px; height: 30px;"></td>' +
 
                     '<td>' +
@@ -638,6 +501,151 @@
                     '</tr>';
 
                 $('#penjualan-uraian').append(row);
+
+                var tableDetail = $("#table-detail").DataTable({
+                    info: false,
+                    bPaginate: false,
+                    bLengthChange: false,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    bDestroy: true,
+                    ajax: {
+                        url: '{{ route('produk.data') }}',
+                        data: function(d) {
+                            d.jns = 'penjualan';
+                        },
+                    },
+                    dom: 'tip',
+                    buttons: [{
+                        extend: "excel",
+                        text: "Export Data",
+                        className: "btn-excel",
+                        action: function(e, dt, node, config) {
+                            $.getJSON('#', function(
+                                data) {
+                                var result = data.map(function(row) {
+                                    return {
+                                        fullname: row.fullname,
+                                        group_name: row.group_name,
+                                        satker: row.satker,
+                                        active: (row.active == '0') ?
+                                            'Not Active' : (row
+                                                .active == '1') ?
+                                            'Active' : 'Unknown',
+                                        username: row.username,
+                                        email: row.email,
+                                        phone: row.phone
+                                    };
+                                });
+                                downloadXLSX(result);
+                            });
+                        }
+                    }],
+                    columns: [{
+                            data: 'nama',
+                            render: function(data, type, row) {
+                                var row_data = JSON.stringify(row);
+                                return '<div style="white-space: nowrap;"><span id="detail_nama" style="font-size: 16px; font-weight: bold;">' +
+                                    data + '</span></div>' +
+                                    '<input readonly type="hidden" class="form-control money detail_kd_produk" name="kd_produk" id="detail_kd_produk" value="' +
+                                    row.kd_produk + '">';
+
+                            }
+                        },
+                        // {
+                        //     data: 'type',
+                        //     render: function(data, type, row) {
+                        //         return data;
+                        //     }
+                        // },
+                        {
+                            data: 'qty_pesan',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan">';
+                            }
+                        },
+                        {
+                            data: 'qty_retur',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_qty_retur" name="qty_retur" id="detail_qty_retur">';
+                            }
+                        },
+                        {
+                            data: 'qty_bersih',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_qty_bersih" name="qty_bersih" id="detail_qty_bersih" readonly>';
+                            }
+                        },
+                        {
+                            data: 'kd_gudang',
+                            render: function(data, type, row) {
+                                var selectOptions =
+                                    '<option value="">== Pilih Gudang ==</option>';
+
+                                @foreach ($gudang as $item)
+                                    selectOptions +=
+                                        '<option value="{{ $item->kd_gudang }}">{{ $item->nama }}</option>';
+                                @endforeach
+
+                                return '<select name="kd_gudang" id="detail_kd_gudang" class="form-control">' +
+                                    selectOptions +
+                                    '</select>';
+                            }
+                        },
+                        {
+                            data: 'harga_satuan',
+                            render: function(data, type, row) {
+                                var selectOptions =
+                                    '<option value="">== Pilih Harga ==</option>';
+                                var kd_produk = row
+                                    .kd_produk; // Ambil nilai kd_produk dari row
+
+                                @foreach ($hargas as $harga)
+                                    if ('{{ $harga->kd_produk }}' == kd_produk) {
+                                        var formattedPrice = addCommas(
+                                            '{{ $harga->harga }}');
+                                        selectOptions +=
+                                            '<option value="{{ $harga->harga }}">' +
+                                            '{{ $harga->ket_harga }} / ' + formattedPrice +
+                                            '</option>';
+                                    }
+                                @endforeach
+
+                                return '<select name="harga_satuan" id="detail_harga_satuan" class="form-control detail_harga_satuan">' +
+                                    selectOptions +
+                                    '</select>';
+
+                            }
+                        },
+                        {
+                            data: 'harga_total',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control money detail_harga_total" name="harga_total" id="detail_harga_total" readonly>';
+                            }
+                        }
+                    ],
+                    columnDefs: [{
+                            targets: [4, 5, 6],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [0, 1],
+                            orderable: false
+                        },
+                        {
+                            targets: [1,
+                                2
+                            ], // Indeks kolom yang ingin disembunyikan (dimulai dari 0)
+                            readonly: false
+                        }
+                    ],
+                    initComplete: function() {
+                        initializeColumnSearch(this);
+                    }
+
+                });
 
                 $("#modal-penjualan-title").text("Input Penjualan " + rowData.nama);
                 $("#modal-penjualan").modal("show");

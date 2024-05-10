@@ -136,7 +136,8 @@ class PembayaranService
             }
         }
 
-        if (!isset($pembelianData['jns'])) {
+
+        if (isset($pembelianData['jns'])) {
             $requiredColumnsDetail = [
                 'tgl_pembayaran' => 'Tanggal Pembayaran',
                 'nominal_bayar' => 'Nominal Bayar',
@@ -299,7 +300,8 @@ class PembayaranService
             $kembali = $data['galon_kembali'];
             $sisa = intVal($total) - intVal($kembali);
             $data_fix['sisa_galon'] = $sisa;
-            $data_fix['galon_kembali'] = $kembali;
+
+            $data_fix['galon_kembali'] = intVal($data_fix['galon_kembali']) + intVal($kembali);
 
             if (intVal($total) > 0) {
                 if ($sisa == 0) {
