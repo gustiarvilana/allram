@@ -19,6 +19,7 @@ class DPembelianModel extends Model
     {
         $pembelian = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
+            ->orderBy('a.sts_angsuran', 'asc')
             ->orderBy('a.created_at', 'desc')
             ->select('a.*', 'b.nama');
 
@@ -58,6 +59,7 @@ class DPembelianModel extends Model
         $query = DB::table('d_pembelian as a')
             ->join('d_supplier as b', 'a.kd_supplier', '=', 'b.kd_supplier')
             ->orderBy('a.created_at', 'desc')
+            ->orderBy('sts_angsuran', 'desc')
             ->select('a.*', 'b.nama');
 
         if (isset($input['kd_supplier'])) {

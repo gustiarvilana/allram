@@ -18,7 +18,8 @@ class DPembelianDetailModel extends Model
     {
         $pembelian = DB::table('d_pembelian_detail as a')
             ->join('t_master_produk as b', 'a.kd_produk', '=', 'b.kd_produk')
-            ->where('nota_pembelian', '=', $this->getNotaPemebelian());
+            ->where('nota_pembelian', '=', $this->getNotaPemebelian())
+            ->orderBy('sts_angsuran', 'desc');
         return $pembelian;
     }
 

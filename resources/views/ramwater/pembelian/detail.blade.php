@@ -273,6 +273,10 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
+                            if (data == 1)
+                                return '<span class="badge rounded-pill bg-primary">Tempo Aktif</span>';
+                            if (data == 4)
+                                return '<span class="badge rounded-pill bg-success">Lunas</span>';
                             return data;
                         }
                     },
@@ -482,17 +486,17 @@
                 var row =
                     '<tr>' +
                     '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
-                    .tgl_pembelian + '" class="form-control" readonly></td>' +
+                    .tgl_pembelian + '" class="form-control" ></td>' +
                     '<td>' +
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                     rowData.nama + '</span></div>' +
                     '</td>' +
                     '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control" value="' +
-                    rowData.nota_pembelian + '" readonly></td>' +
+                    rowData.nota_pembelian + '" ></td>' +
                     '<input type="hidden" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
                     .kd_supplier + '" class="form-control">' +
                     '<td>' +
-                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control" disabled>' +
+                    '<select name="jns_pembelian" id="ur_jns_pembelian" class="form-control">' +
                     '<option value=""></option>' +
                     '<option value="tunai" ' + (rowData.jns_pembelian === 'tunai' ? 'selected' : '') +
                     '>Tunai</option>' +
@@ -501,13 +505,13 @@
                     '</select>' +
                     '</td>' +
                     '<td><input type="text" name="harga_total" id="ur_harga_total" class="form-control money" value="' +
-                    addCommas(rowData.harga_total) + '" readonly></td>' +
+                    addCommas(rowData.harga_total) + '" ></td>' +
                     '<td><input type="text" name="nominal_bayar" id="ur_nominal_bayar" class="form-control money" value="' +
-                    addCommas(rowData.nominal_bayar) + '" readonly></td>' +
+                    addCommas(rowData.nominal_bayar) + '" ></td>' +
                     '<td><input type="text" name="sisa_bayar" id="ur_sisa_bayar" class="form-control money" value="' +
-                    addCommas(rowData.sisa_bayar) + '" readonly></td>' +
+                    addCommas(rowData.sisa_bayar) + '" ></td>' +
                     '<input type="hidden" name="sts_angsuran" id="ur_sts_angsuran" class="form-control money" value="' +
-                    addCommas(rowData.sts_angsuran) + '" readonly>' +
+                    addCommas(rowData.sts_angsuran) + '" >' +
                     '</tr>';
                 $('#pembelian-uraian').append(row);
 
@@ -778,6 +782,8 @@
                 var total = harga_total - nominal_bayar;
                 if (total > 0) {
                     sts_angsuran = '1';
+                } else if (total == 0) {
+                    sts_angsuran = '4';
                 }
 
                 $('#ur_sisa_bayar').val(addCommas(total))
