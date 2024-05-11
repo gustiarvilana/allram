@@ -76,13 +76,20 @@ class PenjualanService
                 }
 
                 // save: d_penjualan_detail + stok
-                $this->upsertpenjualanDetail($penjualan, $dataArrayDetail);
+                $this->upsertpenjualanDetail($penjualan, $dataArrayDetail, $file);
 
                 // pembayaran
                 if ($penjualanData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
+                    $angs_ke = $pembayaran['angs_ke'];
                     if (isset($penjualanData['jns'])) unset($pembayaran['angs_ke']);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
+
+                    if ($file) {
+                        $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $penjualan['nota_penjualan'] . '/' . $penjualan['tgl_penjualan'] . '/' . $penjualan['kd_supplier'], $penjualan['nota_penjualan'] . '_' . $angs_ke);
+                        $pembayaran['path_file'] = $filename;
+                        $pembayaran->save();
+                    }
 
                     if ($penjualanData_fix['total_galon']) {
                         $pembayaranGalon = $this->preparePembayaranGalonData($penjualanData_fix);
@@ -108,7 +115,6 @@ class PenjualanService
                         $set_penjualan->save();
                     }
                 }
-                // dd('success');
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
         } catch (\Exception $e) {
@@ -360,7 +366,7 @@ class PenjualanService
         }
     }
 
-    public function upsertpenjualanDetail($penjualan, $dataArrayDetail)
+    public function upsertpenjualanDetail($penjualan, $dataArrayDetail, $file)
     {
         $detail = $this->penjualanDetailModel->where('nota_penjualan', $penjualan->nota_penjualan)->get();
         if ($detail->count() > 0) {
@@ -382,7 +388,7 @@ class PenjualanService
             $dataDetail_fix['tgl_penjualan'] = $penjualan->tgl_penjualan;
             $dataDetail_fix['nik'] = $penjualan->kd_sales;
             // save: ops
-            $this->upsertOps($dataDetail_fix);
+            $this->upsertOps($dataDetail_fix, $file);
         }
     }
 
@@ -398,15 +404,23 @@ class PenjualanService
         }
     }
 
-    public function upsertOps($penjualanData)
+    public function upsertOps($penjualanData, $file)
     {
         $data = $this->prepareOpsnData($penjualanData);
 
         try {
-            return $this->dtransaksiOps->updateOrCreate([
+            $ops = $this->dtransaksiOps->updateOrCreate([
                 'nota'    => $data['nota'],
                 'kd_ops' => $data['kd_ops']
             ], $data);
+
+            if ($file) {
+                $filename = FormatHelper::uploadFile($file, 'ops/' . $data['tanggal'] . '/' . $data['nik'] . '/' . $data['kd_ops'], $data['nota']);
+                $ops->path_file = $filename;
+                $ops->save();
+            }
+
+            return $ops;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

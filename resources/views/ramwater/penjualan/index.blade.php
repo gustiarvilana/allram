@@ -715,6 +715,8 @@
                 var total = harga_total - nominal_bayar;
                 if (total > 0) {
                     sts_angsuran = '1';
+                } else if (total == 0) {
+                    sts_angsuran = '4';
                 }
 
                 $('#ur_sisa_bayar').val(addCommas(total))

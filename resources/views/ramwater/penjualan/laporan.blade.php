@@ -105,8 +105,7 @@
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
-                                                <th>opr_input</th>
-                                                <th>tgl_input</th>
+                                                <th>File</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -1019,17 +1018,14 @@
                         }
                     },
                     {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
+                        data: 'path_file',
+                        name: 'a.path_file',
                         render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
-                        render: function(data, type, row) {
-                            return data;
+                            return '<a href="{{ asset('') }}' + row.path_file +
+                                '" target="_blank" class="a">' +
+                                '<img src="{{ asset('') }}' + row.path_file +
+                                '" alt="Bukti Pembayaran" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                '</a>';
                         }
                     },
                     {
@@ -1057,7 +1053,7 @@
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11],
+                        targets: [0, 5, 6, 7, 8, 9, 10],
                         searchable: false,
                         orderable: false
                     },

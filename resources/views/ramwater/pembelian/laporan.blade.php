@@ -403,7 +403,8 @@
                                     '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
                                     '</a>';
                             }
-                        }],
+                        }
+                    ],
                     // columnDefs: [{
                     //         targets: [0, 1, 2, 3, 4],
                     //         searchable: false,
@@ -425,7 +426,7 @@
 
                 $('#penjualan-show #modal-title').text('Pembelian Detail')
                 $('#penjualan-show #modal-header').text('No Nota: ' + rowData.nota_pembelian)
-                
+
                 $('#section-riwayat-bayar #card-header').text('Riwayat Pembayaran')
                 $('#penjualan-show').modal('show')
 
@@ -549,8 +550,11 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
-                            if (data==1) return 'Aktif';
-                            if (data==4) return 'Aktif';
+                            if (data == 1)
+                                return '<span class="badge rounded-pill bg-primary">Tempo Aktif</span>';
+                            if (data == 4)
+                                return '<span class="badge rounded-pill bg-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Lunas</span>';
+                            return data;
                         }
                     },
                     {

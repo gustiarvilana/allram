@@ -66,8 +66,15 @@ class PembelianService
                 // pembayaran
                 if ($pembelianData_fix['nominal_bayar']) {
                     $pembayaran = $this->preparePembayaranData($pembelianData_fix);
+                    $angs_ke = $pembayaran['angs_ke'];
                     if (isset($pembelianData['jns'])) unset($pembayaran['angs_ke']);
                     $pembayaran = $this->upsertPembayaran($pembayaran);
+
+                    if ($file) {
+                        $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $pembelianData_fix['nota_pembelian'] . '/' . $pembelianData_fix['tgl_pembelian'] . '/' . $pembelianData_fix['kd_supplier'], $pembelianData_fix['nota_pembelian'] . '_' . $angs_ke);
+                        $pembayaran['path_file'] = $filename;
+                        $pembayaran->save();
+                    }
                 }
 
                 $pembelian['nota_pembelian'] = $pembelianData_fix['nota_pembelian'];
@@ -255,7 +262,15 @@ class PembelianService
         $data = $this->prepareOpsnData($pembelianData);
 
         try {
-            return $this->dtransaksiOps->updateOrCreate(['nota' => $data['nota']], $data);
+            $ops = $this->dtransaksiOps->updateOrCreate(['nota' => $data['nota']], $data);
+
+            if ($file) {
+                $filename = FormatHelper::uploadFile($file, 'ops/' . $data['tanggal'] . '/' . $data['nik'] . '/' . $data['kd_ops'], $data['nota']);
+                $ops->path_file = $filename;
+                $ops->save();
+            }
+
+            return $ops;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

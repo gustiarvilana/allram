@@ -276,7 +276,7 @@
                             if (data == 1)
                                 return '<span class="badge rounded-pill bg-primary">Tempo Aktif</span>';
                             if (data == 4)
-                                return '<span class="badge rounded-pill bg-success">Lunas</span>';
+                                return '<span class="badge rounded-pill bg-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Lunas</span>';
                             return data;
                         }
                     },
