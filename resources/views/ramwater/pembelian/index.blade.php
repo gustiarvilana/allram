@@ -404,8 +404,8 @@
                     '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
                     rowData.nama + '</span></div>' + '</td>' +
                     '<td><input type="text" name="nota_pembelian" id="ur_nota_pembelian" class="form-control"></td>' +
-                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' + rowData
-                    .tgl_pembelian + '" class="form-control" readonly></td>' +
+                    '<td><input type="text" name="tgl_pembelian" id="ur_tgl_pembelian" value="' +
+                    {{ date('Ymd') }} + '" class="form-control" readonly></td>' +
                     '<td><input type="text" name="kd_supplier" id="ur_kd_supplier" value="' + rowData
                     .kd_supplier + '" class="form-control" readonly></td>' +
                     '<td>' +

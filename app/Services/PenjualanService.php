@@ -17,6 +17,7 @@ use App\Models\SupplierModel;
 use App\Models\TOps;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PenjualanService
@@ -63,7 +64,7 @@ class PenjualanService
             $this->validateData($penjualanData, $dataArrayDetail);
             $penjualanData_fix = $this->preparepenjualanData($penjualanData);
 
-            return DB::transaction(function () use ($penjualanData, $penjualanData_fix, $dataArrayDetail, $file) { //rollback if error
+            return DB::transaction(function () use ($penjualanData, $penjualanData_fix, $dataArrayDetail, $file) {
                 // save: d_penjualan
                 $penjualan = $this->upsertpenjualan($penjualanData_fix);
 
@@ -107,6 +108,7 @@ class PenjualanService
                         $set_penjualan->save();
                     }
                 }
+                // dd('success');
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
         } catch (\Exception $e) {

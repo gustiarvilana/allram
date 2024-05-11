@@ -76,9 +76,8 @@ class FormatHelper
     public static function generateCode($table, $prefix = false, $length = 5)
     {
         $lastRecord = DB::table($table)->orderBy('created_at', 'desc')->first();
-
         if ($lastRecord) {
-            if (isset($lastRecord->kd_pelanggan)) {
+            if ($table == 'd_pelanggan') {
                 $lastCode = $lastRecord->kd_pelanggan;
             } else {
                 $lastCode = $lastRecord->nota_penjualan;
@@ -87,6 +86,7 @@ class FormatHelper
         } else {
             $lastNumber = 0;
         }
+
 
         $nextNumber = $lastNumber + 1;
 

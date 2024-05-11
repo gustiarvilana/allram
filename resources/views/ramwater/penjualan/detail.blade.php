@@ -248,7 +248,9 @@
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
                             if (data == '1') return 'Aktif';
+                            if (data == '3') return 'Kasbon Sales';
                             if (data == '4') return 'Lunas';
+                            return data;
                         }
                     },
                     {
