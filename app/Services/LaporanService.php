@@ -12,12 +12,27 @@ class LaporanService
     public function getLaporanByTgl($tanggal_awal, $tanggal_akhir)
     {
         $data = [
+            // 'penjualan' => DB::table('view_penjualan_by_produk as a')
+            //     ->select('a.*', 'b.*', 'c.*', 'b.nama as nama_pelanggan', 'd.nama as nama_sales')
+            //     ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+            //     ->join('t_master_produk as c', 'a.kd_pelanggan', 'c.kd_produk')
+            //     ->join('d_karyawan as d', 'a.kd_sales', 'd.nik')
+            //     ->whereBetween('tgl_penjualan', [$tanggal_awal, $tanggal_akhir])
+            //     ->get(),
+
             'penjualan' => DB::table('view_penjualan_by_produk as a')
-                ->select('a.*', 'b.*', 'c.*', 'b.nama as nama_pelanggan', 'd.nama as nama_sales')
+                ->select(
+                    'd.nama as sales',
+                    'c.nama',
+                    'a.harga_satuan',
+                    DB::raw('SUM(a.harga_total) as total_nominal'),
+                    DB::raw('SUM(a.qty_bersih) as total_qty')
+                )
                 ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
                 ->join('t_master_produk as c', 'a.kd_pelanggan', 'c.kd_produk')
                 ->join('d_karyawan as d', 'a.kd_sales', 'd.nik')
                 ->whereBetween('tgl_penjualan', [$tanggal_awal, $tanggal_akhir])
+                ->groupBy('d.nama', 'c.nama', 'a.harga_satuan')
                 ->get(),
 
             'bayarTunai' => DB::table('view_pembayaran_penjualan as a')
@@ -51,16 +66,21 @@ class LaporanService
             'pengeluaran' => DB::table('d_kasbon as a')
                 ->join('t_jns_kasbon as b', 'a.jns_kasbon', '=', 'b.kd_jns_kasbon')
                 ->whereBetween('tgl_kasbon', [$tanggal_awal, $tanggal_akhir])
-                ->select('b.nama', 'a.nota_penjualan', 'a.nik', 'a.nominal')
+                ->select('b.nama', DB::raw('SUM(a.nominal) as total_nominal'))
+                ->groupBy('b.nama')
                 ->union(
                     DB::table('d_ops as a')
                         ->join('t_ops as b', 'a.kd_ops', '=', 'b.kd_ops')
                         ->where('b.tipe', 'B')
                         ->whereBetween('tanggal', [$tanggal_awal, $tanggal_akhir])
-                        ->select('b.nama_ops', 'a.nota', 'a.nik', 'a.total')
+                        ->select('b.nama_ops', DB::raw('SUM(a.total) as total_nominal'))
+                        ->groupBy('b.nama_ops')
                 )
                 ->get(),
+
         ];
+
+        // dd($data['penjualan']);
 
         return $data;
     }

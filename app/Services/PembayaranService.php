@@ -289,7 +289,7 @@ class PembayaranService
         } elseif ($totalNominalBayar < $harga_total) {
             $data_fix->sts_angsuran = 1;
         } elseif ($totalNominalBayar > $harga_total) {
-            throw new \Exception("Pembayaran Terlalu banyak!");
+            throw new \Exception("Pembayaran Terlalu Banyak!");
         };
         // };
 

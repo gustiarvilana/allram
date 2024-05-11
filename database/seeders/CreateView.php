@@ -14,11 +14,7 @@ class CreateView extends Seeder
      */
     public function run()
     {
-        DB::statement("DROP VIEW IF EXISTS view_penjualan_by_produk;");
-        DB::statement("DROP VIEW IF EXISTS view_pembayaran_penjualan;");
-        DB::statement("DROP VIEW IF EXISTS view_pembayaran_piutang_nominal;");
-
-        DB::statement("CREATE VIEW view_penjualan_by_produk AS
+        DB::statement("CREATE OR REPLACE VIEW view_penjualan_by_produk AS
             SELECT
                 b.tgl_penjualan,
                 b.kd_pelanggan,
@@ -35,7 +31,7 @@ class CreateView extends Seeder
                 b.tgl_penjualan, b.`kd_pelanggan`, a.kd_produk,a.qty_bersih,a.harga_satuan,a.harga_total,b.kd_sales;
         ");
 
-        DB::statement("CREATE VIEW view_pembayaran_penjualan AS
+        DB::statement("CREATE OR REPLACE VIEW view_pembayaran_penjualan AS
             SELECT
                 a.tgl,
                 b.kd_pelanggan,
@@ -55,7 +51,7 @@ class CreateView extends Seeder
                 a.tgl, b.kd_pelanggan,b.nota_penjualan,a.angs_ke,a.jns_nota,a.channel_bayar;
         ");
 
-        DB::statement("CREATE VIEW view_pembayaran_piutang_nominal AS
+        DB::statement("CREATE OR REPLACE VIEW view_pembayaran_piutang_nominal AS
             SELECT
                 a.tgl,
                 b.kd_pelanggan,

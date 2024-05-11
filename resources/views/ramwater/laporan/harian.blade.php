@@ -74,11 +74,10 @@
                                 <table class="table table-striped" id="tbl-produk">
                                     <thead>
                                         <tr>
-                                            <th>Nama Pelanggan</th>
+                                            <th>Nama Sales</th>
                                             <th>Product</th>
-                                            <th>Qty</th>
                                             <th>Harga Satuan</th>
-                                            <th>nama_sales</th>
+                                            <th>Qty</th>
                                             <th>Subtotal</th>
                                         </tr>
                                     </thead>
@@ -192,8 +191,6 @@
                                     <thead>
                                         <tr>
                                             <th>Nama OPS</th>
-                                            <th>Nota</th>
-                                            <th>Nama</th>
                                             <th>Total</th>
                                         </tr>
                                     </thead>
@@ -372,18 +369,18 @@
             tableBody.empty();
             // Looping data.penjualan
             data.penjualan.forEach(function(item) {
+                console.log(item);
                 // Buat baris baru untuk setiap item dalam data.penjualan
                 var row = $('<tr>');
 
                 // Tambahkan kolom-kolom sesuai dengan struktur tabel
-                row.append($('<td>').text(item.nama_pelanggan));
+                row.append($('<td>').text(item.sales));
                 row.append($('<td>').text(item.nama));
-                row.append($('<td>').text(item.qty_bersih));
-                row.append($('<td>').text(addCommas(item.harga_satuan)));
-                row.append($('<td>').text(item.nama_sales));
-                row.append($('<td class="text-right">').text(addCommas(item.harga_total)));
+                row.append($('<td>').text(addCommas(item.harga_satuan)).css('font-weight', 'bold'));
+                row.append($('<td>').text(item.total_qty)).css('font-weight', 'bold');
+                row.append($('<td class="text-right">').text(addCommas(item.total_nominal)));
 
-                totalJualProduk += parseInt(item.harga_total);
+                totalJualProduk += parseInt(item.total_nominal);
                 tableBody.append(row);
             });
 
@@ -393,7 +390,7 @@
                     'font-size': '20px'
                 });
                 totalRow.append(
-                    $('<td class="text-center" colspan="5">').text('Total Penjualan'),
+                    $('<td class="text-center" colspan="4">').text('Total Penjualan'),
                     $('<td class="text-right">').text(addCommas(totalJualProduk)).css('border-top', '2px solid black')
                 );
 
@@ -541,12 +538,12 @@
 
                 var row = $('<tr>');
 
-                row.append($('<td>').text(item.nama_ops));
-                row.append($('<td>').text(item.nota));
                 row.append($('<td>').text(item.nama));
-                row.append($('<td class="text-right">').text(addCommas(item.total)));
+                row.append($('<td>').text(item.nota_penjualan));
+                row.append($('<td>').text(item.nik));
+                row.append($('<td class="text-right">').text(addCommas(item.total_nominal)));
 
-                totalPengeluaran += parseInt(item.total);
+                totalPengeluaran += parseInt(item.total_nominal);
                 tableBody.append(row);
             });
 
