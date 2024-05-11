@@ -175,6 +175,9 @@ class PenjualanService
         if (empty($penjualanData['opr_input'])) {
             $errors[] = 'opr_input';
         }
+        if (empty($penjualanData['kd_channel'])) {
+            $errors[] = 'kd_channel';
+        }
         if (empty($penjualanData['tgl_input'])) {
             $errors[] = 'tgl_input';
         }

@@ -42,7 +42,7 @@ class DOpsModel extends Model
             $query->where('a.nik', '=', $input['nik']);
         }
         if (isset($input['kd_ops'])) {
-            $query->where('a.kd_ops',  $input['kd_ops']);
+            $query->where('a.kd_ops',  $input['kd_ops'])->where('c.kd_ops',  $input['kd_ops']);
             // $query->where('a.kd_ops', 'like', '%' . $input['kd_ops'] . '%');
         }
         if (isset($input['rTanggal'])) {

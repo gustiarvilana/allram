@@ -501,7 +501,7 @@
                     '<input type="hidden" name="kd_pelanggan" id="ur_kd_pelanggan" class="form-control" value="' +
                     rowData.kd_pelanggan + '">' +
                     '<td>' +
-                    '<select name="kd_channel" id="ur_kd_channel" class="form-control" disabled>' +
+                    '<select name="kd_channel" id="ur_kd_channel" class="form-control" readonly>' +
                     '<option value="">== Pilih Channel ==</option>' +
                     '@foreach ($channels as $channel)' +
                     '<option value="{{ $channel->kd_channel }}" ' + (rowData.kd_channel ==

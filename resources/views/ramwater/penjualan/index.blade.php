@@ -178,9 +178,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // $("#modal-pembelian").modal("show");
-            // $("#modal-pembelian-title").text("Tambah Data");
-
             var tableSupplier = $("#table-supplier").DataTable({
                 info: false,
                 bPaginate: false,

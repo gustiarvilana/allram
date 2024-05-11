@@ -32,8 +32,6 @@
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
-                                                <th>opr_input</th>
-                                                <th>tgl_input</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
                                             </tr>
@@ -224,20 +222,10 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'opr_input',
-                        name: 'a.opr_input',
-                        render: function(data, type, row) {
-                            return data;
-                        }
-                    },
-                    {
-                        data: 'tgl_input',
-                        name: 'a.tgl_input',
-                        render: function(data, type, row) {
+                            if (data == 1) data = 'Aktif'
+                            if (data == 3) data = 'Kasbon Sales'
+                            if (data == 4) data = 'Lunas'
+
                             return data;
                         }
                     },
@@ -266,7 +254,7 @@
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10, 11],
+                        targets: [0, 5, 6, 7, 8, 9],
                         searchable: false,
                         orderable: false
                     },

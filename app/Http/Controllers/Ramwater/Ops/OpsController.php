@@ -46,9 +46,10 @@ class OpsController extends Controller
     public function index()
     {
         $data = [
-            'opss' => $this->tOps->get(),
+            'opss' => $this->tOps->whereRaw("SUBSTR(kd_ops, -2) != '00'")->orderBy('kd_ops', 'asc')->get(),
             'pegawais' => $this->dKaryawan->get(),
         ];
+
         return view('ramwater.ops.index', $data);
     }
 

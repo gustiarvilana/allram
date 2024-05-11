@@ -83,6 +83,7 @@
                                         <th>total</th>
                                         <th>Tipe</th>
                                         <th>keterangan</th>
+                                        <th>File</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -293,6 +294,15 @@
                             } else {
                                 return data;
                             }
+                        }
+                    }, {
+                        data: 'path_file',
+                        render: function(data, type, row) {
+                            return '<a href="{{ asset('') }}' + row.path_file +
+                                '" target="_blank" class="a">' +
+                                '<img src="{{ asset('') }}' + row.path_file +
+                                '" alt="File OPS" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                '</a>';
                         }
                     }],
                     footerCallback: function(row, data, start, end, display) {

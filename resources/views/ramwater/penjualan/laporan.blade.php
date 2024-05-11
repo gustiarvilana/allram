@@ -1011,6 +1011,10 @@
                         data: 'sts_angsuran',
                         name: 'a.sts_angsuran',
                         render: function(data, type, row) {
+                            if (data == 1) data = 'Aktif'
+                            if (data == 3) data = 'Kasbon Sales'
+                            if (data == 4) data = 'Lunas'
+
                             return data;
                         }
                     },
