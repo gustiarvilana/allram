@@ -96,7 +96,7 @@ class PenjualanService
                         $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
                     }
 
-                    if ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar'] || $penjualanData['isKasbon'] == '0') {
+                    if ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar'] || isset($penjualanData['jns'])) {
                         $dataKasbon = $this->prepareKasbon($penjualan);
 
                         $set_penjualan = $this->penjualanModel->where('nota_penjualan', '=', $dataKasbon['nota_penjualan'])->first();
@@ -106,6 +106,8 @@ class PenjualanService
                             $this->dKasbon->upsert($dataKasbon);
                             $set_penjualan->sisa_bayar = 0;
                             $set_penjualan->nominal_bayar =  $set_penjualan->harga_total;
+                            $set_penjualan->sts_angsuran = 3;
+                            // dd($set_penjualan);
                         } else if ($set_kasbon) {
                             $set_penjualan->sisa_bayar = $set_kasbon->nominal;
                             $set_penjualan->nominal_bayar = intVal($set_penjualan->harga_total) - $set_kasbon->nominal;
