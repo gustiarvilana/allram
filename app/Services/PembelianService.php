@@ -28,20 +28,13 @@ class PembelianService
     protected $supplierModel;
     protected $dtransaksiOps;
     protected $jns;
-    public function __construct(
-        DStokProduk $dStokProduk,
-        DPembelianModel $dPembelianModel,
-        DPembayaranModel $dPembayaran,
-        DPembelianDetailModel $dPembelianDetailModel,
-        SupplierModel $supplierModel,
-        DOpsModel $dtransaksiOps
-    ) {
-        $this->dStokProduk = $dStokProduk;
-        $this->dPembelianModel = $dPembelianModel;
-        $this->dPembayaran = $dPembayaran;
-        $this->dPembelianDetailModel = $dPembelianDetailModel;
-        $this->supplierModel = $supplierModel;
-        $this->dtransaksiOps = $dtransaksiOps;
+    public function __construct() {
+        $this->dStokProduk = new DStokProduk;
+        $this->dPembelianModel = new DPembelianModel;
+        $this->dPembayaran = new DPembayaranModel;
+        $this->dPembelianDetailModel = new DPembelianDetailModel;
+        $this->supplierModel = new SupplierModel;
+        $this->dtransaksiOps = new DOpsModel;
     }
 
     public function storePembelian($pembelianData, $dataArrayDetail, $file)
@@ -83,7 +76,7 @@ class PembelianService
                 $this->upsertPembelianDetail($pembelian, $dataArrayDetail);
 
                 // save: ops
-                $this->upsertOps($pembelian);
+                $this->upsertOps($pembelian,$file);
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
@@ -257,7 +250,7 @@ class PembelianService
         }
     }
 
-    public function upsertOps($pembelianData)
+    public function upsertOps($pembelianData,$file)
     {
         $data = $this->prepareOpsnData($pembelianData);
 
