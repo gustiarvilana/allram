@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class PembayaranService
 {
+    protected $integrationHelper;
     protected $dStokProduk;
     protected $dPembelianModel;
     protected $dPembelianDetailModel;
@@ -28,18 +29,13 @@ class PembayaranService
     protected $dPembayaranGalon;
     protected $dOps;
     protected $jns;
-    public function __construct(
-        DStokProduk $dStokProduk,
-        DPembelianModel $dPembelianModel,
-        DPembayaranModel $dPembayaran,
-        DPembelianDetailModel $dPembelianDetailModel
-    ) {
+    public function __construct() {
         $this->integrationHelper = new IntegrationHelper();
-        $this->dStokProduk = $dStokProduk;
-        $this->dPembelianModel = $dPembelianModel;
-        $this->dPembayaran = $dPembayaran;
+        $this->dStokProduk = new DStokProduk();
+        $this->dPembelianModel = new DPembelianModel();
+        $this->dPembayaran = new DPembayaranModel();
         $this->dPembayaranGalon = new DPembayaranGalonModel();
-        $this->dPembelianDetailModel = $dPembelianDetailModel;
+        $this->dPembelianDetailModel = new DPembelianDetailModel();
     }
 
     public function storePembayaran($pembelianData, $dataArrayDetail, $file)
@@ -283,15 +279,17 @@ class PembayaranService
         if (isset($data['nota_pembelian'])) $data_fix = $pembelianModel->find($data['id']);
         if (isset($data['nota_penjualan'])) $data_fix = $penjualanModel->where('nota_penjualan', '=', $data['nota_penjualan'])->first();
 
-        // if ($data['sts_angsuran'] != '4') {
-        if ($totalNominalBayar == $harga_total) {
-            $data_fix->sts_angsuran = 4;
-        } elseif ($totalNominalBayar < $harga_total) {
-            $data_fix->sts_angsuran = 1;
-        } elseif ($totalNominalBayar > $harga_total) {
-            throw new \Exception("Pembayaran Terlalu Banyak!");
+        if($data_fix['sts_angsuran']!=3){
+            if ($totalNominalBayar == $harga_total) {
+                $data_fix->sts_angsuran = 4;
+            } elseif ($totalNominalBayar < $harga_total) {
+                $data_fix->sts_angsuran = 1;
+            } elseif ($totalNominalBayar > $harga_total) {
+                throw new \Exception("Pembayaran Terlalu Banyak!");
+            };
+            $data_fix->nominal_bayar = $totalNominalBayar;
+            $data_fix->sisa_bayar = $harga_total - $totalNominalBayar;
         };
-        // };
 
         if (isset($data['total_galon'])) {
 
@@ -317,10 +315,6 @@ class PembayaranService
                 $pembayaranGalon = $this->upsertPembayaranGalon($pembayaranGalon);
             }
         }
-
-        $data_fix->nominal_bayar = $totalNominalBayar;
-        $data_fix->sisa_bayar = $harga_total - $totalNominalBayar;
-
 
         return $data_fix->save();
     }

@@ -34,22 +34,14 @@ class PenjualanService
     protected $tOps;
     protected $jns;
     protected $dKasbon;
-    public function __construct(
-        DStokProduk $dStokProduk,
-        DPembelianDetailModel $dPembelianDetailModel,
-        SupplierModel $supplierModel,
-        Penjualan $penjualanModel,
-        PenjualanDetail $penjualanDetailModel,
-        DOpsModel $dtransaksiOps,
-        TOps $tOps
-    ) {
-        $this->dStokProduk           = $dStokProduk;
-        $this->dPembelianDetailModel = $dPembelianDetailModel;
-        $this->supplierModel         = $supplierModel;
-        $this->dtransaksiOps         = $dtransaksiOps;
-        $this->penjualanModel        = $penjualanModel;
-        $this->penjualanDetailModel  = $penjualanDetailModel;
-        $this->tOps                  = $tOps;
+    public function __construct() {
+        $this->dStokProduk           = new DStokProduk();
+        $this->dPembelianDetailModel = new DPembelianDetailModel();
+        $this->supplierModel         = new SupplierModel();
+        $this->penjualanModel        = new Penjualan();
+        $this->penjualanDetailModel  = new PenjualanDetail();
+        $this->dtransaksiOps         = new DOpsModel();
+        $this->tOps                  = new TOps();
         $this->dPembayaran           = new DPembayaranModel();
         $this->dPembayaranGalon      = new DPembayaranGalonModel();
         $this->dKasbon               = new DKasbonModel();
@@ -234,7 +226,7 @@ class PenjualanService
             'nominal_bayar'  => $penjualanData['nominal_bayar'] ? FormatHelper::removeDots($penjualanData['nominal_bayar']) : 0,
             'sisa_bayar'     => $penjualanData['sisa_bayar'] ? FormatHelper::removeDots($penjualanData['sisa_bayar']) : 0,
 
-            'sts_angsuran'   => $penjualanData['isKasbon'] == 1 && $penjualanData['sisa_bayar'] != '0' ? 3 : $penjualanData['sts_angsuran'],
+            'sts_angsuran'   =>  $penjualanData['isKasbon'] == 1 && $penjualanData['sisa_bayar'] != '0' ? 3 : $penjualanData['sts_angsuran'],
 
             'total_galon'   => $penjualanData['total_galon'] ? FormatHelper::removeDots($penjualanData['total_galon']) : 0,
             'galon_kembali' => $penjualanData['galon_kembali'] ? FormatHelper::removeDots($penjualanData['galon_kembali']) : 0,

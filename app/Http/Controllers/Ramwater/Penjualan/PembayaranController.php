@@ -24,14 +24,15 @@ class PembayaranController extends Controller
     protected $dPembayaranModel;
     protected $dPembayaranGalonModel;
     protected $pembayaranService;
+    protected $dPenjualanModel;
 
-    public function __construct(PembayaranService $pembayaranService)
+    public function __construct()
     {
         $this->integrationHelper     = new IntegrationHelper();
         $this->dPembayaranModel      = new DPembayaranModel();
         $this->dPembayaranGalonModel = new DPembayaranGalonModel();
         $this->dPenjualanModel       = new Penjualan();
-        $this->pembayaranService     = $pembayaranService;
+        $this->pembayaranService     = new PembayaranService();
     }
 
     public function data(Request $request)

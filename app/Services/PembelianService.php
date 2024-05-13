@@ -29,12 +29,12 @@ class PembelianService
     protected $dtransaksiOps;
     protected $jns;
     public function __construct() {
-        $this->dStokProduk = new DStokProduk;
-        $this->dPembelianModel = new DPembelianModel;
-        $this->dPembayaran = new DPembayaranModel;
-        $this->dPembelianDetailModel = new DPembelianDetailModel;
-        $this->supplierModel = new SupplierModel;
-        $this->dtransaksiOps = new DOpsModel;
+        $this->dStokProduk = new DStokProduk();
+        $this->dPembelianModel = new DPembelianModel();
+        $this->dPembayaran = new DPembayaranModel();
+        $this->dPembelianDetailModel = new DPembelianDetailModel();
+        $this->supplierModel = new SupplierModel();
+        $this->dtransaksiOps = new DOpsModel();
     }
 
     public function storePembelian($pembelianData, $dataArrayDetail, $file)
