@@ -52,7 +52,7 @@ class PembayaranController extends Controller
             })
             ->make(true);
 
-        // return response()->json($bayar);
+        return response()->json($bayar);
     }
 
     public function index()

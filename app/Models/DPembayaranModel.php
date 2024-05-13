@@ -24,15 +24,15 @@ class DPembayaranModel extends Model
         return $pembayaran;
     }
 
-    public function decrementAng($pembayaran)
-    {
-        $produk->decrement('angs_ke', $pembayaran['angs_ke']);
-    }
+    // public function decrementAng($pembayaran)
+    // {
+    //     $produk->decrement('angs_ke', $pembayaran['angs_ke']);
+    // }
 
-    public function incrementAngs($pembayaran)
-    {
-        $produk->increment('angs_ke', $pembayaran['angs_ke']);
-    }
+    // public function incrementAngs($pembayaran)
+    // {
+    //     $produk->increment('angs_ke', $pembayaran['angs_ke']);
+    // }
 
 
 
