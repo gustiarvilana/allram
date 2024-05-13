@@ -8,6 +8,7 @@ use App\Models\SupplierModel;
 use App\Models\TOps;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProdukController extends Controller
 {
@@ -28,9 +29,19 @@ class ProdukController extends Controller
     {
         $input = $request->input();
 
-        $produk = $this->model->where('satker', '=', 'ramwater')->orderBy('created_at', 'DESC');
+        $produk = DB::table('t_master_produk as a')
+            ->where('satker', '=', 'ramwater')
+            ->leftJoin('d_stok_produk as b', 'a.kd_produk', '=', 'b.kd_produk')
+            ->select(
+                'a.*',
+                DB::raw("CASE WHEN b.kd_gudang = 1 THEN b.stok ELSE NULL END AS stok_gudang_1"),
+                DB::raw("CASE WHEN b.kd_gudang = 2 THEN b.stok ELSE NULL END AS stok_gudang_2")
+            )
+            ->orderBy('a.created_at', 'DESC');
 
-        if (isset($input['kd_supplier'])) $produk->where('kd_supplier', $input['kd_supplier']);
+        if (isset($input['kd_supplier'])) {
+            $produk->where('kd_supplier', $input['kd_supplier']);
+        }
 
         return datatables()
             ->of($produk)

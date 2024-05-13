@@ -22,7 +22,9 @@
                                         <th>merek</th>
                                         <th>type</th>
                                         <th>kd_supplier</th>
-                                        <th>stok_all</th>
+                                        <th>Stok Gudang 1</th>
+                                        <th>Stok Gudang 2</th>
+                                        <th>Total Stok</th>
                                         <th>OPS</th>
                                         <th>harga_beli</th>
                                         <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i></th>
@@ -78,6 +80,12 @@
                     },
                     {
                         data: 'kd_supplier'
+                    },
+                    {
+                        data: 'stok_gudang_1'
+                    },
+                    {
+                        data: 'stok_gudang_2'
                     },
                     {
                         data: 'stok_all'
