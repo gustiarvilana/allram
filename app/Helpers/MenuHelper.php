@@ -10,6 +10,7 @@ class MenuHelper
 {
     public static function getMenusByRole($role, $kd_parent = 0)
     {
+
         if ($role) {
             $query = DB::table('users_role as a')
                 ->join('users_role_menu as b', 'a.kd_role', 'b.kd_role')
@@ -18,8 +19,9 @@ class MenuHelper
 
                 ->where('d.kd_parent', $kd_parent)
                 ->where('d.is_active', '1')
-                ->where('b.tahun', date('Y'))
+                // ->where('b.tahun', date('Y'))
                 ->where('c.kd_role', $role)
+                ->where('c.nik', Auth::user()->nik)
                 ->orderBy('d.order', 'asc')
                 ->get();
 
