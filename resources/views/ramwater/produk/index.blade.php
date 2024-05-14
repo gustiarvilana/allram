@@ -218,9 +218,179 @@
             });
 
             $('body').on('click', '#harga_jual', function() {
-                $('#modal-form-harga').modal('show');
+                var row = $(this).data('row')
+                $('#modal-form-harga form')[0].reset();
+                showHargaJual(row.kd_produk);
+                $('#modal-form-harga #kd_produk').val(row.kd_produk).trigger('change');
                 $('#modal-form-harga .modal-title').text('Harga jual');
+                $('#modal-form-harga').modal('show');
+            }).on('click', '#modal-form-harga #simpan-harga', function() {
+                var formData = new FormData($('#modal-form-harga #form-harga-jual')[0]);
+                // var input = Object.fromEntries(formData);
+                simpanHarga(formData);
+            }).on('click', '#modal-form-harga #hapus-harga', function() {
+                var row = $(this).data('row');
+
+                var url_delete = "{{ route('hargaJual.destroy', ['hargaJual' => ':id']) }}".replace(':id',
+                    row.id);
+
+                if (confirm('Yakin akan menghapus data terpilih?')) {
+                    $.ajax({
+                        url: url_delete,
+                        type: 'DELETE',
+                        data: {
+                            _token: $('[name=csrf-token]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Sukses!',
+                                    text: response.message,
+                                });
+                                $('.close').click()
+                                return;
+                            }
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: response.message,
+                            });
+
+                        },
+                        error: function(error) {
+                            var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                            if (error.responseJSON && error.responseJSON.message) {
+                                errorMessage = error.responseJSON.message;
+                            } else if (error.statusText) {
+                                errorMessage = error.statusText;
+                            }
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Kesalahan!',
+                                text: errorMessage,
+                            });
+                        }
+                    });
+                }
+
+            }).on('click', '#modal-form-harga #harga-edit', function() {
+                var row = $(this).data('row')
+
+                $('#modal-form-harga form')[0].reset();
+
+                $('#modal-form-harga [name=id]').val(row.id);
+                $('#modal-form-harga [name=kd_harga]').val(row.kd_harga);
+                $('#modal-form-harga [name=kd_produk]').val(row.kd_produk);
+                $('#modal-form-harga [name=ket_harga]').val(row.ket_harga);
+                $('#modal-form-harga [name=harga]').val(row.harga);
+                $('#modal-form-harga [name=satuan]').val(row.satuan);
             })
         });
+
+        function showHargaJual(kd_produk) {
+            var tableHarga = $("#table-harga-jual").DataTable({
+                "dom": 'Bfrtip',
+                "info": true,
+                "processing": true,
+                "responsive": false,
+                "lengthChange": true,
+                "autoWidth": true,
+                "searching": true,
+                "ordering": true,
+                "bDestroy": true,
+                "ajax": {
+                    url: '{{ route('hargaJual.data') }}',
+                    data: function(d) {
+                        d.kd_produk = kd_produk;
+                    }
+                },
+                "columns": [{
+                        data: 'DT_RowIndex',
+                        searchable: false,
+                        sortable: false // Fixed typo here
+                    },
+                    {
+                        data: 'nama',
+                        render: function(data) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'ket_harga',
+                        render: function(data) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'harga',
+                        render: function(data) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'satuan',
+                        render: function(data) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'id',
+                        render: function(data, type, row) {
+                            var rowData = JSON.stringify(row);
+                            return `
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-success" id="harga-edit" data-row='${rowData}'> Edit</a>
+                            <a class="btn btn-sm btn-danger" id="hapus-harga" data-row='${rowData}'> Delete</a>
+                        </div>
+                    `;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function simpanHarga(input) {
+            $.ajax({
+                processData: false,
+                contentType: false,
+                url: '{{ route('hargaJual.store') }}',
+                type: 'POST',
+                data: input,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses!',
+                            text: response.message,
+                        });
+                        $('.close').click()
+                        return;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response.message,
+                    });
+                },
+                error: function(error) {
+                    var errorMessage = "Terjadi kesalahan dalam operasi.";
+
+                    if (error.responseJSON && error.responseJSON.message) {
+                        errorMessage = error.responseJSON.message;
+                    } else if (error.statusText) {
+                        errorMessage = error.statusText;
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan!',
+                        text: errorMessage,
+                    });
+                }
+            });
+        }
     </script>
 @endpush

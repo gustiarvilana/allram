@@ -10,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" class="form-horizontal" id="form-produk">
+            <form method="post" class="form-horizontal" id="form-harga-jual">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -18,60 +18,79 @@
                             <div class="card">
                                 <div class="card-body">
                                     <input type="hidden" name="id" id="id">
-                                    <div class="form-group">
-                                        <label for="kd_produk">kd_produk</label>
-                                        <input type="text" class="form-control" name="kd_produk" id="kd_produk">
-                                        @error('kd_produk')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                    <input type="hidden" name="kd_harga" id="kd_harga">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="kd_produk">kd_produk</label>
+                                                <select name="kd_produk" id="kd_produk" class="form-control select2">
+                                                    <option value="">Pilih Produk</option>
+                                                    @foreach ($produks as $produk)
+                                                        <option value="{{ $produk->kd_produk }}">{{ $produk->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ket_harga">ket_harga</label>
+                                                <input type="text" class="form-control" name="ket_harga"
+                                                    id="ket_harga">
+                                                @error('ket_harga')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="harga">harga</label>
+                                                <input type="text" class="form-control" name="harga"
+                                                    id="harga">
+                                                @error('harga')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="satuan">satuan</label>
+                                                <input type="text" class="form-control" name="satuan"
+                                                    id="satuan">
+                                                @error('satuan')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="nama">nama</label>
-                                        <input type="text" class="form-control" name="nama" id="nama">
-                                        @error('nama')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                    <div>
+                                        <a class="btn btn-success float-right" id="simpan-harga"> Simpan</a>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="merek">merek</label>
-                                        <input type="text" class="form-control" name="merek" id="merek">
-                                        @error('merek')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="type">type</label>
-                                        <input type="text" class="form-control" name="type" id="type">
-                                        @error('type')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="kd_supplier">kd_supplier</label>
-                                        <select name="kd_supplier" id="kd_supplier" class="form-control select2">
-                                            <option value="">Pilih Supplier</option>
-                                            @foreach ($suppliers as $supplier)
-                                                <option value="{{ $supplier->kd_supplier }}">{{ $supplier->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="kd_ops">kd_ops</label>
-                                        <select name="kd_ops" id="kd_ops" class="form-control select2">
-                                            <option value="">Pilih OPS</option>
-                                            @foreach ($tOpss as $tOps)
-                                                <option value="{{ $tOps->kd_ops }}">{{ $tOps->nama_ops }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="harga_beli">harga_beli</label>
-                                        <input type="text" class="form-control money" name="harga_beli"
-                                            id="harga_beli">
-                                        @error('harga_beli')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-success">
+                                <div class="card-header">
+                                    {{-- <a class="btn btn-success text-white" id="add_menu">Tambah Produk</a> --}}
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col table-responsive">
+                                            <table class="table table-striped table-bordered nowarp"
+                                                id="table-harga-jual">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Produk</th>
+                                                        <th>Keterangan</th>
+                                                        <th>Harga</th>
+                                                        <th>Satuan</th>
+                                                        <th><i class="fa fa-cogs" aria-hidden="true"></i></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -90,8 +109,8 @@
                 </div>
             </form>
             <div class="modal-footer">
-                {{-- <button class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                <button class="btn btn-primary" id="simpan">Simpan</button>
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                {{-- <button class="btn btn-primary" id="simpan">Simpan</button> --}}
             </div>
         </div>
 

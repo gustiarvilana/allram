@@ -148,7 +148,6 @@ class PenjualanService
 
                 $this->dPembayaran->where('nota', '=', $penjualan->nota_penjualan)->delete();
                 $this->dtransaksiOps->where('nota', '=', $penjualan->nota_penjualan)->delete();
-
                 $this->dKasbon->where('nota_penjualan', '=', $penjualan->nota_penjualan)->delete();
 
                 $penjualan->delete();

@@ -5,6 +5,7 @@ use App\Http\Controllers\pelanggan\LaporanPelangganController;
 use App\Http\Controllers\pelanggan\PelangganController;
 use App\Http\Controllers\Produk\LaporanProdukController;
 use App\Http\Controllers\Produk\ProdukController;
+use App\Http\Controllers\Ramwater\HargaJual\HargaJualController;
 use App\Http\Controllers\Ramwater\Hutang\HutangNominalController;
 use App\Http\Controllers\Ramwater\Kasbon\KasbonController;
 use App\Http\Controllers\Ramwater\Kasbon\LaporanKasbonController;
@@ -74,6 +75,11 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
         Route::resource('/produk', ProdukController::class)->except('show');
         Route::prefix('produk')->group(function () {
             Route::get('/data', [ProdukController::class, 'data'])->name('produk.data');
+        });
+
+        Route::resource('/hargaJual', HargaJualController::class)->except('show');
+        Route::prefix('hargaJual')->group(function () {
+            Route::get('/data', [HargaJualController::class, 'data'])->name('hargaJual.data');
         });
 
         Route::resource('/pelanggan', PelangganController::class)->except('show');

@@ -54,6 +54,7 @@ class ProdukController extends Controller
         $data = [
             'tOpss' => $this->tOps->where('tipe', '=', 'P')->get(),
             'suppliers' => $this->supplier->get(),
+            'produks' => DB::table('t_master_produk')->where('satker', '=', 'ramwater')->get(),
         ];
         return view('ramwater.produk.index', $data);
     }
