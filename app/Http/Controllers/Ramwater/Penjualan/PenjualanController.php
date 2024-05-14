@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\DB;
 
 class PenjualanController extends Controller
 {
+    protected $integrationHelper;
     protected $tGudang;
     protected $produkMOdel;
     protected $tChannelModel;
     protected $karyawan;
+    protected $harga;
     protected $penjualanService;
 
     public function __construct(PenjualanService $penjualanService)

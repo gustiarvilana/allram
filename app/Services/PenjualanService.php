@@ -34,7 +34,8 @@ class PenjualanService
     protected $tOps;
     protected $jns;
     protected $dKasbon;
-    public function __construct() {
+    public function __construct()
+    {
         $this->dStokProduk           = new DStokProduk();
         $this->dPembelianDetailModel = new DPembelianDetailModel();
         $this->supplierModel         = new SupplierModel();
@@ -147,6 +148,8 @@ class PenjualanService
 
                 $this->dPembayaran->where('nota', '=', $penjualan->nota_penjualan)->delete();
                 $this->dtransaksiOps->where('nota', '=', $penjualan->nota_penjualan)->delete();
+
+                $this->dKasbon->where('nota_penjualan', '=', $penjualan->nota_penjualan)->delete();
 
                 $penjualan->delete();
 

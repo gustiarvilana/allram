@@ -50,12 +50,12 @@ jobs:
           username: test.water@ramarmalia.com
           password: Water09120912
 
-      # - name: 📂 Sync Files
-      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      #   with:
-      #     server: ftp.ramarmalia.com
-      #     username: water@ramarmalia.com
-      #     password: Water09120912
+      - name: 📂 Sync Files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftp.ramarmalia.com
+          username: water@ramarmalia.com
+          password: Water09120912
 
       # optimize
       - name: Setup PHP
