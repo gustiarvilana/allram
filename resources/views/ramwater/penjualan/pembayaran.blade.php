@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <i class="fa fa-file" aria-hidden="true"></i> <b>Laporan Pembayaran Penjualan</b>
+    <i class="fa fa-file" aria-hidden="true"></i> <b>Pembayaran Penjualan</b>
 @endsection
 
 @section('content')
