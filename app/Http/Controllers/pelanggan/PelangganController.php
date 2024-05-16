@@ -35,7 +35,7 @@ class PelangganController extends Controller
         return DB::transaction(function () use ($req) {
             $this->model->simpan($req);
 
-            return back()->with(['success' => 'Pelanggan berhasil ditambahkan!']);
+            return back()->with(['success' => 'Pelanggan berhasil disimpan!']);
         });
         return back()->with('error', 'Operasi gagal dilakukan!');
     }
