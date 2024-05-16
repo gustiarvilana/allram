@@ -28,6 +28,7 @@ use App\Http\Controllers\Utility\UtilityController;
 use App\Http\Controllers\Ramwater\Ops\LaporanOpsController;
 use App\Http\Controllers\Ramwater\Pembelian\LaporanPembelianController;
 use App\Http\Controllers\Ramwater\Penjualan\LaporanPenjualanController;
+use App\Http\Controllers\Ramwater\Penjualan\Pengembalian\PenjualanPengembalianController;
 use App\Http\Controllers\Ramwater\Piutang\PiutangGalonController;
 use App\Http\Controllers\Ramwater\Piutang\PiutangNominalController;
 use App\Http\Controllers\Supplier\SupplierController;
@@ -130,6 +131,7 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
 
             Route::resource('/pengembalian', PenjualanPengembalianController::class)->except('show');
             Route::prefix('pengembalian')->group(function () {
+                Route::get('/galon', [PenjualanPengembalianController::class, 'index'])->name('galon.index');
                 Route::get('/galon/data', [PenjualanPengembalianController::class, 'dataGalon'])->name('galon.detail.data');
                 Route::delete('/galon/destroy/{id}', [PenjualanPengembalianController::class, 'destroyGalon'])->name('galon.detail.destroy');
             });

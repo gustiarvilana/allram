@@ -29,7 +29,8 @@ class PembayaranService
     protected $dPembayaranGalon;
     protected $dOps;
     protected $jns;
-    public function __construct() {
+    public function __construct()
+    {
         $this->integrationHelper = new IntegrationHelper();
         $this->dStokProduk = new DStokProduk();
         $this->dPembelianModel = new DPembelianModel();
@@ -43,14 +44,15 @@ class PembayaranService
         if (isset($pembelianData['jns'])) {
             $this->setJns($pembelianData['jns']);
         }
+
         try {
             $this->validateData($pembelianData, $dataArrayDetail);
             return DB::transaction(function () use ($pembelianData, $dataArrayDetail, $file) { //rollback if error
                 if (isset($pembelianData['nota_pembelian'])) $data = $this->preparePembelianData($pembelianData);
                 if (isset($pembelianData['nota_penjualan'])) $data = $this->preparePenjualanData($pembelianData);
-
                 // save: d_penjualan_detail + stok
                 $this->upsertPembayaranDetail($data, $dataArrayDetail, $file);
+
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
         } catch (\Exception $e) {
@@ -120,7 +122,6 @@ class PembayaranService
             ];
 
             $errorColumns = [];
-
             foreach ($requiredColumns as $column => $columnName) {
                 if (empty($pembelianData[$column])) {
                     $errorColumns[] = $columnName;
@@ -132,7 +133,6 @@ class PembayaranService
             }
         }
 
-
         if (isset($pembelianData['jns'])) {
             $requiredColumnsDetail = [
                 'tgl_pembayaran' => 'Tanggal Pembayaran',
@@ -140,17 +140,19 @@ class PembayaranService
                 'channel_bayar' => 'Channel Bayar'
             ];
 
-            foreach ($dataArrayDetail as $index => $dataDetail) {
-                $errorColumnsDetail = [];
+            if ($dataArrayDetail) {
+                foreach ($dataArrayDetail as $index => $dataDetail) {
+                    $errorColumnsDetail = [];
 
-                foreach ($requiredColumnsDetail as $column => $columnName) {
-                    if (empty($dataDetail[$column])) {
-                        $errorColumnsDetail[] = $columnName;
+                    foreach ($requiredColumnsDetail as $column => $columnName) {
+                        if (empty($dataDetail[$column])) {
+                            $errorColumnsDetail[] = $columnName;
+                        }
                     }
-                }
 
-                if (!empty($errorColumnsDetail)) {
-                    throw new \Exception("Kolom-kolom berikut pada Tabel Pembelian Detail pada baris " . ($index + 1) . " harus terisi: " . implode(', ', $errorColumnsDetail) . ".");
+                    if (!empty($errorColumnsDetail)) {
+                        throw new \Exception("Kolom-kolom berikut pada Tabel Pembelian Detail pada baris " . ($index + 1) . " harus terisi: " . implode(', ', $errorColumnsDetail) . ".");
+                    }
                 }
             }
         }
@@ -227,41 +229,43 @@ class PembayaranService
     public function upsertPembayaranDetail($data, $dataArrayDetail, $file)
     {
         try {
-            if ($dataArrayDetail) {
+            if ($dataArrayDetail || $data) {
                 $totalNominalBayar = 0;
 
-                foreach ($dataArrayDetail as $key => $dataDetail) {
-                    $dataDetail['angs_ke'] = $key + 1;
-                    if (isset($data['nota_pembelian'])) $dataDetail['nota_pembelian'] = $data['nota_pembelian'];
-                    if (isset($data['nota_penjualan'])) $dataDetail['nota_penjualan'] = $data['nota_penjualan'];
+                if ($dataArrayDetail) {
+                    foreach ($dataArrayDetail as $key => $dataDetail) {
+                        $dataDetail['angs_ke'] = $key + 1;
+                        if (isset($data['nota_pembelian'])) $dataDetail['nota_pembelian'] = $data['nota_pembelian'];
+                        if (isset($data['nota_penjualan'])) $dataDetail['nota_penjualan'] = $data['nota_penjualan'];
 
-                    $dataDetail_fix = $this->preparePembayaranData($dataDetail);
+                        $dataDetail_fix = $this->preparePembayaranData($dataDetail);
 
-                    if (!isset($dataDetail_fix['id']) || $dataDetail_fix['update'] == $dataDetail_fix['id']) {
-                        if ($file) {
-                            if (isset($data['nota_pembelian'])) $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $data['nota_pembelian'] . '/' . $data['tgl_pembelian'] . '/' . $data['kd_supplier'], $data['nota_pembelian'] . '_' . $dataDetail_fix['angs_ke']);
-                            if (isset($data['nota_penjualan'])) $filename = FormatHelper::uploadFile($file, 'penjualan/' . $data['nota_penjualan'] . '/' . $data['tgl_penjualan'] . '/' . $data['kd_pelanggan'], $data['nota_penjualan'] . '_' . $dataDetail_fix['angs_ke']);
-                            $dataDetail_fix['path_file'] = $filename;
+                        if (!isset($dataDetail_fix['id']) || $dataDetail_fix['update'] == $dataDetail_fix['id']) {
+                            if ($file) {
+                                if (isset($data['nota_pembelian'])) $filename = FormatHelper::uploadFile($file, 'pembayaran/' . $data['nota_pembelian'] . '/' . $data['tgl_pembelian'] . '/' . $data['kd_supplier'], $data['nota_pembelian'] . '_' . $dataDetail_fix['angs_ke']);
+                                if (isset($data['nota_penjualan'])) $filename = FormatHelper::uploadFile($file, 'penjualan/' . $data['nota_penjualan'] . '/' . $data['tgl_penjualan'] . '/' . $data['kd_pelanggan'], $data['nota_penjualan'] . '_' . $dataDetail_fix['angs_ke']);
+                                $dataDetail_fix['path_file'] = $filename;
+                            }
                         }
-                    }
 
-                    $dataDetail_fix['id']             = $dataDetail['id'] ?? null;
-                    $dataDetail_fix['path_file']      = $dataDetail_fix['path_file'] ?? '';
-                    unset($dataDetail_fix["update"]);
+                        $dataDetail_fix['id']             = $dataDetail['id'] ?? null;
+                        $dataDetail_fix['path_file']      = $dataDetail_fix['path_file'] ?? '';
+                        unset($dataDetail_fix["update"]);
 
-                    if ($dataDetail_fix['nominal_bayar']) {
-                        $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
+                        if ($dataDetail_fix['nominal_bayar']) {
+                            $totalNominalBayar += $dataDetail_fix['nominal_bayar'];
 
-                        $dataDetail = $this->dPembayaran->updateOrCreate([
-                            'id'             => $dataDetail_fix['id'],
-                            'nota' => $dataDetail_fix['nota'],
-                        ], $dataDetail_fix);
+                            $dataDetail = $this->dPembayaran->updateOrCreate([
+                                'id'             => $dataDetail_fix['id'],
+                                'nota' => $dataDetail_fix['nota'],
+                            ], $dataDetail_fix);
+                        }
                     }
                 }
 
                 $this->updateStatus($data, $totalNominalBayar, $data['harga_total']);
 
-                return $dataDetail;
+                return $data;
             } else {
                 $this->dPembayaran->where('nota_pembelian', '=', $data['nota_pembelian'])->delete();
                 return;
@@ -279,7 +283,7 @@ class PembayaranService
         if (isset($data['nota_pembelian'])) $data_fix = $pembelianModel->find($data['id']);
         if (isset($data['nota_penjualan'])) $data_fix = $penjualanModel->where('nota_penjualan', '=', $data['nota_penjualan'])->first();
 
-        if($data_fix['sts_angsuran']!=3){
+        if ($data_fix['sts_angsuran'] != 3) {
             if ($totalNominalBayar == $harga_total) {
                 $data_fix->sts_angsuran = 4;
             } elseif ($totalNominalBayar < $harga_total) {

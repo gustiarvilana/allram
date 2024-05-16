@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class PenjualanPembayaranController extends Controller
+class PenjualanPengembalianController extends Controller
 {
     protected $integrationHelper;
     protected $dPembayaranModel;
@@ -65,7 +65,7 @@ class PenjualanPembayaranController extends Controller
             'gudang' => TGudang::get(),
             'channels' => TChannelModel::get(),
         ];
-        return view('ramwater.penjualan.pembayaran', $data);
+        return view('ramwater.penjualan.pengembalian.pembayaran', $data);
     }
 
     public function store(Request $request)

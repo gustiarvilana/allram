@@ -28,10 +28,9 @@
                                                 <th>Nama Pelanggan</th>
                                                 <th>tgl_penjualan</th>
                                                 <th>Sales</th>
-                                                <th>harga_total</th>
-                                                <th>nominal_bayar</th>
-                                                <th>sisa_bayar</th>
-                                                <th>sts_angsuran</th>
+                                                <th>Total Galon</th>
+                                                <th>Galon Kembali</th>
+                                                <th>Sisa Galon</th>
                                                 <th>sts_galon</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
@@ -99,59 +98,6 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card card-success">
-                                <div class="card-header">
-                                    <span>Upload Bukti Pembayaran</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col d-flex align-items-center justify-content-center">
-                                            <div class="form-group">
-                                                <label for="path_file">Upload Bukti Pembayaran</label>
-                                                <input class="form-control path_file" type="file" name="path_file"
-                                                    id="path_file">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-success">
-                                <div class="card-header card-success">
-                                    <span>Input Pembayaran</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-12 table-responsive">
-                                            <table class="table table-striped" id="table-detail">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>nota_penjualan</th>
-                                                        <th>tgl_pembayaran</th>
-                                                        <th>angs_ke</th>
-                                                        <th>nominal_bayar</th>
-                                                        <th>channel_bayar</th>
-                                                        <th>ket_bayar</th>
-                                                        <th>File</th>
-                                                        <th><i class="fa fa-cog" aria-hidden="true"></i></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="table-detail-edit"> </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header card-success">
                                     <span>Riwayat Pembayaran Galon</span>
@@ -198,8 +144,6 @@
             </div>
         </div>
     </div>
-
-    @include('ramwater.penjualan.modal-show')
 @endsection
 
 @push('js')
@@ -264,37 +208,24 @@
                         }
                     },
                     {
-                        data: 'harga_total',
+                        data: 'total_galon',
                         name: 'a.harga_total',
                         render: function(data, type, row) {
                             return addCommas(data);
                         }
                     },
                     {
-                        data: 'nominal_bayar',
+                        data: 'galon_kembali',
                         name: 'a.nominal_bayar',
                         render: function(data, type, row) {
                             return addCommas(data);
                         }
                     },
                     {
-                        data: 'sisa_bayar',
+                        data: 'sisa_galon',
                         name: 'a.sisa_bayar',
                         render: function(data, type, row) {
                             return addCommas(data);
-                        }
-                    },
-                    {
-                        data: 'sts_angsuran',
-                        name: 'a.sts_angsuran',
-                        render: function(data, type, row) {
-                            if (data == 1)
-                                return '<span class="badge rounded-pill bg-primary">Tempo Aktif</span>';
-                            if (data == 3)
-                                return '<span class="badge rounded-pill bg-info"><i class="fa fa-check-circle" aria-hidden="true"></i> Kasbon Sales</span>';
-                            if (data == 4)
-                                return '<span class="badge rounded-pill bg-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Lunas</span>';
-                            return data;
                         }
                     },
                     {
@@ -302,7 +233,7 @@
                         name: 'a.sts_galon',
                         render: function(data, type, row) {
                             if (data == 1)
-                                return '<span class="badge rounded-pill bg-primary">Tempo Aktif</span>';
+                                return '<span class="badge rounded-pill bg-primary">Galon Aktif</span>';
                             if (data == 3)
                                 return '<span class="badge rounded-pill bg-info"><i class="fa fa-check-circle" aria-hidden="true"></i> Kasbon Sales</span>';
                             if (data == 4)
@@ -325,7 +256,7 @@
                     },
                 ],
                 columnDefs: [{
-                        targets: [0, 5, 6, 7, 8, 9, 10],
+                        targets: [0, 5, 6, 7, 8, 9],
                         searchable: false,
                         orderable: false
                     },
@@ -410,27 +341,6 @@
                 $("#modal-penjualan").modal("hide");
                 $('#penjualan-uraian').empty();
             }).on("click", "#btn-add-penjualan-simpan", function() {
-                var imageFile = $('#path_file')[0].files[0];
-
-                var dataArrayDetail = [];
-                $('#table-detail-edit tr').each(function() {
-
-                    var rowData = {
-                        id: $(this).find('#bayar_id').val(),
-                        update: $(this).find('#bayar_update').val(),
-                        nota_pembelian: $(this).find('#bayar_nota_pembelian').val(),
-                        tgl_pembayaran: $(this).find('#bayar_tgl_pembayaran').val(),
-                        angs_ke: $(this).find('#bayar_angs_ke').val(),
-                        nominal_bayar: $(this).find('#bayar_nominal_bayar').val(),
-                        channel_bayar: $(this).find('#bayar_channel_bayar').val(),
-                        ket_bayar: $(this).find('#bayar_ket_bayar').val(),
-                        path_file: $(this).find('#bayar_path_file').val(),
-
-                    };
-                    dataArrayDetail.push(rowData);
-
-                });
-
                 var penjualanData = {
                     nota_penjualan: $('#penjualan-uraian #ur_nota_penjualan').val(),
                     tgl_penjualan: $('#penjualan-uraian #ur_tgl_penjualan').val(),
@@ -451,13 +361,11 @@
 
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
-                formData.append('path_file', imageFile);
-                formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('penjualanData', JSON.stringify(penjualanData));
-                formData.append('jns', 'update');
+                formData.append('jns', 'Pengembalian-galon');
 
                 $.ajax({
-                    url: '{{ route('penjualan.pembayaran.store') }}',
+                    url: '{{ route('pengembalian.store') }}',
                     method: 'POST',
                     processData: false,
                     contentType: false,
