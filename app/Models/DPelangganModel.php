@@ -19,8 +19,8 @@ class DPelangganModel extends Model
         $data = $this->prepareSimpan($req);
 
         return $this->updateOrCreate([
-            'kd_pelanggan' => $data['kd_pelanggan'],
             'id'           => $data['id'],
+            'kd_pelanggan' => $data['kd_pelanggan'],
         ], $data);
     }
 
@@ -30,7 +30,7 @@ class DPelangganModel extends Model
 
         $data = [
             'id'           => $input['id'] ?? null,
-            'kd_pelanggan' => $input['nama'] ?? $kode,
+            'kd_pelanggan' => $input['kd_pelanggan'] == 0 ? $kode : $input['kd_pelanggan'],
             'nama'         => $input['nama'],
             'alamat'       => $input['alamat'],
             'kd_kec'       => $input['kd_kec'] ?? 0,

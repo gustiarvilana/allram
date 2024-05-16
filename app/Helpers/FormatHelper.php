@@ -11,19 +11,13 @@ class FormatHelper
 {
     public static function addDots($value)
     {
-
         $data = number_format($value, 0, ',', '.');
-
-
         return $data;
     }
 
     public static function removeDots($value)
     {
-
         $data = str_replace('.', '', $value);
-
-
         return $data;
     }
 
@@ -72,7 +66,6 @@ class FormatHelper
         return $a + $b;
     }
 
-
     public static function generateCode($table, $prefix = false, $length = 5)
     {
         $lastRecord = DB::table($table)->orderBy('created_at', 'desc')->first();
@@ -86,7 +79,6 @@ class FormatHelper
         } else {
             $lastNumber = 0;
         }
-
 
         $nextNumber = $lastNumber + 1;
 
