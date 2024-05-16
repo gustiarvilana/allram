@@ -482,7 +482,6 @@
 
             }).on("click", "#btn-penjualan-edit", function() {
                 var rowData = $(this).data('row');
-                console.log(rowData.galon_kembali);
                 var row =
                     '<tr>' +
                     '<td><input type="text" name="tgl_penjualan" id="ur_tgl_penjualan" class="form-control" value="' +
@@ -493,7 +492,7 @@
                     '<select name="kd_channel" id="ur_kd_channel" class="form-control">' +
                     '<option value="">== Pilih Channel ==</option>' +
                     '@foreach ($channels as $channel)' +
-                    '<option value="{{ $channel->kd_channel }}" ' + (rowData.kd_pelanggan ==
+                    '<option value="{{ $channel->kd_channel }}" ' + (rowData.kd_channel ==
                         '{{ $channel->kd_channel }}' ? 'selected' : '') +
                     '>{{ $channel->ur_channel }}</option>' +
                     '@endforeach' +
@@ -583,7 +582,6 @@
                         {
                             data: 'qty_pesan',
                             render: function(data, type, row) {
-                                console.log(row);
                                 var value = (data !== null) ? data : 0;
 
                                 return '<input type="text" class="form-control money detail_qty_pesan" name="qty_pesan" id="detail_qty_pesan" value="' +

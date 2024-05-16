@@ -74,18 +74,22 @@ class DKasbonModel extends Model
 
     public function upsert($input)
     {
-        $input['id'] = $input['id'] ?? '';
+
         $input['opr_input'] = $input['opr_input'] ?? date('Ymd');
         $input['tgl_input'] = $input['tgl_input'] ?? Auth::user()->nik;
 
         try {
             return DB::transaction(function () use ($input) {
-
-                $condition = isset($input['nota_penjualan']) ? ['nota_penjualan' => $input['nota_penjualan']] : ['id' => $input['id']];
-                return $this->updateOrCreate(
-                    $condition,
-                    $input
-                );
+                if (isset($input['nota_penjualan'])) {
+                    $this->updateOrCreate([
+                        'id'             => $input['id'],
+                        'nota_penjualan' => $input['nota_penjualan']
+                    ], $input);
+                } else {
+                    $this->updateOrCreate([
+                        'id'             => $input['id'],
+                    ], $input);
+                }
             });
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
