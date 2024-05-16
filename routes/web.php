@@ -127,6 +127,12 @@ Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
                 Route::get('/galon/data', [PenjualanPembayaranController::class, 'dataGalon'])->name('galon.detail.data');
                 Route::delete('/galon/destroy/{id}', [PenjualanPembayaranController::class, 'destroyGalon'])->name('galon.detail.destroy');
             });
+
+            Route::resource('/pengembalian', PenjualanPengembalianController::class)->except('show');
+            Route::prefix('pengembalian')->group(function () {
+                Route::get('/galon/data', [PenjualanPengembalianController::class, 'dataGalon'])->name('galon.detail.data');
+                Route::delete('/galon/destroy/{id}', [PenjualanPengembalianController::class, 'destroyGalon'])->name('galon.detail.destroy');
+            });
         });
 
         Route::resource('/ops', OpsController::class)->except('show');

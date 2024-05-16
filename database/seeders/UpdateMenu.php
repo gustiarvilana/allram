@@ -28,7 +28,7 @@ class UpdateMenu extends Seeder
             (15, 15, 12, null, 'Pembayaran', 'Ramwater Pembayaran penjualan', '/ramwater/penjualan/pembayaran', '#', 'ri-calendar-todo-line', 3, 1),
             (16, 16, 4, null, 'OPS', 'Ramwater OPS', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1),
             (17, 17, 16, null, 'Input OPS', 'Ramwater Input ops', '/ramwater/ops', '#', 'fa-solid fa-cart-flatbed-suitcase', 1, 1),
-            (18, 18, 12, null, 'Penyerahan', 'Ramwater Penyerahan', '/ramwater/penjualan/penyerahan', '#', 'fa-solid fa-cart-flatbed-suitcase', 4, 1),
+            (18, 18, 12, null, 'Penyerahan', 'Ramwater Penyerahan', '/ramwater/penjualan/penyerahan', '#', 'fa-solid fa-cart-flatbed-suitcase', 5, 1),
             (19, 19, 4, null, 'Laporan', 'Ramwater Laporan', '#', '#', 'fa-solid fa-cart-flatbed-suitcase', 4, 1),
             (20, 20, 19, null, 'Laporan Pembelian', 'Ramwater Laporan Pembelian', '/ramwater/laporan/pembelian', '#', 'fa-solid fa-cart-flatbed-suitcase', 1, 1),
             (21, 21, 19, null, 'Laporan Penjualan', 'Ramwater Laporan penjualan', '/ramwater/laporan/penjualan', '#', 'fa-solid fa-cart-flatbed-suitcase', 2, 1),
@@ -43,7 +43,8 @@ class UpdateMenu extends Seeder
 
             (29, 29, 4, null, 'Master', 'Mastering Data ', '#', '#', 'fas fa-wrench', 0, 1),
             (30, 30, 29, null, 'Supplier', 'Supplier Ramwater', '/ramwater/supplier', '#', 'fa-solid fa-cart-flatbed-suitcase', 2, 1),
-            (31, 31, 29, null, 'Produk', 'Produk Ramwater', '/ramwater/produk', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1)
+            (31, 31, 29, null, 'Produk', 'Produk Ramwater', '/ramwater/produk', '#', 'fa-solid fa-cart-flatbed-suitcase', 3, 1),
+            (32, 32, 12, null, 'Pengembalian Galon', 'Ramwater Pengembalian Galon', '/ramwater/penjualan/pengembalian/galon', '#', 'ri-calendar-todo-line', 4, 1)
         ");
 
         DB::statement("INSERT IGNORE INTO `users_role_menu`
@@ -112,7 +113,10 @@ class UpdateMenu extends Seeder
             (60,'99', '30', '2024'),
             (61,'1', '30', '2024'),
             (62,'99', '31', '2024'),
-            (63,'1', '31', '2024')
+            (63,'1', '31', '2024'),
+            (64,'99', '32', '2024'),
+            (65,'1', '32', '2024'),
+            (66,'2', '32', '2024')
         ");
     }
 }

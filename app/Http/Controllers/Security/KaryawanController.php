@@ -28,10 +28,13 @@ class KaryawanController extends Controller
 
     public function store(Request $request)
     {
+        $lastNik = Karyawan::max('nik');
+        $newNik = $lastNik ? $lastNik + 1 : 1;
+
         $data = [
-            'nik'       => $request->input('nik'),
+            'nik'       => $newNik,
             'nama'      => $request->input('nama'),
-            'satker'    => $request->input('satker'),
+            'satker'    => 'ramarmalia',
             'jabatan'   => $request->input('jabatan'),
             'alamat'    => $request->input('alamat'),
             'jk'        => $request->input('jk'),
@@ -39,6 +42,7 @@ class KaryawanController extends Controller
             'no_hp'     => $request->input('no_hp'),
             'reference' => $request->input('reference'),
         ];
+
         try {
             Karyawan::upsert($data, ['kd_menu', 'kd_parent']);
         } catch (\Throwable $th) {
