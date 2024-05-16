@@ -55,7 +55,6 @@
                 "info": true,
                 "processing": true,
                 "responsive": false,
-                "lengthChange": true,
                 "autoWidth": true,
                 "searching": true,
                 "ordering": true,

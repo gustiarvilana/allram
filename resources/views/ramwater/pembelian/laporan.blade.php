@@ -263,8 +263,6 @@
 
                 var tableDetail = $("#modal-show-detail").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
@@ -347,8 +345,6 @@
 
                 var tableRiwayat = $("#modal-show-pembayaran").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
@@ -397,11 +393,15 @@
                             data: 'path_file',
                             name: 'a.path_file',
                             render: function(data, type, row) {
-                                return '<a href="{{ asset('') }}' + row.path_file +
-                                    '" target="_blank" class="a">' +
-                                    '<img src="{{ asset('') }}' + row.path_file +
-                                    '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
-                                    '</a>';
+                                if (row.path_file) {
+                                    return '<a href="{{ asset('') }}' + row.path_file +
+                                        '" target="_blank" class="a">' +
+                                        '<img src="{{ asset('') }}' + row.path_file +
+                                        '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                        '</a>';
+                                } else {
+                                    return '-';
+                                }
                             }
                         }
                     ],
@@ -444,9 +444,6 @@
             });
             var tableDetailPembelian = $("#table-pembelian-detail").DataTable({
                 info: false,
-                paging: false,
-                bPaginate: false,
-                bLengthChange: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -561,11 +558,15 @@
                         data: 'path_file',
                         name: 'a.path_file',
                         render: function(data, type, row) {
-                            return '<a href="{{ asset('') }}' + row.path_file +
-                                '" target="_blank" class="a">' +
-                                '<img src="{{ asset('') }}' + row.path_file +
-                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
-                                '</a>';
+                            if (row.path_file) {
+                                return '<a href="{{ asset('') }}' + row.path_file +
+                                    '" target="_blank" class="a">' +
+                                    '<img src="{{ asset('') }}' + row.path_file +
+                                    '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                    '</a>';
+                            } else {
+                                return '-';
+                            }
                         }
                     },
 

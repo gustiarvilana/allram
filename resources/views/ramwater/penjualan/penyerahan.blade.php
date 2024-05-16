@@ -146,8 +146,6 @@
         $(document).ready(function() {
             var tableLaporanpenjualan = $("#table-penjualan-laporan").DataTable({
                 info: false,
-                bPaginate: false,
-                bLengthChange: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -225,9 +223,9 @@
                             if (data == 1)
                                 return '<span class="badge rounded-pill bg-primary">Tempo Aktif</span>';
                             if (data == 3)
-                            return '<span class="badge rounded-pill bg-info"><i class="fa fa-check-circle" aria-hidden="true"></i> Kasbon Sales</span>';
+                                return '<span class="badge rounded-pill bg-info"><i class="fa fa-check-circle" aria-hidden="true"></i> Kasbon Sales</span>';
                             if (data == 4)
-                            return '<span class="badge rounded-pill bg-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Lunas</span>';
+                                return '<span class="badge rounded-pill bg-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Lunas</span>';
                             return data;
                         }
                     },
@@ -492,8 +490,6 @@
 
                 var tableDetail = $("#table-detail  ").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
@@ -609,8 +605,6 @@
 
                 var tableDetail = $("#modal-show-detail").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,

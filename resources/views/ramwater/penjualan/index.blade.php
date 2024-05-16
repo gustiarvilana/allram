@@ -180,8 +180,6 @@
         $(document).ready(function() {
             var tableSupplier = $("#table-supplier").DataTable({
                 info: false,
-                bPaginate: false,
-                bLengthChange: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -503,8 +501,6 @@
 
                 var tableDetail = $("#table-detail").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,

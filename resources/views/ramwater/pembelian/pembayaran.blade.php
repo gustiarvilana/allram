@@ -187,8 +187,6 @@
         $(document).ready(function() {
             var tableLaporanPembelian = $("#table-pembelian-laporan").DataTable({
                 info: false,
-                bPaginate: false,
-                bLengthChange: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -261,7 +259,6 @@
                         name: 'a.nominal_bayar',
                         render: function(data, type, row) {
                             if (data == 0 || data == null) {
-
                                 return '0';
                             } else {
                                 return addCommas(data);
@@ -295,11 +292,15 @@
                         data: 'path_file',
                         name: 'a.path_file',
                         render: function(data, type, row) {
-                            return '<a href="{{ asset('') }}' + row.path_file +
-                                '" target="_blank" class="a">' +
-                                '<img src="{{ asset('') }}' + row.path_file +
-                                '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
-                                '</a>';
+                            if (row.path_file) {
+                                return '<a href="{{ asset('') }}' + row.path_file +
+                                    '" target="_blank" class="a">' +
+                                    '<img src="{{ asset('') }}' + row.path_file +
+                                    '" alt="Faktur pembelian" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                    '</a>';
+                            } else {
+                                return '-';
+                            }
                         }
                     },
 

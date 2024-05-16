@@ -157,8 +157,6 @@
 
             var tableSupplier = $("#table-supplier").DataTable({
                 info: false,
-                bPaginate: false,
-                bLengthChange: false,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
@@ -191,13 +189,7 @@
                 //         });
                 //     }
                 // }],
-                columns: [
-                    // {
-                    //     data: 'DT_RowIndex',
-                    //     searchable: false,
-                    //     shrotable: false
-                    // },
-                    {
+                columns: [{
                         data: 'nama',
                         render: function(data, type, row) {
                             return '<div style="white-space: nowrap;"><span style="font-size: 16px; font-weight: bold;">' +
@@ -426,8 +418,6 @@
                 // detail
                 var tableDetail = $("#table-detail").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,

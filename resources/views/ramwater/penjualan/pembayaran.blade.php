@@ -659,8 +659,6 @@
 
                 var tableHistoryGalon = $("#table-detail-galon").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,

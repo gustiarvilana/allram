@@ -377,8 +377,6 @@
 
                 var tableLaporanpenjualan = $("#table-penjualan-laporan").DataTable({
                     info: false,
-                    bPaginate: false,
-                    bLengthChange: false,
                     processing: true,
                     serverSide: true,
                     autoWidth: false,

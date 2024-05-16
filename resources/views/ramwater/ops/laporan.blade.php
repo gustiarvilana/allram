@@ -236,7 +236,6 @@
                     "info": true,
                     "processing": true,
                     "responsive": false,
-                    "lengthChange": true,
                     "autoWidth": true,
                     "searching": true,
                     "ordering": true,
@@ -298,11 +297,15 @@
                     }, {
                         data: 'path_file',
                         render: function(data, type, row) {
-                            return '<a href="{{ asset('') }}' + row.path_file +
-                                '" target="_blank" class="a">' +
-                                '<img src="{{ asset('') }}' + row.path_file +
-                                '" alt="File OPS" style="width: 100px;height: 50px;border-radius: 5px;">' +
-                                '</a>';
+                            if (row.path_file) {
+                                return '<a href="{{ asset('') }}' + row.path_file +
+                                    '" target="_blank" class="a">' +
+                                    '<img src="{{ asset('') }}' + row.path_file +
+                                    '" alt="File OPS" style="width: 100px;height: 50px;border-radius: 5px;">' +
+                                    '</a>';
+                            } else {
+                                return '-';
+                            }
                         }
                     }],
                     footerCallback: function(row, data, start, end, display) {
