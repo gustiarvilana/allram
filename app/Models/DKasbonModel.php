@@ -75,6 +75,7 @@ class DKasbonModel extends Model
     public function upsert($input)
     {
 
+        $input['id'] = isset($input['id']) ? $input['id'] : null;
         $input['opr_input'] = $input['opr_input'] ?? date('Ymd');
         $input['tgl_input'] = $input['tgl_input'] ?? Auth::user()->nik;
 

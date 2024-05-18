@@ -107,6 +107,7 @@ class PenjualanService
                             $set_penjualan->sts_angsuran = 1;
                             $this->dKasbon->hapus($dataKasbon);
                         }
+
                         $set_penjualan->save();
                     }
                 }
