@@ -63,9 +63,6 @@ class DetailPembelianController extends Controller
             ->make(true);
     }
 
-
-
-
     public function index()
     {
         return view('ramwater.pembelian.detail');

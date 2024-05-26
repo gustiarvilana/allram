@@ -11,7 +11,7 @@
                 <div class="card-hearder"></div>
                 <div class="card-body">
                     <form id="form-cari">
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Date range:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -22,7 +22,7 @@
                                 <input type="text" name="rTanggal" class="form-control float-right dateRange"
                                     id="rTanggal">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label>Nota:</label>
                             <div class="input-group">
@@ -471,6 +471,8 @@
                             data: 'sts_angsuran',
                             name: 'a.sts_angsuran',
                             render: function(data, type, row) {
+                                if (data == '1')
+                                    return '<span class="badge badge-primary">Aktif</span>';
                                 return data;
                             }
                         },
@@ -520,6 +522,8 @@
                     // }
                 });
             })
+
+            $('body #btn-cari').click();
         });
     </script>
 @endpush

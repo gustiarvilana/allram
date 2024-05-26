@@ -459,6 +459,8 @@
                             data: 'sts_galon',
                             name: 'a.sts_galon',
                             render: function(data, type, row) {
+                                if (data == '1')
+                                    return '<span class="badge badge-primary">Aktif</span>';
                                 return data;
                             }
                         },
@@ -523,6 +525,8 @@
                     }
                 });
             })
+
+            $("body #btn-cari").click();
         });
     </script>
 @endpush

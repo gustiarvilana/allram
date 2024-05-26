@@ -68,15 +68,15 @@ class DPembelianModel extends Model
         if (isset($input['nota_pembelian'])) {
             $query->where('a.nota_pembelian', 'like', '%' . $input['nota_pembelian'] . '%');
         }
-        if (isset($input['rTanggal'])) {
-            $rTanggal = $input['rTanggal'];
-            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+        // if (isset($input['rTanggal'])) {
+        //     $rTanggal = $input['rTanggal'];
+        //     list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
 
-            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
-            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+        //     $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+        //     $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
 
-            $query->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);
-        }
+        //     $query->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);
+        // }
 
         return $query;
     }

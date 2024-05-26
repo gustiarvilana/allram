@@ -64,14 +64,14 @@ class Penjualan extends Model
         if (isset($input['nota_penjualan'])) {
             $penjualan->where('a.nota_penjualan', 'like', '%' . $input['nota_penjualan'] . '%');
         }
-        if (isset($input['rTanggal'])) {
-            $rTanggal = $input['rTanggal'];
-            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+        // if (isset($input['rTanggal'])) {
+        //     $rTanggal = $input['rTanggal'];
+        //     list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
 
-            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
-            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
-            $penjualan->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir]);
-        }
+        //     $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+        //     $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+        //     $penjualan->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir]);
+        // }
 
         return $penjualan;
     }
@@ -98,14 +98,14 @@ class Penjualan extends Model
         if (isset($input['nota_penjualan'])) {
             $penjualan->where('a.nota_penjualan', 'like', '%' . $input['nota_penjualan'] . '%');
         }
-        if (isset($input['rTanggal'])) {
-            $rTanggal = $input['rTanggal'];
-            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+        // if (isset($input['rTanggal'])) {
+        //     $rTanggal = $input['rTanggal'];
+        //     list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
 
-            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
-            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
-            $penjualan->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir]);
-        }
+        //     $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+        //     $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+        //     $penjualan->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir]);
+        // }
 
         return $penjualan;
     }
