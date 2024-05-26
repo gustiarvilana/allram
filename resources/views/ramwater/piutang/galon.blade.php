@@ -11,7 +11,7 @@
                 <div class="card-hearder"></div>
                 <div class="card-body">
                     <form id="form-cari">
-                        <div class="form-group">
+                        <div class="form-group" style="display: none">
                             <label>Date range:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">

@@ -11,7 +11,7 @@
                 <div class="card-hearder"></div>
                 <div class="card-body">
                     <form id="form-cari">
-                        {{-- <div class="form-group">
+                        <div class="form-group" style="display: none">
                             <label>Date range:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -22,7 +22,7 @@
                                 <input type="text" name="rTanggal" class="form-control float-right dateRange"
                                     id="rTanggal">
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="form-group">
                             <label>Nota:</label>
                             <div class="input-group">
