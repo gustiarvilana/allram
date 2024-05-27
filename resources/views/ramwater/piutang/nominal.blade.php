@@ -83,7 +83,7 @@
                                                 <th>nominal_bayar</th>
                                                 <th>sisa_bayar</th>
                                                 <th>sts_angsuran</th>
-                                                <th>opr_input</th>
+                                                {{-- <th>opr_input</th> --}}
                                                 <th>tgl_input</th>
                                                 <th width="15%"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 </th>
@@ -477,13 +477,6 @@
                             }
                         },
                         {
-                            data: 'opr_input',
-                            name: 'a.opr_input',
-                            render: function(data, type, row) {
-                                return data;
-                            }
-                        },
-                        {
                             data: 'tgl_input',
                             name: 'a.tgl_input',
                             render: function(data, type, row) {
@@ -506,20 +499,45 @@
                             },
                         },
                     ],
-                    // columnDefs: [{
-                    //         targets: [0, 5, 6, 7, 8, 9, 10, 11, 12],
-                    //         searchable: false,
-                    //         orderable: false
-                    //     },
-                    //     {
-                    //         targets: [5, 6, 7],
-                    //         className: 'text-right'
-                    //     }
-                    // ],
-                    // initComplete: function() {
-                    //     initializeColumnSearch(this);
-                    //     // setupHoverShapes(this, 11);
-                    // }
+                    columnDefs: [{
+                            targets: [0, 5, 6, 7],
+                            searchable: false,
+                            orderable: false
+                        },
+                        {
+                            targets: [5, 6, 7],
+                            className: 'text-right'
+                        }
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api();
+
+                        // Menghitung total sum kolom harga_total
+                        var hargaTotalTotal = api.column(4, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menghitung total sum kolom nominal_bayar
+                        var nominalBayarTotal = api.column(5, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menghitung total sum kolom sisa_bayar
+                        var sisaBayarTotal = api.column(6, {
+                            page: 'current'
+                        }).data().reduce(function(acc, curr) {
+                            return acc + parseFloat(curr);
+                        }, 0);
+
+                        // Menampilkan total sum di footer
+                        $(api.column(4).footer()).html(addCommas(hargaTotalTotal));
+                        $(api.column(5).footer()).html(addCommas(nominalBayarTotal));
+                        $(api.column(6).footer()).html(addCommas(sisaBayarTotal));
+                    }
                 });
             })
 
