@@ -239,6 +239,7 @@ class PenjualanService
             'opr_input'      => Auth::user()->nik,
             'tgl_input'      => date('Ymd'),
         ];
+        $penjualanData_fix['sisa_bayar'] = $penjualanData_fix['harga_total'] - $penjualanData_fix['nominal_bayar'];
 
         // $total_galon = intVal($penjualanData_fix['total_galon']) - intVal($penjualanData_fix['sisa_galon']);
         $total_galon = intVal($penjualanData_fix['total_galon']);
@@ -253,6 +254,17 @@ class PenjualanService
                 $penjualanData_fix['sts_galon'] = 1;
             } elseif ($penjualanData_fix['sisa_galon'] < 0) {
                 throw new \Exception("Pengembalian Galon Terlalu banyak!");
+            };
+        }
+
+        if ($penjualanData_fix['sts_angsuran'] != 3) {
+
+            if ($penjualanData_fix['harga_total'] == $penjualanData_fix['nominal_bayar']) {
+                $penjualanData_fix['sts_angsuran'] = 4;
+            } elseif ($penjualanData_fix['harga_total'] > $penjualanData_fix['nominal_bayar']) {
+                $penjualanData_fix['sts_angsuran'] = 1;
+            } elseif ($penjualanData_fix['harga_total'] < $penjualanData_fix['nominal_bayar']) {
+                throw new \Exception("Pembayaran Terlalu banyak!");
             };
         }
 
