@@ -72,7 +72,7 @@ class PenjualanService
                 $this->upsertpenjualanDetail($penjualan, $dataArrayDetail, $file);
 
                 // pembayaran
-                if ($penjualanData_fix['nominal_bayar']) {
+                if ($penjualanData_fix['nominal_bayar'] || $penjualanData_fix['sts_angsuran'] == 3) {
                     $pembayaran = $this->preparePembayaranData($penjualanData_fix);
                     $angs_ke = $pembayaran['angs_ke'];
                     if (isset($penjualanData['jns'])) unset($pembayaran['angs_ke']);
