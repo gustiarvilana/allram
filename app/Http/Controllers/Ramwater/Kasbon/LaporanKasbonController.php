@@ -37,7 +37,6 @@ class LaporanKasbonController extends Controller
     public function data(Request $request)
     {
         $input = $request->input();
-
         if (isset($input['jns'])) {
             $input['jns'] == 'detail' ? $kasbon = $this->dKasbonModel->getKasbonByDate($input['data'], $input['nik']) : dd('fail');
         } else {

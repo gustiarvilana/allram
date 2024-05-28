@@ -35,8 +35,9 @@ class DKasbonModel extends Model
         $result = DB::table('d_kasbon as a')
             ->where('a.nik', $nik)
             ->join('d_karyawan as b', 'a.nik', 'b.nik')
+            ->join('t_jns_kasbon as c', 'a.jns_kasbon', 'c.kd_jns_kasbon')
             ->whereBetween('tgl_kasbon', [$tanggal_awal, $tanggal_akhir])
-            ->select('a.*', 'b.nama as nama_karyawan', DB::raw('SUM(a.nominal) as sum_nominal'))
+            ->select('a.*', 'b.nama as nama_karyawan', DB::raw('SUM(a.nominal) as sum_nominal'), 'c.nama as nama_kasbon')
             ->groupBy('a.id');
 
 
@@ -64,7 +65,7 @@ class DKasbonModel extends Model
             $result->where('a.nik', $input['nik']);
         }
 
-        $result->groupBy('a.nik', 'a.jns_kasbon');
+        $result->groupBy('a.nik');
         try {
             return $result;
         } catch (\Exception $e) {

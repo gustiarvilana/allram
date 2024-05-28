@@ -161,8 +161,9 @@
                             }
                         },
                         {
-                            data: 'jns_kasbon',
+                            data: 'nama_kasbon',
                             render: function(data, type, row) {
+                                console.log(row);
                                 return data;
                             }
                         },
@@ -217,6 +218,7 @@
             }).on("click", "#btn-cari", function() {
                 cariLaporan()
             });
+            cariLaporan()
         });
 
         function cariLaporan() {
