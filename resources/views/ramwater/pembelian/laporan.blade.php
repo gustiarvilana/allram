@@ -431,8 +431,9 @@
                 $('#penjualan-show').modal('show')
 
             }).on("click", "#btn-cari", function() {
-                cariLaporan()
+                cariLaporan();
             });
+            cariLaporan();
         });
 
         function cariLaporan() {

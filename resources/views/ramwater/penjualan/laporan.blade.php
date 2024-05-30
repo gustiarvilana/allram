@@ -904,6 +904,7 @@
                     // Update total pada ur_harga_total berdasarkan detail_harga_total
                     updateTotal('#ur_harga_total', '.detail_harga_total');
                 });
+            cariLaporan();
         });
 
         function cariLaporan() {

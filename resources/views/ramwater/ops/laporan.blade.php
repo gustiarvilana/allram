@@ -221,6 +221,7 @@
             }).on('click', '#btn-cari', function() {
                 cariLaporan()
             });
+            cariLaporan();
         });
 
         function cariLaporan() {
