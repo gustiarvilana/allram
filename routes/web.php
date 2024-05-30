@@ -71,7 +71,8 @@ Route::middleware(['auth', 'roles:99,1'])->group(function () {
     });
 });
 
-Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
+// Route::middleware(['auth', 'roles:99,1,2'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::prefix('ramwater')->group(function () {
         Route::resource('/produk', ProdukController::class)->except('show');
         Route::prefix('produk')->group(function () {
