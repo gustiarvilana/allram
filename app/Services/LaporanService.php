@@ -11,11 +11,11 @@ class LaporanService
     {
         $data = [
             // 'penjualan' => DB::table('view_penjualan_by_produk as a')
-            //     ->select('a.*', 'b.*', 'c.*', 'b.nama as nama_pelanggan', 'd.nama as nama_sales')
+            //     // ->select('a.*', 'b.*', 'c.*', 'b.nama as nama_pelanggan', 'd.nama as nama_sales')
             //     ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
-            //     ->join('t_master_produk as c', 'a.kd_pelanggan', 'c.kd_produk')
+            //     // ->join('t_master_produk as c', 'a.kd_pelanggan', 'c.kd_produk')
             //     ->join('d_karyawan as d', 'a.kd_sales', 'd.nik')
-            //     ->whereBetween('tgl_penjualan', [$tanggal_awal, $tanggal_akhir])
+            //     ->whereBetween('a.tgl_penjualan', [$tanggal_awal, $tanggal_akhir])
             //     ->get(),
 
             'penjualan' => DB::table('view_penjualan_by_produk as a')
@@ -27,7 +27,7 @@ class LaporanService
                     DB::raw('SUM(a.qty_bersih) as total_qty')
                 )
                 ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
-                ->join('t_master_produk as c', 'a.kd_pelanggan', 'c.kd_produk')
+                ->join('t_master_produk as c', 'a.kd_produk', 'c.kd_produk')
                 ->join('d_karyawan as d', 'a.kd_sales', 'd.nik')
                 ->whereBetween('tgl_penjualan', [$tanggal_awal, $tanggal_akhir])
                 ->groupBy('d.nama', 'c.nama', 'a.harga_satuan')
