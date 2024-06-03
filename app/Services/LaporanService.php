@@ -33,33 +33,32 @@ class LaporanService
                 ->groupBy('d.nama', 'c.nama', 'a.harga_satuan')
                 ->get(),
 
-            'bayarTunai' => DB::table('view_pembayaran_penjualan as a')
-                ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
-                ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
-                ->whereBetween('a.tgl', [$tanggal_awal, $tanggal_akhir])
-                ->whereIn('a.channel_bayar', [1])
-                ->get(),
+            // 'bayarTunai' => DB::table('view_pembayaran_penjualan as a')
+            //     ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+            //     ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
+            //     ->whereBetween('a.tgl', [$tanggal_awal, $tanggal_akhir])
+            //     ->whereIn('a.channel_bayar', [1])
+            //     ->get(),
 
-            'bayarOnline' => DB::table('view_pembayaran_penjualan as a')
+            // 'bayarOnline' => DB::table('view_pembayaran_penjualan as a')
+            //     ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+            //     ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
+            //     ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
+            //     ->whereIn('channel_bayar', [2, 3])
+            //     ->get(),
+
+            'bayarPiutang' => DB::table('view_pembayaran_piutang_nominal as a')
                 ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
                 ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
                 ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
-                ->whereIn('channel_bayar', [2, 3])
                 ->get(),
 
-            'BayarPiutangTunai' => DB::table('view_pembayaran_piutang_nominal as a')
-                ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
-                ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
-                ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
-                ->whereIn('channel_bayar', [1])
-                ->get(),
-
-            'BayarPiutangNTunai' => DB::table('view_pembayaran_piutang_nominal as a')
-                ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
-                ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
-                ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
-                ->whereIn('channel_bayar', [2, 3])
-                ->get(),
+            // 'BayarPiutangNTunai' => DB::table('view_pembayaran_piutang_nominal as a')
+            //     ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+            //     ->join('t_channel_bayar as c', 'a.channel_bayar', 'c.kd_channel')
+            //     ->whereBetween('tgl', [$tanggal_awal, $tanggal_akhir])
+            //     ->whereIn('channel_bayar', [2, 3])
+            //     ->get(),
 
             'pengeluaran' => DB::table('d_kasbon as a')
                 ->join('t_jns_kasbon as b', 'a.jns_kasbon', '=', 'b.kd_jns_kasbon')
