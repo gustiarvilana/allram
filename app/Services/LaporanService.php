@@ -22,7 +22,11 @@ class LaporanService
                 ->select(
                     'd.nama as sales',
                     'c.nama',
+                    'b.nama as nama_pelanggan',
+                    'a.nota_penjualan',
                     'a.harga_satuan',
+                    'a.sts_angsuran',
+                    'a.sisa_bayar',
                     DB::raw('SUM(a.harga_total) as total_nominal'),
                     DB::raw('SUM(a.qty_bersih) as total_qty')
                 )
@@ -30,6 +34,26 @@ class LaporanService
                 ->join('t_master_produk as c', 'a.kd_produk', 'c.kd_produk')
                 ->join('d_karyawan as d', 'a.kd_sales', 'd.nik')
                 ->whereBetween('tgl_penjualan', [$tanggal_awal, $tanggal_akhir])
+                ->groupBy('d.nama', 'c.nama', 'a.harga_satuan')
+                ->get(),
+
+            'pending' => DB::table('view_penjualan_by_produk as a')
+                ->select(
+                    'd.nama as sales',
+                    'c.nama',
+                    'b.nama as nama_pelanggan',
+                    'a.nota_penjualan',
+                    'a.harga_satuan',
+                    'a.sts_angsuran',
+                    'a.sisa_bayar',
+                    DB::raw('SUM(a.harga_total) as total_nominal'),
+                    DB::raw('SUM(a.qty_bersih) as total_qty')
+                )
+                ->join('d_pelanggan as b', 'a.kd_pelanggan', 'b.kd_pelanggan')
+                ->join('t_master_produk as c', 'a.kd_produk', 'c.kd_produk')
+                ->join('d_karyawan as d', 'a.kd_sales', 'd.nik')
+                ->whereBetween('tgl_penjualan', [$tanggal_awal, $tanggal_akhir])
+                ->where('a.sts_angsuran', '=', 1)
                 ->groupBy('d.nama', 'c.nama', 'a.harga_satuan')
                 ->get(),
 
