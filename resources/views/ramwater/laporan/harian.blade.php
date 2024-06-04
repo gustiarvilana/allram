@@ -352,7 +352,7 @@
                 var row = $('<tr>');
 
                 // Tambahkan kolom-kolom sesuai dengan struktur tabel
-                row.append($('<td>').text(item.sales));
+                row.append($('<td>').text(item.nama_pelanggan));
                 row.append($('<td>').text(item.nama));
                 row.append($('<td>').text(addCommas(item.harga_satuan)).css('font-weight', 'bold'));
                 row.append($('<td>').text(item.total_qty)).css('font-weight', 'bold');
