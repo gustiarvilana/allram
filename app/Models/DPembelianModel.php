@@ -35,21 +35,23 @@ class DPembelianModel extends Model
             ->orderBy('a.created_at', 'desc')
             ->select('a.*', 'b.nama');
 
+
         if (isset($input['kd_supplier'])) {
             $pembelian->where('a.kd_supplier', '=', $input['kd_supplier']);
         }
         if (isset($input['nota_pembelian'])) {
             $pembelian->where('a.nota_pembelian', 'like', '%' . $input['nota_pembelian'] . '%');
         }
-        if (isset($input['rTanggal'])) {
-            $rTanggal = $input['rTanggal'];
-            list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
+        // dd($input);
+        // if (isset($input['rTanggal'])) {
+        //     $rTanggal = $input['rTanggal'];
+        //     list($tanggal_awal, $tanggal_akhir) = explode(' - ', $rTanggal);
 
 
-            $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
-            $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
-            $pembelian->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);
-        }
+        //     $tanggal_awal = date('Ymd', strtotime($tanggal_awal));
+        //     $tanggal_akhir = date('Ymd', strtotime($tanggal_akhir));
+        //     $pembelian->whereBetween('a.tgl_pembelian', [$tanggal_awal, $tanggal_akhir]);
+        // }
 
         return $pembelian;
     }

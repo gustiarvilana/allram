@@ -202,6 +202,7 @@
 @push('js')
     <script>
         $(document).ready(function() {
+
             $('#modal-pembelian').on('hidden.bs.modal', function() {
                 console.log('Modal Pembelian telah disembunyikan');
                 $("#modal-pembelian").modal("hide");

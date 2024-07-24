@@ -28,7 +28,8 @@ class PembelianService
     protected $supplierModel;
     protected $dtransaksiOps;
     protected $jns;
-    public function __construct() {
+    public function __construct()
+    {
         $this->dStokProduk = new DStokProduk();
         $this->dPembelianModel = new DPembelianModel();
         $this->dPembayaran = new DPembayaranModel();
@@ -76,7 +77,7 @@ class PembelianService
                 $this->upsertPembelianDetail($pembelian, $dataArrayDetail);
 
                 // save: ops
-                $this->upsertOps($pembelian,$file);
+                $this->upsertOps($pembelian, $file);
 
                 return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
             });
@@ -218,7 +219,7 @@ class PembelianService
     public function prepareOpsnData($pembelian)
     {
         $supplier = $this->supplierModel->where('kd_supplier', '=', $pembelian['kd_supplier'])->first();
-
+        // dd($supplier);
         $ops['nota']    = $pembelian['nota_pembelian'];
         $ops['tanggal']    = $pembelian['tgl_pembelian'];
         $ops['satker']     = 'ramwater';
@@ -250,7 +251,7 @@ class PembelianService
         }
     }
 
-    public function upsertOps($pembelianData,$file)
+    public function upsertOps($pembelianData, $file)
     {
         $data = $this->prepareOpsnData($pembelianData);
 
