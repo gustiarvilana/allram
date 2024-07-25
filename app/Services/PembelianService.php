@@ -219,7 +219,7 @@ class PembelianService
     public function prepareOpsnData($pembelian)
     {
         $supplier = $this->supplierModel->where('kd_supplier', '=', $pembelian['kd_supplier'])->first();
-        // dd($supplier);
+        // dd($pembelian);
         $ops['nota']    = $pembelian['nota_pembelian'];
         $ops['tanggal']    = $pembelian['tgl_pembelian'];
         $ops['satker']     = 'ramwater';
@@ -227,7 +227,7 @@ class PembelianService
         $ops['kd_ops']     = $supplier->kd_ops;
         $ops['jumlah']     = '000';
         $ops['harga']      = '000';
-        $ops['total']      = $pembelian['harga_total'];
+        $ops['total']      = $pembelian['nominal_bayar'];
         $ops['keterangan'] = '000';
 
         return $ops;

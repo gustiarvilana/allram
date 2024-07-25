@@ -7,17 +7,18 @@ namespace App\Services;
 use App\Helpers\FormatHelper;
 use App\Helpers\IntegrationHelper;
 use App\Models\DOps;
+use App\Models\DOpsModel;
 use App\Models\DPembayaranGalonModel;
 use App\Models\DPembayaranModel;
 use App\Models\DPembelianDetailModel;
 use App\Models\DPembelianModel;
 use App\Models\DStokProduk;
 use App\Models\Penjualan;
+use App\Models\SupplierModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use PhpParser\Node\Stmt\TryCatch;
 
 class PembayaranService
 {
@@ -37,6 +38,8 @@ class PembayaranService
         $this->dPembayaran = new DPembayaranModel();
         $this->dPembayaranGalon = new DPembayaranGalonModel();
         $this->dPembelianDetailModel = new DPembelianDetailModel();
+        $this->supplierModel = new SupplierModel();
+        $this->dtransaksiOps = new DOpsModel();
     }
 
     public function storePembayaran($pembelianData, $dataArrayDetail, $file)
@@ -159,6 +162,39 @@ class PembayaranService
     }
 
 
+    public function prepareOpsnData($pembayaran)
+    {
+        $supplier = $this->supplierModel->where('kd_supplier', '=', $pembayaran['kd_supplier'])->first();
+        // dd($supplier);
+        $ops['nota']    = $pembayaran['nota'];
+        $ops['tanggal']    = $pembayaran['tgl'];
+        $ops['satker']     = 'ramwater';
+        $ops['nik']        = $pembayaran['opr_input'];
+        $ops['kd_ops']     = $supplier->kd_ops;
+        $ops['jumlah']     = '000';
+        $ops['harga']      = '000';
+        $ops['total']      = $pembayaran['nominal_bayar'];
+        $ops['keterangan'] = '000';
+
+        return $ops;
+    }
+    public function upsertOps($data, $file)
+    {
+        try {
+            $ops = $this->dtransaksiOps->updateOrCreate(['nota' => $data['nota']], $data);
+
+            if ($file) {
+                $filename = FormatHelper::uploadFile($file, 'ops/' . $data['tanggal'] . '/' . $data['nik'] . '/' . $data['kd_ops'], $data['nota']);
+                $ops->path_file = $filename;
+                $ops->save();
+            }
+
+            return $ops;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public function preparePembelianData($pembelianData)
     {
         $pembelianData = [
@@ -259,6 +295,10 @@ class PembayaranService
                                 'id'             => $dataDetail_fix['id'],
                                 'nota' => $dataDetail_fix['nota'],
                             ], $dataDetail_fix);
+
+                            $dataDetail_fix['kd_supplier'] = $data['kd_supplier'];
+                            $dataOps = $this->prepareOpsnData($dataDetail_fix);
+                            $this->upsertOps($dataOps, $file);
                         }
                     }
                 }
