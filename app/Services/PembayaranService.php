@@ -170,7 +170,7 @@ class PembayaranService
         $ops['tanggal']    = $pembayaran['tgl'];
         $ops['satker']     = 'ramwater';
         $ops['nik']        = $pembayaran['opr_input'];
-        $ops['kd_ops']     = $supplier->kd_ops;
+        $ops['kd_ops']     = $supplier ? $supplier->kd_ops : '0';
         $ops['jumlah']     = '000';
         $ops['harga']      = '000';
         $ops['total']      = $pembayaran['nominal_bayar'];
@@ -296,7 +296,7 @@ class PembayaranService
                                 'nota' => $dataDetail_fix['nota'],
                             ], $dataDetail_fix);
 
-                            $dataDetail_fix['kd_supplier'] = $data['kd_supplier'];
+                            $dataDetail_fix['kd_supplier'] = $data['kd_supplier'] ?? '';
                             $dataOps = $this->prepareOpsnData($dataDetail_fix);
                             $this->upsertOps($dataOps, $file);
                         }

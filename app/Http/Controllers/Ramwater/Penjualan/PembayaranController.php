@@ -77,7 +77,6 @@ class PembayaranController extends Controller
         if ($request->input('jns')) {
             $penjualanData['jns'] = $request->input('jns');
         }
-
         return $this->pembayaranService->storePembayaran($penjualanData, $dataArrayDetail, $file);
     }
 
