@@ -128,6 +128,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('kasbon.laporan.data') }}',
                         type: 'GET',
@@ -238,6 +239,7 @@
                 serverSide: true,
                 autoWidth: false,
                 bDestroy: true,
+                pageLength: 100,
                 ajax: {
                     url: '{{ route('kasbon.laporan.data') }}',
                     type: 'GET',

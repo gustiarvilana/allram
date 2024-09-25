@@ -183,6 +183,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
+                pageLength: 100,
                 ajax: '{{ route('pelanggan.data') }}',
                 dom: 'Brtip',
                 buttons: [{
@@ -505,6 +506,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('produk.data') }}',
                         data: function(d) {

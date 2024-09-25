@@ -212,6 +212,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
+                pageLength: 100,
                 ajax: {
                     url: '{{ route('penjualan.detail.data') }}',
                     data: {
@@ -667,6 +668,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: "{{ route('galon.detail.data') }}?nota_penjualan=" + rowData
                         .nota_penjualan,
                     dom: 'Brtip',

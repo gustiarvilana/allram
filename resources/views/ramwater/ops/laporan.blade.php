@@ -241,6 +241,7 @@
                     "searching": true,
                     "ordering": true,
                     "bDestroy": true,
+                    "pageLength": 100,
                     buttons: [{
                         extend: 'excel',
                         customizeData: function(data) {

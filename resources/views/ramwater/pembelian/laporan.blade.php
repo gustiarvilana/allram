@@ -267,6 +267,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('pembelian.detail.detailData') }}?nota_pembelian=' +
                             rowData
@@ -349,6 +350,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('pembayaran.data') }}?nota_pembelian=' +
                             rowData
@@ -449,6 +451,7 @@
                 serverSide: true,
                 autoWidth: false,
                 bDestroy: true,
+                pageLength: 100,
                 ajax: {
                     url: '{{ route('pembelian.detail.data') }}',
                     type: 'GET',

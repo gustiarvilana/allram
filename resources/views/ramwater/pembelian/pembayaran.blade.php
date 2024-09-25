@@ -190,6 +190,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
+                pageLength: 100,
                 ajax: {
                     url: '{{ route('pembelian.detail.data') }}',
                     data: {

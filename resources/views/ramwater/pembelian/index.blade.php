@@ -160,6 +160,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
+                pageLength: 100,
                 ajax: '{{ route('pembelian.data') }}',
                 dom: 'Brtip',
                 buttons: [
@@ -421,6 +422,7 @@
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
+                    pageLength: 100,
                     bDestroy: true,
                     ajax: {
                         url: '{{ route('produk.data') }}',

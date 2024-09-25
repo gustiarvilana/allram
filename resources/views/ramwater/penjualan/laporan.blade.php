@@ -522,6 +522,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('produk.data') }}?nota_penjualan=' + rowData.nota_penjualan,
                         data: {

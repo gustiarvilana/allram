@@ -50,6 +50,7 @@
                 "autoWidth": true,
                 "searching": true,
                 "ordering": true,
+                "pageLength": 100,
                 "buttons": [
                     // "copy",
                     // "csv",

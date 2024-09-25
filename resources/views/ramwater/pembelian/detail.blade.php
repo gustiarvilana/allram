@@ -187,6 +187,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: '{{ route('pembelian.detail.data') }}',
+                pageLength: 100,
                 dom: 'Brtip',
                 // buttons: [
                 //     'copy', 'excel', 'pdf'
@@ -529,6 +530,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('pembelian.detail.detailData') }}?nota_pembelian=' + rowData
                             .nota_pembelian +
@@ -633,6 +635,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('pembelian.detail.detailData') }}?nota_pembelian=' +
                             rowData

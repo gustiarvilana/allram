@@ -331,6 +331,7 @@
                     serverSide: true,
                     autoWidth: false,
                     bDestroy: true,
+                    pageLength: 100,
                     ajax: {
                         url: '{{ route('pembelian.detail.data') }}',
                         method: 'GET',
