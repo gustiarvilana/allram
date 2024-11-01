@@ -111,7 +111,11 @@ class PenjualanService
                         $set_penjualan->save();
                     }
                 }
-                return response()->json(['success' => true, 'message' => 'Data berhasil disimpan']);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data berhasil disimpan',
+                    'nota_penjualan' =>  $penjualan['nota_penjualan'],
+                ]);
             });
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);

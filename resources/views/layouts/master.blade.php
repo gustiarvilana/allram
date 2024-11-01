@@ -539,6 +539,169 @@
         }
     </script>
 
+    <script>
+        function printInvoice(data) {
+            // Parsing data untuk mendapatkan detail penjualan
+            const penjualanData = JSON.parse(data.get('penjualanData'));
+            const dataArrayDetail = JSON.parse(data.get('dataArrayDetail'));
+
+            // Fungsi untuk memformat angka dengan pemisah titik
+            function formatNumber(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+
+            // Membuat jendela baru untuk mencetak
+            const printWindow = window.open('', '', 'width=400,height=600');
+
+            printWindow.document.write(`
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Kwitansi</title>
+                    <style>
+                        /* Set up page size for printing */
+                        @page {
+                            size: 14.00cm 24.13cm; /* Orientasi potret */
+                            margin: 0;
+                        }
+
+                        /* Reset margins and padding for the body */
+                        body {
+                            font-family: Arial, sans-serif;
+                            font-size: 14px; /* Ukuran font sedikit lebih besar */
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        .container {
+                            width: 13.90cm;
+                            height: 23.90cm;
+                            margin: 0 auto;
+                            padding: 8px; /* Menambah padding */
+                            box-sizing: border-box;
+                        }
+
+                        .header, .footer {
+                            text-align: center;
+                            margin-bottom: 8px; /* Tambah jarak antar-elemen */
+                        }
+
+                        .details, .table, .summary {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 6px; /* Mengurangi jarak antar tabel */
+                        }
+
+                        .details td {
+                            padding: 3px; /* Sedikit tambahan padding */
+                        }
+
+                        .table, .table th, .table td {
+                            border: 1px solid black;
+                        }
+
+                        .table th, .table td {
+                            padding: 6px; /* Menambah padding tabel */
+                            text-align: left;
+                            font-size: 12px; /* Ukuran font lebih besar di tabel */
+                        }
+
+                        .table th {
+                            background-color: #f2f2f2;
+                        }
+
+                        .summary td {
+                            padding: 6px;
+                            font-size: 12px; /* Ukuran font lebih besar di ringkasan */
+                        }
+
+                        .right-align {
+                            text-align: right;
+                        }
+
+                        .center-align {
+                            text-align: center;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2 style="font-size: 16px;">RAM WATER</h2> <!-- Ukuran judul lebih besar -->
+                            <p style="margin: 4px 0;">Jl. Lkr. Sel., Limusnunggal, Kec. Cibeureum, Kota Sukabumi, Jawa Barat 43165<br>TELP. 0331-123456</p>
+                        </div>
+                        <hr style="margin: 6px 0;"> <!-- Menambah spasi di bawah garis -->
+
+                        <table class="details" style="font-size: 14px;">
+                            <tr>
+                                <td style="text-align: right; padding: 3px;">Tgl Pembelian:</td>
+                                <td style="padding: 3px;">${penjualanData.tgl_penjualan}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right; padding: 3px;">Faktur No:</td>
+                                <td style="padding: 3px;">${penjualanData.nota_penjualan}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right; padding: 3px;">No Pelanggan:</td>
+                                <td style="padding: 3px;">${penjualanData.kd_pelanggan}</td>
+                            </tr>
+                        </table>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="5%">NO</th>
+                                    <th>PRODUK</th>
+                                    <th>QTY</th>
+                                    <th style="text-align: right;">HARGA SATUAN</th>
+                                    <th style="text-align: right;">SUB TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dataArrayDetail.map((row, index) => `
+                                                                            <tr>
+                                                                                <td style="text-align: center; padding: 6px;">${index + 1}</td>
+                                                                                <td style="padding: 6px;">${row.nama}</td>
+                                                                                <td style="text-align: center; padding: 6px;">${row.qty_pesan}</td>
+                                                                                <td style="text-align: right; padding: 6px;">${formatNumber(row.harga_satuan)}</td>
+                                                                                <td style="text-align: right; padding: 6px;">${formatNumber(row.harga_total)}</td>
+                                                                            </tr>
+                                                                        `).join('')}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" style="text-align: right; padding: 6px;"><strong>TOTAL:</strong></td>
+                                    <td style="text-align: right; padding: 6px;"><strong>${formatNumber(penjualanData.harga_total)}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <table class="summary">
+                            <tr>
+                                <td style="padding: 3px;">Total Bayar:</td>
+                                <td style="text-align: right; padding: 3px;">${formatNumber(penjualanData.nominal_bayar)}</td>
+                                <td style="text-align: right; padding: 3px;">Admin:</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 3px;">Status:</td>
+                                <td style="padding: 3px;">${penjualanData.harga_total == penjualanData.nominal_bayar ? 'Lunas' : 'Belum Lunas'}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </body>
+                </html>
+            `);
+
+            // Perintah cetak
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.onafterprint = function() {
+                printWindow.close();
+            };
+        }
+    </script>
+
 
 
     @stack('js')

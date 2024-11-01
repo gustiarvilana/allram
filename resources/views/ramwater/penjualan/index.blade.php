@@ -164,6 +164,9 @@
 
                 </div>
                 <div class="modal-footer">
+                    <label for="">Print </label>
+                    <input type="checkbox" name="my-checkbox" data-bootstrap-switch>
+
                     <button class="btn btn-success btn-add-pembelian-simpan" id="btn-add-pembelian-simpan"><i
                             class="fas fa-save"></i>
                         Simpan</button>
@@ -301,6 +304,7 @@
                 $("input").val('');
                 $("select").val('');
             }).on("click", "#btn-add-pembelian-simpan", function() {
+
                 var imageFile = $('#path_file')[0].files[0];
 
                 var dataArrayDetail = [];
@@ -346,6 +350,14 @@
                 formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('penjualanData', JSON.stringify(penjualanData));
+                // Perbarui nilai print
+                var print = $("input[name='my-checkbox']").is(':checked') ? 1 : 0;
+                formData.append('print', print);
+
+                // Tampilkan semua formData untuk pemeriksaan
+                // for (var pair of formData.entries()) {
+                //     console.log(pair[0] + ', ' + pair[1]);
+                // }
 
                 //
                 var detailPembelianHTML = '<div>';
@@ -402,6 +414,13 @@
                     scrollbarPadding: true,
                 }).then((result) => {
                     if (result.isConfirmed) {
+
+                        $("input[name='my-checkbox']").bootstrapSwitch();
+                        $("input[name='my-checkbox']").on('switchChange.bootstrapSwitch', function(
+                            event, state) {
+                            let value = state ? 1 : 0;
+                        });
+
                         $.ajax({
                             url: '{{ route('penjualan.store') }}',
                             method: 'POST',
@@ -409,6 +428,16 @@
                             contentType: false,
                             data: formData,
                             success: function(response) {
+                                if (print === 1) {
+                                    penjualanData.nota_penjualan = response
+                                        .nota_penjualan; // Add nota_penjualan to penjualanData
+                                    // Directly update formData without deleting the previous entry
+                                    formData.set('penjualanData', JSON.stringify(
+                                        penjualanData
+                                    )); // Update penjualanData in formData
+
+                                    printInvoice(formData)
+                                }
                                 if (response.success) {
                                     Swal.fire({
                                         icon: 'success',

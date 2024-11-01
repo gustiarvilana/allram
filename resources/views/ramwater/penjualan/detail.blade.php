@@ -154,6 +154,8 @@
 
                 </div>
                 <div class="modal-footer">
+                    <label for="">Print </label>
+                    <input type="checkbox" name="my-checkbox" data-bootstrap-switch>
                     <button class="btn btn-success btn-add-penjualan-simpan" id="btn-add-penjualan-simpan"><i
                             class="fas fa-save"></i>
                         Simpan</button>
@@ -378,12 +380,21 @@
                     isKasbon: $('#penjualan-uraian #ur_is_kasbon').prop('checked') ? 1 : 0
                 };
 
+
                 var formData = new FormData();
                 formData.append('_token', getCSRFToken());
                 formData.append('path_file', imageFile);
                 formData.append('dataArrayDetail', JSON.stringify(dataArrayDetail));
                 formData.append('penjualanData', JSON.stringify(penjualanData));
                 formData.append('jns', 'update');
+                // Perbarui nilai print
+                var print = $("input[name='my-checkbox']").is(':checked') ? 1 : 0;
+                formData.append('print', print);
+
+                // Tampilkan semua formData untuk pemeriksaan
+                for (var pair of formData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
 
                 //
                 var detailpenjualanHTML = '<div>';
@@ -440,6 +451,7 @@
 
                 }).then((result) => {
                     if (result.isConfirmed) {
+
                         $.ajax({
                             url: '{{ route('penjualan.store') }}',
                             method: 'POST',
@@ -455,6 +467,10 @@
                                         title: 'Sukses!',
                                         text: response.message,
                                     });
+                                    if (print === 1) {
+                                        printInvoice(formData)
+                                        return;
+                                    }
                                     return;
                                 }
                                 Swal.fire({
