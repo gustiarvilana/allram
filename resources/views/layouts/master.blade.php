@@ -540,7 +540,7 @@
     </script>
 
     <script>
-        function printInvoice(data) {
+        function printInvoice_besar(data) {
             // Parsing data untuk mendapatkan detail penjualan
             const penjualanData = JSON.parse(data.get('penjualanData'));
             const dataArrayDetail = JSON.parse(data.get('dataArrayDetail'));
@@ -660,14 +660,14 @@
                             </thead>
                             <tbody>
                                 ${dataArrayDetail.map((row, index) => `
-                                                                            <tr>
-                                                                                <td style="text-align: center; padding: 6px;">${index + 1}</td>
-                                                                                <td style="padding: 6px;">${row.nama}</td>
-                                                                                <td style="text-align: center; padding: 6px;">${row.qty_pesan}</td>
-                                                                                <td style="text-align: right; padding: 6px;">${formatNumber(row.harga_satuan)}</td>
-                                                                                <td style="text-align: right; padding: 6px;">${formatNumber(row.harga_total)}</td>
-                                                                            </tr>
-                                                                        `).join('')}
+                                                                                            <tr>
+                                                                                                <td style="text-align: center; padding: 6px;">${index + 1}</td>
+                                                                                                <td style="padding: 6px;">${row.nama}</td>
+                                                                                                <td style="text-align: center; padding: 6px;">${row.qty_pesan}</td>
+                                                                                                <td style="text-align: right; padding: 6px;">${formatNumber(row.harga_satuan)}</td>
+                                                                                                <td style="text-align: right; padding: 6px;">${formatNumber(row.harga_total)}</td>
+                                                                                            </tr>
+                                                                                        `).join('')}
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -694,6 +694,148 @@
             `);
 
             // Perintah cetak
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.onafterprint = function() {
+                printWindow.close();
+            };
+        }
+
+        function printInvoice(data) {
+            const penjualanData = JSON.parse(data.get('penjualanData'));
+            const dataArrayDetail = JSON.parse(data.get('dataArrayDetail'));
+
+            function formatNumber(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+
+            const printWindow = window.open('', '', 'width=300,height=500');
+
+            printWindow.document.write(`
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Kwitansi</title>
+                    <style>
+                        @page {
+                            size: 7.5cm 20cm;
+                            margin: 0;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            font-size: 10px;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .container {
+                            width: 7.2cm;
+                            margin: 0 auto;
+                            padding: 5px;
+                            box-sizing: border-box;
+                        }
+                        .header, .footer {
+                            text-align: center;
+                            margin-bottom: 5px;
+                        }
+                        .details, .table, .summary {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 3px;
+                        }
+                        .details td {
+                            padding: 2px;
+                        }
+                        .table, .table th, .table td {
+                            border: 1px solid black;
+                        }
+                        .table th, .table td {
+                            padding: 3px;
+                            text-align: left;
+                            font-size: 10px;
+                        }
+                        .table th {
+                            background-color: #f2f2f2;
+                        }
+                        .summary td {
+                            padding: 2px;
+                            font-size: 10px;
+                        }
+                        .right-align {
+                            text-align: right;
+                        }
+                        .center-align {
+                            text-align: center;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2 style="font-size: 12px;">RAM WATER</h2>
+                            <p>Jl. Lkr. Sel., Limusnunggal, Cibeureum, Sukabumi, Jawa Barat<br>TELP. 0813-8293-6622</p>
+                        </div>
+                        <hr style="margin: 4px 0;">
+
+                        <table class="details">
+                            <tr>
+                                <td style="text-align: right;">Tgl:</td>
+                                <td>${penjualanData.tgl_penjualan}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">Faktur:</td>
+                                <td>${penjualanData.nota_penjualan}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">Pelanggan:</td>
+                                <td>${penjualanData.kd_pelanggan}</td>
+                            </tr>
+                        </table>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th>Produk</th>
+                                    <th>Qty</th>
+                                    <th class="right-align">Harga</th>
+                                    <th class="right-align">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dataArrayDetail.map((row, index) => `
+                                                    <tr>
+                                                        <td class="center-align">${index + 1}</td>
+                                                        <td>${row.nama}</td>
+                                                        <td class="center-align">${row.qty_pesan}</td>
+                                                        <td class="right-align">${formatNumber(row.harga_satuan)}</td>
+                                                        <td class="right-align">${formatNumber(row.harga_total)}</td>
+                                                    </tr>
+                                                `).join('')}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="right-align"><strong>Total:</strong></td>
+                                    <td class="right-align"><strong>${formatNumber(penjualanData.harga_total)}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <table class="summary">
+                            <tr>
+                                <td>Total Bayar:</td>
+                                <td class="right-align">${formatNumber(penjualanData.nominal_bayar)}</td>
+                            </tr>
+                            <tr>
+                                <td>Status:</td>
+                                <td>${penjualanData.harga_total == penjualanData.nominal_bayar ? 'Lunas' : 'Belum Lunas'}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </body>
+                </html>
+            `);
+
             printWindow.document.close();
             printWindow.print();
             printWindow.onafterprint = function() {
