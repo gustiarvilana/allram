@@ -590,11 +590,11 @@
                         .details, .table, .summary {
                             width: 100%;
                             border-collapse: collapse;
-                            margin-top: 6px; /* Mengurangi jarak antar tabel */
+                            margin-top: 5px; /* Mengurangi jarak antar tabel */
                         }
 
                         .details td {
-                            padding: 3px; /* Sedikit tambahan padding */
+                            padding: 5px; /* Sedikit tambahan padding */
                         }
 
                         .table, .table th, .table td {
@@ -752,7 +752,7 @@
                         .table th, .table td {
                             padding: 3px;
                             text-align: left;
-                            font-size: 10px;
+                            font-size: 12px;
                         }
                         .table th {
                             background-color: #f2f2f2;
@@ -773,7 +773,7 @@
                     <div class="container">
                         <div class="header">
                             <h2 style="font-size: 12px;">RAM WATER</h2>
-                            <p>Jl. Lkr. Sel., Limusnunggal, Cibeureum, Sukabumi, Jawa Barat<br>TELP. 0813-8293-6622</p>
+                            <p style="font-size: 6px;">Jl. Lkr. Selatan No.8 Kota Sukabumi<br>TELP. 0813-8293-6622</p>
                         </div>
                         <hr style="margin: 4px 0;">
 
