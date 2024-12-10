@@ -729,7 +729,7 @@
                             padding: 0;
                         }
                         .container {
-                            width: 8.2cm;
+                            width: 7.2cm;
                             margin: 0 auto;
                             padding: 5px;
                             box-sizing: border-box;
