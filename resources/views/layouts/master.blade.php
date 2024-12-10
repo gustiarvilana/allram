@@ -823,8 +823,8 @@
 
                         <table class="summary">
                             <tr>
-                                <td>Total Bayar:</td>
-                                <td class="right-align" style="12px"><b> ${formatNumber(penjualanData.nominal_bayar)} </b></td>
+                                <td>Nominal Bayar:</td>
+                                <td class="right-align" style="16px"><strong> ${formatNumber(penjualanData.nominal_bayar)} </strong></td>
                             </tr>
                             <tr>
                                 <td>Status:</td>
