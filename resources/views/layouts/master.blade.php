@@ -729,7 +729,7 @@
                             padding: 0;
                         }
                         .container {
-                            width: 7.2cm;
+                            width: 8.2cm;
                             margin: 0 auto;
                             padding: 5px;
                             box-sizing: border-box;
@@ -773,11 +773,11 @@
                     <div class="container">
                         <div class="header">
                             <h2 style="font-size: 12px;">RAM WATER</h2>
-                            <p style="font-size: 6px;">Jl. Lkr. Selatan No.8 Kota Sukabumi<br>TELP. 0813-8293-6622</p>
+                            <p style="font-size: 16px;">Jl. Lkr. Selatan No.8 Kota Sukabumi<br>TELP. 0813-8293-6622</p>
                         </div>
                         <hr style="margin: 4px 0;">
 
-                        <table class="details">
+                        <table class="details" style="font-size: 10px;">
                             <tr>
                                 <td style="text-align: right;">Tgl:</td>
                                 <td>${penjualanData.tgl_penjualan}</td>
@@ -824,7 +824,7 @@
                         <table class="summary">
                             <tr>
                                 <td>Total Bayar:</td>
-                                <td class="right-align">${formatNumber(penjualanData.nominal_bayar)}</td>
+                                <td class="right-align" style="12px"><b> ${formatNumber(penjualanData.nominal_bayar)} </b></td>
                             </tr>
                             <tr>
                                 <td>Status:</td>
